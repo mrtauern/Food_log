@@ -3,32 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>index</title>
+    <head th:include="fragments/head :: styles">
 </head>
 <body>
-<div th:switch="${users}">
-  <h2 th:case="null">No users yet!</h2>
-  <div th:case="*">
-    <h2>Users</h2>
-    <table>
-      <thead>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Edit</th>
-        <th>Delete</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="user : ${users}">
-        <td th:text="${user.name}"></td>
-        <td th:text="${user.email}"></td>
-        <td><a th:href="@{/edit/{id}(id=${user.id})}">Edit</a></td>
-        <td><a th:href="@{/delete/{id}(id=${user.id})}">Delete</a></td>
-      </tr>
-      </tbody>
-    </table>
+  <header th:include="fragments/navbar_top :: navbar"></header>
+  <div th:switch="${users}">
+    <h2 th:case="null">No users yet!</h2>
+    <div th:case="*">
+      <h2>Users</h2>
+      <table>
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+          <td th:text="${user.name}"></td>
+          <td th:text="${user.email}"></td>
+          <td><a th:href="@{/edit/{id}(id=${user.id})}">Edit</a></td>
+          <td><a th:href="@{/delete/{id}(id=${user.id})}">Delete</a></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <p><a href="/signup">Add a new user</a></p>
   </div>
-  <p><a href="/signup">Add a new user</a></p>
-</div>
+  <div th:include="fragments/navbar_top :: bottom_bar"></div>
 </body>
 </html>
