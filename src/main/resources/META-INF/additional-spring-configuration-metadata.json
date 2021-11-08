@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "emailProperties.pass",
+      "type": "java.lang.String",
+      "description": "Description for emailProperties.pass."
+  }
+] }
