@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Food</title>
+</head>
+<body>
+<header th:include="fragments/navbar_top :: navbar"></header>
+
+
+<div class="container">
+  <div id="inner_container">
+    <h1>Create Food</h1>
+
+    <form action="#" th:action="@{/saveFood}" th:object ="${food}" method="POST">
+      <input type="text" th:field = "*{name}" placeholder=" Name" class="form-control mb-4 col-4">
+      <input type="text" th:field = "*{protein}" placeholder=" Protein g" class="form-control mb-4 col-4">
+      <input type="text" th:field = "*{carbohydrates}" placeholder=" Carb g" class="form-control mb-4 col-4">
+      <input type="text" th:field = "*{fat}" required placeholder=" Fat g" class="form-control mb-4 col-4">
+      <input type="text" th:field = "*{energy_kilojoule}" placeholder=" Kilojoule" class="form-control mb-4 col-4">
+      <input type="text" th:field = "*{energy_kcal}" required placeholder=" Kcal" class="form-control mb-4 col-4">
+      <button type="submit" class="form-control mb-4 col-4" >Create Food</button>
+    </form>
+  </div>
+</div>
+
+<div th:include="fragments/navbar_top :: bottom_bar"></div>
+</body>
+</html>

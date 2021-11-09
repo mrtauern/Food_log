@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"> -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Food List</title>
+</head>
+<body>
+<header th:include="fragments/navbar_top :: navbar"></header>
+
+<h2>Welcome to food List</h2>
+
+<div class="container">
+    <div id="inner_container">
+
+        <h1>Food List</h1>
+        <a th:href="@{/createFood}" >Create New Food</a>
+        <br/><br/>
+        <table border="1" cellpadding="10">
+            <thead>
+            <tr>
+                <th>Class ID</th>
+                <th>Name</th>
+                <th>Protein</th>
+                <th>Carbohydrates</th>
+                <th>Fat</th>
+                <td>Kilojoule</td>
+                <th>Kcal</th>
+                <td>Action</td>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="food : ${foodlist}">
+                <td th:text="${food.id}">Student ID</td>
+                <td th:text="${food.name}">FirstName</td>
+                <td th:text="${food.protein}">LastName</td>
+                <td th:text="${food.carbohydrates}">Email</td>
+                <td th:text="${food.fat}">Password</td>
+                <td th:text="${food.energy_kilojoule}">Email</td>
+                <td th:text="${food.energy_kcal}">Password</td>
+                <td>
+                    <a th:href="@{/showUpdateFood/{id}(id=${food.id})}">Edit</a>
+                    <a th:href="@{/deleteFood/{id}(id=${food.id})}">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div th:include="fragments/navbar_top :: bottom_bar"></div>
+</body>
+</html>
