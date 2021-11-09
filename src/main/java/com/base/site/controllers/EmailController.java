@@ -1,6 +1,6 @@
 package com.base.site.controllers;
 import com.base.site.models.Mail;
-import com.base.site.services.EmailService;
+import com.base.site.services.EmailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 //---------------------------------This controller might not be needed anymore------------------------------------------
 @RestController
 public class EmailController {
     @Autowired
-    EmailService emailService;
+    EmailServiceImpl emailServiceImpl;
+
+    Logger log = Logger.getLogger(EmailController.class.getName());
 
     @RequestMapping(value = "/sendemail/{address}/{type}")
     public String sendEmail(@PathVariable String address, @PathVariable String type, @RequestParam(defaultValue="nothing") String content) throws AddressException, MessagingException, IOException {
@@ -41,13 +44,11 @@ public class EmailController {
                 mail.setContent(content);
             break;
             default:
-                mail.setRecipient(address);
-                mail.setTopic("something went wrong");
-                mail.setContent("something went wrong");
-            break;
+                log.info("Error sending email...");
+                return "Something went wrong...";
         }
 
-        emailService.sendmail(mail);
+        emailServiceImpl.sendmail(mail);
         return "Email sent successfully";
     }
 
