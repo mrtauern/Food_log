@@ -1,6 +1,6 @@
-package com.base.site.APIs.EmailAPI.controller;
-import com.base.site.APIs.EmailAPI.model.Mail;
-import com.base.site.APIs.EmailAPI.service.EmailService;
+package com.base.site.controllers;
+import com.base.site.models.Mail;
+import com.base.site.services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +11,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import java.io.IOException;
 
+//---------------------------------This controller might not be needed anymore------------------------------------------
 @RestController
 public class EmailController {
     @Autowired
@@ -34,7 +35,7 @@ public class EmailController {
                 mail.setContent("Welcome to Food Log...<br> We hope you enjoy your stay please click the link below to confirm your account.<br> https://test/asd2231gsdfa");
             break;
             case "custom":
-                // http://localhost:8080/sendemail/niklasld@gmail.com/custom?content=Hello%20there%20food%20logger!
+                // http://localhost:8080/sendemail/email@gmail.com/custom?content=Hello%20there%20food%20logger!
                 mail.setRecipient(address);
                 mail.setTopic("Message from Food Log");
                 mail.setContent(content);

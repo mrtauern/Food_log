@@ -1,10 +1,8 @@
-package com.base.site.APIs.EmailAPI.service;
+package com.base.site.services;
 
-import com.base.site.APIs.EmailAPI.controller.EmailController;
-import com.base.site.APIs.EmailAPI.model.Mail;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.base.site.controllers.EmailController;
+import com.base.site.models.Mail;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -24,22 +22,19 @@ public class EmailService {
     private String pass;
 
     public void sendmail(Mail mail) throws AddressException, MessagingException, IOException {
-
-
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
 
-        //log.info("username: "+userName+" Pass: "+pass);
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(userName, pass);
             }
         });
         Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress("foodlog.dk@gmail.com", false));
+        msg.setFrom(new InternetAddress(userName, false));
 
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mail.getRecipient()));
         msg.setSubject(mail.getTopic());

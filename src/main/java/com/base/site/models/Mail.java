@@ -1,4 +1,4 @@
-package com.base.site.APIs.EmailAPI.model;
+package com.base.site.models;
 
 public class Mail {
     String recipient;
