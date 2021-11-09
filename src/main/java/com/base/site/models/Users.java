@@ -68,7 +68,7 @@ public class Users {
     private double bmi;
 
     @Basic
-    @Column(name = "actime")
+    @Column(name = "active")
     private byte active;
 
     @Basic

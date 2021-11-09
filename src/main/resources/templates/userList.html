@@ -6,7 +6,30 @@
 <body>
     <header th:include="fragments/navbar_top :: navbar"></header>
 
+    <div class="contentBox">
+
     <h1>User list</h1>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Active</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.firstname}"></td>
+            <td th:text="${user.lastname}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.active}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    </div>
 
     <footer th:include="fragments/navbar_top :: bottom_bar"></footer>
 </body>
