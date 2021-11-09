@@ -17,7 +17,7 @@ public class AccountController {
 
     }
 
-    Logger log = Logger.getLogger(com.base.site.restControllers.UsersController.class.getName());
+    Logger log = Logger.getLogger(AccountController.class.getName());
 
     @Autowired
     UsersService usersService;

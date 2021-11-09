@@ -90,10 +90,30 @@ li {
 
 /* --------------------- NAVBAR STYLING --------------------- */
 
+/* --------------------- CONTENT_BOX STYLING --------------------- */
+
 div.contentBox{
     background-color: white;
     box-shadow: 5px 10px 8px #999999;
 
     margin: 80px;
     padding: 40px;
+}
+
+div.actionBar{
+    margin: 20px 0;
+}
+
+div.actionBar form{
+    display: inline-block;
+}
+
+div.actionBar input{
+    border: none;
+    background-color: #CCCCCC;
+    padding: 2px 4px;
+}
+
+div.actionBar a{
+    float: right;
 }
