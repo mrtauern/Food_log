@@ -19,6 +19,10 @@ public class AccountController {
 
     Logger log = Logger.getLogger(AccountController.class.getName());
 
+    private final String USER_LIST = "userlist";
+    private final String CREATE_USER = "createUser";
+    private final String REDIRECT = "redirect:/";
+
     @Autowired
     UsersService usersService;
 
@@ -29,6 +33,13 @@ public class AccountController {
         List<Users> users = usersService.findAll();
         model.addAttribute("users", users);
 
-        return "userList";
+        return USER_LIST;
+    }
+
+    @GetMapping("/createUser")
+    public String createUser(Model model){
+        log.info("createUser called");
+
+        return CREATE_USER;
     }
 }

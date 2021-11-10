@@ -45,7 +45,7 @@ public class Users {
 
     @Basic
     @Column(name = "register_date")
-    private Timestamp redisterDate;
+    private Timestamp registerDate;
 
     @Basic
     @Column(name = "start_weight")

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="fragments/head :: styles"></head>
+<body>
+<header th:include="fragments/navbar_top :: navbar"></header>
+
+<div class="formBox">
+
+    <h1>Create user</h1>
+
+    <form>
+        <label for="firstname">Firstname</label>
+        <input type="text" th:name="firstname" id="firstname" th:required="required">
+
+        <label for="lastname">Lastname</label>
+        <input type="text" th:name="lastname" id="lastname" th:required="required">
+
+        <label for="email">Email</label>
+        <input type="email" th:name="email" id="email" th:required="required">
+
+        <label for="password">Password</label>
+        <input type="password" th:name="password" id="password" th:required="required">
+
+        <label for="birthday">Birthday</label>
+        <input type="date" th:name="birthday" id="birthday" th:required="required">
+
+        <label for="startWeight">Start weight</label>
+        <input type="number" th:name="startWeight" id="startWeight" th:required="required">
+
+        <label for="goalWeight">Goal weight</label>
+        <input type="number" th:name="goalWeight" id="goalWeight" th:required="required">
+
+        <label for="height">Height (cm)</label>
+        <input type="number" th:name="height" id="height" th:required="required">
+
+        <label for="active">Active</label>
+        <input type="checkbox" th:name="active" id="active" checked>
+
+        <label for="userType">User type</label>
+        <select th:name="userType" id="userType">
+            <option th:value="1">Admin</option>
+            <option th:value="2">Costumer</option>
+            <option th:value="3" selected>Freeloader</option>
+        </select>
+
+        <div>
+            <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Create</button>
+            <button type="button" class="btn mr-2 btn-sm"><i class="fas fa-times"></i> Cancel</button>
+        </div>
+    </form>
+
+</div>
+
+<footer th:include="fragments/navbar_top :: bottom_bar"></footer>
+</body>
+</html>
