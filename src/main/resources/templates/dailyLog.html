@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/head :: styles">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<script type="text/javascript">
+    function clearSearch() {
+        window.location = "[[@{/dailyLog}]]";
+    }
+</script>
+<body>
+<header th:include="fragments/navbar_top :: navbar"></header>
+
+    <form id="searchForm" th:action="@{/dailyLog}">
+        Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required />
+        &nbsp;
+        <input type="submit" value="Search" />
+        &nbsp;
+        <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+    </form>
+
+<div class="row">
+    <div class="column" style="background-color:#aaa;">
+        <h2>Adding-Calender</h2>
+        <h2>Adding-Calender</h2><br>
+        <h2>Adding-Calender</h2><br><br>
+        <h2>Adding-Calender</h2><br>
+        <h2>Calorie Acounti</h2><br><br>
+        <h2>Calorie Acounti</h2><br>
+        <h2>Calorie</h2><br><br>
+        <h2>Calorie Acounti</h2><br>
+        <h2>Calorie</h2><br><br>
+        <h2>Calorie </h2><br>
+        <h2>Calorie Acountg</h2><br>
+        <h2>Calorie Acounti</h2><br><br>
+        <h2>Calorie Acounng</h2><br><br>
+        <h2>Calorie Acountg</h2><br><br>
+        <h2>Calorie Acoting</h2><br><br>
+        <h2>Calorie Acounng</h2><br><br>
+        <h2>Calorie Acounng</h2><br><br>
+    </div>
+
+    <div class="column" style="background-color:#bbb;">
+        <table border="1" cellpadding="10">
+            <thead>
+            <tr>
+                <th>Food ID</th>
+                <th>User ID</th>
+                <th>Food ID</th>
+                <th>Log type</th>
+                <th>Exercise ID</th>
+                <td>Date</td>
+                <th>Food Amount</th>
+                <th>Private Food ID</th>
+                <td>Action</td>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="log : ${list}">
+                <td th:text="${log.id}">DailyLog ID</td>
+                <td th:text="${log.fkUser}">FirstName</td>
+                <td th:text="${log.fkFood}">LastName</td>
+                <td th:text="${log.fkLogType}">Email</td>
+                <td th:text="${log.fkExercise}">Password</td>
+                <td th:text="${log.datetime}">Email</td>
+                <td th:text="${log.foodAmount}">Password</td>
+                <td th:text="${log.fkPrivateFood}">Password</td>
+                <td>
+                    <a th:href="@{/updateFood/{id}(id=${log.id})}">Edit</a>
+                    <a th:href="@{/deleteFood/{id}(id=${log.id})}">Delete</a>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="column" style="background-color:#ccc;">
+        <h2>Calorie Aconting</h2><br>
+        <h2>Calorie </h2><br><br>
+        <h2>Calorie counting</h2><br>
+        <h2>Calorie Acunting</h2><br><br>
+        <h2>Calorie Acunting</h2><br>
+        <h2>Calorie Acunting</h2><br><br>
+        <h2>Calorie Aconting</h2><br>
+        <h2>Calorie </h2><br><br>
+        <h2>Calorie Acunting</h2><br>
+        <h2>Calorie Acunting</h2><br>
+        <h2>Calorie Acunting</h2><br><br>
+        <h2>Calorie Acunting</h2><br><br>
+        <h2>Calorie Acunting</h2><br><br>
+        <h2>Calorie Aounting</h2><br><br>
+        <h2>Calorie Acunting</h2><br><br>
+        <h2>Calorie Aounting</h2><br><br>
+    </div>
+
+</div>
+
+
+<div th:include="fragments/navbar_top :: bottom_bar"></div>
+
+</body>
+</html>

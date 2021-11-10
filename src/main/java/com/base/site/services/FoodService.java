@@ -1,4 +1,4 @@
-package com.base.site.security;
+package com.base.site.services;
 
 import com.base.site.models.Food;
 import org.springframework.stereotype.Service;

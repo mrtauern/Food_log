@@ -2,7 +2,7 @@ package com.base.site.controllers;
 
 import com.base.site.models.Food;
 import com.base.site.repositories.FoodRepo;
-import com.base.site.security.FoodService;
+import com.base.site.services.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
