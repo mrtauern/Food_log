@@ -50,11 +50,11 @@ public class FoodController {
             return  "redirect:/" + "food";
     }
 
-    @GetMapping("/showUpdateFood/{id}")
-    public String showUpdateFood(@PathVariable(value = "id") Long id, Model model) {
+    @GetMapping("/updateFood/{id}")
+    public String updateFood(@PathVariable(value = "id") Long id, Model model) {
             Food food = foodService.findById(id);
             model.addAttribute("food", food);
-            log.info("  GetMapping showUpdateFood is called ");
+            log.info("  GetMapping updateFood is called ");
 
             return "updateFood";
     }

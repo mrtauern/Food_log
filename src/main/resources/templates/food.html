@@ -37,7 +37,7 @@
                 <td th:text="${food.energy_kilojoule}">Email</td>
                 <td th:text="${food.energy_kcal}">Password</td>
                 <td>
-                    <a th:href="@{/showUpdateFood/{id}(id=${food.id})}">Edit</a>
+                    <a th:href="@{/updateFood/{id}(id=${food.id})}">Edit</a>
                     <a th:href="@{/deleteFood/{id}(id=${food.id})}">Delete</a>
                 </td>
             </tr>
