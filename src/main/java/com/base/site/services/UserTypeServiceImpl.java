@@ -2,13 +2,15 @@ package com.base.site.services;
 
 import com.base.site.models.UserType;
 import com.base.site.repositories.UserTypeRepo;
-import com.base.site.repositories.UsersRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service("UserTypeService")
 public class UserTypeServiceImpl implements UserTypeService{
+
+    @Autowired
     UserTypeRepo userTypeRepo;
 
     @Override

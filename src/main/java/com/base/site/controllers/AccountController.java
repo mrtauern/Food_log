@@ -1,6 +1,8 @@
 package com.base.site.controllers;
 
+import com.base.site.models.UserType;
 import com.base.site.models.Users;
+import com.base.site.services.UserTypeService;
 import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,12 +28,14 @@ public class AccountController {
     @Autowired
     UsersService usersService;
 
+    @Autowired
+    UserTypeService userTypeService;
+
     @GetMapping("/userList")
     public String userList(Model model){
         log.info("userList called");
 
-        List<Users> users = usersService.findAll();
-        model.addAttribute("users", users);
+        model.addAttribute("users", usersService.findAll());
 
         return USER_LIST;
     }
@@ -39,6 +43,8 @@ public class AccountController {
     @GetMapping("/createUser")
     public String createUser(Model model){
         log.info("createUser called");
+
+        model.addAttribute("userTypes", userTypeService.findAll());
 
         return CREATE_USER;
     }

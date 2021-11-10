@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -71,7 +68,7 @@ public class Users {
     @Column(name = "active")
     private byte active;
 
-    @Basic
-    @Column(name = "fk_user_type_id")
-    private double fkUserTypeId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="fk_user_type_id", nullable = false)
+    private UserType userType;
 }

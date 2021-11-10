@@ -9,7 +9,7 @@
 
     <h1>Create user</h1>
 
-    <form>
+    <form method="post" action="/createUser">
         <label for="firstname">Firstname</label>
         <input type="text" th:name="firstname" id="firstname" th:required="required">
 
@@ -39,9 +39,14 @@
 
         <label for="userType">User type</label>
         <select th:name="userType" id="userType">
-            <option th:value="1">Admin</option>
-            <option th:value="2">Costumer</option>
-            <option th:value="3" selected>Freeloader</option>
+            <th:block th:each="userType : ${userTypes}">
+                <th:block th:if="${userType.id == 3}">
+                    <option th:value="${userType.id}" th:text="${userType.type}" selected></option>
+                </th:block>
+                <th:block th:if="${userType.id != 3}">
+                    <option th:value="${userType.id}" th:text="${userType.type}"></option>
+                </th:block>
+            </th:block>
         </select>
 
         <div>
