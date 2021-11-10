@@ -23,7 +23,7 @@ public class AccountController {
     UsersService usersService;
 
     @GetMapping("/userList")
-    public String index(Model model){
+    public String userList(Model model){
         log.info("userList called");
 
         List<Users> users = usersService.findAll();
