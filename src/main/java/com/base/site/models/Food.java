@@ -9,7 +9,7 @@ import javax.persistence.Id;
 public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String name;
     private int protein;
     private int carbohydrates;
@@ -17,11 +17,11 @@ public class Food {
     private double energy_kilojoule;
     private double energy_kcal;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

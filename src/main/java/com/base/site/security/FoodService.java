@@ -8,8 +8,8 @@ import java.util.List;
 @Service("FoodService")
 public interface FoodService {
 
-    List<Food> getAllFood();
-    Food saveFood(Food food);
-    Food getFoodById(int id);
-    void deleteFoodById(int id);
+    List<Food> findAll();
+    Food save(Food food);
+    Food findById(Long id);
+    void deleteById(Long id);
 }

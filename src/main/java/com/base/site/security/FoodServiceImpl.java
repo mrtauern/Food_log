@@ -16,17 +16,17 @@ public class FoodServiceImpl implements FoodService {
     FoodRepo foodRepo;
 
         @Override
-        public List<Food> getAllFood() {
+        public List<Food> findAll() {
             return (List<Food>) foodRepo.findAll();
         }
 
         @Override
-        public Food saveFood(Food food) {
+        public Food save(Food food) {
             return foodRepo.save(food);
         }
 
         @Override
-        public Food getFoodById(int id) {
+        public Food findById(Long id) {
             Optional<Food> optional = foodRepo.findById(id);
             Food food = null;
             if (optional.isPresent()){
@@ -38,7 +38,7 @@ public class FoodServiceImpl implements FoodService {
         }
 
         @Override
-        public void deleteFoodById(int Id) {
+        public void deleteById(Long Id) {
             this.foodRepo.deleteById(Id);
         }
 
