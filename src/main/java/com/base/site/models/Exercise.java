@@ -21,11 +21,6 @@ public class Exercise {
     @JoinColumn(name="fk_exercise_type_id", nullable = false)
     private ExerciseType exerciseType;
 
-    /*
-    @OneToMany(mappedBy="exercise", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private Set<ExerciseType> exerciseTypes;
-*/
     public Exercise() {
     }
 
