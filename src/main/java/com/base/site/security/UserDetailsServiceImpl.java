@@ -14,7 +14,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UsersRepo usersRepo;
 
-    Logger log = Logger.getLogger(AccountController.class.getName());
+    Logger log = Logger.getLogger(UserDetailsServiceImpl.class.getName());
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
