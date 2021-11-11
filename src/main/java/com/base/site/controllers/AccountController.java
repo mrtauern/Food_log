@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -42,10 +44,20 @@ public class AccountController {
 
     @GetMapping("/createUser")
     public String createUser(Model model){
-        log.info("createUser called");
+        log.info("createUser get called");
 
+        model.addAttribute("users", new Users());
         model.addAttribute("userTypes", userTypeService.findAll());
 
         return CREATE_USER;
+    }
+
+    @PostMapping("/createUser")
+    public String createUser(@ModelAttribute("users") Users users){
+        log.info("createUser get called");
+
+        usersService.save(users);
+
+        return REDIRECT + USER_LIST;
     }
 }

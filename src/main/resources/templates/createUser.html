@@ -9,7 +9,7 @@
 
     <h1>Create user</h1>
 
-    <form method="post" action="/createUser">
+    <form method="post" th:action="@{/createUser}" th:object="${users}">
         <label for="firstname">Firstname</label>
         <input type="text" th:name="firstname" id="firstname" th:required="required">
 
