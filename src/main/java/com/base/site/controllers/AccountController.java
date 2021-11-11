@@ -12,15 +12,16 @@ import java.util.logging.Logger;
 
 @Controller
 public class AccountController {
+    Logger log = Logger.getLogger(AccountController.class.getName());
+
+    @Autowired
+    UsersService usersService;
 
     public AccountController(){
 
     }
 
-    Logger log = Logger.getLogger(AccountController.class.getName());
 
-    @Autowired
-    UsersService usersService;
 
     @GetMapping("/userList")
     public String userList(Model model){

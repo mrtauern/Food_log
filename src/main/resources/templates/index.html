@@ -6,6 +6,11 @@
     <head th:include="fragments/head :: styles">
 </head>
 <body>
+<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+<form th:action="@{/logout}" method="post">
+  <input type="submit" value="Sign Out"/>
+</form>
+<!-- old html
   <header th:include="fragments/navbar_top :: navbar"></header>
   <div th:switch="${users}">
     <h2 th:case="null">No users yet!</h2>
@@ -31,7 +36,7 @@
       </table>
     </div>
     <p><a href="/signup">Add a new user</a></p>
-  </div>
+  </div>-->
   <div th:include="fragments/navbar_top :: bottom_bar"></div>
 </body>
 </html>

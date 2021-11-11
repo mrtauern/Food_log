@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-
+/*
 @Controller
 public class UserController {
     @Autowired
@@ -66,4 +66,4 @@ public class UserController {
         userRepository.delete(user);
         return "redirect:/index";
     }
-}
+}*/
