@@ -6,16 +6,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user_type")
-public class UserType {
-
+@Table(name = "user_type", schema = "food_log")
+public class UserType implements Serializable {
     @Id
     @Column(name = "id")
     private Long id;
@@ -23,8 +22,4 @@ public class UserType {
     @Basic
     @Column(name = "type")
     private String type;
-
-    @OneToMany(mappedBy="userType", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private Set<Users> users;
 }

@@ -1,7 +1,6 @@
 package com.base.site.controllers;
 
 import com.base.site.repositories.ExerciseRepository;
-import com.base.site.repositories.UserRepository;
 import com.base.site.services.ExerciseService;
 import com.base.site.services.ExerciseTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
