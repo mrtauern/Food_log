@@ -6,9 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 @Entity
-public class User {
+public class User implements Serializable {
 
     @javax.persistence.Id
     @Id
