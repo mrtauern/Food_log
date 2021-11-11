@@ -65,10 +65,6 @@ public class Users implements Serializable {
     private double bmi = 0;
 
     @Basic
-    @Column(name = "active")
-    private byte active;
-
-    @Basic
     @Column(name = "fk_user_type_id")
     private long fkUserTypeId;
 
@@ -184,14 +180,6 @@ public class Users implements Serializable {
 
     public void setBmi(double bmi) {
         this.bmi = bmi;
-    }
-
-    public byte getActive() {
-        return active;
-    }
-
-    public void setActive(byte active) {
-        this.active = active;
     }
 
     public long getFkUserTypeId() {
