@@ -1,7 +1,7 @@
 package com.base.site.controllers;
 
-import com.base.site.models.User;
-import com.base.site.repositories.UserRepository;
+import com.base.site.models.Users;
+import com.base.site.repositories.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,32 +15,17 @@ import javax.validation.Valid;
 @Controller
 public class UserController {
     @Autowired
-    UserRepository userRepository;
-
-    @GetMapping("/signup")
-    public String showSignUpForm(User user) {
-        return "add-user";
-    }
-
-    @PostMapping("/adduser")
-    public String addUser(@Valid User user, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "add-user";
-        }
-
-        userRepository.save(user);
-        return "redirect:/index";
-    }
+    UsersRepo usersRepo;
 
     @GetMapping("/index")
     public String showUserList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", usersRepo.findAll());
         return "index";
     }
 
     @GetMapping("/edit/{id}")
     public String showUpdateForm(@PathVariable("id") long id, Model model) {
-        User user = userRepository.findById(id)
+        Users user = usersRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
 
         model.addAttribute("user", user);
@@ -48,22 +33,22 @@ public class UserController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateUser(@PathVariable("id") long id, @Valid User user,
+    public String updateUser(@PathVariable("id") long id, @Valid Users user,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
             user.setId(id);
             return "update-user";
         }
 
-        userRepository.save(user);
+        usersRepo.save(user);
         return "redirect:/index";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") long id, Model model) {
-        User user = userRepository.findById(id)
+        Users user = usersRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-        userRepository.delete(user);
+        usersRepo.delete(user);
         return "redirect:/index";
     }
 }

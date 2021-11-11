@@ -57,16 +57,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 //.antMatchers("/category/?**","/questions/?**").hasRole("ADMIN")
-                //.antMatchers("/api/**").permitAll()
+                .antMatchers("/signup","/adduser")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()
                 .and()
-                .logout().permitAll();
-                //.and()
-                //.oauth2Login()
+                .logout()
+                .logoutUrl("/user_logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll();
                 //.loginPage("/login");
 
         /*old
