@@ -1,9 +1,11 @@
 package com.base.site.controllers;
 
+import com.base.site.models.DailyLog;
 import com.base.site.models.Food;
 import com.base.site.repositories.FoodRepo;
 import com.base.site.services.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
+import java.util.List;
 import java.util.logging.Logger;
 
 @Controller
@@ -25,8 +28,11 @@ public class FoodController {
 
 
     @GetMapping("/food")
-    public String food( Model model) {
-        model.addAttribute("foodlist", foodService.findAll());
+    public String food(Model model, Food food, @Param("keyword") String keyword) {
+        List<Food> foodlist = foodService.findAllByKeyword(keyword);
+        model.addAttribute("foodlist", foodlist);
+        model.addAttribute("keyword", keyword);
+
         log.info("  get mapping food is called");
 
             return "food";

@@ -2,9 +2,18 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head th:include="fragments/head :: styles"></head>
+
+<script type="text/javascript" src="js/javascript.js"></script>
 <body>
 <header th:include="fragments/navbar_top :: navbar"></header>
 
+<form id="searchForm" th:action="@{/food}">
+    Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required />
+    &nbsp;
+    <input type="submit" value="Search" />
+    &nbsp;
+    <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+</form>
 <div class="container">
     <div id="inner_container">
 

@@ -18,19 +18,14 @@ public class DailyLogServiceImpl implements DailyLogService {
     public List<DailyLog> findAll() {
         return (List<DailyLog>) dailyLogRepo.findAll();
     }
+
     @Override
-    public List<DailyLog> findAll1(String keyword) {
+    public List<DailyLog> findAllByKeyword(String keyword) {
         if (keyword != null) {
             return dailyLogRepo.search(keyword);
         }
         return (List<DailyLog>) dailyLogRepo.findAll();
     }
-
-    /*
-    @Override
-    public List<DailyLog> findByKeyword(String keyword) {
-        return dailyLogRepo.findByKeyword(keyword);
-    }*/
 
     @Override
     public DailyLog save(DailyLog dailyLog) {

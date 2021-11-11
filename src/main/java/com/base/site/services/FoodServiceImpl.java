@@ -1,5 +1,6 @@
 package com.base.site.services;
 
+import com.base.site.models.DailyLog;
 import com.base.site.models.Food;
 import com.base.site.repositories.FoodRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,14 @@ public class FoodServiceImpl implements FoodService {
 
         @Override
         public List<Food> findAll() {
+            return (List<Food>) foodRepo.findAll();
+        }
+
+        @Override
+        public List<Food> findAllByKeyword(String keyword) {
+            if (keyword != null) {
+                return foodRepo.search(keyword);
+            }
             return (List<Food>) foodRepo.findAll();
         }
 

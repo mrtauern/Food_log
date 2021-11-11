@@ -9,7 +9,7 @@ import java.util.List;
 public interface DailyLogService {
 
     List<DailyLog> findAll();
-    List<DailyLog> findAll1(String keyword);
+    List<DailyLog> findAllByKeyword(String keyword);
     //List<DailyLog> findByKeyword(String keyword);
     DailyLog save(DailyLog dailyLog);
     DailyLog findById(Long id);
