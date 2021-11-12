@@ -16,14 +16,14 @@
         <label for="lastname">Lastname</label>
         <input type="text" th:name="lastname" id="lastname" th:required="required">
 
-        <label for="email">Email</label>
-        <input type="email" th:name="email" id="email" th:required="required">
+        <label for="username">Email</label>
+        <input type="email" th:name="username" id="username" th:required="required">
 
-        <label for="password">Password</label>
-        <input type="password" th:name="password" id="password" th:required="required">
+        <!--<label for="password">Password</label>
+        <input type="password" th:name="password" id="password" th:required="required">-->
 
         <label for="birthday">Birthday</label>
-        <input type="date" th:name="birthday" id="birthday" th:required="required">
+        <input type="date" th:name="sBirthday" id="birthday" th:required="required">
 
         <label for="startWeight">Start weight</label>
         <input type="number" th:name="startWeight" id="startWeight" th:required="required">
@@ -34,19 +34,10 @@
         <label for="height">Height (cm)</label>
         <input type="number" th:name="height" id="height" th:required="required">
 
-        <label for="active">Active</label>
-        <input type="checkbox" th:name="active" id="active" checked>
-
-        <label for="userType">User type</label>
-        <select th:name="userType" id="userType">
-            <th:block th:each="userType : ${userTypes}">
-                <th:block th:if="${userType.id == 3}">
-                    <option th:value="${userType.id}" th:text="${userType.type}" selected></option>
-                </th:block>
-                <th:block th:if="${userType.id != 3}">
-                    <option th:value="${userType.id}" th:text="${userType.type}"></option>
-                </th:block>
-            </th:block>
+        <label for="roles">Role</label>
+        <select th:name="roles" id="roles">
+            <option value="USER" selected>USER</option>
+            <option value="ADMIN">ADMIN</option>
         </select>
 
         <div>
