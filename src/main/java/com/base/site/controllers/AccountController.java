@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.sql.Timestamp;
@@ -30,6 +31,7 @@ public class AccountController {
 
     private final String USER_LIST = "userList";
     private final String CREATE_USER = "createUser";
+    private final String DELETE_USER_CONFIRM = "delete_user_confirm";
     private final String REDIRECT = "redirect:/";
 
     @Autowired
@@ -98,6 +100,24 @@ public class AccountController {
             log.info(e.toString());
         }
 
+        return REDIRECT + USER_LIST;
+    }
+
+    @GetMapping("/delete_user_confirm/{id}")
+    public String deleteUser(@PathVariable("id") long id, Model model) {
+        log.info("delete_user_confirm called userId: "+id);
+
+        Users user = usersService.findById(id);
+
+        model.addAttribute("user", user);
+
+        return DELETE_USER_CONFIRM;
+    }
+
+    @PostMapping("/delete_user_confirm/{id}")
+    public String deleteUser(@PathVariable("id") long id) {
+        log.info("delete_user_confirm confirmed... deleting user with  userId: "+id);
+        usersService.deleteById(id);
         return REDIRECT + USER_LIST;
     }
 }
