@@ -141,11 +141,68 @@ div.actionBar form{
 
 div.actionBar input{
     border: none;
-    background-color: #CCCCCC;
-    padding: 2px 4px;
+    background-color: #DDDDDD;
+    padding: 4px 4px;
 }
 
 div.actionBar a{
     float: right;
 }
 
+/* --------------------- FORM_BOX STYLING --------------------- */
+
+div.formBox{
+    background-color: white;
+    box-shadow: 5px 10px 8px #999999;
+
+    padding: 40px;
+    padding-bottom: 80px;
+    margin: 80px auto;
+
+    max-width: 600px;
+}
+
+div.formBox form{
+
+}
+
+div.formBox form label{
+    display: block;
+}
+
+div.formBox form input{
+    display: block;
+
+    width: 100%;
+
+    border: none;
+
+    background-color: #DDDDDD;
+
+    padding: 4px 4px;
+    margin-bottom: 20px;
+}
+
+div.formBox form input[type="checkbox"]{
+    width: auto;
+}
+
+div.formBox form select{
+    display: block;
+
+    width: 100%;
+
+    border: none;
+
+    background-color: #DDDDDD;
+
+    padding: 4px 4px;
+    margin-bottom: 20px;
+}
+
+div.formBox form div button{
+    float: right;
+
+    margin: 0 !IMPORTANT;
+    margin-left: 8px !IMPORTANT;
+}

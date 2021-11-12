@@ -1,6 +1,7 @@
 package com.base.site.models;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
@@ -10,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -40,12 +43,17 @@ public class Users implements Serializable {
     @Column(name = "password")
     private String password;
 
+    @Transient
+    private String sBirthday;
+
     @Basic
     @Column(name = "birthday")
     private Timestamp birthday;
 
+    @Setter(AccessLevel.NONE)
     @Basic
     @Column(name = "register_date")
+    @CreationTimestamp
     private Timestamp redisterDate;
 
     @Basic
@@ -70,7 +78,7 @@ public class Users implements Serializable {
 
     @Basic
     @Column(name = "fk_user_type_id")
-    private long fkUserTypeId;
+    private long fkUserTypeId = 3;
 
     @Basic
     @Column(name = "roles")
@@ -92,118 +100,6 @@ public class Users implements Serializable {
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Timestamp getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Timestamp birthday) {
-        this.birthday = birthday;
-    }
-
-    public Timestamp getRedisterDate() {
-        return redisterDate;
-    }
-
-    public void setRedisterDate(Timestamp redisterDate) {
-        this.redisterDate = redisterDate;
-    }
-
-    public double getStartWeight() {
-        return startWeight;
-    }
-
-    public void setStartWeight(double startWeight) {
-        this.startWeight = startWeight;
-    }
-
-    public double getCurrentWeight() {
-        return currentWeight;
-    }
-
-    public void setCurrentWeight(double currentWeight) {
-        this.currentWeight = currentWeight;
-    }
-
-    public double getGoalWeight() {
-        return goalWeight;
-    }
-
-    public void setGoalWeight(double goalWeight) {
-        this.goalWeight = goalWeight;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public double getBmi() {
-        return bmi;
-    }
-
-    public void setBmi(double bmi) {
-        this.bmi = bmi;
-    }
-
-    public long getFkUserTypeId() {
-        return fkUserTypeId;
-    }
-
-    public void setFkUserTypeId(long fkUserTypeId) {
-        this.fkUserTypeId = fkUserTypeId;
-    }
-
-    public String getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String roles) {
-        this.roles = roles;
     }
 
     @Override

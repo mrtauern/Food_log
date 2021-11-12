@@ -5,10 +5,14 @@ import com.base.site.repositories.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 
 @Service("UsersService")
 public class UsersServiceImpl implements UsersService {
+    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    static final int LEN = 10; //length
+    static SecureRandom rnd = new SecureRandom();
 
     @Autowired
     UsersRepo usersRepo;
@@ -41,5 +45,13 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public Users findByUserName(String name) {
         return usersRepo.findUsersByUsername(name);
+    }
+
+    @Override
+    public String generatePassword() {
+        StringBuilder sb = new StringBuilder(LEN);
+        for(int i = 0; i < LEN; i++)
+            sb.append(AB.charAt(rnd.nextInt(AB.length())));
+        return sb.toString();
     }
 }
