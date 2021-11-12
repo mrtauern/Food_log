@@ -16,4 +16,6 @@ public interface UsersService {
     void deleteById(Long id);
 
     void delete(Users user);
+
+    String generatePassword();
 }
