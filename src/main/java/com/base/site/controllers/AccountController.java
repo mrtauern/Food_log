@@ -131,10 +131,10 @@ public class AccountController {
 
             emailService.sendmail(mail);
 
-            return "redirect:/userList";
+            return REDIRECT + USER_LIST;
         } else {
             log.info("user not found or code already sent");
-            return "redirect:/userList";
+            return REDIRECT + USER_LIST;
         }
     }
 }
