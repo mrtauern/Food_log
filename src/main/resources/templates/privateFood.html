@@ -22,7 +22,7 @@
     <div id="inner_container">
         <br> <br>
         <h1>Private Food List</h1>
-        <a th:href="@{/createFood}" >Create New Food</a>
+        <a th:href="@{/createPrivateFood}" >Create New Food</a>
         <br/><br/>
         <table id="foodTable" border="1" cellpadding="10">
             <thead>
@@ -49,8 +49,8 @@
                 <td th:text="${pfood.energyKcal}">Kcal</td>
                 <td th:text="${pfood.fkUser.firstname}">User</td>
                 <td>
-                    <a th:href="@{/updateFood/{id}(id=${pfood.id})}">Edit</a>
-                    <a th:href="@{/deleteFood/{id}(id=${pfood.id})}">Delete</a>
+                    <a th:href="@{/updatePrivateFood/{id}(id=${pfood.id})}">Edit</a>
+                    <a th:href="@{/deletePrivateFood/{id}(id=${pfood.id})}">Delete</a>
                     <!-- <a th:href="@{/addFoodToDailyLog/{id}(id=${food.id})}">add to DailyLog</a> -->
                 </td>
             </tr>

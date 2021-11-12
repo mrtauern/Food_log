@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: styles"></head>
+<body>
+<header th:include="fragments/navbar_top :: navbar"></header>
+
+<div class="container">
+
+  <div id="inner_container">
+    <h1>Update Food</h1>
+
+    <form action="#" th:action="@{/savePrivateFood}" th:object ="${privateFood}" method="POST">
+
+      <input type="hidden" th:field="*{id}" />
+      <input type="hidden" th:field="*{fkUser.id}" />
+
+      <label  class="col-form-label">Name </label>
+      <input type="text" th:field = "*{name}"  class="form-control mb-4 col-4">
+
+      <label  class="col-form-label">Protein </label>
+      <input type="number" th:field = "*{protein}"  class="form-control mb-4 col-4">
+
+      <label  class="col-form-label">Carbohyrates </label>
+      <input type="text" th:field = "*{carbohydrates}"  class="form-control mb-4 col-4">
+
+      <label  class="col-form-label">Fat</label>
+      <input type="text" th:field = "*{fat}"  class="form-control mb-4 col-4">
+
+      <label  class="col-form-label">Kilojoule </label>
+      <input type="text" th:field = "*{energyKilojoule}"  class="form-control mb-4 col-4">
+
+      <label  class="col-form-label">Kcal</label>
+      <input type="text" th:field = "*{energyKcal}"  class="form-control mb-4 col-4">
+      <button type="submit" class="form-control mb-4 col-4" >Update Food</button>
+    </form>
+  </div>
+</div>
+
+<div th:include="fragments/navbar_top :: bottom_bar"></div>
+
+</body>
+</html>

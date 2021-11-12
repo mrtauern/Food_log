@@ -82,11 +82,13 @@ public class FoodController {
     }
 
     @GetMapping("/addFoodToDailyLog")
-    public String addFoodToDailyLog(Model model,Food food, DailyLog dailyLog, @Param("keyword") String keyword) {
+    public String addFoodToDailyLog(Model model,Food food, DailyLog dailyLog, PrivateFood privateFood, @Param("keyword") String keyword) {
         List<Food> foodlist = foodService.findAllByKeyword(keyword);
+        List<PrivateFood> pfoodlist = privateFoodService.findAllByKeyword(keyword);
 
         //model.addAttribute("foodlist", dailyLogList);
         model.addAttribute("foodlist", foodlist);
+        model.addAttribute("pfoodlist", pfoodlist);
         model.addAttribute("keyword", keyword);
 
         log.info("  get mapping addFoodToDailyLog is called");
