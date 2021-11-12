@@ -22,9 +22,14 @@ public class DailyLog {
     @Column(name = "id", nullable = false)
     private long id;
 
+    /*
     @ManyToOne
     @JoinColumn(name = "fk_user_id")
-    private User fkUser;
+    private Users fkUser;
+*/
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="fk_user_id", nullable = false)
+    private Users fkUser;
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "food_dailylog",

@@ -1,10 +1,12 @@
 package com.base.site.repositories;
 
 import com.base.site.models.DailyLog;
+import com.base.site.models.Food;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 

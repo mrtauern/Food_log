@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="fragments/head :: styles"></head>
+<body>
+    <header th:include="fragments/navbar_top :: navbar"></header>
+
+    <div class="contentBox">
+
+    <h1>User list</h1>
+
+        <div class="actionBar">
+
+            <form>
+                <input type="text" placeholder="Search...">
+            </form>
+
+            <a href="#" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Create user</a>
+
+        </div>
+
+
+        <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Active</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.firstname}"></td>
+            <td th:text="${user.lastname}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.active}"></td>
+            <td>
+                <a href="#" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                <a href="#" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    </div>
+
+    <footer th:include="fragments/navbar_top :: bottom_bar"></footer>
+</body>
+</html>

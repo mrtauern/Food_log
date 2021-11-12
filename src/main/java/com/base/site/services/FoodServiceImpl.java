@@ -77,7 +77,10 @@ public class FoodServiceImpl implements FoodService {
         }
 
 
-        return foodNotInDailyLog;    }
+        return foodNotInDailyLog;
+    }
+
+
 
 }
 

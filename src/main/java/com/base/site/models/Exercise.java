@@ -1,34 +1,58 @@
 package com.base.site.models;
 
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
-@Setter
-@Getter
-@Table(name = "exercise")
 @Entity
+@Table(name="exercise")
 public class Exercise {
+    @javax.persistence.Id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private long id;
 
-    public Integer getId() {
+    @NotBlank(message = "Time is mandatory")
+    private int time_min;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="fk_exercise_type_id", nullable = false)
+    private ExerciseType exerciseType;
+
+    public Exercise() {
+    }
+
+    public Exercise(long id, int time_min, ExerciseType exerciseType) {
+        this.id = id;
+        this.time_min = time_min;
+        this.exerciseType = exerciseType;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
-/*
-    @Override
-    public String toString() {
-        return "Exercise{" +
-                "id=" + id +
-                '}';
+
+    public int getTime_min() {
+        return time_min;
     }
 
- */
+    public void setTime_min(int time_min) {
+        this.time_min = time_min;
+    }
+
+    public ExerciseType getExerciseType() {
+        return exerciseType;
+    }
+
+    public void setExerciseType(ExerciseType exerciseType) {
+        this.exerciseType = exerciseType;
+    }
 }
+
