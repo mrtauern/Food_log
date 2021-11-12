@@ -51,7 +51,8 @@ public class FoodServiceImpl implements FoodService {
             this.foodRepo.deleteById(Id);
         }
 
-    @Override
+        /*
+        @Override
     public List<Food> findAllNotInList(DailyLog dailyLog) {
         List<Food> allFood = findAll();
         List<Food> foodNotInDailyLog = new ArrayList<>();
@@ -79,6 +80,8 @@ public class FoodServiceImpl implements FoodService {
 
         return foodNotInDailyLog;
     }
+
+         */
 
 
 

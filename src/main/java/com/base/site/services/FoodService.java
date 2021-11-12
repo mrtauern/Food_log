@@ -15,5 +15,5 @@ public interface FoodService {
     Food findById(Long id);
     void deleteById(Long id);
 
-    List<Food> findAllNotInList (DailyLog dailyLog);
+    //List<Food> findAllNotInList (DailyLog dailyLog);
 }

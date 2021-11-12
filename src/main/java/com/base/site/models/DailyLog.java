@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +32,14 @@ public class DailyLog {
     @JoinColumn(name="fk_user_id", nullable = false)
     private Users fkUser;
 
+    /*
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "food_dailylog",
             joinColumns = @JoinColumn(name = "dailylog_id_fk"),
             inverseJoinColumns = @JoinColumn(name = "food_id_fk")
     )
     private List<Food> food = new ArrayList<>();
-
+*/
 
     @ManyToOne
     @JoinColumn(name = "fk_log_type")
@@ -48,10 +50,14 @@ public class DailyLog {
     private Exercise fkExercise;
 
     @Column(name = "datetime")
-    private Instant datetime;
+    private Timestamp datetime;
 
     @Column(name = "food_amount")
     private Double foodAmount;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_food_id")
+    private Food food;
 
     @ManyToOne
     @JoinColumn(name = "fk_private_food_id")

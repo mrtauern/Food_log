@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: styles"></head>
+<body>
+<header th:include="fragments/navbar_top :: navbar"></header>
+
+
+<div class="container">
+  <div id="inner_container">
+    <h1>Create Food</h1>
+
+    <form action="#" th:action="@{/saveDailyLog}" th:object ="${dailyLog}" method="POST">
+      <input type="hidden" th:field="*{id}" />
+      <input type="hidden" name="userId" th:field="*{fkUser.id}" />
+
+      <label  class="col-form-label">Type Log </label>
+      <select  id="logType" name="logType" th:field="*{fkLogType}" >
+        <option th:each="logType : ${logType}" th:value="${logType.id}" th:utext="${logType.type}"/>
+      </select>
+
+      <!--  <label  class="col-form-label">Minutes</label>
+      <input type="text" th:field = "*{fkExercise.time_min}" placeholder=" Time Minute" class="form-control mb-4 col-4">
+
+      <input type="text" th:field = "*{datetime}" placeholder=" Name" class="form-control mb-4 col-4">-->
+
+      <label  class="col-form-label">Food Amount </label>
+      <input type="text" th:field = "*{foodAmount}" placeholder=" Amount " class="form-control mb-4 col-4">
+
+
+      <button type="submit" class="form-control mb-4 col-4" >Create DailyLog</button>
+    </form>
+  </div>
+</div>
+
+<div th:include="fragments/navbar_top :: bottom_bar"></div>
+</body>
+</html>

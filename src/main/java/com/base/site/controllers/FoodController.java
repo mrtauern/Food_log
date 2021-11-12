@@ -1,12 +1,10 @@
 package com.base.site.controllers;
 
-import com.base.site.models.DailyLog;
-import com.base.site.models.Food;
-import com.base.site.models.FoodDailylog;
-import com.base.site.models.Users;
+import com.base.site.models.*;
 import com.base.site.repositories.FoodRepo;
 import com.base.site.services.DailyLogService;
 import com.base.site.services.FoodService;
+import com.base.site.services.LogTypeService;
 import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -21,7 +19,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -29,14 +32,16 @@ import java.util.logging.Logger;
 public class FoodController {
     Logger log = Logger.getLogger(FoodController.class.getName());
 
-    @Autowired
-    FoodRepo foodRepo;
+    //@Autowired
+    //FoodRepo foodRepo;
     @Autowired
     FoodService foodService;
     @Autowired
     DailyLogService dailyLogService;
     @Autowired
     UsersService usersService;
+    @Autowired
+    LogTypeService logTypeService;
 
 
     @GetMapping("/food")
@@ -51,7 +56,7 @@ public class FoodController {
     }
 
     @GetMapping("/createFood")
-    public String createStudentForm(Model model) {
+    public String createFood(Model model) {
 
             Food food = new Food();
             model.addAttribute("food", food);
@@ -85,62 +90,55 @@ public class FoodController {
             return "redirect:/" + "food";
     }
 
+    @GetMapping("/addFoodToDailyLog")
+    public String addFoodToDailyLog(Model model,Food food, DailyLog dailyLog, @Param("keyword") String keyword) {
+        List<Food> foodlist = foodService.findAllByKeyword(keyword);
 
-    @GetMapping("/addFoodToDailyLog/{id}")
-    public String addFoodToDailyLog(@PathVariable(value = "id") long id, Model model, HttpSession session) {
-        log.info("addFoodToDailyLog getmapping called with id=" + id);
-        //log.info("this session " + session.getAttribute("login"));
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        //model.addAttribute("foodlist", dailyLogList);
+        model.addAttribute("foodlist", foodlist);
+        model.addAttribute("keyword", keyword);
 
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-
-        for (DailyLog test: loggedInUser.getDailyLogs()) {
-            log.info("asd111: "+test.getDatetime());
-        }
-
-        DailyLog dailyLog = dailyLogService.findById((int) id);
-        //DailyLog dailyLog = new DailyLog();
-        long test = 3;
-
-        List<Food> userFoodList = dailyLog.getFood();
-        Food food = foodService.findById(test);
-        userFoodList.add(food);
-        //List<Food> foodInDailyLog = dailyLog.getFood();
-        List<DailyLog> foodList = dailyLogService.findAll();
-        for (Food currentFood: dailyLog.getFood()) {
-            log.info("food: "+currentFood.getName());
-        }
-
-
-        List<Food> foodNotInDailyLog = foodService.findAllNotInList(dailyLog);
-
-        FoodDailylog newFoodDailylog = new FoodDailylog();
-
-        model.addAttribute("foodlist", foodService.findAll());
-        model.addAttribute("dailyLog", dailyLog);
-        model.addAttribute("dailyLogId", "" + id);
-        //model.addAttribute("foodInDailyLog", foodInDailyLog);
-        model.addAttribute("foodInDailyLog", dailyLog.getFood());
-        model.addAttribute("foodNotInDailyLog", foodNotInDailyLog);
-        model.addAttribute("newFoodDailylog", newFoodDailylog);
+        log.info("  get mapping addFoodToDailyLog is called");
 
         return "addFoodToDailyLog";
-
     }
 
-    @PostMapping("/addFoodToDailyLog")
-    public String addFoodToDailyLog(@ModelAttribute("foodDailyLog") FoodDailylog newFoodDailyLog) {
-        log.info("saving foodDailyLog DailyLogId=" + newFoodDailyLog.getFoodIdFk() + " dailyLogId=" + newFoodDailyLog.getDailylogIdFk());
-            DailyLog newDailyLog = dailyLogService.findById(newFoodDailyLog.getDailylogIdFk());
-            Food test = foodService.findById((long) newFoodDailyLog.getFoodIdFk());
+    @GetMapping("/createDailyLog/{id}")
+    public String createDailyLog(@PathVariable(value = "id") Long id,Model model,DailyLog dailyLog) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+        Food foods = foodService.findById(id);
+        model.addAttribute("dailyLog", dailyLog);
+        model.addAttribute("foods", foods);
+        model.addAttribute("logType", logTypeService.findAll());
+        log.info("  createDailyLog is called ");
 
-            newDailyLog.getFood().add(test);
+        return "createDailyLog";
+    }
+    @PostMapping("/saveDailyLog")
+    public String saveDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,Food food, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+        Food foodId = foodService.findById(food.getId());
+        dailyLog.setFkUser(loggedInUser);
+        dailyLog.setFood(foodId);
 
-            dailyLogService.save(newDailyLog);
+        dailyLogService.save(dailyLog);
 
-            return "redirect:/" + "food" + newFoodDailyLog.getDailylogIdFk();
+        log.info("  PostMapping saveDailyLog is called ");
+        return  "redirect:/" + "addFoodToDailyLog";
+    }
+/*
+    @GetMapping("/updateDailyLog/{id}")
+    public String updateDailyLog(@PathVariable(value = "id") Long id, Model model) {
+        DailyLog dailyLog = dailyLogService.findById(id);
+        model.addAttribute("dailyLog", dailyLog);
+        log.info("  GetMapping updateDailyLog is called ");
+
+        return "updateDailyLog";
     }
 
+ */
 
 
 }

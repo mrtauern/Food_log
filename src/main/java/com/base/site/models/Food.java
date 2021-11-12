@@ -25,11 +25,16 @@ public class Food {
     private double energy_kilojoule;
     private double energy_kcal;
 
+    @OneToMany(mappedBy="food", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<DailyLog> dailyLogs;
 
 
-    @ManyToMany(mappedBy = "food")
+
+
+    /*@ManyToMany(mappedBy = "food")
     private List<DailyLog> dailyLog = new ArrayList<>();
-
+*/
     /*
     @Override
     public String toString() {

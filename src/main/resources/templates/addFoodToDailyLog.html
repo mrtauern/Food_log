@@ -12,71 +12,52 @@
 <body>
 <header th:include="fragments/navbar_top :: navbar"></header>
 
-<!--
-<form id="searchForm" th:action="@{/food}">
+<form id="searchForm" th:action="@{/addFoodToDailyLog}">
     Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required />
     &nbsp;
     <input type="submit" value="Search" />
     &nbsp;
     <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
 </form>
-
--->
 <div class="container">
     <div id="inner_container">
         <br> <br>
         <h1>Food List</h1>
         <br/><br/>
-        <table border="1" cellpadding="10">
+        <table id="foodTable" border="1" cellpadding="10">
             <thead>
             <tr>
-                <th>Food ID</th>
-                <th>Name</th>
-                <!-- <th>Protein</th>
-                <th>Carbohydrates</th>
-                <th>Fat</th>
-                <td>Kilojoule</td>
-                <th>Kcal</th> -->
-                <td>Action</td>
+                <th>  Food ID </th>
+                <th> Name < /th>
+                <th> Protein </th>
+                <th> Carbohydrates </th>
+                <th> Fat </th>
+                <td> Kilojoule </td>
+                <th> Kcal </th>
+                <td> Action </td>
 
             </tr>
             </thead>
             <tbody>
-
-
-            <tr th:each="food : ${foodInDailyLog}">
-                <td th:text="${food.id}">Food ID</td>
-                <td th:text="${food.name}">Name</td>
-                <!-- <td th:text="${food.protein}">Protein</td>
-                <td th:text="${food.carbohydrates}">Carbohydrates</td>
-                <td th:text="${food.fat}">Fat</td>
-                <td th:text="${food.energy_kilojoule}">Kilojoule</td>
-                <td th:text="${food.energy_kcal}">Kcal</td> -->
+            <tr th:each="foods : ${foodlist}">
+                <td th:text="${foods.id}">Food ID</td>
+                <td th:text="${foods.name}">Name</td>
+                <td th:text="${foods.protein}">Protein</td>
+                <td th:text="${foods.carbohydrates}">Carbohydrates</td>
+                <td th:text="${foods.fat}">Fat</td>
+                <td th:text="${foods.energy_kilojoule}">Kilojoule</td>
+                <td th:text="${foods.energy_kcal}">Kcal</td>
                 <td>
-                   <!-- <a th:href="${'/removeStudentFromClass/'+{food.id}+'/'+{dailyLogId}}">Remove From DailyLog</a> -->
-
-                    <a th:href="@{/addFoodToDailyLog/{id}(id=${food.id})}">add to DailyLog</a>
+                    <a th:href="@{/createDailyLog/{id}(id=${foods.id})}">Add To Daily Log</a>
+                    <!-- <a th:href="@{/addFoodToDailyLog/{id}(id=${food.id})}">add to DailyLog</a> -->
                 </td>
-
             </tr>
             </tbody>
         </table>
-<!--
-        <form method="POST" th:action="@{/addFoodToDailyLog}" th:object ="${newFoodDailylog}">
 
-            <input type="hidden" th:name="dailyLogIdFk" th:value="${dailyLogId}">
-            <select id="Food" name="Food" th:field="*{foodIdFk}">
-        <span th:each="food : ${foodNotInDailyLog}">
-          <option th:value="${food.id}" th:text="${food.name + ' ' + food.protein}"></option>
-        </span>
-            </select>
-            <button>Add to DailyLog</button>
-
-        </form>
--->
     </div>
-
-    <footer th:include="fragments/footer :: bottom"></footer>
 </div>
+
+<div th:include="fragments/navbar_top :: bottom_bar"></div>
 </body>
 </html>
