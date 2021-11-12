@@ -16,7 +16,7 @@
 <header th:include="fragments/navbar_top :: navbar"></header>
 
     <form id="searchForm" th:action="@{/dailyLog}">
-        Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required />
+        Filter: <input type="text" name="keyword" id="keyword"  placeholder="Search for id"  size="50" th:value="${keyword}" required />
         &nbsp;
         <input type="submit" value="Search" />
         &nbsp;
@@ -55,7 +55,7 @@
                 <td th:text="${log.fkExercise}">Exercise</td>
                 <td th:text="${log.datetime}">Date</td>
                 <td th:text="${log.foodAmount}">Amount</td>
-                <td th:text="${log.fkPrivateFood}">P Food</td>
+                <!--<td th:text="${log.fkPrivateFood}">P Food</td> -->
                 <td>
                     <!-- <a th:href="@{/updateFood/{id}(id=${log.id})}">Edit</a>
                     <a th:href="@{/deleteFood/{id}(id=${log.id})}">Delete</a> -->

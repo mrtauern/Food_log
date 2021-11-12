@@ -86,6 +86,10 @@ public class Users implements Serializable {
             cascade = CascadeType.ALL)
     private Set<DailyLog> dailyLogs;
 
+    @OneToMany(mappedBy="fkUser", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<PrivateFood> privateFoods;
+
     public Users(String firstname, String lastname, String username, String password, long fkUserTypeId, String roles, double bmi) {
         this.firstname = firstname;
         this.lastname = lastname;

@@ -23,23 +23,12 @@ public class DailyLog {
     @Column(name = "id", nullable = false)
     private long id;
 
-    /*
-    @ManyToOne
-    @JoinColumn(name = "fk_user_id")
-    private Users fkUser;
-*/
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="fk_user_id", nullable = false)
     private Users fkUser;
 
-    /*
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "food_dailylog",
-            joinColumns = @JoinColumn(name = "dailylog_id_fk"),
-            inverseJoinColumns = @JoinColumn(name = "food_id_fk")
-    )
-    private List<Food> food = new ArrayList<>();
-*/
+
 
     @ManyToOne
     @JoinColumn(name = "fk_log_type")
@@ -61,20 +50,7 @@ public class DailyLog {
 
     @ManyToOne
     @JoinColumn(name = "fk_private_food_id")
-    private PrivateFood fkPrivateFood;
-/*
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "fkUser = " + fkUser + ", " +
-                "fkLogType = " + fkLogType + ", " +
-                "fkExercise = " + fkExercise + ", " +
-                "datetime = " + datetime + ", " +
-                "foodAmount = " + foodAmount + ", " +
-                "fkPrivateFood = " + fkPrivateFood + ")";
-    }
+    private PrivateFood privateFood;
 
- */
 }
 

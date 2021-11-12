@@ -30,25 +30,4 @@ public class Food {
     private Set<DailyLog> dailyLogs;
 
 
-
-
-    /*@ManyToMany(mappedBy = "food")
-    private List<DailyLog> dailyLog = new ArrayList<>();
-*/
-    /*
-    @Override
-    public String toString() {
-        return "Food{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", protein=" + protein +
-                ", carbohydrates=" + carbohydrates +
-                ", fat=" + fat +
-                ", energy_kilojoule=" + energy_kilojoule +
-                ", energy_kcal=" + energy_kcal +
-                ", dailyLog=" + dailyLog +
-                '}';
-    }
-
-     */
 }

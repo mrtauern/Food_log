@@ -2,10 +2,7 @@ package com.base.site.controllers;
 
 import com.base.site.models.*;
 import com.base.site.repositories.FoodRepo;
-import com.base.site.services.DailyLogService;
-import com.base.site.services.FoodService;
-import com.base.site.services.LogTypeService;
-import com.base.site.services.UsersService;
+import com.base.site.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
@@ -18,13 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.servlet.http.HttpSession;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -32,10 +22,10 @@ import java.util.logging.Logger;
 public class FoodController {
     Logger log = Logger.getLogger(FoodController.class.getName());
 
-    //@Autowired
-    //FoodRepo foodRepo;
     @Autowired
     FoodService foodService;
+    @Autowired
+    PrivateFoodService privateFoodService;
     @Autowired
     DailyLogService dailyLogService;
     @Autowired
@@ -47,6 +37,7 @@ public class FoodController {
     @GetMapping("/food")
     public String food(Model model, Food food, @Param("keyword") String keyword) {
         List<Food> foodlist = foodService.findAllByKeyword(keyword);
+
         model.addAttribute("foodlist", foodlist);
         model.addAttribute("keyword", keyword);
 

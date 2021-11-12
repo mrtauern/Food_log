@@ -5,14 +5,14 @@
 
 <script type="text/javascript">
     function clearSearch() {
-        window.location = "[[@{/food}]]";
+        window.location = "[[@{/privateFood}]]";
     }
 </script>
 <body>
 <header th:include="fragments/navbar_top :: navbar"></header>
 
-<form id="searchForm" th:action="@{/food}">
-    Filter: <input type="text" name="keyword" id="keyword" placeholder="Search for name"  size="50" th:value="${keyword}" required />
+<form id="searchForm" th:action="@{/privateFood}">
+    Filter: <input type="text" name="keyword" id="keyword" placeholder="Search for name" size="50" th:value="${keyword}" required />
     &nbsp;
     <input type="submit" value="Search" />
     &nbsp;
@@ -21,7 +21,7 @@
 <div class="container">
     <div id="inner_container">
         <br> <br>
-        <h1>Food List</h1>
+        <h1>Private Food List</h1>
         <a th:href="@{/createFood}" >Create New Food</a>
         <br/><br/>
         <table id="foodTable" border="1" cellpadding="10">
@@ -39,17 +39,18 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="food : ${foodlist}">
-                <td th:text="${food.id}">Food ID</td>
-                <td th:text="${food.name}">Name</td>
-                <td th:text="${food.protein}">Protein</td>
-                <td th:text="${food.carbohydrates}">Carbohydrates</td>
-                <td th:text="${food.fat}">Fat</td>
-                <td th:text="${food.energy_kilojoule}">Kilojoule</td>
-                <td th:text="${food.energy_kcal}">Kcal</td>
+            <tr th:each="pfood : ${pfood}">
+                <td th:text="${pfood.id}">Food ID</td>
+                <td th:text="${pfood.name}">Name</td>
+                <td th:text="${pfood.protein}">Protein</td>
+                <td th:text="${pfood.carbohydrates}">Carbohydrates</td>
+                <td th:text="${pfood.fat}">Fat</td>
+                <td th:text="${pfood.energyKilojoule}">Kilojoule</td>
+                <td th:text="${pfood.energyKcal}">Kcal</td>
+                <td th:text="${pfood.fkUser.firstname}">User</td>
                 <td>
-                    <a th:href="@{/updateFood/{id}(id=${food.id})}">Edit</a>
-                    <a th:href="@{/deleteFood/{id}(id=${food.id})}">Delete</a>
+                    <a th:href="@{/updateFood/{id}(id=${pfood.id})}">Edit</a>
+                    <a th:href="@{/deleteFood/{id}(id=${pfood.id})}">Delete</a>
                     <!-- <a th:href="@{/addFoodToDailyLog/{id}(id=${food.id})}">add to DailyLog</a> -->
                 </td>
             </tr>

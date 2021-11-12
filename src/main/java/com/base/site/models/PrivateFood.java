@@ -1,20 +1,33 @@
 package com.base.site.models;
 
-import javax.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.*;
+import java.util.Set;
+
+@Getter
+@Setter
 @Table(name = "private_food")
 @Entity
 public class PrivateFood {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
+    private String name;
+    private Integer protein;
+    private Integer carbohydrates;
+    private Integer fat;
+    private Double energyKilojoule;
+    private Double energyKcal;
 
-    public Integer getId() {
-        return id;
-    }
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "fk_user_id", nullable = false)
+    private Users fkUser;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @OneToMany(mappedBy="privateFood", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<DailyLog> dailyLogs;
+
 }
