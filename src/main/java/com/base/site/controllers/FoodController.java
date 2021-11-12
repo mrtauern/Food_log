@@ -119,19 +119,26 @@ public class FoodController {
         dailyLogService.save(dailyLog);
 
         log.info("  PostMapping saveDailyLog is called ");
-        return  "redirect:/" + "addFoodToDailyLog";
+        return  "redirect:/" + "dailyLog";
     }
-/*
+
     @GetMapping("/updateDailyLog/{id}")
     public String updateDailyLog(@PathVariable(value = "id") Long id, Model model) {
         DailyLog dailyLog = dailyLogService.findById(id);
         model.addAttribute("dailyLog", dailyLog);
+        model.addAttribute("logType", logTypeService.findAll());
         log.info("  GetMapping updateDailyLog is called ");
 
         return "updateDailyLog";
     }
 
- */
+    @GetMapping("/deleteDailyLog/{id}")
+    public String deleteDailyLog(@PathVariable(value = "id") Long id, Model model) {
+        this.dailyLogService.deleteById(id);
+        log.info("  GetMapping deleteDailyLog is called ");
+
+        return "redirect:/" + "dailyLog";
+    }
 
 
 }
