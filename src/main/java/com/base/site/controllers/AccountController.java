@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -30,6 +28,8 @@ public class AccountController {
 
     private final String USER_LIST = "userList";
     private final String CREATE_USER = "createUser";
+    private final String EDIT_USER = "editUser";
+
     private final String REDIRECT = "redirect:/";
 
     @Autowired
@@ -49,6 +49,7 @@ public class AccountController {
         log.info("userList called");
 
         model.addAttribute("users", usersService.findAll());
+        model.addAttribute("pageTitle", "User list");
 
         return USER_LIST;
     }
@@ -58,7 +59,8 @@ public class AccountController {
         log.info("createUser get called");
 
         model.addAttribute("users", new Users());
-        model.addAttribute("userTypes", userTypeService.findAll());
+        //model.addAttribute("userTypes", userTypeService.findAll());
+        model.addAttribute("pageTitle", "Create user");
 
         return CREATE_USER;
     }
@@ -99,5 +101,21 @@ public class AccountController {
         }
 
         return REDIRECT + USER_LIST;
+    }
+
+    @GetMapping("/editUser/{id}")
+    public String editUser(@PathVariable(value = "id") Long id, Model model){
+        log.info("editUser get called");
+
+        Users user = usersService.findById(id);
+
+        String sBirthday = new SimpleDateFormat("yyyy-MM-dd").format(user.getBirthday());
+        user.setSBirthday(sBirthday);
+
+        model.addAttribute("users", user);
+        //model.addAttribute("userTypes", userTypeService.findAll());
+        model.addAttribute("pageTitle", "Edit user");
+
+        return EDIT_USER;
     }
 }

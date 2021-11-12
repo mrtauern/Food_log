@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="fragments/head :: styles"></head>
+<body>
+<header th:include="fragments/navbar_top :: navbar"></header>
+
+<div class="formBox">
+
+    <h1>Edit user</h1>
+
+    <form th:method="put" th:action="@{/editUser}" th:object="${users}">
+        <label for="firstname">Firstname</label>
+        <input type="text" th:field="*{firstname}" id="firstname" th:required="required">
+
+        <label for="lastname">Lastname</label>
+        <input type="text" th:field="*{lastname}" id="lastname" th:required="required">
+
+        <label for="username">Email</label>
+        <input type="email" th:field="*{username}" id="username" th:required="required">
+
+        <!--<label for="password">Password</label>
+        <input type="password" th:field="password" id="password" th:required="required">-->
+
+        <label for="birthday">Birthday</label>
+        <input type="date" th:field="*{sBirthday}" id="birthday" th:required="required">
+
+        <label for="startWeight">Start weight</label>
+        <input type="number" th:field="*{startWeight}" id="startWeight" th:required="required">
+
+        <label for="goalWeight">Goal weight</label>
+        <input type="number" th:field="*{goalWeight}" id="goalWeight" th:required="required">
+
+        <label for="height">Height (cm)</label>
+        <input type="number" th:field="*{height}" id="height" th:required="required">
+
+        <label for="roles">Role</label>
+        <select th:name="roles" id="roles">
+            <th:block th:if="${users.roles == 'USER'}">
+                <option value="USER" selected>USER</option>
+                <option value="ADMIN">ADMIN</option>
+            </th:block>
+            <th:block th:if="${users.roles == 'ADMIN'}">
+                <option value="USER">USER</option>
+                <option value="ADMIN" selected>ADMIN</option>
+            </th:block>
+        </select>
+
+        <div>
+            <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Save</button>
+            <button type="button" class="btn mr-2 btn-sm"><i class="fas fa-times"></i> Cancel</button>
+        </div>
+    </form>
+
+</div>
+
+<footer th:include="fragments/navbar_top :: bottom_bar"></footer>
+</body>
+</html>

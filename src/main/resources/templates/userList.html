@@ -35,7 +35,7 @@
             <td th:text="${user.lastname}"></td>
             <td th:text="${user.username}"></td>
             <td>
-                <a href="#" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                <a th:href="${'/editUser/' + user.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
                 <a href="#" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
             </td>
         </tr>
