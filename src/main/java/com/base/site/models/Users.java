@@ -70,7 +70,7 @@ public class Users implements Serializable {
 
     @Basic
     @Column(name = "bmi")
-    private double bmi = 0;
+    private double bmi = 1;
 
     @Basic
     @Column(name = "fk_user_type_id")

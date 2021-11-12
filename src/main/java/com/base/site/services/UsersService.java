@@ -18,4 +18,5 @@ public interface UsersService {
     void delete(Users user);
 
     String generatePassword();
+    Users findUsersByUsername(String username);
 }
