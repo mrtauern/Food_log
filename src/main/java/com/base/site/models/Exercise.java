@@ -1,7 +1,12 @@
 package com.base.site.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
+@Setter
+@Getter
 @Table(name = "exercise")
 @Entity
 public class Exercise {
@@ -17,4 +22,13 @@ public class Exercise {
     public void setId(Integer id) {
         this.id = id;
     }
+/*
+    @Override
+    public String toString() {
+        return "Exercise{" +
+                "id=" + id +
+                '}';
+    }
+
+ */
 }

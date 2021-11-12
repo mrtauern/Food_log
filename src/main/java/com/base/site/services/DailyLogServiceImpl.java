@@ -33,7 +33,7 @@ public class DailyLogServiceImpl implements DailyLogService {
     }
 
     @Override
-    public DailyLog findById(Long id) {
+    public DailyLog findById(long id) {
         Optional<DailyLog> optional = dailyLogRepo.findById(id);
         DailyLog dailyLog = null;
         if (optional.isPresent()){
@@ -44,7 +44,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         return dailyLog;
     }
 
-    @Override
+     @Override
     public void deleteById(Long Id) {
         this.dailyLogRepo.deleteById(Id);
     }

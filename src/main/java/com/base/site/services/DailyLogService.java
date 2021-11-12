@@ -10,8 +10,7 @@ public interface DailyLogService {
 
     List<DailyLog> findAll();
     List<DailyLog> findAllByKeyword(String keyword);
-    //List<DailyLog> findByKeyword(String keyword);
     DailyLog save(DailyLog dailyLog);
-    DailyLog findById(Long id);
-    void deleteById(Long id);
+    DailyLog findById(long id);
+    void deleteById(Long Id);
 }

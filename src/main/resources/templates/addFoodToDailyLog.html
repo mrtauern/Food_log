@@ -1,10 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: styles">
+</head>
+<script type="text/javascript">
+    function clearSearch() {
+        window.location = "[[@{/addFoodToDailyLog}]]";
+    }
+</script>
+<body>
+<header th:include="fragments/navbar_top :: navbar"></header>
+
+<!--
+<form id="searchForm" th:action="@{/food}">
+    Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required />
+    &nbsp;
+    <input type="submit" value="Search" />
+    &nbsp;
+    <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+</form>
+
+-->
+<div class="container">
+    <div id="inner_container">
+        <br> <br>
+        <h1>Food List</h1>
+        <br/><br/>
+        <table border="1" cellpadding="10">
+            <thead>
+            <tr>
+                <th>Food ID</th>
+                <th>Name</th>
+                <!-- <th>Protein</th>
+                <th>Carbohydrates</th>
+                <th>Fat</th>
+                <td>Kilojoule</td>
+                <th>Kcal</th> -->
+                <td>Action</td>
+
+            </tr>
+            </thead>
+            <tbody>
+
+
+            <tr th:each="food : ${foodInDailyLog}">
+                <td th:text="${food.id}">Food ID</td>
+                <td th:text="${food.name}">Name</td>
+                <!-- <td th:text="${food.protein}">Protein</td>
+                <td th:text="${food.carbohydrates}">Carbohydrates</td>
+                <td th:text="${food.fat}">Fat</td>
+                <td th:text="${food.energy_kilojoule}">Kilojoule</td>
+                <td th:text="${food.energy_kcal}">Kcal</td> -->
+                <td>
+                   <!-- <a th:href="${'/removeStudentFromClass/'+{food.id}+'/'+{dailyLogId}}">Remove From DailyLog</a> -->
+
+                    <a th:href="@{/addFoodToDailyLog/{id}(id=${food.id})}">add to DailyLog</a>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+<!--
+        <form method="POST" th:action="@{/addFoodToDailyLog}" th:object ="${newFoodDailylog}">
+
+            <input type="hidden" th:name="dailyLogIdFk" th:value="${dailyLogId}">
+            <select id="Food" name="Food" th:field="*{foodIdFk}">
+        <span th:each="food : ${foodNotInDailyLog}">
+          <option th:value="${food.id}" th:text="${food.name + ' ' + food.protein}"></option>
+        </span>
+            </select>
+            <button>Add to DailyLog</button>
+
+        </form>
+-->
+    </div>
+
+    <footer th:include="fragments/footer :: bottom"></footer>
+</div>
 </body>
 </html>

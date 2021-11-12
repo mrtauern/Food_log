@@ -26,6 +26,7 @@ public class DailyLogController {
     @RequestMapping("dailyLog")
     public String dailyLog(DailyLog dailyLog, Model model,@Param("keyword") String keyword) {
             List<DailyLog> list = dailyLogService.findAllByKeyword(keyword);
+            //List<DailyLog> list = dailyLogService.findAll();
             model.addAttribute("list", list);
             model.addAttribute("keyword", keyword);
         log.info("  get mapping DailyLog is called");

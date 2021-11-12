@@ -6,6 +6,7 @@ import com.base.site.repositories.FoodRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +51,34 @@ public class FoodServiceImpl implements FoodService {
             this.foodRepo.deleteById(Id);
         }
 
-    }
+    @Override
+    public List<Food> findAllNotInList(DailyLog dailyLog) {
+        List<Food> allFood = findAll();
+        List<Food> foodNotInDailyLog = new ArrayList<>();
+        List<Long> usedIds = new ArrayList<>();
+        Boolean used = false;
+
+        for (Food f: dailyLog.getFood()) {
+            usedIds.add(f.getId());
+        }
+
+        for (Food f: allFood) {
+            for (long id: usedIds) {
+                if(f.getId() == id) {
+                    used = true;
+                }
+            }
+
+            if(used != true) {
+                foodNotInDailyLog.add(f);
+                usedIds.add(f.getId());
+            }
+            used = false;
+        }
+
+
+        return foodNotInDailyLog;    }
+
+}
 
 
