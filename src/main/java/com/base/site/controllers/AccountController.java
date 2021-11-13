@@ -1,18 +1,21 @@
 package com.base.site.controllers;
 
+import com.base.site.models.Mail;
+import com.base.site.models.UserPassResetCode;
 import com.base.site.models.UserType;
 import com.base.site.models.Users;
+import com.base.site.repositories.UPRCRepository;
+import com.base.site.services.EmailService;
 import com.base.site.services.UserTypeService;
 import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,6 +48,12 @@ public class AccountController {
 
     @Autowired
     EmailController emailController;
+
+    @Autowired
+    UPRCRepository uprcRepository;
+
+    @Autowired
+    EmailService emailService;
 
     @GetMapping("/userList")
     public String userList(Model model){
@@ -103,6 +112,33 @@ public class AccountController {
         return REDIRECT + USER_LIST;
     }
 
+    @GetMapping("/password_reset_user/{id}")
+    public String passwordResetUser(@PathVariable(value = "id") long id, Model model) throws MessagingException, IOException {
+        //UserPassResetCode foundResetCode = uprcRepository.findByUsername(resetCode.getUsername());
+        Users foundUser = usersService.findById(id);
+        UserPassResetCode resetCode = new UserPassResetCode();
+
+        if (foundUser != null) {
+            resetCode.setUsername(foundUser.getUsername());
+            resetCode.setCode(resetCode.generateCode());
+            resetCode.setUsed(false);
+            uprcRepository.save(resetCode);
+
+            log.info("mail with link and code being sent to user with email: " + resetCode.getUsername());
+            Mail mail = new Mail();
+            mail.setRecipient(resetCode.getUsername());
+            mail.setTopic("Your password on Food Log have been requested to be reset");
+            mail.setContent("To complete the password reset click the link Http://localhost:8080/password_reset_code and type in the username and code: " + resetCode.getCode());
+
+            emailService.sendmail(mail);
+
+            return REDIRECT + USER_LIST;
+        } else {
+            log.info("user not found or code already sent");
+            return REDIRECT + USER_LIST;
+        }
+    }
+  
     @GetMapping("/delete_user_confirm/{id}")
     public String deleteUser(@PathVariable("id") long id, Model model) {
         log.info("delete_user_confirm called userId: "+id);

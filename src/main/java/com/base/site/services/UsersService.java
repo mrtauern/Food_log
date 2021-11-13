@@ -20,4 +20,5 @@ public interface UsersService {
     Users findByUserName(String name);
 
     String generatePassword();
+    Users findUsersByUsername(String username);
 }

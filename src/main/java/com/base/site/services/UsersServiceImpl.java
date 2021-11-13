@@ -54,4 +54,9 @@ public class UsersServiceImpl implements UsersService {
             sb.append(AB.charAt(rnd.nextInt(AB.length())));
         return sb.toString();
     }
+
+    @Override
+    public Users findUsersByUsername(String username) {
+        return usersRepo.findUsersByUsername(username);
+    }
 }
