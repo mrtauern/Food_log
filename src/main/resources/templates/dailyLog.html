@@ -50,7 +50,7 @@
             <tr th:each="log : ${list}">
                 <td th:text="${log.id}">DailyLog ID</td>
                 <td th:text="${log.fkUser.firstname}">Name</td>
-                <td th:text="${log.food}">Food Name</td>
+                <td th:text="${log.food.name}">Food Name</td>
                 <td th:text="${log.fkLogType.type}">Type</td>
                 <td th:text="${log.fkExercise}">Exercise</td>
                 <td th:text="${log.datetime}">Date</td>
