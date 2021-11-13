@@ -43,6 +43,11 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    public Users findByUserName(String name) {
+        return usersRepo.findUsersByUsername(name);
+    }
+
+    @Override
     public String generatePassword() {
         StringBuilder sb = new StringBuilder(LEN);
         for(int i = 0; i < LEN; i++)

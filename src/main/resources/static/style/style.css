@@ -90,6 +90,37 @@ li {
 
 /* --------------------- NAVBAR STYLING --------------------- */
 
+
+
+/*------   Daily Log     ------
+* {box-sizing: border-box;}
+.column { float: left; padding: 15px;}
+.left, .right {width:25%}
+.middle{width: 40%;}
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+} */
+/*------   Search Form    ------*/
+#searchForm {
+    float: left;
+    padding-left: 35%;
+    padding-right: 35%;
+    padding-top: 20px;
+    padding-bottom: 2%;
+}
+/*------   Food Table    ------*/
+#kfoodTable {
+    float: left;
+    padding-left: 40%;
+    /*padding-right: 35%;
+    padding-top: 20px;
+    padding-bottom: 2%; */
+}
+
+/*------   Calendar    ------*/
+
 /* --------------------- CONTENT_BOX STYLING --------------------- */
 
 div.contentBox{
