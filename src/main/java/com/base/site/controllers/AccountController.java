@@ -34,6 +34,7 @@ public class AccountController {
 
     private final String USER_LIST = "userList";
     private final String CREATE_USER = "createUser";
+    private final String EDIT_USER = "editUser";
     private final String DELETE_USER_CONFIRM = "delete_user_confirm";
     private final String REDIRECT = "redirect:/";
 
@@ -60,6 +61,7 @@ public class AccountController {
         log.info("userList called");
 
         model.addAttribute("users", usersService.findAll());
+        model.addAttribute("pageTitle", "User list");
 
         return USER_LIST;
     }
@@ -69,7 +71,8 @@ public class AccountController {
         log.info("createUser get called");
 
         model.addAttribute("users", new Users());
-        model.addAttribute("userTypes", userTypeService.findAll());
+        //model.addAttribute("userTypes", userTypeService.findAll());
+        model.addAttribute("pageTitle", "Create user");
 
         return CREATE_USER;
     }
@@ -112,6 +115,53 @@ public class AccountController {
         return REDIRECT + USER_LIST;
     }
 
+
+    @GetMapping("/editUser/{id}")
+    public String editUser(@PathVariable(value = "id") Long id, Model model){
+        log.info("editUser get called");
+
+        Users user = usersService.findById(id);
+
+        String sBirthday = new SimpleDateFormat("yyyy-MM-dd").format(user.getBirthday());
+        user.setSBirthday(sBirthday);
+
+        model.addAttribute("users", user);
+        //model.addAttribute("userTypes", userTypeService.findAll());
+        model.addAttribute("pageTitle", "Edit user");
+
+        return EDIT_USER;
+    }
+
+    @PostMapping("/editUser")
+    public String editUser(@ModelAttribute("users") Users user){
+        log.info("editUser post called");
+
+        Date birthday = new Date();
+
+        String sBirthday = user.getSBirthday();
+
+        log.info("New birthday: " + sBirthday);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            birthday = dateFormat.parse(sBirthday);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Timestamp ts=new Timestamp(birthday.getTime());
+        user.setBirthday(ts);
+
+        try {
+            usersService.save(user);
+        } catch (Exception e){
+            log.info("Something went wrong with crating an user");
+            log.info(e.toString());
+        }
+
+        return REDIRECT + USER_LIST;
+    }
+  
     @GetMapping("/password_reset_user/{id}")
     public String passwordResetUser(@PathVariable(value = "id") long id, Model model) throws MessagingException, IOException {
         //UserPassResetCode foundResetCode = uprcRepository.findByUsername(resetCode.getUsername());
