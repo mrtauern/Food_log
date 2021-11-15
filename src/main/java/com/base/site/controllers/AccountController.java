@@ -118,4 +118,34 @@ public class AccountController {
 
         return EDIT_USER;
     }
+
+    @PostMapping("/editUser")
+    public String editUser(@ModelAttribute("users") Users user){
+        log.info("editUser post called");
+
+        Date birthday = new Date();
+
+        String sBirthday = user.getSBirthday();
+
+        log.info("New birthday: " + sBirthday);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            birthday = dateFormat.parse(sBirthday);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Timestamp ts=new Timestamp(birthday.getTime());
+        user.setBirthday(ts);
+
+        try {
+            usersService.save(user);
+        } catch (Exception e){
+            log.info("Something went wrong with crating an user");
+            log.info(e.toString());
+        }
+
+        return REDIRECT + USER_LIST;
+    }
 }

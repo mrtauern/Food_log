@@ -9,7 +9,9 @@
 
     <h1>Edit user</h1>
 
-    <form th:method="put" th:action="@{/editUser}" th:object="${users}">
+    <form method="post" th:action="@{/editUser}" th:object="${users}">
+        <input type="hidden" th:field="*{id}" id="id" th:required="required">
+
         <label for="firstname">Firstname</label>
         <input type="text" th:field="*{firstname}" id="firstname" th:required="required">
 
