@@ -8,9 +8,9 @@
 
 <div class="container">
   <div id="inner_container">
-    <h1>Create Food</h1>
+    <h1>Create Private Food</h1>
 
-    <form action="#" th:action="@{/saveFood}" th:object ="${food}" method="POST">
+    <form action="#" th:action="@{/savePrivateFood}" th:object ="${privateFood}" method="POST">
 
       <label  class="col-form-label">Name </label>
       <input type="text" th:field = "*{name}" placeholder=" Name" class="form-control mb-4 col-4">
@@ -25,10 +25,13 @@
       <input type="text" th:field = "*{fat}" required placeholder=" Fat g" class="form-control mb-4 col-4">
 
       <label  class="col-form-label">Kilojoule </label>
-      <input type="text" th:field = "*{energy_kilojoule}" placeholder=" Kilojoule" class="form-control mb-4 col-4">
+      <input type="text" th:field = "*{energyKilojoule}" placeholder=" Kilojoule" class="form-control mb-4 col-4">
 
       <label  class="col-form-label">Kcal</label>
-      <input type="text" th:field = "*{energy_kcal}" required placeholder=" Kcal" class="form-control mb-4 col-4">
+      <input type="text" th:field = "*{energyKcal}" required placeholder=" Kcal" class="form-control mb-4 col-4">
+
+      <input type="hidden" th:field = "*{fkUser.id}"  class="form-control mb-4 col-4">
+
       <button type="submit" class="form-control mb-4 col-4" >Create Food</button>
     </form>
   </div>

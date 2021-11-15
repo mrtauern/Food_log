@@ -43,10 +43,20 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    public Users findByUserName(String name) {
+        return usersRepo.findUsersByUsername(name);
+    }
+
+    @Override
     public String generatePassword() {
         StringBuilder sb = new StringBuilder(LEN);
         for(int i = 0; i < LEN; i++)
             sb.append(AB.charAt(rnd.nextInt(AB.length())));
         return sb.toString();
+    }
+
+    @Override
+    public Users findUsersByUsername(String username) {
+        return usersRepo.findUsersByUsername(username);
     }
 }

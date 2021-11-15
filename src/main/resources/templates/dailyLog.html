@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="fragments/head :: styles">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<script type="text/javascript" src="/js/javascript.js"></script>
+<script type="text/javascript">
+    function clearSearch() {
+        window.location = "[[@{/dailyLog}]]";
+    }
+</script>
+<body>
+<header th:include="fragments/navbar_top :: navbar"></header>
+
+    <form id="searchForm" th:action="@{/dailyLog}">
+        Filter: <input type="text" name="keyword" id="keyword"  placeholder="Search for id"  size="50" th:value="${keyword}" required />
+        &nbsp;
+        <input type="submit" value="Search" />
+        &nbsp;
+        <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+    </form>
+<div class="container">
+    <div id="inner_container">
+<!-- <div class="row"> -->
+    <div class="column" style="background-color:#bbb;">
+        <br><br><br>
+        <a th:href="@{/addFoodToDailyLog}" >Add Food To DailyLog</a>
+        <br><br>
+
+
+        <table border="1" cellpadding="10">
+            <thead>
+            <tr>
+                <th>Food ID</th>
+                <th>U Name</th>
+                <th>Food ID</th>
+                <th>Log type</th>
+                <th>Exercise ID</th>
+                <td>Date</td>
+                <th>Food Amount</th>
+                <!--<th>Private Food ID</th> -->
+                <td>Action</td>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="log : ${list}">
+                <td th:text="${log.id}">DailyLog ID</td>
+                <td th:text="${log.fkUser.firstname}">Name</td>
+                <td th:text="${log.food.name}">Food Name</td>
+                <td th:text="${log.fkLogType.type}">Type</td>
+                <td th:text="${log.fkExercise}">Exercise</td>
+                <td th:text="${log.datetime}">Date</td>
+                <td th:text="${log.foodAmount}">Amount</td>
+                <!--<td th:text="${log.fkPrivateFood}">P Food</td> -->
+                <td>
+                    <a th:href="@{/updateDailyLog/{id}(id=${log.id})}">Edit</a>
+                    <a th:href="@{/deleteDailyLog/{id}(id=${log.id})}">Delete</a>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+ <!-- </div> -->
+    </div>
+</div>
+<div th:include="fragments/navbar_top :: bottom_bar"></div>
+
+</body>
+</html>

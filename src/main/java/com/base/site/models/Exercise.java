@@ -11,7 +11,8 @@ import java.util.Set;
 public class Exercise {
     @javax.persistence.Id
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private long id;
 
     @NotBlank(message = "Time is mandatory")
@@ -54,3 +55,4 @@ public class Exercise {
         this.exerciseType = exerciseType;
     }
 }
+

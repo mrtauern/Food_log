@@ -16,10 +16,12 @@ import java.io.Serializable;
 @Table(name = "user_type", schema = "food_log")
 public class UserType implements Serializable {
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Basic
     @Column(name = "type")
     private String type;
 }
+

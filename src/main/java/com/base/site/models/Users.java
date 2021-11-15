@@ -8,6 +8,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -70,7 +72,7 @@ public class Users implements Serializable {
 
     @Basic
     @Column(name = "bmi")
-    private double bmi = 0;
+    private double bmi = 1;
 
     @Basic
     @Column(name = "fk_user_type_id")
@@ -79,6 +81,14 @@ public class Users implements Serializable {
     @Basic
     @Column(name = "roles")
     private String roles;
+
+    @OneToMany(mappedBy="fkUser", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<DailyLog> dailyLogs;
+
+    @OneToMany(mappedBy="fkUser", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<PrivateFood> privateFoods;
 
     public Users(String firstname, String lastname, String username, String password, long fkUserTypeId, String roles, double bmi) {
         this.firstname = firstname;

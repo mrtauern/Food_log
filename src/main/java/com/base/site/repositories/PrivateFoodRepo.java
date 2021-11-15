@@ -1,18 +1,16 @@
 package com.base.site.repositories;
 
-import com.base.site.models.DailyLog;
 import com.base.site.models.Food;
+import com.base.site.models.PrivateFood;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository ("FoodRepo")
-public interface FoodRepo extends JpaRepository<Food, Long> {
+@Repository
+public interface PrivateFoodRepo extends JpaRepository <PrivateFood, Long> {
 
-    @Query("SELECT f FROM Food f WHERE CONCAT(f.name) LIKE %?1%")
-    public List<Food> search(String keyword);
-
+    @Query("SELECT pf FROM PrivateFood pf WHERE CONCAT(pf.name) LIKE %?1%")
+    public List<PrivateFood> search(String keyword);
 }
