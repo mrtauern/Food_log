@@ -158,6 +158,8 @@ public class AccountController {
             log.info("Something went wrong with crating an user");
             log.info(e.toString());
         }
+
+        return REDIRECT + USER_LIST;
     }
   
     @GetMapping("/password_reset_user/{id}")

@@ -36,7 +36,7 @@
             <td th:text="${user.username}"></td>
             <td>
                 <a th:href="${'/editUser/' + user.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                <a th:href="@{'/password_reset_user/'+${user.id}}" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-pen"></i> Reset Password</a>
+                <a th:href="@{'/password_reset_user/'+${user.id}}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Reset Password</a>
                 <a th:href="@{'/delete_user_confirm/'+${user.id}}" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
             </td>
         </tr>
