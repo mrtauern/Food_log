@@ -40,8 +40,8 @@ public class DailyLog {
     @Column(name = "datetime")
     private LocalDate datetime;
 
-    @Column(name = "food_amount")
-    private Double foodAmount;
+    @Column(name = "amount")
+    private Double amount;
 
     @ManyToOne
     @JoinColumn(name = "fk_food_id")
@@ -54,6 +54,11 @@ public class DailyLog {
     public DailyLog() {
         LocalDate ldt = LocalDate.now();
         datetime = ldt;
+    }
+
+    //String format yyyy-mm-dd
+    public DailyLog(String date) {
+        datetime = LocalDate.parse(date);
     }
 
 }

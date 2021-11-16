@@ -2,10 +2,12 @@ package com.base.site.controllers;
 
 import com.base.site.models.Mail;
 import com.base.site.models.UserPassResetCode;
+import com.base.site.models.UserType;
 import com.base.site.models.Users;
 import com.base.site.repositories.UPRCRepository;
 import com.base.site.repositories.UsersRepo;
 import com.base.site.services.EmailService;
+import com.base.site.services.UserTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +28,9 @@ import java.util.logging.Logger;
 public class LoginController {
     @Autowired
     UsersRepo usersRepo;
+
+    @Autowired
+    UserTypeService userTypeService;
 
     @Autowired
     UPRCRepository uprcRepository;
@@ -56,7 +61,7 @@ public class LoginController {
         }
         Users foundUser = usersRepo.findUsersByUsername(user.getUsername());
         if(foundUser == null){
-            user.setFkUserTypeId(1);
+            user.setUserType(userTypeService.findById((long)4));
             user.setRoles("USER");
             String pass = passwordEncoder.encode(user.getPassword());
             user.setPassword(pass);
