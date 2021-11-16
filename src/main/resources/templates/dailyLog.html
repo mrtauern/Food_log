@@ -80,6 +80,8 @@
                 <td th:text="${log.currentWeight}">Exercise</td>
                 <td>
                     <a th:href="@{/updateCurrentWeight/{id}(id=${log.id})}">Edit</a>
+                    <a th:href="@{/deleteCurrentWeight/{id}(id=${log.id})}">Delete</a>
+
                 </td>
             </tr>
             </tbody>

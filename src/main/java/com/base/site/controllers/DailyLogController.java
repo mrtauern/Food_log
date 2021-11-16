@@ -87,5 +87,12 @@ public class DailyLogController {
         return "updateCurrentWeight";
     }
 
+    @GetMapping("/deleteCurrentWeight/{id}")
+    public String deleteCurrentWeight(@PathVariable(value = "id") Long id, Model model) {
+        this.dailyLogService.deleteById(id);
+        log.info("  GetMapping deleteCurrentWeight is called ");
+
+        return "redirect:/" + "dailyLog";
+    }
 
  }
