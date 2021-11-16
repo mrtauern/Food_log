@@ -51,7 +51,7 @@ public class DailyLogController {
         ArrayList<DailyLog> logListUserDate = new ArrayList<DailyLog>();
 
         for (DailyLog logdate: logList) {
-            if(logdate.getDatetime().equals(date) && loggedInUser.getId() == logdate.getFkUser().getId()) {
+            if(logdate.getDatetime().equals(date) && loggedInUser.getId() == logdate.getFkUser().getId() && logdate.getFood() != null) {
                 logListUserDate.add(logdate);
             }
         }
@@ -82,7 +82,7 @@ public class DailyLogController {
         LocalDate enteredDate = LocalDate.parse(date);
 
         for (DailyLog logdate: logList) {
-            if(logdate.getDatetime().equals(enteredDate) && loggedInUser.getId() == logdate.getFkUser().getId()) {
+            if(logdate.getDatetime().equals(enteredDate) && loggedInUser.getId() == logdate.getFkUser().getId() && logdate.getFood() != null) {
                 logListUserDate.add(logdate);
             }
         }

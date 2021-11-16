@@ -57,7 +57,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         List<DailyLog> logList = findAll();
         int kcalUsed = 0;
         for (DailyLog dailyLog: logList) {
-            if(dailyLog.getDatetime().equals(date) && user.getId() == dailyLog.getFkUser().getId()) {
+            if(dailyLog.getDatetime().equals(date) && user.getId() == dailyLog.getFkUser().getId() && dailyLog.getFood() != null) {
                 kcalUsed += (int)((dailyLog.getAmount()/100)*dailyLog.getFood().getEnergy_kcal());
             }
         }
