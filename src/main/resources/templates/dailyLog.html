@@ -27,11 +27,7 @@
 <!-- <div class="row"> -->
     <div class="column" style="background-color:#bbb;">
         <br><br><br>
-        <a th:href="@{/addFoodToDailyLog}" >Add Food To DailyLog</a> <br><br>
-        <!--<a th:href="@{/createCurrentWeight}" >Add Weight To DailyLog</a> <br><br>
-        <a th:href="@{/createCurrentWeight/{id}(id=${dailyLog.datetime})}">Add To Daily Log</a> -->
-        <a th:href="@{/createCurrentWeight}">Add To Daily Log</a>
-
+        <a th:href="@{/addFoodToDailyLog}" >Add Food To DailyLog</a>
         <table border="1" cellpadding="10">
             <thead>
             <tr>
@@ -66,7 +62,31 @@
             </tbody>
         </table>
 
-        <br><br><br>
+        <br><br>
+        <a th:href="@{/createCurrentWeight}">Add Weight To Daily Log</a>
+        <table border="1" cellpadding="10">
+            <thead>
+                <tr>
+                    <th>DailyLog ID</th>
+                    <th>Date </th>
+                    <th>Current weight</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr th:each="log : ${list}">
+                <td th:text="${log.id}">DailyLog ID</td>
+                <td th:text="${log?.datetime}">DailyLog ID</td>
+                <td th:text="${log.currentWeight}">Exercise</td>
+                <td>
+                    <a th:href="@{/updateCurrentWeight/{id}(id=${log.id})}">Edit</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <br><br>
         <table border="1" cellpadding="10">
             <thead>
             <tr>
@@ -84,7 +104,7 @@
             </tbody>
         </table>
 
-        <br><br><br>
+        <br>
         <a th:href="@{/addExercise}" >Add Exercise To DailyLog</a>
         <table border="1" cellpadding="10">
             <thead>

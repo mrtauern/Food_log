@@ -78,5 +78,14 @@ public class DailyLogController {
 
     }
 
+    @GetMapping("/updateCurrentWeight/{id}")
+    public String updateCurrentWeight(@PathVariable(value = "id") Long id, Model model) {
+        DailyLog dailyLog = dailyLogService.findById(id);
+        model.addAttribute("dailyLog", dailyLog);
+        log.info("  GetMapping updateCurrentWeight is called ");
+
+        return "updateCurrentWeight";
+    }
+
 
  }
