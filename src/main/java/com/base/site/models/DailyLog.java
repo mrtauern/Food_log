@@ -17,6 +17,7 @@ import java.util.List;
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "daily_log")
 public class DailyLog {
@@ -38,7 +39,8 @@ public class DailyLog {
     private Exercise fkExercise;
 
     @Column(name = "datetime")
-    private LocalDate datetime;
+    @CreationTimestamp
+    private Timestamp datetime;
 
     @Column(name = "food_amount")
     private Double foodAmount;
@@ -51,10 +53,10 @@ public class DailyLog {
     @JoinColumn(name = "fk_private_food_id")
     private PrivateFood privateFood;
 
-    public DailyLog() {
+    /*public DailyLog() {
         LocalDate ldt = LocalDate.now();
         datetime = ldt;
-    }
+    }*/
 
 }
 

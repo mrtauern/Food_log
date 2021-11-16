@@ -63,24 +63,25 @@ public class DailyLogController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
 
-        List<DailyLog> logList = dailyLogService.findAll();
-        ArrayList<DailyLog> logListUserDate = new ArrayList<DailyLog>();
+        List<DailyLog> dailyLogs = dailyLogService.findAll();
+        List<DailyLog> dailyLogsView = new ArrayList<>();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date enteredDate = dateFormat.parse(date);
 
-        for (DailyLog logdate: logList) {
-            if(logdate.getDatetime().equals(enteredDate) && loggedInUser.getId() == logdate.getFkUser().getId()) {
-                logListUserDate.add(logdate);
+        for (DailyLog dailyLog: dailyLogs) {
+            String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(dailyLog.getDatetime());
+            if(timeStamp.equals(date) && loggedInUser.getId() == dailyLog.getFkUser().getId()) {
+                dailyLogsView.add(dailyLog);
             }
         }
 
         LocalDate localDate = enteredDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-        model.addAttribute("list",logListUserDate);
+        model.addAttribute("list",dailyLogsView);
         model.addAttribute("keyword", keyword);
         model.addAttribute("tomorrow", localDate.plusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        model.addAttribute("Yesterday", localDate.minusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("yesterday", localDate.minusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
         return DAILY_LOG;
     }
