@@ -16,7 +16,7 @@
 <header th:include="fragments/navbar_top :: navbar"></header>
 
     <form id="searchForm" th:action="@{/dailyLog}">
-        Filter: <input type="text" name="keyword" id="keyword"  placeholder="Search for id"  size="50" th:value="${keyword}" required />
+        Filter: <input type="text" name="keyword" id="keyword"  placeholder="Search for id DailyLog"  size="50" th:value="${keyword}" required />
         &nbsp;
         <input type="submit" value="Search" />
         &nbsp;
@@ -27,43 +27,82 @@
 <!-- <div class="row"> -->
     <div class="column" style="background-color:#bbb;">
         <br><br><br>
-        <a th:href="@{/addFoodToDailyLog}" >Add Food To DailyLog</a>
-        <br><br>
-
-
-        <table border="1" cellpadding="10">
+        <a th:href="@{/addFoodToDailyLog}" >Add Food To DailyLog</a> <br><br>
+         <table border="1" cellpadding="10">
             <thead>
             <tr>
-                <th>Food ID</th>
-                <th>U Name</th>
-                <th>Food ID</th>
+                <th>DailyLog ID</th>
+                <th>User Name</th>
+                <th>Food Name</th>
                 <th>Log type</th>
-                <th>Exercise ID</th>
+                <th>Exercise Name</th>
                 <td>Date</td>
                 <th>Food Amount</th>
                 <!--<th>Private Food ID</th> -->
                 <td>Action</td>
-
             </tr>
             </thead>
             <tbody>
             <tr th:each="log : ${list}">
                 <td th:text="${log.id}">DailyLog ID</td>
-                <td th:text="${log.fkUser.firstname}">Name</td>
-                <td th:text="${log.food.name}">Food Name</td>
-                <td th:text="${log.fkLogType.type}">Type</td>
-                <td th:text="${log.fkExercise}">Exercise</td>
+                <td th:text="${log?.fkUser?.firstname}">Name</td>
+                <td th:text="${log?.food?.name}">Food Name</td>
+                <td th:text="${log?.fkLogType?.type}">Type</td>
+                <td th:text="${log?.fkExercise?.exerciseType?.name}">Exercise</td>
                 <td th:text="${log.datetime}">Date</td>
-                <td th:text="${log.foodAmount}">Amount</td>
+                <td th:text="${log?.foodAmount}">Amount</td>
                 <!--<td th:text="${log.fkPrivateFood}">P Food</td> -->
                 <td>
                     <a th:href="@{/updateDailyLog/{id}(id=${log.id})}">Edit</a>
                     <a th:href="@{/deleteDailyLog/{id}(id=${log.id})}">Delete</a>
-
                 </td>
             </tr>
             </tbody>
         </table>
+
+        <br><br><br>
+        <table border="1" cellpadding="10">
+            <thead>
+            <tr>
+                <th>DailyLog ID</th>
+                <th>Exercise Name</th>
+                <th>Exercise Burned </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="log : ${list}">
+                <td th:text="${log.id}">DailyLog ID</td>
+                <td th:text="${log?.fkExercise?.exerciseType?.name}">Exercise</td>
+                <td th:text="${log?.fkExercise?.exerciseType?.kcal_burned_per_min}">Exercise</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br><br><br>
+        <a th:href="@{/addExercise}" >Add Exercise To DailyLog</a>
+        <table border="1" cellpadding="10">
+            <thead>
+            <tr>
+                <th>Exercise ID</th>
+                <th>Training Time</th>
+                <th>Training Name</th>
+                <td>Action</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="exList : ${exerciseList}">
+                <td th:text="${exList.id}">Exercise ID</td>
+                <td th:text="${exList.time_min}">Time</td>
+                <td th:text="${exList.exerciseType.name}">Exercise Name</td>
+                <!--<td th:text="${log.fkPrivateFood}">P Food</td> -->
+                <td>
+                    <a th:href="@{/updateExerciseInDailyLog/{id}(id=${exList.id})}">Edit</a>
+                    <a th:href="@{/deleteExerciseFromDailyLog/{id}(id=${exList.id})}">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
     </div>
  <!-- </div> -->
     </div>
