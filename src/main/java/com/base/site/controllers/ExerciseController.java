@@ -78,21 +78,19 @@ public class ExerciseController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
         Exercise exerciseId = exerciseService.findById(exercise.getId());
-        ExerciseType exerciseTypeId = exerciseTypeService.findById(exercise.getId());
-        log.info(" ======= Post Mapping saveExercise is called ");
-        log.info(" ======= :::::" + exerciseId.toString());
-        //dailyLog.setFkExercise(exerciseId);
-        exercise.setExerciseType(exerciseTypeId);
+        dailyLog.setFkExercise(exerciseId);
+        //ExerciseType exerciseTypeId = exerciseTypeService.findById(exercise.getId());
+        //exercise.setExerciseType(exerciseTypeId);
         //dailyLog.setFkUser(loggedInUser);
 
-        exerciseService.save(exercise);
-        //dailyLogService.save(dailyLog);
+        //exerciseService.save(exercise);
+        dailyLogService.save(dailyLog);
 
         log.info("  Post Mapping saveExercise is called ");
         return  "redirect:/" + "dailyLog";
 
     }
-    /*
+
 
     @GetMapping("/updateExerciseInDailyLog/{id}")
     public String updateExerciseInDailyLog(@PathVariable(value = "id") Long id, Model model) {
@@ -112,5 +110,5 @@ public class ExerciseController {
 
         return "redirect:/" + "dailyLog";
     }
-     */
+
 }
