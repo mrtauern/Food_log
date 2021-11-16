@@ -29,7 +29,6 @@ public class DailyLog {
     private Users fkUser;
 
 
-
     @ManyToOne
     @JoinColumn(name = "fk_log_type")
     private LogType fkLogType;
@@ -51,6 +50,10 @@ public class DailyLog {
     @ManyToOne
     @JoinColumn(name = "fk_private_food_id")
     private PrivateFood privateFood;
+
+    @Column(name = "current_weight")
+    private Double currentWeight;
+
 
 }
 

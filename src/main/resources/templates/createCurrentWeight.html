@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: styles"></head>
+<body>
+<header th:include="fragments/navbar_top :: navbar"></header>
+
+<div class="container">
+  <div id="inner_container">
+    <h1>Add Current Wight To Log</h1>
+
+    <form action="#" th:action="@{/saveCurrentWeight}" th:object ="${dailyLog}" method="POST">
+
+      <label  class="col-form-label">Current Weight </label>
+      <input type="text" th:field = "*{currentWeight}" placeholder="Enter your Weight" class="form-control mb-4 col-4">
+
+      <button type="submit" class="form-control mb-4 col-4" >Add Current weight to Log</button>
+    </form>
+  </div>
+</div>
+
+<div th:include="fragments/navbar_top :: bottom_bar"></div>
+</body>
+</html>
