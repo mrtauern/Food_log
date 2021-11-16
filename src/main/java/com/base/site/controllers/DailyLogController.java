@@ -15,11 +15,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
+
+
 
 @Controller
 public class DailyLogController {
@@ -39,16 +45,20 @@ public class DailyLogController {
 
     @RequestMapping("dailyLog")
     public String dailyLog(DailyLog dailyLog, Model model,@Param("keyword") String keyword) {
-            List<DailyLog> list = dailyLogService.findAllByKeyword(keyword);
+            //List<DailyLog> list = dailyLogService.findAllByKeyword(keyword);
             //List<DailyLog> list = dailyLogService.findAll();
-            model.addAttribute("list", list);
-            model.addAttribute("keyword", keyword);
+            //model.addAttribute("list", list);
+            //model.addAttribute("keyword", keyword);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = new Date();
+
         log.info("  get mapping DailyLog is called");
-        return DAILY_LOG;
+        return REDIRECT + DAILY_LOG + "/" + dateFormat.format(date);
     }
 
     @GetMapping("dailyLog/{date}")
-    public String dailyLog(@PathVariable(value = "date") String date, Model model, @Param("keyword") String keyword) {
+    public String dailyLog(@PathVariable(value = "date") String date, Model model, @Param("keyword") String keyword) throws ParseException {
         log.info("Getnapping called for dailylog for specific date: "+date);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
@@ -56,7 +66,8 @@ public class DailyLogController {
         List<DailyLog> logList = dailyLogService.findAll();
         ArrayList<DailyLog> logListUserDate = new ArrayList<DailyLog>();
 
-        LocalDate enteredDate = LocalDate.parse(date);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Date enteredDate = dateFormat.parse(date);
 
         for (DailyLog logdate: logList) {
             if(logdate.getDatetime().equals(enteredDate) && loggedInUser.getId() == logdate.getFkUser().getId()) {
@@ -64,8 +75,12 @@ public class DailyLogController {
             }
         }
 
+        LocalDate localDate = enteredDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
         model.addAttribute("list",logListUserDate);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("tomorrow", localDate.plusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("Yesterday", localDate.minusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
         return DAILY_LOG;
     }
