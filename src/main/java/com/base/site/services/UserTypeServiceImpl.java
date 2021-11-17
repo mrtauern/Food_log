@@ -38,4 +38,9 @@ public class UserTypeServiceImpl implements UserTypeService{
     public void delete(UserType user){
         userTypeRepo.delete(user);
     }
+
+    @Override
+    public UserType findByType(String type) {
+        return userTypeRepo.findByType(type);
+    }
 }

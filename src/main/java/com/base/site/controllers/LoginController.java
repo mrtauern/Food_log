@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
@@ -55,13 +56,15 @@ public class LoginController {
     }
 
     @PostMapping("/signup")
-    public String addUser(@Valid Users user, BindingResult result) {
+    public String addUser(@Valid Users user, BindingResult result, @RequestParam String userType) {
+        log.info("signup postmapping called in logincontroller...");
         if (result.hasErrors()) {
             return "add-user";
         }
         Users foundUser = usersRepo.findUsersByUsername(user.getUsername());
         if(foundUser == null){
-            user.setUserType(userTypeService.findById((long)4));
+            UserType userTypeObject = userTypeService.findByType(userType);
+            user.setFkUserTypeId(userTypeObject.getId());
             user.setRoles("USER");
             String pass = passwordEncoder.encode(user.getPassword());
             user.setPassword(pass);
