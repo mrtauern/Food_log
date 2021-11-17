@@ -64,5 +64,11 @@ public class DailyLog {
         datetime = LocalDate.parse(date);
     }
 
+    public Double getAmount() {
+        if(amount != null) {
+            return amount;
+        }
+        return 0.0;
+    }
 }
 

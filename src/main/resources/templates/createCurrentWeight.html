@@ -12,7 +12,7 @@
     <form action="#" th:action="@{/saveCurrentWeight}" th:object ="${dailyLog}" method="POST">
 
       <label  class="col-form-label">Current Weight </label>
-      <input type="text" th:field = "*{currentWeight}" placeholder="Enter your Weight" class="form-control mb-4 col-4">
+      <input type="text" th:field = "*{amount}" placeholder="Enter your Weight" class="form-control mb-4 col-4">
 
       <button type="submit" class="form-control mb-4 col-4" >Add Current weight to Log</button>
     </form>

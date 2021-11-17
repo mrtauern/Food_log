@@ -1,5 +1,6 @@
 package com.base.site.services;
 
+import com.base.site.models.DailyLog;
 import com.base.site.models.Users;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +23,5 @@ public interface UsersService {
 
     String generatePassword();
     Users findUsersByUsername(String username);
-    double getLatestWeight(LocalDate date);
+    DailyLog getLatestWeight(LocalDate date);
 }

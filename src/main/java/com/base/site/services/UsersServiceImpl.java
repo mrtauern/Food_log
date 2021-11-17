@@ -1,7 +1,6 @@
 package com.base.site.services;
 
 import com.base.site.models.DailyLog;
-import com.base.site.models.LogType;
 import com.base.site.models.Users;
 import com.base.site.repositories.DailyLogRepo;
 import com.base.site.repositories.UsersRepo;
@@ -12,14 +11,16 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Service("UsersService")
 public class UsersServiceImpl implements UsersService {
     static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     static final int LEN = 10; //length
     static SecureRandom rnd = new SecureRandom();
+
+    Logger log = Logger.getLogger(UsersServiceImpl.class.getName());
 
     @Autowired
     UsersRepo usersRepo;
@@ -71,7 +72,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public double getLatestWeight(LocalDate date) {
+    public DailyLog getLatestWeight(LocalDate date) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = findByUserName(auth.getName());
 
@@ -95,10 +96,11 @@ public class UsersServiceImpl implements UsersService {
             }
         }
 
-        if(weightLog.getAmount() != null) {
-            return weightLog.getAmount();
+        if(weightLog.getAmount() != 0.0) {
+            return weightLog;
         } else {
-            return loggedInUser.getStartWeight();
+            weightLog.setCurrentWeight(loggedInUser.getStartWeight());
+            return weightLog;
         }
 
 

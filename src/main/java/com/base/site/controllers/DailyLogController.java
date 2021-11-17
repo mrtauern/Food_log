@@ -8,6 +8,7 @@ import com.base.site.repositories.DailyLogRepo;
 import com.base.site.services.DailyLogService;
 import com.base.site.services.ExerciseService;
 
+import com.base.site.services.LogTypeService;
 import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -35,9 +36,8 @@ public class DailyLogController {
     ExerciseService exerciseService;
     @Autowired
     UsersService usersService;
-
     @Autowired
-    UsersService usersService;
+    LogTypeService logTypeService;
 
     private final String DAILY_LOG = "dailyLog";
     private final String REDIRECT = "redirect:/";
@@ -46,6 +46,7 @@ public class DailyLogController {
     public String dailyLog(DailyLog dailyLog, Model model,@Param("keyword") String keyword) {
         List<DailyLog> list = dailyLogService.findAllByKeyword(keyword);
         List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
+
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
@@ -61,9 +62,16 @@ public class DailyLogController {
             }
         }
 
-        model.addAttribute("bmr", loggedInUser.getBMR(usersService.getLatestWeight(date)));
+        log.info("1"+loggedInUser.getBMR(usersService.getLatestWeight(date).getAmount()));
+        //log.info(""+usersService.getLatestWeight(date)+"");
+        model.addAttribute("bmr", loggedInUser.getBMR(usersService.getLatestWeight(date).getAmount()));
+        log.info("2");
         model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(date, loggedInUser));
+        log.info("3");
         model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(date, loggedInUser));
+        log.info("4");
+        model.addAttribute("weight",usersService.getLatestWeight(date));
+        log.info("5");
         model.addAttribute("list", logListUserDate);
         model.addAttribute("exerciseList", exerciseList);
         model.addAttribute("keyword", keyword);
@@ -117,11 +125,13 @@ public class DailyLogController {
         return "createCurrentWeight";
     }
     @PostMapping("/saveCurrentWeight")
-    public String saveExercise(@ModelAttribute("dailyLog") DailyLog dailyLog, Model model) {
+    public String saveCurrentWeight(@ModelAttribute("dailyLog") DailyLog dailyLog, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
         log.info("   _______-----Post Mapping saveCurrentWeight is called ");
-
+        dailyLog.setFkLogType(logTypeService.findByType("Weight"));
+        dailyLog.setFkUser(loggedInUser);
+        log.info("weight"+dailyLog.getAmount());
         dailyLogService.save(dailyLog);
 
         log.info("  Post Mapping saveCurrentWeight is called ");
