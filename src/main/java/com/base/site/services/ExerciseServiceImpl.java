@@ -1,6 +1,5 @@
 package com.base.site.services;
 
-import com.base.site.models.DailyLog;
 import com.base.site.models.Exercise;
 import com.base.site.repositories.ExerciseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ public class ExerciseServiceImpl implements ExerciseService{
         if (optional.isPresent()){
             exercise = optional.get();
         }else {
-            throw new RuntimeException("Exercise is not found for id ::" + id);
+            throw new RuntimeException("Exercise is not found for id :: " + id);
         }
         return exercise;
     }
@@ -49,4 +48,6 @@ public class ExerciseServiceImpl implements ExerciseService{
     public void deleteById(Long Id) {
         this.exerciseRepository.deleteById(Id);
     }
+
+
 }

@@ -6,29 +6,18 @@
 <header th:include="fragments/navbar_top :: navbar"></header>
 
 <div class="container">
-
   <div id="inner_container">
     <h1>Update Exercise in DailyLog</h1>
-
-    <form action="#" th:action="@{/saveExercise}" th:object ="${exercise}" method="POST">
-
+    <form action="#" th:action="@{/saveExercise}" th:object ="${dailyLog}" method="POST">
       <input type="hidden" th:field="*{id}" />
-      <!--<input type="hidden" name="userId" th:field="*{fkUser.id}" /> -->
-
-      <label  class="col-form-label">Type Log </label>
-      <select  id="eType" name="eType" th:field="*{exerciseType}" >
-        <option th:each="eType : ${eType}" th:value="${eType.id}" th:utext="${eType.name}"/>
-      </select>
+      <input type="hidden" name="userId" th:field="*{fkUser.id}" />
 
       <label  class="col-form-label">training Amount </label>
-      <input type="text" th:field = "*{time_min}" placeholder=" Amount " class="form-control mb-4 col-4">
-
+      <input type="text" th:field = "*{amount}" placeholder=" Amount " class="form-control mb-4 col-4">
       <button type="submit" class="form-control mb-4 col-4" >Update Exercise</button>
     </form>
   </div>
 </div>
-
 <div th:include="fragments/navbar_top :: bottom_bar"></div>
-
 </body>
 </html>
