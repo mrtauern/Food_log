@@ -143,8 +143,8 @@ public class DailyLogController {
         model.addAttribute("previousMonth", localDate.minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
         //model.addAttribute("bmr", loggedInUser.getBMR(usersService.getLatestWeight(localDate)));
-        //model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(localDate, loggedInUser));
-        //model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(localDate, loggedInUser));
+        model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(localDate, loggedInUser));
+        model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(localDate, loggedInUser));
         //model.addAttribute("list", logListUserDate);
         //model.addAttribute("exerciseList", exerciseList);
         //model.addAttribute("keyword", keyword);
