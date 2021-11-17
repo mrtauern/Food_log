@@ -34,4 +34,9 @@ public class LogTypeServiceImpl implements LogTypeService{
     public void deleteById(Long id) {
         logTypeRepository.deleteById(id);
     }
+
+    @Override
+    public LogType findByType(String type) {
+        return logTypeRepository.findByType(type);
+    }
 }

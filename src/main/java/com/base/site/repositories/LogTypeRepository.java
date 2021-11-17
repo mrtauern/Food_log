@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository("LogTypeRepository")
 public interface LogTypeRepository extends JpaRepository<LogType, Long> {
+    LogType findByType(String type);
 }

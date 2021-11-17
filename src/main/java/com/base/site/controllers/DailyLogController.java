@@ -2,11 +2,13 @@ package com.base.site.controllers;
 
 import com.base.site.models.DailyLog;
 import com.base.site.models.Exercise;
+import com.base.site.models.ExerciseType;
 import com.base.site.models.Users;
 import com.base.site.repositories.DailyLogRepo;
 import com.base.site.services.DailyLogService;
 import com.base.site.services.ExerciseService;
 
+import com.base.site.services.LogTypeService;
 import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -38,6 +40,8 @@ public class DailyLogController {
     ExerciseService exerciseService;
     @Autowired
     UsersService usersService;
+    @Autowired
+    LogTypeService logTypeService;
 
     private final String DAILY_LOG = "dailyLog";
     private final String REDIRECT = "redirect:/";
@@ -172,11 +176,13 @@ public class DailyLogController {
         return "createCurrentWeight";
     }
     @PostMapping("/saveCurrentWeight")
-    public String saveExercise(@ModelAttribute("dailyLog") DailyLog dailyLog, Model model) {
+    public String saveCurrentWeight(@ModelAttribute("dailyLog") DailyLog dailyLog, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
         log.info("   _______-----Post Mapping saveCurrentWeight is called ");
-
+        dailyLog.setFkLogType(logTypeService.findByType("Weight"));
+        dailyLog.setFkUser(loggedInUser);
+        log.info("weight"+dailyLog.getAmount());
         dailyLogService.save(dailyLog);
 
         log.info("  Post Mapping saveCurrentWeight is called ");
