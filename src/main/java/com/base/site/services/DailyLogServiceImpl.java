@@ -19,7 +19,7 @@ public class DailyLogServiceImpl implements DailyLogService {
 
    @Override
     public List<DailyLog> findAll() {
-        return (List<DailyLog>) dailyLogRepo.findAll();
+        return dailyLogRepo.findAll();
     }
 
     @Override

@@ -45,8 +45,8 @@ public class DailyLog {
     @Transient
     private String sDatetime;
 
-    @Column(name = "food_amount")
-    private Double foodAmount;
+    @Column(name = "amount")
+    private Double amount;
 
     @ManyToOne
     @JoinColumn(name = "fk_food_id")
@@ -59,10 +59,10 @@ public class DailyLog {
     @Column(name = "current_weight")
     private Double currentWeight;
 
-    public DailyLog() {
+    /*public DailyLog() {
         LocalDate ldt = LocalDate.now();
         datetime = ldt;
-    }
+    }*/
 
     //String format yyyy-mm-dd
     public DailyLog(String date) {

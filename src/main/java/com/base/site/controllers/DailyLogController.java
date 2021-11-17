@@ -40,15 +40,30 @@ public class DailyLogController {
     @Autowired
     UsersService usersService;
 
-    @Autowired
-    UsersService usersService;
-
     private final String DAILY_LOG = "dailyLog";
     private final String REDIRECT = "redirect:/";
 
-    @RequestMapping("/dailyLog")
+    @PostMapping("/selectedDate")
+    public String selectedDate(@RequestParam("selectedDate") String sSelectedDate) {
+        log.info("Post mapping selectedDate is called " + sSelectedDate);
+
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date selectedDate = new Date();
+
+        try {
+            selectedDate = inputFormat.parse(sSelectedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return REDIRECT + DAILY_LOG + "/" + outputFormat.format(selectedDate);
+        //return null;
+    }
+
+    @GetMapping("/dailyLog")
     public String dailyLog(DailyLog dailyLog, Model model,@Param("keyword") String keyword) {
-        List<DailyLog> list = dailyLogService.findAllByKeyword(keyword);
+        /*List<DailyLog> list = dailyLogService.findAllByKeyword(keyword);
         List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -70,14 +85,14 @@ public class DailyLogController {
         model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(date, loggedInUser));
         model.addAttribute("list", logListUserDate);
         model.addAttribute("exerciseList", exerciseList);
-        model.addAttribute("keyword", keyword);
+        model.addAttribute("keyword", keyword);*/
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date date = new Date();
 
         log.info("  get mapping DailyLog is called");
-        //return REDIRECT + DAILY_LOG + "/" + dateFormat.format(date);
-        return DAILY_LOG;
+        return REDIRECT + DAILY_LOG + "/" + dateFormat.format(date);
+        //return DAILY_LOG;
     }
 
     @GetMapping("dailyLog/{date}")
@@ -88,6 +103,7 @@ public class DailyLogController {
 
         List<DailyLog> dailyLogs = dailyLogService.findAll();
         List<DailyLog> dailyLogsView = new ArrayList<>();
+        List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date enteredDate = dateFormat.parse(date);
@@ -106,6 +122,7 @@ public class DailyLogController {
         Date currentDate = new Date();
         LocalDate today = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         model.addAttribute("today", today.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("sSelectedDate", localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         model.addAttribute("list", dailyLogsView);
         model.addAttribute("keyword", keyword);
@@ -122,6 +139,13 @@ public class DailyLogController {
         // +/- Month
         model.addAttribute("nextMonth", localDate.plusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         model.addAttribute("previousMonth", localDate.minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+        model.addAttribute("bmr", loggedInUser.getBMR(usersService.getLatestWeight(localDate)));
+        model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(localDate, loggedInUser));
+        model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(localDate, loggedInUser));
+        //model.addAttribute("list", logListUserDate);
+        model.addAttribute("exerciseList", exerciseList);
+        //model.addAttribute("keyword", keyword);
 
         return DAILY_LOG;
     }
