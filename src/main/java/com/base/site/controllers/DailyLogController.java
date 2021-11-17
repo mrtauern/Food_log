@@ -2,7 +2,6 @@ package com.base.site.controllers;
 
 import com.base.site.models.DailyLog;
 import com.base.site.models.Exercise;
-import com.base.site.models.ExerciseType;
 import com.base.site.models.Users;
 import com.base.site.repositories.DailyLogRepo;
 import com.base.site.services.DailyLogService;
@@ -143,9 +142,9 @@ public class DailyLogController {
         model.addAttribute("nextMonth", localDate.plusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         model.addAttribute("previousMonth", localDate.minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
-        model.addAttribute("bmr", loggedInUser.getBMR(usersService.getLatestWeight(localDate)));
-        model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(localDate, loggedInUser));
-        model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(localDate, loggedInUser));
+        //model.addAttribute("bmr", loggedInUser.getBMR(usersService.getLatestWeight(localDate)));
+        //model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(localDate, loggedInUser));
+        //model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(localDate, loggedInUser));
         //model.addAttribute("list", logListUserDate);
         //model.addAttribute("exerciseList", exerciseList);
         //model.addAttribute("keyword", keyword);

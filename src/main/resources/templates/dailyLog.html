@@ -44,7 +44,7 @@
                         <th>U Name</th>
                         <th>Food ID</th>
                         <th>Log type</th>
-                        <th>Exercise ID</th>
+                        <!--<th>Exercise ID</th>-->
                         <td>Date</td>
                         <th>Amount</th>
                         <!--<th>Private Food ID</th> -->
@@ -58,7 +58,7 @@
                 <td th:text="${log.fkUser.firstname}">Name</td>
                 <td th:text="${log.food.name}">Food Name</td>
                 <td th:text="${log.fkLogType.type}">Type</td>
-                <td th:text="${log.fkExercise}">Exercise</td>
+                <!--<td th:text="${log.fkExercise}">Exercise</td>-->
                 <!--<td th:text="${#dates.format(log.datetime, 'dd-MM-yyyy')}">Date</td>-->
                 <td th:text="${log.sDatetime}">Date</td>
                 <td th:text="${#strings.replace(log.amount,'.',',')}">Amount</td>
@@ -85,11 +85,11 @@
                   <tbody>
 
                   <tr>
-                      <span th:if="${weight.amount != 0.0}">
-                          <td th:text="${weight.amount}">Weight</td>
+                      <span th:if="${weight?.amount != 0.0}">
+                          <td th:text="${weight?.amount}">Weight</td>
                           <td>
-                              <a th:href="@{/updateCurrentWeight/{id}(id=${weight.id})}">Edit</a>
-                              <a th:href="@{/deleteCurrentWeight/{id}(id=${weight.id})}">Delete</a>
+                              <a th:href="@{/updateCurrentWeight/{id}(id=${weight?.id})}">Edit</a>
+                              <a th:href="@{/deleteCurrentWeight/{id}(id=${weight?.id})}">Delete</a>
 
                           </td>
                       </span>
@@ -124,7 +124,7 @@
 
             </div>
             <div class="w-25" id="inner_container" style="background-color:#4c9e9e;">
-                <b>Total Kcal: </b><span th:text="${bmr}"></span><br>
+                <!--<b>Total Kcal: </b><span th:text="${bmr}"></span><br>-->
                 <b>Kcal used: </b><span th:text="${kcalUsed}"></span><br>
                 <b>Kcal left: </b><span th:text="${kcalLeft}"></span><br>
             </div>
