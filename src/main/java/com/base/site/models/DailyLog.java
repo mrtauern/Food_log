@@ -40,7 +40,10 @@ public class DailyLog {
 
     @Column(name = "datetime")
     @CreationTimestamp
-    private Timestamp datetime;
+    private LocalDate datetime;
+
+    @Transient
+    private String sDatetime;
 
     @Column(name = "food_amount")
     private Double foodAmount;

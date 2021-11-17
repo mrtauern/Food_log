@@ -70,18 +70,34 @@ public class DailyLogController {
         Date enteredDate = dateFormat.parse(date);
 
         for (DailyLog dailyLog: dailyLogs) {
-            String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(dailyLog.getDatetime());
+            String timeStamp = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             if(timeStamp.equals(date) && loggedInUser.getId() == dailyLog.getFkUser().getId()) {
+                String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                dailyLog.setSDatetime(sDatetime);
                 dailyLogsView.add(dailyLog);
             }
         }
 
         LocalDate localDate = enteredDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-        model.addAttribute("list",dailyLogsView);
+        Date currentDate = new Date();
+        LocalDate today = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        model.addAttribute("today", today.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+        model.addAttribute("list", dailyLogsView);
         model.addAttribute("keyword", keyword);
+
+        // +/- Day
         model.addAttribute("tomorrow", localDate.plusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         model.addAttribute("yesterday", localDate.minusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+        // +/- Week
+        model.addAttribute("nextWeek", localDate.plusWeeks(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("previousWeek", localDate.minusWeeks(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+        // +/- Month
+        model.addAttribute("nextMonth", localDate.plusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("previousMonth", localDate.minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
         return DAILY_LOG;
     }

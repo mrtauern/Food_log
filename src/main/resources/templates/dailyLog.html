@@ -25,8 +25,13 @@
 <div class="container">
     <div id="inner_container">
 
-        <a th:href="${'/dailyLog/' + yesterday}" class="btn btn-dark mr-2 btn-sm">Yesterday</a>
-        <a th:href="${'/dailyLog/' + tomorrow}" class="btn btn-dark mr-2 btn-sm">Tomorrow</a>
+        <a th:href="${'/dailyLog/' + today}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-calendar-day"></i> Today</a>
+        <a th:href="${'/dailyLog/' + previousMonth}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-chevron-left"></i> Month</a>
+        <a th:href="${'/dailyLog/' + previousWeek}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-chevron-left"></i> Week</a>
+        <a th:href="${'/dailyLog/' + yesterday}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-chevron-left"></i> Day</a>
+        <a th:href="${'/dailyLog/' + tomorrow}" class="btn btn-dark mr-2 btn-sm">Day <i class="fas fa-chevron-right"></i></a>
+        <a th:href="${'/dailyLog/' + nextWeek}" class="btn btn-dark mr-2 btn-sm">Week <i class="fas fa-chevron-right"></i></a>
+        <a th:href="${'/dailyLog/' + nextMonth}" class="btn btn-dark mr-2 btn-sm">Month <i class="fas fa-chevron-right"></i></a>
 <!-- <div class="row"> -->
     <div class="column" style="background-color:#bbb;">
         <br><br><br>
@@ -42,10 +47,10 @@
                 <th>Food ID</th>
                 <th>Log type</th>
                 <th>Exercise ID</th>
-                <td>Date</td>
+                <th>Date</th>
                 <th>Food Amount</th>
                 <!--<th>Private Food ID</th> -->
-                <td>Action</td>
+                <th>Action</th>
 
             </tr>
             </thead>
@@ -56,8 +61,9 @@
                 <td th:text="${log.food.name}">Food Name</td>
                 <td th:text="${log.fkLogType.type}">Type</td>
                 <td th:text="${log.fkExercise}">Exercise</td>
-                <td th:text="${log.datetime}">Date</td>
-                <td th:text="${log.foodAmount}">Amount</td>
+                <!--<td th:text="${#dates.format(log.datetime, 'dd-MM-yyyy')}">Date</td>-->
+                <td th:text="${log.sDatetime}">Date</td>
+                <td th:text="${#strings.replace(log.foodAmount,'.',',')}">Amount</td>
                 <!--<td th:text="${log.fkPrivateFood}">P Food</td> -->
                 <td>
                     <a th:href="@{/updateDailyLog/{id}(id=${log.id})}">Edit</a>
