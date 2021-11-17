@@ -51,6 +51,9 @@ public class DailyLog {
     @JoinColumn(name = "fk_private_food_id")
     private PrivateFood privateFood;
 
+    @Column(name = "current_weight")
+    private Double currentWeight;
+
     public DailyLog() {
         LocalDate ldt = LocalDate.now();
         datetime = ldt;
