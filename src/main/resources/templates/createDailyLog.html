@@ -19,13 +19,8 @@
         <option th:each="logType : ${logType}" th:value="${logType.id}" th:utext="${logType.type}"/>
       </select>
 
-      <!--  <label  class="col-form-label">Minutes</label>
-      <input type="text" th:field = "*{fkExercise.time_min}" placeholder=" Time Minute" class="form-control mb-4 col-4">-->
-
-      <!--<input type="hidden" th:field = "*{datetime}" value=date class="form-control mb-4 col-4"> -->
-
       <label  class="col-form-label">Food Amount </label>
-      <input type="text" th:field = "*{foodAmount}" placeholder=" Amount " class="form-control mb-4 col-4">
+      <input type="text" th:field = "*{Amount}" placeholder=" Amount " class="form-control mb-4 col-4">
 
 
       <button type="submit" class="form-control mb-4 col-4" >Create DailyLog</button>
