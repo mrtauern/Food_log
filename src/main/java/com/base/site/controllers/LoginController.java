@@ -64,7 +64,7 @@ public class LoginController {
         Users foundUser = usersRepo.findUsersByUsername(user.getUsername());
         if(foundUser == null){
             UserType userTypeObject = userTypeService.findByType(userType);
-            user.setFkUserTypeId(userTypeObject.getId());
+            user.setUserType(userTypeObject);
             user.setRoles("USER");
             String pass = passwordEncoder.encode(user.getPassword());
             user.setPassword(pass);
