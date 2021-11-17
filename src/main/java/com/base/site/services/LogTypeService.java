@@ -12,4 +12,5 @@ public interface LogTypeService {
     LogType save(LogType logType);
     LogType findById(Long id);
     void deleteById(Long id);
+    LogType findByType(String type);
 }

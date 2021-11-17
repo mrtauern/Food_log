@@ -1,5 +1,6 @@
 package com.base.site.services;
 
+import com.base.site.controllers.DailyLogController;
 import com.base.site.models.DailyLog;
 import com.base.site.models.Users;
 import com.base.site.repositories.DailyLogRepo;
@@ -10,9 +11,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service("DailyLogService")
 public class DailyLogServiceImpl implements DailyLogService {
+
+    Logger log = Logger.getLogger(DailyLogServiceImpl.class.getName());
 
     @Autowired
     DailyLogRepo dailyLogRepo;
@@ -56,9 +60,12 @@ public class DailyLogServiceImpl implements DailyLogService {
     public int getKcalUsed(LocalDate date, Users user) {
         List<DailyLog> logList = findAll();
         int kcalUsed = 0;
-        for (DailyLog dailyLog: logList) {
-            if(dailyLog.getDatetime().equals(date) && user.getId() == dailyLog.getFkUser().getId() && dailyLog.getFood() != null) {
-                kcalUsed += (int)((dailyLog.getAmount()/100)*dailyLog.getFood().getEnergy_kcal());
+        if(!logList.isEmpty()) {
+            for (DailyLog dailyLog: logList) {
+                log.info("hello");
+                if(dailyLog.getDatetime().equals(date) && user.getId() == dailyLog.getFkUser().getId() && dailyLog.getFood() != null) {
+                    kcalUsed += (int)((dailyLog.getAmount()/100)*dailyLog.getFood().getEnergy_kcal());
+                }
             }
         }
 
