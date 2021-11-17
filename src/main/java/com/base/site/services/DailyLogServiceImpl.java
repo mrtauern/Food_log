@@ -1,11 +1,13 @@
 package com.base.site.services;
 
 import com.base.site.models.DailyLog;
+import com.base.site.models.Users;
 import com.base.site.repositories.DailyLogRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +50,28 @@ public class DailyLogServiceImpl implements DailyLogService {
      @Override
     public void deleteById(Long Id) {
         this.dailyLogRepo.deleteById(Id);
+    }
+
+    @Override
+    public int getKcalUsed(LocalDate date, Users user) {
+        List<DailyLog> logList = findAll();
+        int kcalUsed = 0;
+        for (DailyLog dailyLog: logList) {
+            if(dailyLog.getDatetime().equals(date) && user.getId() == dailyLog.getFkUser().getId() && dailyLog.getFood() != null) {
+                kcalUsed += (int)((dailyLog.getAmount()/100)*dailyLog.getFood().getEnergy_kcal());
+            }
+        }
+
+        return kcalUsed;
+    }
+
+    @Override
+    public int getKcalLeft(LocalDate date, Users user) {
+       int kcalLeft = 0;
+       int totalKcal = user.getBMR(user.getCurrentWeight());
+       int usedKcal = getKcalUsed(date, user);
+       kcalLeft = totalKcal-usedKcal;
+       return kcalLeft;
     }
 
 }

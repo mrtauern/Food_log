@@ -39,17 +39,40 @@ public class DailyLogController {
 
     @RequestMapping("dailyLog")
     public String dailyLog(DailyLog dailyLog, Model model,@Param("keyword") String keyword) {
-            List<DailyLog> list = dailyLogService.findAllByKeyword(keyword);
-            //List<DailyLog> list = dailyLogService.findAll();
-            model.addAttribute("list", list);
-            model.addAttribute("keyword", keyword);
+        List<DailyLog> list = dailyLogService.findAllByKeyword(keyword);
+        //List<DailyLog> list = dailyLogService.findAll();
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+
+        List<DailyLog> logList = dailyLogService.findAll();
+        LocalDate date = LocalDate.now();
+
+        ArrayList<DailyLog> logListUserDate = new ArrayList<DailyLog>();
+
+        for (DailyLog logdate: logList) {
+            if(logdate.getDatetime().equals(date) && loggedInUser.getId() == logdate.getFkUser().getId() && logdate.getFood() != null) {
+                logListUserDate.add(logdate);
+            }
+        }
+
+        /*
+        log.info("BMR:::::::::::::"+loggedInUser.getBMR(usersService.getLatestWeight(date)));
+        log.info("KCALUSED:::::::::::::"+dailyLogService.getKcalUsed(date, loggedInUser));
+        log.info("KCALLEFT:::::::::::::"+dailyLogService.getKcalLeft(date, loggedInUser));
+        */
+        model.addAttribute("bmr", loggedInUser.getBMR(usersService.getLatestWeight(date)));
+        model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(date, loggedInUser));
+        model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(date, loggedInUser));
+        model.addAttribute("list", logListUserDate);
+        model.addAttribute("keyword", keyword);
         log.info("  get mapping DailyLog is called");
         return DAILY_LOG;
     }
 
     @GetMapping("dailyLog/{date}")
     public String dailyLog(@PathVariable(value = "date") String date, Model model, @Param("keyword") String keyword) {
-        log.info("Getnapping called for dailylog for specific date: "+date);
+        log.info("Getmapping called for dailylog for specific date: "+date);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
 
@@ -59,7 +82,7 @@ public class DailyLogController {
         LocalDate enteredDate = LocalDate.parse(date);
 
         for (DailyLog logdate: logList) {
-            if(logdate.getDatetime().equals(enteredDate) && loggedInUser.getId() == logdate.getFkUser().getId()) {
+            if(logdate.getDatetime().equals(enteredDate) && loggedInUser.getId() == logdate.getFkUser().getId() && logdate.getFood() != null) {
                 logListUserDate.add(logdate);
             }
         }

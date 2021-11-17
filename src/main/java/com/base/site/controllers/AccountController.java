@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -98,13 +101,19 @@ public class AccountController {
             e.printStackTrace();
         }
 
+
         Timestamp ts=new Timestamp(birthday.getTime());
-        user.setBirthday(ts);
+        //created by Niklas to fit with change to LocalDate in users
+        LocalDate bday = Instant.ofEpochMilli(birthday.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        user.setBirthday(bday);
 
         String emailMessage = "We have created a new user for you.\n\n";
         emailMessage += "Your new password is: " + genPass;
 
         try {
+            //niklas... temporary till users is correctly mapped
+            user.setUserType(userTypeService.findById((long)4));
+
             usersService.save(user);
             emailController.sendEmail(user.getUsername(), "custom", emailMessage);
         } catch (Exception e){
@@ -122,7 +131,10 @@ public class AccountController {
 
         Users user = usersService.findById(id);
 
-        String sBirthday = new SimpleDateFormat("yyyy-MM-dd").format(user.getBirthday());
+        //String sBirthday = new SimpleDateFormat("yyyy-MM-dd").format(user.getBirthday());
+        //created by Niklas to fit with change to LocalDate in users
+        String sBirthday = user.getBirthday().toString();
+
         user.setSBirthday(sBirthday);
 
         model.addAttribute("users", user);
@@ -150,9 +162,13 @@ public class AccountController {
         }
 
         Timestamp ts=new Timestamp(birthday.getTime());
-        user.setBirthday(ts);
+        //created by Niklas to fit with change to LocalDate in users
+        LocalDate bday = Instant.ofEpochMilli(birthday.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        user.setBirthday(bday);
 
         try {
+            //niklas... temporary till users is correctly mapped
+            user.setUserType(userTypeService.findById((long)4));
             usersService.save(user);
         } catch (Exception e){
             log.info("Something went wrong with crating an user");

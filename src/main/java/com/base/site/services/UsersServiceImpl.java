@@ -1,11 +1,18 @@
 package com.base.site.services;
 
+import com.base.site.models.DailyLog;
+import com.base.site.models.LogType;
 import com.base.site.models.Users;
+import com.base.site.repositories.DailyLogRepo;
 import com.base.site.repositories.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("UsersService")
@@ -16,6 +23,9 @@ public class UsersServiceImpl implements UsersService {
 
     @Autowired
     UsersRepo usersRepo;
+
+    @Autowired
+    DailyLogRepo dailyLogRepo;
 
     @Override
     public List<Users> findAll(){
@@ -58,5 +68,39 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public Users findUsersByUsername(String username) {
         return usersRepo.findUsersByUsername(username);
+    }
+
+    @Override
+    public double getLatestWeight(LocalDate date) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = findByUserName(auth.getName());
+
+        List<DailyLog> logList = dailyLogRepo.findAll();
+
+        //ArrayList<DailyLog> weight = new ArrayList<DailyLog>();
+        DailyLog weightLog = new DailyLog("1900-01-01");
+        for (DailyLog logdate: logList) {
+            if((logdate.getDatetime().isBefore(date) || logdate.getDatetime().equals(date))
+                    && loggedInUser.getId() == logdate.getFkUser().getId()
+                    && logdate.getFkLogType().getType().equals("Weight")) {
+
+                if(logdate.getDatetime() != null
+                        && logdate.getDatetime().isAfter(weightLog.getDatetime())) {
+
+                    weightLog.setDatetime(logdate.getDatetime());
+                    weightLog.setFkLogType(logdate.getFkLogType());
+                    weightLog.setAmount(logdate.getAmount());
+
+                }
+            }
+        }
+
+        if(weightLog.getAmount() != null) {
+            return weightLog.getAmount();
+        } else {
+            return loggedInUser.getStartWeight();
+        }
+
+
     }
 }
