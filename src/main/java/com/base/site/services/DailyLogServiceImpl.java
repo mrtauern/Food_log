@@ -37,14 +37,8 @@ public class DailyLogServiceImpl implements DailyLogService {
 
     @Override
     public DailyLog findById(long id) {
-        Optional<DailyLog> optional = dailyLogRepo.findById(id);
-        DailyLog dailyLog = null;
-        if (optional.isPresent()){
-            dailyLog = optional.get();
-        }else {
-            throw new RuntimeException("DailyLog is not found for id ::" + id);
-        }
-        return dailyLog;
+
+        return dailyLogRepo.findById(id).get();
     }
 
      @Override

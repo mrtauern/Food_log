@@ -17,16 +17,17 @@ public class ExerciseServiceImpl implements ExerciseService{
 
     @Override
     public List<Exercise> findAll() {
-        return (List<Exercise>) exerciseRepository.findAll();
+        return exerciseRepository.findAll();
     }
 
-    @Override
+    //Fix later
+    /*@Override
     public List<Exercise> findAllByKeyword(String keyword) {
         if (keyword != null) {
             return exerciseRepository.search(keyword);
         }
         return (List<Exercise>) exerciseRepository.findAll();
-    }
+    }*/
 
     @Override
     public Exercise save(Exercise exercise) {
@@ -35,14 +36,14 @@ public class ExerciseServiceImpl implements ExerciseService{
 
     @Override
     public Exercise findById(long id) {
-        Optional<Exercise> optional = exerciseRepository.findById(id);
+        /*Optional<Exercise> optional = exerciseRepository.findById(id);
         Exercise exercise = null;
         if (optional.isPresent()){
             exercise = optional.get();
         }else {
             throw new RuntimeException("Exercise is not found for id ::" + id);
-        }
-        return exercise;
+        }*/
+        return exerciseRepository.findById(id).get();
     }
 
     @Override

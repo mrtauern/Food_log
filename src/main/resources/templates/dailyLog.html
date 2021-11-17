@@ -117,7 +117,7 @@
 
               <br>
               <a th:href="@{/addExercise}" >Add Exercise To DailyLog</a>
-              <table border="1" cellpadding="10">
+              <!--<table border="1" cellpadding="10">
                   <thead>
                   <tr>
                       <th>Exercise ID</th>
@@ -131,14 +131,13 @@
                       <td th:text="${exList.id}">Exercise ID</td>
                       <td th:text="${exList.time_min}">Time</td>
                       <td th:text="${exList.exerciseType.name}">Exercise Name</td>
-                      <!--<td th:text="${log.fkPrivateFood}">P Food</td> -->
                       <td>
                           <a th:href="@{/updateExerciseInDailyLog/{id}(id=${exList.id})}">Edit</a>
                           <a th:href="@{/deleteExerciseFromDailyLog/{id}(id=${exList.id})}">Delete</a>
                       </td>
                   </tr>
                   </tbody>
-              </table>
+              </table>-->
 
             </div>
             <div class="w-25" id="inner_container" style="background-color:#4c9e9e;">

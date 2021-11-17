@@ -11,7 +11,7 @@ import java.util.List;
 @Service("ExerciseService")
 public interface ExerciseService {
     List<Exercise> findAll();
-    List<Exercise> findAllByKeyword(String keyword);
+    //List<Exercise> findAllByKeyword(String keyword);
     Exercise save(Exercise  exercise);
     Exercise findById(long id);
     void deleteById(Long Id);

@@ -4,7 +4,6 @@ import com.base.site.models.*;
 import com.base.site.repositories.ExerciseRepository;
 import com.base.site.services.DailyLogService;
 import com.base.site.services.ExerciseService;
-import com.base.site.services.ExerciseTypeService;
 import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -24,9 +23,6 @@ import java.util.logging.Logger;
 public class ExerciseController {
     @Autowired
     ExerciseService exerciseService;
-
-    @Autowired
-    ExerciseTypeService exerciseTypeService;
     @Autowired
     UsersService usersService;
     @Autowired
@@ -38,10 +34,10 @@ public class ExerciseController {
 
     @GetMapping("/exercise")
     public String exercise(Model model, Exercise exercise, @Param("keyword") String keyword) {
-        List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
+        //List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
         List<DailyLog> edList = dailyLogService.findAllByKeyword(keyword);
 
-        model.addAttribute("exerciseList", exerciseList);
+        //model.addAttribute("exerciseList", exerciseList);
         model.addAttribute("edList", edList);
         model.addAttribute("keyword", keyword);
 
@@ -53,10 +49,10 @@ public class ExerciseController {
     @GetMapping("/addExercise")
     public String addExercise(Model model, Exercise exercise, DailyLog dailyLog, @Param("keyword") String keyword) {
         //List<ExerciseType> exerciseTypeList = exerciseTypeService.findAllByKeyword(keyword);
-        List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
+        //List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
 
         //model.addAttribute("exerciseTypeList", exerciseTypeList);
-        model.addAttribute("exerciseList", exerciseList);
+        //model.addAttribute("exerciseList", exerciseList);
         model.addAttribute("keyword", keyword);
 
         log.info("  get mapping addExercise is called");
@@ -66,9 +62,9 @@ public class ExerciseController {
 
     @GetMapping("/createExercise/{id}")
     public String createExercise(@PathVariable(value = "id") Long id, Model model, DailyLog dailyLog) {
-        ExerciseType exerciseTypes = exerciseTypeService.findById(id);
+        Exercise exercise = exerciseService.findById(id);
         model.addAttribute("dailyLog", dailyLog);
-        model.addAttribute("exerciseTypes", exerciseTypes);
+        model.addAttribute("exerciseTypes", exercise);
         log.info("  Get mapping createExercise is called ");
 
         return "createExercise";
@@ -97,7 +93,7 @@ public class ExerciseController {
         Exercise exercise= exerciseService.findById(id);
         //DailyLog dailyLog= dailyLogService.findById(id);
         model.addAttribute("exercise", exercise);
-        model.addAttribute("eType", exerciseTypeService.findAll());
+        model.addAttribute("eType", exerciseService.findAll());
         log.info("  GetMapping updateDailyLog is called ");
 
         return "updateExerciseInDailyLog";

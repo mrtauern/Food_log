@@ -36,14 +36,8 @@ public class FoodServiceImpl implements FoodService {
 
         @Override
         public Food findById(Long id) {
-            Optional<Food> optional = foodRepo.findById(id);
-            Food food = null;
-            if (optional.isPresent()){
-                food = optional.get();
-            }else {
-                throw new RuntimeException("Food is not found for id ::" + id);
-            }
-            return food;
+
+            return foodRepo.findById(id).get();
         }
 
         @Override

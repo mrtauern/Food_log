@@ -26,14 +26,8 @@ public class LogTypeServiceImpl implements LogTypeService{
 
     @Override
     public LogType findById(Long id) {
-        Optional<LogType> optional = logTypeRepository.findById(id);
-        LogType logType = null;
-        if (optional.isPresent()){
-            logType = optional.get();
-        }else {
-            throw new RuntimeException("LogType is not found for id ::" + id);
-        }
-        return logType;
+
+        return logTypeRepository.findById(id).get();
     }
 
     @Override

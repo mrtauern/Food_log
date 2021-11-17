@@ -2,7 +2,6 @@ package com.base.site.controllers;
 
 import com.base.site.models.DailyLog;
 import com.base.site.models.Exercise;
-import com.base.site.models.ExerciseType;
 import com.base.site.models.Users;
 import com.base.site.repositories.DailyLogRepo;
 import com.base.site.services.DailyLogService;
@@ -103,7 +102,7 @@ public class DailyLogController {
 
         List<DailyLog> dailyLogs = dailyLogService.findAll();
         List<DailyLog> dailyLogsView = new ArrayList<>();
-        List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
+        //List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date enteredDate = dateFormat.parse(date);
@@ -144,7 +143,7 @@ public class DailyLogController {
         model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(localDate, loggedInUser));
         model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(localDate, loggedInUser));
         //model.addAttribute("list", logListUserDate);
-        model.addAttribute("exerciseList", exerciseList);
+        //model.addAttribute("exerciseList", exerciseList);
         //model.addAttribute("keyword", keyword);
 
         return DAILY_LOG;

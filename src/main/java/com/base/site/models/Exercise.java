@@ -18,16 +18,17 @@ import java.util.Set;
 @Table(name="exercise")
 public class Exercise {
     @javax.persistence.Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @NotBlank(message = "Time is mandatory")
-    private int time_min;
+    @NotBlank(message = "kcal_burned_per_min is mandatory")
+    private int kcal_burned_per_min;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="fk_exercise_type_id", nullable = false)
-    private ExerciseType exerciseType;
+    @NotBlank(message = "Name is mandatory")
+    private String name;
+
+    @OneToMany(mappedBy="fkExercise", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<DailyLog> dailyLogs;
 
 }
-
