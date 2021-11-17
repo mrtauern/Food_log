@@ -4,17 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Setter
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "daily_log")
 public class DailyLog {
@@ -23,11 +25,9 @@ public class DailyLog {
     @Column(name = "id", nullable = false)
     private long id;
 
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="fk_user_id", nullable = false)
     private Users fkUser;
-
 
     @ManyToOne
     @JoinColumn(name = "fk_log_type")
@@ -38,10 +38,10 @@ public class DailyLog {
     private Exercise fkExercise;
 
     @Column(name = "datetime")
-    private Timestamp datetime;
+    private LocalDate datetime;
 
-    @Column(name = "food_amount")
-    private Double foodAmount;
+    @Column(name = "amount")
+    private Double amount;
 
     @ManyToOne
     @JoinColumn(name = "fk_food_id")
@@ -54,6 +54,15 @@ public class DailyLog {
     @Column(name = "current_weight")
     private Double currentWeight;
 
+    public DailyLog() {
+        LocalDate ldt = LocalDate.now();
+        datetime = ldt;
+    }
+
+    //String format yyyy-mm-dd
+    public DailyLog(String date) {
+        datetime = LocalDate.parse(date);
+    }
 
 }
 

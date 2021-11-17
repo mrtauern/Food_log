@@ -16,4 +16,6 @@ public interface UserTypeService {
     void deleteById(Long id);
 
     void delete(UserType user);
+
+    UserType findByType(String type);
 }

@@ -7,6 +7,7 @@ import com.base.site.models.Users;
 import com.base.site.repositories.DailyLogRepo;
 import com.base.site.services.DailyLogService;
 import com.base.site.services.ExerciseService;
+
 import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +17,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -30,17 +36,62 @@ public class DailyLogController {
     @Autowired
     UsersService usersService;
 
+    @Autowired
+    UsersService usersService;
 
-    @RequestMapping("dailyLog")
-    public String dailyLog(DailyLog dailyLog, Exercise exercise, Model model, @Param("keyword") String keyword) {
+    private final String DAILY_LOG = "dailyLog";
+    private final String REDIRECT = "redirect:/";
+
+    @RequestMapping("/dailyLog")
+    public String dailyLog(DailyLog dailyLog, Model model,@Param("keyword") String keyword) {
         List<DailyLog> list = dailyLogService.findAllByKeyword(keyword);
         List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
-            //List<DailyLog> list = dailyLogService.findAll();
-        model.addAttribute("list", list);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+
+        List<DailyLog> logList = dailyLogService.findAll();
+        LocalDate date = LocalDate.now();
+
+        ArrayList<DailyLog> logListUserDate = new ArrayList<DailyLog>();
+
+        for (DailyLog logdate: logList) {
+            if(logdate.getDatetime().equals(date) && loggedInUser.getId() == logdate.getFkUser().getId() && logdate.getFood() != null) {
+                logListUserDate.add(logdate);
+            }
+        }
+
+        model.addAttribute("bmr", loggedInUser.getBMR(usersService.getLatestWeight(date)));
+        model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(date, loggedInUser));
+        model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(date, loggedInUser));
+        model.addAttribute("list", logListUserDate);
         model.addAttribute("exerciseList", exerciseList);
-            model.addAttribute("keyword", keyword);
+        model.addAttribute("keyword", keyword);
         log.info("  get mapping DailyLog is called");
-        return "dailyLog";
+        return DAILY_LOG;
+    }
+
+    @GetMapping("dailyLog/{date}")
+    public String dailyLog(@PathVariable(value = "date") String date, Model model, @Param("keyword") String keyword) {
+        log.info("Getmapping called for dailylog for specific date: "+date);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+
+        List<DailyLog> logList = dailyLogService.findAll();
+        ArrayList<DailyLog> logListUserDate = new ArrayList<DailyLog>();
+
+        LocalDate enteredDate = LocalDate.parse(date);
+
+        for (DailyLog logdate: logList) {
+            if(logdate.getDatetime().equals(enteredDate) && loggedInUser.getId() == logdate.getFkUser().getId() && logdate.getFood() != null) {
+                logListUserDate.add(logdate);
+            }
+        }
+
+        model.addAttribute("list",logListUserDate);
+        model.addAttribute("keyword", keyword);
+
+        return DAILY_LOG;
     }
 
     @GetMapping("/addCurrentWeight")

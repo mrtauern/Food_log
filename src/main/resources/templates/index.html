@@ -22,8 +22,8 @@
         </thead>
         <tbody>
         <tr th:each="user : ${users}">
-          <td th:text="${user.name}"></td>
-          <td th:text="${user.email}"></td>
+          <td th:text="${user.firstname}"></td>
+          <td th:text="${user.username}"></td>
           <td><a th:href="@{/edit/{id}(id=${user.id})}">Edit</a></td>
           <td><a th:href="@{/delete/{id}(id=${user.id})}">Delete</a></td>
         </tr>
