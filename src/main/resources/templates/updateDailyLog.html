@@ -10,10 +10,12 @@
   <div id="inner_container">
     <h1>Update Food</h1>
 
-    <form action="#" th:action="@{/saveDailyLog}" th:object ="${dailyLog}" method="POST">
+    <form action="#" th:action="@{/updateDailyLog}" th:object ="${dailyLog}" method="POST">
 
       <input type="hidden" th:field="*{id}" />
       <input type="hidden" name="userId" th:field="*{fkUser.id}" />
+      <input type="hidden" name="userId" th:field="*{food.id}" />
+
 
       <label  class="col-form-label">Type Log </label>
       <select  id="logType" name="logType" th:field="*{fkLogType}" >

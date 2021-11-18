@@ -131,6 +131,18 @@ public class FoodController {
         return "updateDailyLog";
     }
 
+    @PostMapping("/updateDailyLog")
+    public String updateDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,Food food, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+        dailyLog.setFkUser(loggedInUser);
+
+        dailyLogService.save(dailyLog);
+
+        log.info("  PostMapping updateDailyLog is called ");
+        return  "redirect:/" + "dailyLog";
+    }
+
     @GetMapping("/deleteDailyLog/{id}")
     public String deleteDailyLog(@PathVariable(value = "id") Long id, Model model) {
         this.dailyLogService.deleteById(id);
