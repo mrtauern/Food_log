@@ -39,21 +39,11 @@ public class DailyLogController {
     private final String DAILY_LOG = "dailyLog";
     private final String REDIRECT = "redirect:/";
 
-    /*
-    @RequestMapping({"/dailyLog", "/dailyLog/{date}"})
-    public String dailyLog(DailyLog dailyLog, Model model,@Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString) {
-        log.info("  get mapping DailyLog is called");
-        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
-
-        //List<DailyLog> list = dailyLogService.findAllByKeyword(keyword);
-        //List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
-    */
     @RequestMapping({"/dailyLog", "/dailyLog/{date}"})
     public String dailyLog(DailyLog dailyLog, Model model,@Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString) {
         log.info("  get mapping DailyLog is called");
         List<DailyLog> dailyLogList = dailyLogService.findAll();
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
-
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
@@ -74,34 +64,11 @@ public class DailyLogController {
         model.addAttribute("weight",usersService.getLatestWeight(date));
         model.addAttribute("list", logListUserDate);
         //model.addAttribute("exerciseList", exerciseList);
+        model.addAttribute("keyword", keyword);
         model.addAttribute("dailyLogList", dailyLogList);
 
         return DAILY_LOG;
     }
-
-    /*
-    @GetMapping("dailyLog/{date}")
-    public String dailyLog(@PathVariable(value = "date") String date, Model model, @Param("keyword") String keyword) {
-        log.info("Getmapping called for dailylog for specific date: "+date);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-
-        List<DailyLog> logList = dailyLogService.findAll();
-        ArrayList<DailyLog> logListUserDate = new ArrayList<DailyLog>();
-
-        LocalDate enteredDate = LocalDate.parse(date);
-
-        for (DailyLog logdate: logList) {
-            if(logdate.getDatetime().equals(enteredDate) && loggedInUser.getId() == logdate.getFkUser().getId() && logdate.getFood() != null) {
-                logListUserDate.add(logdate);
-            }
-        }
-
-        model.addAttribute("list",logListUserDate);
-        model.addAttribute("keyword", keyword);
-
-        return DAILY_LOG;
-    }*/
 
     @GetMapping("/addCurrentWeight")
     public String addCurrentWeight(Model model, @Param("keyword") String keyword) {
