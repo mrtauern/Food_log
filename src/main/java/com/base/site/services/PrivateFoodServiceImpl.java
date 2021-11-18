@@ -34,14 +34,8 @@ public class PrivateFoodServiceImpl implements PrivateFoodService{
 
     @Override
     public PrivateFood findById(Long id) {
-        Optional<PrivateFood> optional = privateFoodRepo.findById(id);
-        PrivateFood privateFood = null;
-        if (optional.isPresent()){
-            privateFood = optional.get();
-        }else {
-            throw new RuntimeException("privateFood is not found for id ::" + id);
-        }
-        return privateFood;
+
+        return privateFoodRepo.findById(id).get();
     }
 
     @Override

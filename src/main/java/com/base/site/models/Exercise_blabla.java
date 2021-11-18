@@ -4,18 +4,21 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
-@Getter
+
+/*@Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "exercise")
+@NoArgsConstructor
 @Entity
-public class Exercise {
-    @Id
+@Table(name="exercise")*/
+public class Exercise_blabla {
+    /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
@@ -28,5 +31,5 @@ public class Exercise {
 
     @OneToMany(mappedBy="fkExercise", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
-    private Set<DailyLog> dailyLogs;
+    private Set<DailyLog> dailyLogs;*/
 }

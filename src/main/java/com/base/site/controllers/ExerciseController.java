@@ -1,6 +1,7 @@
 package com.base.site.controllers;
 
 import com.base.site.models.*;
+import com.base.site.repositories.ExerciseRepository;
 import com.base.site.services.DailyLogService;
 import com.base.site.services.ExerciseService;
 import com.base.site.services.LogTypeService;
@@ -36,10 +37,10 @@ public class ExerciseController {
 
     @GetMapping("/exercise")
     public String exercise(Model model, Exercise exercise, @Param("keyword") String keyword) {
-        List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
+        //List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
         List<DailyLog> edList = dailyLogService.findAllByKeyword(keyword);
 
-        model.addAttribute("exerciseList", exerciseList);
+        //model.addAttribute("exerciseList", exerciseList);
         model.addAttribute("edList", edList);
         model.addAttribute("keyword", keyword);
 

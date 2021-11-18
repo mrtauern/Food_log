@@ -1,5 +1,6 @@
 package com.base.site.services;
 
+import com.base.site.models.DailyLog;
 import com.base.site.models.Exercise;
 import com.base.site.repositories.ExerciseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class ExerciseServiceImpl implements ExerciseService{
 
     @Override
     public List<Exercise> findAll() {
-        return (List<Exercise>) exerciseRepository.findAll();
+        return exerciseRepository.findAll();
     }
 
     @Override
@@ -34,20 +35,18 @@ public class ExerciseServiceImpl implements ExerciseService{
 
     @Override
     public Exercise findById(long id) {
-        Optional<Exercise> optional = exerciseRepository.findById(id);
+        /*Optional<Exercise> optional = exerciseRepository.findById(id);
         Exercise exercise = null;
         if (optional.isPresent()){
             exercise = optional.get();
         }else {
-            throw new RuntimeException("Exercise is not found for id :: " + id);
-        }
-        return exercise;
+            throw new RuntimeException("Exercise is not found for id ::" + id);
+        }*/
+        return exerciseRepository.findById(id).get();
     }
 
     @Override
     public void deleteById(Long Id) {
         this.exerciseRepository.deleteById(Id);
     }
-
-
 }

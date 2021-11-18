@@ -135,6 +135,7 @@ public class AccountController {
         //String sBirthday = new SimpleDateFormat("yyyy-MM-dd").format(user.getBirthday());
         //created by Niklas to fit with change to LocalDate in users
         String sBirthday = user.getBirthday().toString();
+        log.info("sBirthday: "+sBirthday);
 
         user.setSBirthday(sBirthday);
 

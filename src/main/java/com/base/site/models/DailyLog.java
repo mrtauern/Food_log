@@ -17,6 +17,7 @@ import java.util.List;
 @Setter
 @Getter
 @AllArgsConstructor
+//@NoArgsConstructor
 @Entity
 @Table(name = "daily_log")
 public class DailyLog {
@@ -40,6 +41,9 @@ public class DailyLog {
     @Column(name = "datetime")
     private LocalDate datetime;
 
+    @Transient
+    private String sDatetime;
+
     @Column(name = "amount")
     private Double amount;
 
@@ -50,6 +54,9 @@ public class DailyLog {
     @ManyToOne
     @JoinColumn(name = "fk_private_food_id")
     private PrivateFood privateFood;
+
+    @Column(name = "current_weight")
+    private Double currentWeight;
 
     public DailyLog() {
         LocalDate ldt = LocalDate.now();

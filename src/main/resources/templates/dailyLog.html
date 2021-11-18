@@ -17,9 +17,27 @@
 <div class="container">
     <div class="row">
         <div class="w-75 p-3" id="inner_container" style="background-color:#bbb;">
-                <br><br><br>
-                <a th:href="@{/addFoodToDailyLog}" >Add Food To DailyLog</a>
-                <br><br>
+
+        <a th:href="${'/dailyLog/' + today}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-calendar-day"></i> Today</a>
+        <a th:href="${'/dailyLog/' + previousMonth}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-chevron-left"></i> Month</a>
+        <a th:href="${'/dailyLog/' + previousWeek}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-chevron-left"></i> Week</a>
+        <a th:href="${'/dailyLog/' + yesterday}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-chevron-left"></i> Day</a>
+        <a th:href="${'/dailyLog/' + tomorrow}" class="btn btn-dark mr-2 btn-sm">Day <i class="fas fa-chevron-right"></i></a>
+        <a th:href="${'/dailyLog/' + nextWeek}" class="btn btn-dark mr-2 btn-sm">Week <i class="fas fa-chevron-right"></i></a>
+        <a th:href="${'/dailyLog/' + nextMonth}" class="btn btn-dark mr-2 btn-sm">Month <i class="fas fa-chevron-right"></i></a>
+
+        <form th:method="post" th:action="@{/selectedDate}">
+            <input type="date" name="selectedDate" th:value="${sSelectedDate}">
+
+            <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-arrow-right"></i></button>
+        </form>
+<!-- <div class="row"> -->
+    <div class="column" style="background-color:#bbb;">
+        <br><br><br>
+        <a th:href="@{/addFoodToDailyLog}" >Add Food To DailyLog</a>
+        <br><br>
+
+
                 <table border="1" cellpadding="10">
                     <thead>
                     <tr>
@@ -29,34 +47,38 @@
                         <th>Log type</th>
                         <td>Date</td>
                         <th>Amount</th>
+                        <!--<th>Private Food ID</th> -->
                         <td>Action</td>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="log : ${list}">
-                        <td th:text="${log.id}">DailyLog ID</td>
-                        <td th:text="${log.fkUser.firstname}">Name</td>
-                        <td th:text="${log.food.name}">Food Name</td>
-                        <td th:text="${log.fkLogType.type}">Type</td>
-                        <td th:text="${log.datetime}">Date</td>
-                        <td th:text="${log.amount}">Amount</td>
+                    <tr th:each="food : ${foods}">
+                        <td th:text="${food?.id}">DailyLog ID</td>
+                        <td th:text="${food?.fkUser?.firstname}">Name</td>
+                        <td th:text="${food?.food?.name}">Food Name</td>
+                        <td th:text="${food?.fkLogType?.type}">Type</td>
+                        <td th:text="${food?.sDatetime}">Date</td>
+                        <td th:text="${food?.amount}">Amount</td>
                         <td>
-                            <a th:href="@{/updateDailyLog/{id}(id=${log.id})}">Edit</a>
-                            <a th:href="@{/deleteDailyLog/{id}(id=${log.id})}">Delete</a>
+                            <a th:href="@{/updateDailyLog/{id}(id=${food.id})}">Edit</a>
+                            <a th:href="@{/deleteDailyLog/{id}(id=${food.id})}">Delete</a>
                         </td>
                     </tr>
                     </tbody>
                 </table>
+
               <br><br>
               <a th:href="@{/createCurrentWeight}">Add Weight To Daily Log</a>
               <table border="1" cellpadding="10">
                   <thead>
                       <tr>
+
                           <th>Current weight</th>
                           <th>Actions</th>
                       </tr>
                   </thead>
                   <tbody>
+
                   <tr>
                       <span th:if="${weight?.amount != 0.0}">
                           <td th:text="${weight?.amount}">Weight</td>
@@ -65,9 +87,11 @@
                               <a th:href="@{/deleteCurrentWeight/{id}(id=${weight?.id})}">Delete</a>
                           </td>
                       </span>
+
                   </tr>
                   </tbody>
               </table>
+
               <br>
               <a th:href="@{/addExercise}" >Add Exercise To DailyLog</a>
               <table border="5" cellpadding="20">
@@ -80,13 +104,13 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr th:each="xlist : ${dailyLogList}">
-                      <td th:text="${xlist?.id}">dailyLog ID</td>
-                      <td th:text="${xlist?.amount}">Training Time min</td>
-                      <td th:text="${xlist?.fkExercise?.name}">Exercise Name</td>
+                  <tr th:each="exercise : ${exercises}">
+                      <td th:text="${exercise?.id}">dailyLog ID</td>
+                      <td th:text="${exercise?.amount}">Training Time min</td>
+                      <td th:text="${exercise?.fkExercise?.name}">Exercise Name</td>
                       <td>
-                          <a th:href="@{/updateExerciseInDailyLog/{id}(id=${xlist.id})}">Edit</a>
-                          <a th:href="@{/deleteExerciseFromDailyLog/{id}(id=${xlist.id})}">Delete</a>
+                          <a th:href="@{/updateExerciseInDailyLog/{id}(id=${exercise.id})}">Edit</a>
+                          <a th:href="@{/deleteExerciseFromDailyLog/{id}(id=${exercise.id})}">Delete</a>
                       </td>
                   </tr>
                   </tbody>
