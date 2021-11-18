@@ -2,6 +2,7 @@ package com.base.site.services;
 
 import com.base.site.controllers.DailyLogController;
 import com.base.site.models.DailyLog;
+import com.base.site.models.Exercise;
 import com.base.site.models.Users;
 import com.base.site.repositories.DailyLogRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class DailyLogServiceImpl implements DailyLogService {
     @Autowired
     DailyLogRepo dailyLogRepo;
 
-   @Override
+    @Override
     public List<DailyLog> findAll() {
         return (List<DailyLog>) dailyLogRepo.findAll();
     }
@@ -41,17 +42,11 @@ public class DailyLogServiceImpl implements DailyLogService {
 
     @Override
     public DailyLog findById(long id) {
-        Optional<DailyLog> optional = dailyLogRepo.findById(id);
-        DailyLog dailyLog = null;
-        if (optional.isPresent()){
-            dailyLog = optional.get();
-        }else {
-            throw new RuntimeException("DailyLog is not found for id ::" + id);
-        }
-        return dailyLog;
+
+        return dailyLogRepo.findById(id).get();
     }
 
-     @Override
+    @Override
     public void deleteById(Long Id) {
         this.dailyLogRepo.deleteById(Id);
     }
@@ -60,11 +55,10 @@ public class DailyLogServiceImpl implements DailyLogService {
     public int getKcalUsed(LocalDate date, Users user) {
         List<DailyLog> logList = findAll();
         int kcalUsed = 0;
-        if(!logList.isEmpty()) {
-            for (DailyLog dailyLog: logList) {
-                log.info("hello");
-                if(dailyLog.getDatetime().equals(date) && user.getId() == dailyLog.getFkUser().getId() && dailyLog.getFood() != null) {
-                    kcalUsed += (int)((dailyLog.getAmount()/100)*dailyLog.getFood().getEnergy_kcal());
+        if (!logList.isEmpty()) {
+            for (DailyLog dailyLog : logList) {
+                if (dailyLog.getDatetime().equals(date) && user.getId() == dailyLog.getFkUser().getId() && dailyLog.getFood() != null) {
+                    kcalUsed += (int) ((dailyLog.getAmount() / 100) * dailyLog.getFood().getEnergy_kcal());
                 }
             }
         }
@@ -74,11 +68,11 @@ public class DailyLogServiceImpl implements DailyLogService {
 
     @Override
     public int getKcalLeft(LocalDate date, Users user) {
-       int kcalLeft = 0;
-       int totalKcal = user.getBMR(user.getCurrentWeight());
-       int usedKcal = getKcalUsed(date, user);
-       kcalLeft = totalKcal-usedKcal;
-       return kcalLeft;
+        int kcalLeft = 0;
+        int totalKcal = user.getBMR(user.getCurrentWeight());
+        int usedKcal = getKcalUsed(date, user);
+        kcalLeft = totalKcal - usedKcal;
+        return kcalLeft;
     }
 
 }

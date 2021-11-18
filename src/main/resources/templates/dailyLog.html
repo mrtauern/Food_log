@@ -20,8 +20,6 @@
                 <br><br><br>
                 <a th:href="@{/addFoodToDailyLog}" >Add Food To DailyLog</a>
                 <br><br>
-
-
                 <table border="1" cellpadding="10">
                     <thead>
                     <tr>
@@ -29,12 +27,9 @@
                         <th>U Name</th>
                         <th>Food ID</th>
                         <th>Log type</th>
-                        <th>Exercise ID</th>
                         <td>Date</td>
                         <th>Amount</th>
-                        <!--<th>Private Food ID</th> -->
                         <td>Action</td>
-
                     </tr>
                     </thead>
                     <tbody>
@@ -43,65 +38,55 @@
                         <td th:text="${log.fkUser.firstname}">Name</td>
                         <td th:text="${log.food.name}">Food Name</td>
                         <td th:text="${log.fkLogType.type}">Type</td>
-                        <td th:text="${log.fkExercise}">Exercise</td>
                         <td th:text="${log.datetime}">Date</td>
                         <td th:text="${log.amount}">Amount</td>
-                        <!--<td th:text="${log.fkPrivateFood}">P Food</td> -->
                         <td>
                             <a th:href="@{/updateDailyLog/{id}(id=${log.id})}">Edit</a>
                             <a th:href="@{/deleteDailyLog/{id}(id=${log.id})}">Delete</a>
-
                         </td>
                     </tr>
                     </tbody>
                 </table>
-
               <br><br>
               <a th:href="@{/createCurrentWeight}">Add Weight To Daily Log</a>
               <table border="1" cellpadding="10">
                   <thead>
                       <tr>
-
                           <th>Current weight</th>
                           <th>Actions</th>
                       </tr>
                   </thead>
                   <tbody>
-
                   <tr>
                       <span th:if="${weight?.amount != 0.0}">
                           <td th:text="${weight?.amount}">Weight</td>
                           <td>
                               <a th:href="@{/updateCurrentWeight/{id}(id=${weight?.id})}">Edit</a>
                               <a th:href="@{/deleteCurrentWeight/{id}(id=${weight?.id})}">Delete</a>
-
                           </td>
                       </span>
-
                   </tr>
                   </tbody>
               </table>
-
               <br>
               <a th:href="@{/addExercise}" >Add Exercise To DailyLog</a>
-              <table border="1" cellpadding="10">
+              <table border="5" cellpadding="20">
                   <thead>
                   <tr>
-                      <th>Exercise ID</th>
+                      <th>dailyLog ID</th>
                       <th>Training Time</th>
                       <th>Training Name</th>
                       <td>Action</td>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr th:each="exList : ${exerciseList}">
-                      <td th:text="${exList.id}">Exercise ID</td>
-                      <td th:text="${exList.time_min}">Time</td>
-                      <td th:text="${exList.exerciseType.name}">Exercise Name</td>
-                      <!--<td th:text="${log.fkPrivateFood}">P Food</td> -->
+                  <tr th:each="xlist : ${dailyLogList}">
+                      <td th:text="${xlist?.id}">dailyLog ID</td>
+                      <td th:text="${xlist?.amount}">Training Time min</td>
+                      <td th:text="${xlist?.fkExercise?.name}">Exercise Name</td>
                       <td>
-                          <a th:href="@{/updateExerciseInDailyLog/{id}(id=${exList.id})}">Edit</a>
-                          <a th:href="@{/deleteExerciseFromDailyLog/{id}(id=${exList.id})}">Delete</a>
+                          <a th:href="@{/updateExerciseInDailyLog/{id}(id=${xlist.id})}">Edit</a>
+                          <a th:href="@{/deleteExerciseFromDailyLog/{id}(id=${xlist.id})}">Delete</a>
                       </td>
                   </tr>
                   </tbody>
