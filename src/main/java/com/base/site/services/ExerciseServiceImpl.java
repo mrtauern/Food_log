@@ -20,14 +20,13 @@ public class ExerciseServiceImpl implements ExerciseService{
         return exerciseRepository.findAll();
     }
 
-    //Fix later
-    /*@Override
+    @Override
     public List<Exercise> findAllByKeyword(String keyword) {
         if (keyword != null) {
             return exerciseRepository.search(keyword);
         }
         return (List<Exercise>) exerciseRepository.findAll();
-    }*/
+    }
 
     @Override
     public Exercise save(Exercise exercise) {

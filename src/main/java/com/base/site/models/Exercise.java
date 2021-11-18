@@ -17,14 +17,15 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name="exercise")
 public class Exercise {
-    @javax.persistence.Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-    @NotBlank(message = "kcal_burned_per_min is mandatory")
-    private int kcal_burned_per_min;
+    @Column(name = "kcal_burned_per_min")
+    private Integer kcalBurnedPerMin;
 
-    @NotBlank(message = "Name is mandatory")
+    @Column(name = "name")
     private String name;
 
     @OneToMany(mappedBy="fkExercise", fetch = FetchType.LAZY,

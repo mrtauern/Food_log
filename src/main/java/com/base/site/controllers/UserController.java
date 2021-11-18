@@ -2,7 +2,10 @@ package com.base.site.controllers;
 
 import com.base.site.models.Users;
 import com.base.site.repositories.UsersRepo;
+import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +22,8 @@ public class UserController {
     Logger log = Logger.getLogger(UserController.class.getName());
 
     private final String INDEX = "index";
+    private final String DAILYLOG = "dailyLog";
+    private final String DASHBOARD = "dashboard";
     private final String UPDATE_USER = "update-user";
     private final String EDIT_USER = "editUser";
     private final String DELETE_USER_CONFIRM = "delete_user_confirm";
@@ -26,11 +31,19 @@ public class UserController {
 
     @Autowired
     UsersRepo usersRepo;
+    @Autowired
+    UsersService usersService;
 
     @GetMapping("/index")
     public String showUserList(Model model) {
         log.info("Usercontroller /index getmapping called...");
-        model.addAttribute("users", usersRepo.findAll());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+        if(loggedInUser.getRoles().equals("USER")) {
+            return REDIRECT+DAILYLOG;
+        } else if(loggedInUser.getRoles().equals("ADMIN")) {
+            return REDIRECT+DASHBOARD;
+        }
         return INDEX;
     }
 
