@@ -10,7 +10,7 @@ import java.util.List;
 public interface ExerciseService {
 
     List<Exercise> findAll();
-    //List<Exercise> findAllByKeyword(String keyword);
+    List<Exercise> findAllByKeyword(String keyword);
     Exercise save(Exercise  exercise);
     Exercise findById(long id);
     void deleteById(Long Id);

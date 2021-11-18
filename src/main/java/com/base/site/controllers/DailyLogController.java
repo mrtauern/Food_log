@@ -62,100 +62,70 @@ public class DailyLogController {
         //return null;
     }
 
-    @GetMapping("/dailyLog")
-    public String dailyLog(DailyLog dailyLog, Model model,@Param("keyword") String keyword) {
-        /*List<DailyLog> list = dailyLogService.findAllByKeyword(keyword);
-        List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-
-        List<DailyLog> logList = dailyLogService.findAll();
-        LocalDate date = LocalDate.now();
-
-        ArrayList<DailyLog> logListUserDate = new ArrayList<DailyLog>();
-
-        for (DailyLog logdate: logList) {
-            if(logdate.getDatetime().equals(date) && loggedInUser.getId() == logdate.getFkUser().getId() && logdate.getFood() != null) {
-                logListUserDate.add(logdate);
-            }
-        }
-
-        log.info("1"+loggedInUser.getBMR(usersService.getLatestWeight(date).getAmount()));
-        //log.info(""+usersService.getLatestWeight(date)+"");
-        model.addAttribute("bmr", loggedInUser.getBMR(usersService.getLatestWeight(date).getAmount()));
-        log.info("2");
-        model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(date, loggedInUser));
-        log.info("3");
-        model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(date, loggedInUser));
-        log.info("4");
-        model.addAttribute("weight",usersService.getLatestWeight(date));
-        log.info("5");
-        model.addAttribute("list", logListUserDate);
-        model.addAttribute("exerciseList", exerciseList);
-        model.addAttribute("keyword", keyword);*/
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        Date date = new Date();
-
-        log.info("  get mapping DailyLog is called");
-        return REDIRECT + DAILY_LOG + "/" + dateFormat.format(date);
-        //return DAILY_LOG;
-    }
-
     @GetMapping({"/dailyLog", "/dailyLog/{date}"})
-    public String dailyLog(DailyLog dailyLog, Model model,@Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString) throws ParseException {
-        log.info("Getmapping called for dailylog for specific date: "+date);
+    public String dailyLog(Model model,@Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString) throws ParseException {
+        log.info("Getmapping called for dailylog for specific date: "+dateString);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
 
-        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString, formatter);
 
         List<DailyLog> dailyLogs = dailyLogService.findAll();
-        List<DailyLog> dailyLogsView = new ArrayList<>();
+        List<DailyLog> dailyLogsFoods = new ArrayList<>();
+        List<DailyLog> dailyLogsExercises = new ArrayList<>();
         //List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        Date enteredDate = dateFormat.parse(date);
+        //SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        //Date enteredDate = dateFormat.parse(date);
 
         for (DailyLog dailyLog: dailyLogs) {
-            String timeStamp = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-            if(timeStamp.equals(date) && loggedInUser.getId() == dailyLog.getFkUser().getId()) {
+            //String timeStamp = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+            if(dailyLog.getDatetime().equals(date) && loggedInUser.getId() == dailyLog.getFkUser().getId()) {
+
                 String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                 dailyLog.setSDatetime(sDatetime);
-                dailyLogsView.add(dailyLog);
+
+                if(dailyLog.getFood() != null) {
+                    dailyLogsFoods.add(dailyLog);
+                } else if (dailyLog.getFkExercise() != null){
+                    dailyLogsExercises.add(dailyLog);
+                }
             }
         }
 
-        LocalDate localDate = enteredDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        //LocalDate localDate = enteredDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
         Date currentDate = new Date();
         LocalDate today = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         model.addAttribute("today", today.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        model.addAttribute("sSelectedDate", localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        model.addAttribute("sSelectedDate", date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
-        model.addAttribute("list", dailyLogsView);
+        model.addAttribute("foods", dailyLogsFoods);
+        model.addAttribute("exercises", dailyLogsExercises);
         model.addAttribute("keyword", keyword);
 
 
         // +/- Day
-        model.addAttribute("tomorrow", localDate.plusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        model.addAttribute("yesterday", localDate.minusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("tomorrow", date.plusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("yesterday", date.minusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
         // +/- Week
-        model.addAttribute("nextWeek", localDate.plusWeeks(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        model.addAttribute("previousWeek", localDate.minusWeeks(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("nextWeek", date.plusWeeks(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("previousWeek", date.minusWeeks(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
         // +/- Month
-        model.addAttribute("nextMonth", localDate.plusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        model.addAttribute("previousMonth", localDate.minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("nextMonth", date.plusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("previousMonth", date.minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
-        model.addAttribute("bmr", loggedInUser.getBMR(usersService.getLatestWeight(localDate).getAmount()));
-        model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(localDate, loggedInUser));
-        model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(localDate, loggedInUser));
+        model.addAttribute("bmr", loggedInUser.getBMR(usersService.getLatestWeight(date).getAmount()));
+        model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(date, loggedInUser));
+        model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(date, loggedInUser));
         //model.addAttribute("list", logListUserDate);
         //model.addAttribute("exerciseList", exerciseList);
         //model.addAttribute("keyword", keyword);
+
+        model.addAttribute("weight", usersService.getLatestWeight(date));
 
         return DAILY_LOG;
     }

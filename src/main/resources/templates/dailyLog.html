@@ -52,16 +52,16 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="log : ${list}">
-                        <td th:text="${log.id}">DailyLog ID</td>
-                        <td th:text="${log.fkUser.firstname}">Name</td>
-                        <td th:text="${log.food.name}">Food Name</td>
-                        <td th:text="${log.fkLogType.type}">Type</td>
-                        <td th:text="${log.sDatetime}">Date</td>
-                        <td th:text="${log.amount}">Amount</td>
+                    <tr th:each="food : ${foods}">
+                        <td th:text="${food?.id}">DailyLog ID</td>
+                        <td th:text="${food?.fkUser?.firstname}">Name</td>
+                        <td th:text="${food?.food?.name}">Food Name</td>
+                        <td th:text="${food?.fkLogType?.type}">Type</td>
+                        <td th:text="${food?.sDatetime}">Date</td>
+                        <td th:text="${food?.amount}">Amount</td>
                         <td>
-                            <a th:href="@{/updateDailyLog/{id}(id=${log.id})}">Edit</a>
-                            <a th:href="@{/deleteDailyLog/{id}(id=${log.id})}">Delete</a>
+                            <a th:href="@{/updateDailyLog/{id}(id=${food.id})}">Edit</a>
+                            <a th:href="@{/deleteDailyLog/{id}(id=${food.id})}">Delete</a>
                         </td>
                     </tr>
                     </tbody>
@@ -104,13 +104,13 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr th:each="xlist : ${dailyLogList}">
-                      <td th:text="${xlist?.id}">dailyLog ID</td>
-                      <td th:text="${xlist?.amount}">Training Time min</td>
-                      <td th:text="${xlist?.fkExercise?.name}">Exercise Name</td>
+                  <tr th:each="exercise : ${exercises}">
+                      <td th:text="${exercise?.id}">dailyLog ID</td>
+                      <td th:text="${exercise?.amount}">Training Time min</td>
+                      <td th:text="${exercise?.fkExercise?.name}">Exercise Name</td>
                       <td>
-                          <a th:href="@{/updateExerciseInDailyLog/{id}(id=${xlist.id})}">Edit</a>
-                          <a th:href="@{/deleteExerciseFromDailyLog/{id}(id=${xlist.id})}">Delete</a>
+                          <a th:href="@{/updateExerciseInDailyLog/{id}(id=${exercise.id})}">Edit</a>
+                          <a th:href="@{/deleteExerciseFromDailyLog/{id}(id=${exercise.id})}">Delete</a>
                       </td>
                   </tr>
                   </tbody>

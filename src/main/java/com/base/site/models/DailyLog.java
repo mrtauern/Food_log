@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @Entity
 @Table(name = "daily_log")
 public class DailyLog {
@@ -39,7 +39,6 @@ public class DailyLog {
     private Exercise fkExercise;
 
     @Column(name = "datetime")
-    @CreationTimestamp
     private LocalDate datetime;
 
     @Transient
@@ -59,10 +58,10 @@ public class DailyLog {
     @Column(name = "current_weight")
     private Double currentWeight;
 
-    /*public DailyLog() {
+    public DailyLog() {
         LocalDate ldt = LocalDate.now();
         datetime = ldt;
-    }*/
+    }
 
     //String format yyyy-mm-dd
     public DailyLog(String date) {
