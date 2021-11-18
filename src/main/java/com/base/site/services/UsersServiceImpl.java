@@ -1,8 +1,10 @@
 package com.base.site.services;
 
 import com.base.site.models.DailyLog;
+import com.base.site.models.LogType;
 import com.base.site.models.Users;
 import com.base.site.repositories.DailyLogRepo;
+import com.base.site.repositories.LogTypeRepository;
 import com.base.site.repositories.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -27,6 +29,9 @@ public class UsersServiceImpl implements UsersService {
 
     @Autowired
     DailyLogRepo dailyLogRepo;
+
+    @Autowired
+    LogTypeRepository logTypeRepo;
 
     @Override
     public List<Users> findAll(){
@@ -99,7 +104,9 @@ public class UsersServiceImpl implements UsersService {
         if(weightLog.getAmount() != 0.0) {
             return weightLog;
         } else {
-            weightLog.setCurrentWeight(loggedInUser.getStartWeight());
+            LogType log_type = logTypeRepo.findByType("Weight");
+            weightLog.setAmount(loggedInUser.getStartWeight());
+            weightLog.setFkLogType(log_type);
             return weightLog;
         }
 
