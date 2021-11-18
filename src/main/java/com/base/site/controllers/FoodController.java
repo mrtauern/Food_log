@@ -86,7 +86,6 @@ public class FoodController {
         List<Food> foodlist = foodService.findAllByKeyword(keyword);
         List<PrivateFood> pfoodlist = privateFoodService.findAllByKeyword(keyword);
 
-        //model.addAttribute("foodlist", dailyLogList);
         model.addAttribute("foodlist", foodlist);
         model.addAttribute("pfoodlist", pfoodlist);
         model.addAttribute("keyword", keyword);
