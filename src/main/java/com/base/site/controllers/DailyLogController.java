@@ -180,29 +180,29 @@ public class DailyLogController {
 
 
 
-    @GetMapping("/addExercise")
-    public String addExercise(Model model, Exercise exercise, DailyLog dailyLog, @Param("keyword") String keyword) {
+    @GetMapping("/addExerciseToDailyLog")
+    public String addExerciseToDailyLog(Model model, Exercise exercise, DailyLog dailyLog, @Param("keyword") String keyword) {
+        log.info("  get mapping addExerciseToDailyLog is called");
         List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
 
         model.addAttribute("exerciseList", exerciseList);
         model.addAttribute("keyword", keyword);
 
-        log.info("  get mapping addExercise is called");
-
-        return "addExercise";
+        return "addExerciseToDailyLog";
     }
 
-    @GetMapping("/createExercise/{id}")
-    public String createExercise(@PathVariable(value = "id") Long id, Model model, DailyLog dailyLog) {
+    @GetMapping("/createExerciseInDailyLog/{id}")
+    public String createExerciseInDailyLog(@PathVariable(value = "id") Long id, Model model, DailyLog dailyLog) {
+        log.info("  Get mapping createExerciseInDailyLog is called ");
         Exercise exercise = exerciseService.findById(id);
         model.addAttribute("dailyLog", dailyLog);
         model.addAttribute("exercise", exercise);
-        log.info("  Get mapping createExercise is called ");
 
-        return "createExercise";
+        return "createExerciseInDailyLog";
     }
-    @PostMapping("/saveExercise")
-    public String saveExercise(@ModelAttribute("dailyLog") DailyLog dailyLog, Exercise exercise, Model model) {
+    @PostMapping("/saveExerciseInDailyLog")
+    public String saveExerciseInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Exercise exercise, Model model) {
+        log.info("  Post Mapping saveExerciseInDailyLog is called ");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
         Exercise exerciseId = exerciseService.findById(exercise.getId());
@@ -212,24 +212,23 @@ public class DailyLogController {
 
         dailyLogService.save(dailyLog);
 
-        log.info("  Post Mapping saveExercise is called ");
         return  "redirect:/" + "dailyLog";
 
     }
 
     @GetMapping("/updateExerciseInDailyLog/{id}")
     public String updateExerciseInDailyLog(@PathVariable(value = "id") Long id, Model model) {
+        log.info("  GetMapping updateExerciseInDailyLog is called ");
         DailyLog dailyLog= dailyLogService.findById(id);
         model.addAttribute("dailyLog", dailyLog);
-        log.info("  GetMapping updateDailyLog is called ");
 
         return "updateExerciseInDailyLog";
     }
 
     @GetMapping("/deleteExerciseFromDailyLog/{id}")
     public String deleteEExerciseFromDailyLog(@PathVariable(value = "id") Long id, Model model) {
-        this.dailyLogService.deleteById(id);
         log.info("  GetMapping deleteEExerciseFromDailyLog is called ");
+        this.dailyLogService.deleteById(id);
 
         return "redirect:/" + "dailyLog";
     }
