@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <head th:include="fragments/head :: styles">
+</head>
+<body>
+  <header th:include="fragments/navbar_top :: navbar"></header>
+
+    <div class="contentBox">
+        <a href="/userList" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-pencil"></span>Users</a> <p>List of users with admin features</p>
+        <a href="/food" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-pencil"></span>Food</a><br> <p>List of foods with admin features</p>
+    </div>
+
+  <div th:include="fragments/navbar_top :: bottom_bar"></div>
+</body>
+</html>

@@ -39,6 +39,7 @@ public class AccountController {
     private final String CREATE_USER = "createUser";
     private final String EDIT_USER = "editUser";
     private final String DELETE_USER_CONFIRM = "delete_user_confirm";
+    private final String DASHBOARD = "dashboard";
     private final String REDIRECT = "redirect:/";
 
     @Autowired
@@ -221,5 +222,11 @@ public class AccountController {
         log.info("delete_user_confirm confirmed... deleting user with  userId: "+id);
         usersService.deleteById(id);
         return REDIRECT + USER_LIST;
+    }
+
+    @GetMapping("/dashboard")
+    public String admin_dashboard() {
+        log.info("dashboard getmapping called...");
+        return DASHBOARD;
     }
 }

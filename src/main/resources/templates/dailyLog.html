@@ -69,11 +69,11 @@
                   <tbody>
 
                   <tr>
-                      <span th:if="${weight.amount != 0.0}">
-                          <td th:text="${weight.amount}">Weight</td>
+                      <span th:if="${weight?.amount != 0.0}">
+                          <td th:text="${weight?.amount}">Weight</td>
                           <td>
-                              <a th:href="@{/updateCurrentWeight/{id}(id=${weight.id})}">Edit</a>
-                              <a th:href="@{/deleteCurrentWeight/{id}(id=${weight.id})}">Delete</a>
+                              <a th:href="@{/updateCurrentWeight/{id}(id=${weight?.id})}">Edit</a>
+                              <a th:href="@{/deleteCurrentWeight/{id}(id=${weight?.id})}">Delete</a>
 
                           </td>
                       </span>

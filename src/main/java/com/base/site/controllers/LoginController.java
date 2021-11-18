@@ -133,7 +133,7 @@ public class LoginController {
             return "login";
         }
 
-        return "predirect:/assword-reset";
+        return "redirect:/password-reset";
     }
 
 }
