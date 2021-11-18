@@ -41,8 +41,9 @@ public class ExerciseServiceImpl implements ExerciseService{
             exercise = optional.get();
         }else {
             throw new RuntimeException("Exercise is not found for id ::" + id);
-        }*/
+        } */
         return exerciseRepository.findById(id).get();
+        //return exercise;
     }
 
     @Override

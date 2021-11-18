@@ -63,6 +63,8 @@ public class ExerciseController {
     public String createExerciseInDailyLog(@PathVariable(value = "id") Long id, Model model, DailyLog dailyLog) {
         log.info("  Get mapping createExerciseInDailyLog is called ");
         Exercise exercise = exerciseService.findById(id);
+
+        model.addAttribute("logType", logTypeService.findAll());
         model.addAttribute("dailyLog", dailyLog);
         model.addAttribute("exercise", exercise);
 
@@ -74,6 +76,8 @@ public class ExerciseController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
         Exercise exerciseId = exerciseService.findById(exercise.getId());
+        log.info("----> Exercise Id From Save dailylog :::"+ exerciseId);
+
         dailyLog.setFkExercise(exerciseId);
         dailyLog.setFkUser(loggedInUser);
         dailyLog.setFkLogType(logTypeService.findByType("Exercise"));
@@ -93,8 +97,23 @@ public class ExerciseController {
         return "updateExerciseInDailyLog";
     }
 
+    @PostMapping("/updateExerciseInDailyLog")
+    public String updateExerciseInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Model model) {
+        log.info("  Post Mapping updateExerciseInDailyLog is called ");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+
+        dailyLog.setFkUser(loggedInUser);
+        dailyLog.setFkLogType(logTypeService.findByType("Exercise"));
+
+        dailyLogService.save(dailyLog);
+
+        return  "redirect:/" + "dailyLog";
+
+    }
+
     @GetMapping("/deleteExerciseFromDailyLog/{id}")
-    public String deleteEExerciseFromDailyLog(@PathVariable(value = "id") Long id, Model model) {
+    public String deleteExerciseFromDailyLog(@PathVariable(value = "id") Long id, Model model) {
         log.info("  GetMapping deleteEExerciseFromDailyLog is called ");
         this.dailyLogService.deleteById(id);
 
