@@ -5,29 +5,19 @@
 <body>
 <header th:include="fragments/navbar_top :: navbar"></header>
 
-
 <div class="container">
   <div id="inner_container">
     <h1>Add Exercise Time to Dailylog</h1>
-
     <form action="#" th:action="@{/saveExercise}" th:object ="${dailyLog}" method="POST">
       <input type="hidden" th:field="*{id}" />
-      <!--<input type="hidden" name="userId" th:field="*{fkUser.id}" />-->
+      <input type="hidden" name="userId" th:field="*{fkUser.id}" />
 
-
-      <label  class="col-form-label">Exercise Time </label>
-      <input type="text" th:field = "*{fkExercise.time_min}" placeholder=" Amount " class="form-control mb-4 col-4"> <br>
-
-      <label  class="col-form-label"> EX Type </label>
-      <select  id="exerciseTypes" name="exerciseTypes" th:field="*{fkExercise.exerciseType.name}" >
-        <option th:each="exerciseTypes : ${exerciseTypes}" th:value="${exerciseTypes.id}" th:utext="${exerciseTypes.name}"/>
-      </select>
-
+      <label  class="col-form-label">Exercise Time (Min) </label>
+      <input type="text" th:field = "*{amount}" placeholder=" Amount " class="form-control mb-4 col-4"> <br>
       <button type="submit" class="form-control mb-4 col-4" >Add Exercise To DailyLog</button>
     </form>
   </div>
 </div>
-
 <div th:include="fragments/navbar_top :: bottom_bar"></div>
 </body>
 </html>

@@ -56,13 +56,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/userList/?**","/createUser/?**").hasRole("ADMIN")
+                .antMatchers("/userList/?**","/createUser/?**", "/dashboard").hasRole("ADMIN")
                 .antMatchers("/signup","/adduser","/password_reset","/password_reset_code")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .defaultSuccessUrl("/index", true)
                 .permitAll()
                 .and()
                 .logout()
