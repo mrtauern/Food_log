@@ -185,62 +185,6 @@ public class DailyLogController {
         return  REDIRECT + DAILY_LOG;
     }
 
-
-
-    @GetMapping("/addExercise")
-    public String addExercise(Model model, Exercise exercise, DailyLog dailyLog, @Param("keyword") String keyword) {
-        List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
-
-        model.addAttribute("exerciseList", exerciseList);
-        model.addAttribute("keyword", keyword);
-
-        log.info("  get mapping addExercise is called");
-
-        return ADD_EXERCISE;
-    }
-
-    @GetMapping("/createExercise/{id}")
-    public String createExercise(@PathVariable(value = "id") Long id, Model model, DailyLog dailyLog) {
-        Exercise exercise = exerciseService.findById(id);
-        model.addAttribute("dailyLog", dailyLog);
-        model.addAttribute("exercise", exercise);
-        log.info("  Get mapping createExercise is called ");
-
-        return CREATE_EXERCISE;
-    }
-    @PostMapping("/saveExercise")
-    public String saveExercise(@ModelAttribute("dailyLog") DailyLog dailyLog, Exercise exercise, Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-        Exercise exerciseId = exerciseService.findById(exercise.getId());
-        dailyLog.setFkExercise(exerciseId);
-        dailyLog.setFkUser(loggedInUser);
-        dailyLog.setFkLogType(logTypeService.findByType("Exercise"));
-
-        dailyLogService.save(dailyLog);
-
-        log.info("  Post Mapping saveExercise is called ");
-        return  REDIRECT + DAILY_LOG;
-
-    }
-
-    @GetMapping("/updateExerciseInDailyLog/{id}")
-    public String updateExerciseInDailyLog(@PathVariable(value = "id") Long id, Model model) {
-        DailyLog dailyLog= dailyLogService.findById(id);
-        model.addAttribute("dailyLog", dailyLog);
-        log.info("  GetMapping updateDailyLog is called ");
-
-        return UPDATE_EXERCISE;
-    }
-
-    @GetMapping("/deleteExerciseFromDailyLog/{id}")
-    public String deleteEExerciseFromDailyLog(@PathVariable(value = "id") Long id, Model model) {
-        this.dailyLogService.deleteById(id);
-        log.info("  GetMapping deleteEExerciseFromDailyLog is called ");
-
-        return  REDIRECT + DAILY_LOG;
-    }
-
     @GetMapping("/weightOptions")
     public String weightOptions(Model model) {
         log.info("Getmapping weightOptions called in DailylogController");
@@ -261,5 +205,6 @@ public class DailyLogController {
         usersService.save(loggedInUser);
         return REDIRECT + DAILY_LOG;
     }
+
 
  }
