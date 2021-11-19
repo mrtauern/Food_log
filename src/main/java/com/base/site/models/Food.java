@@ -1,18 +1,20 @@
 package com.base.site.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Table(name = "food")
 public class Food {
 
     @Id
@@ -29,5 +31,7 @@ public class Food {
             cascade = CascadeType.ALL)
     private Set<DailyLog> dailyLogs;
 
+    @ManyToMany(mappedBy = "recipes", fetch = FetchType.LAZY)
+    private Set<Recipe> recipes = new HashSet<>();
 
 }

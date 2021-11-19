@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -11,6 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @ToString
+@Table(name = "recipe")
 public class Recipe implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -26,4 +29,11 @@ public class Recipe implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="fk_user_id", nullable = false)
     private Users fkUser;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "recipe_food",
+        joinColumns = {@JoinColumn(name = "fk_recipe_id", referencedColumnName = "id", nullable = false, updatable = false)},
+        inverseJoinColumns = {@JoinColumn(name = "fk_food_id", referencedColumnName = "id", nullable = false, updatable = false)})
+        private Set<Food> foods = new HashSet<>();
+
 }

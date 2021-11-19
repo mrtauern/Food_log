@@ -34,6 +34,7 @@ public class DbInitializer implements CommandLineRunner {
         /*
         log.info("Inside the DbInitializer");
 
+        //----------------------------------USERS---------------------------------
         UserType userType = userTypeRepo.findByType("User_male");
         LocalDate date = LocalDate.parse("1998-02-14");
 
@@ -45,6 +46,8 @@ public class DbInitializer implements CommandLineRunner {
 
         usersRepo.saveAll(userList);
         log.info("Successfully inserted record inside user table!");
+        //------------------------------------------------------------------------
         */
+
     }
 }
