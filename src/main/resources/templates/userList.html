@@ -3,45 +3,49 @@
 
 <head th:include="fragments/head :: styles"></head>
 <body>
-    <header th:include="fragments/navbar_top :: navbar"></header>
+    <header th:include="fragments/navbar_top :: navbar" class="navbar"></header>
 
-    <div class="contentBox">
+    <div th:include="fragments/navbar_top :: leftbar" id="leftBar"></div>
 
-    <h1>User list</h1>
+    <div id="content">
 
-        <div class="actionBar">
+        <div class="contentBox">
 
-            <form>
-                <input type="text" placeholder="Search...">
-            </form>
+        <h1>User list</h1>
 
-            <a href="/createUser" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Create user</a>
+            <div class="actionBar">
+
+                <form>
+                    <input type="text" placeholder="Search...">
+                </form>
+
+                <a href="/createUser" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Create user</a>
+
+            </div>
+
+
+            <table class="table table-sm">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td><i class="fas fa-user"></i> <span th:text="${user.firstname + ' ' + user.lastname}"></span></td>
+                <td><i class="fas fa-envelope"></i> <span th:text="${user.username}"></span></td>
+                <td class="actionButtons">
+                    <a th:href="${'/editUser/' + user.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                    <a th:href="@{'/password_reset_user/'+${user.id}}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Reset Password</a>
+                    <a th:href="@{'/delete_user_confirm/'+${user.id}}" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
         </div>
-
-
-        <table class="table table-striped">
-        <thead class="thead-dark">
-        <tr>
-            <th>Firstname</th>
-            <th>Lastname</th>
-            <th>Email</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="user : ${users}">
-            <td th:text="${user.firstname}"></td>
-            <td th:text="${user.lastname}"></td>
-            <td th:text="${user.username}"></td>
-            <td>
-                <a th:href="${'/editUser/' + user.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                <a th:href="@{'/password_reset_user/'+${user.id}}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Reset Password</a>
-                <a th:href="@{'/delete_user_confirm/'+${user.id}}" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
 
     </div>
 

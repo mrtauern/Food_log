@@ -11,6 +11,7 @@
 body {
     /* font-family: cursive; */
     background-color: #EEEEEE;
+    height: 100%;
 }
 a {
     text-decoration: none;
@@ -22,28 +23,42 @@ li {
 
 
 /* --------------------- NAVBAR STYLING --------------------- */
-.navbar {
+
+header.navbar {
     display: flex;
+
     align-items: center;
     justify-content: space-between;
+
     padding: 0px;
-    background-color: #333;
-    color: #fff;
+
+    background-color: #FFFF;
+
+    color: #000000;
+
+    box-shadow: 0px 1px 10px #AAAAAA;
+
+    z-index: 1;
 }
 .nav-links a {
-    color: #fff;
+    color: #000000;
 }
                         /* LOGO */
 #logo {
     font-size: 32px;
-    background-color: #41C685;
     font-family: Lobster;
-    width: 260px;
     text-align: center;
+    color: #FFFFFF;
+
+    background-color: #41C685;
+
+    width: 260px;
+    height: 53px;
 }
 
 #logo img{
     height: 30px;
+    margin: 0 5px 4px 0;
 }
                         /* NAVBAR MENU */
 .menu {
@@ -129,6 +144,79 @@ li {
 
 /*------   Calendar    ------*/
 
+/* --------------------- LEFT_BAR STYLING --------------------- */
+
+div#leftBar{
+    color: #FFFFFF;
+
+    background-color: #41C685;
+
+    width: 260px;
+    height: 100%;
+
+    display: inline-block;
+
+    position: fixed;
+}
+
+div#leftBar ul{
+
+}
+
+div#leftBar ul li{
+    font-size: 18px;
+
+    height: 50px;
+
+    vertical-align: middle;
+}
+
+div#leftBar ul li a{
+    color: #FFFFFF;
+    text-decoration: none;
+
+    width: 100%;
+    height: 100%;
+
+    padding-left: 20px;
+    padding-top: 12px;
+
+    display: block;
+}
+
+div#leftBar ul li:hover{
+    color: #41C685;
+
+    background-color: #FFFFFF;
+}
+
+div#leftBar ul li:hover a{
+    color: #41C685;
+}
+
+div#leftBar ul li.selected {
+    border-right: #FFFFFF solid 6px;
+
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+div#leftBar ul li.selected:hover{
+    color: #41C685;
+
+    background-color: #FFFFFF;
+}
+
+/* --------------------- CONTENT STYLING --------------------- */
+
+div#content{
+    height: 100%;
+    width: calc(100% - 265px);
+
+    display: inline-block;
+
+    margin-left: 260px;
+}
+
 /* --------------------- CONTENT_BOX STYLING --------------------- */
 
 div.contentBox{
@@ -155,6 +243,23 @@ div.actionBar input{
 
 div.actionBar a{
     float: right;
+}
+
+.table thead th{
+    border: none;
+}
+
+.table tbody tr:hover{
+    background-color: #EEEEEE;
+}
+
+.table td{
+    border: none;
+    vertical-align: middle;
+}
+
+.table td.actionButtons{
+    text-align: right;
 }
 
 /* --------------------- FORM_BOX STYLING --------------------- */

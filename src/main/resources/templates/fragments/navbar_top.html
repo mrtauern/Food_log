@@ -1,49 +1,61 @@
 <div th:fragment="navbar">
-    <nav class="navbar">
         <!-- LOGO -->
         <div id="logo"><img src="../static/image/logo.png" th:src="@{/image/logo.png}"> Food Log</div>
         <!-- NAVIGATION MENU -->
-        <ul class="nav-links">
-            <!-- USING CHECKBOX HACK -->
-            <!-- <input type="checkbox" id="checkbox_toggle" /> -->
-            <!-- <label for="checkbox_toggle" class="hamburger">&#9776;</label> -->
-            <!-- NAVIGATION MENUS -->
-            <div class="menu">
-                <li><a href="/dailyLog">Daily Log</a></li>
+        <nav>
+            <ul class="nav-links">
+                <!-- USING CHECKBOX HACK -->
+                <!-- <input type="checkbox" id="checkbox_toggle" /> -->
+                <!-- <label for="checkbox_toggle" class="hamburger">&#9776;</label> -->
+                <!-- NAVIGATION MENUS -->
+                <div class="menu">
+                    <li><a href="/dailyLog">Daily Log</a></li>
 
-                <!--Admin services-->
-                <li class="services">
-                    <a href="/">Services</a>
-                    <!-- DROPDOWN MENU -->
-                    <ul class="dropdown">
-                        <li><a href="/userList">Users</a></li>
-                        <li><a href="/exercise">Exercise</a></li>
-                        <li><a href="/food">Food</a></li>
-                    </ul>
-                </li>
-                <!--User services-->
-                <li class="services">
-                    <a href="/">Account</a>
-                    <!-- DROPDOWN MENU -->
-                    <ul class="dropdown">
-                        <li><a href="/privateFood">Private Food</a></li>
-                        <li><a href="/weightOptions">Weight Options</a></li>
-                        <li>
-                            <form th:action="@{/user_logout}" method="post">
-                                <input type="submit" value="Logout" />
-                            </form>
-                        </li>
-                    </ul>
-                </li>
+                    <!--Admin services-->
+                    <li class="services">
+                        <a href="/">Services</a>
+                        <!-- DROPDOWN MENU -->
+                        <ul class="dropdown">
+                            <li><a href="/userList">Users</a></li>
+                            <li><a href="/exercise">Exercise</a></li>
+                            <li><a href="/food">Food</a></li>
+                        </ul>
+                    </li>
+                    <!--User services-->
+                    <li class="services">
+                        <a href="/">Account</a>
+                        <!-- DROPDOWN MENU -->
+                        <ul class="dropdown">
+                            <li><a href="/privateFood">Private Food</a></li>
+                            <li><a href="/weightOptions">Weight Options</a></li>
+                            <li>
+                                <form th:action="@{/user_logout}" method="post">
+                                    <input type="submit" value="Logout" />
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
 
-                <li><a href="/">Pricing</a></li>
-                <li><a href="/">About</a></li>
-                <li><a href="/">Contact</a></li>
-            </div>
-        </ul>
-    </nav>
+                    <li><a href="/">Pricing</a></li>
+                    <li><a href="/">About</a></li>
+                    <li><a href="/">Contact</a></li>
+                </div>
+            </ul>
+        </nav>
 </div>
 
 <div th:fragment="bottom_bar">
     <div class="bottom_bar">Billy bumse fjæs</div>
+</div>
+
+<div th:fragment="leftbar">
+    <ul>
+        <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="/dailyLog"><i class="fas fa-clipboard-list"></i> Daily log</a></li>
+        <li class="selected"><a href="/userList"><i class="fas fa-user"></i> User</a></li>
+        <li><a href="/exercise"><i class="fas fa-running"></i> Exercise</a></li>
+        <li><a href="/food"><i class="fas fa-hamburger"></i> Food</a></li>
+        <li><a href="#"><i class="fas fa-dollar-sign"></i> Price</a></li>
+        <li><a href="#"><i class="fas fa-ellipsis-h"></i> Other</a></li>
+    </ul>
 </div>
