@@ -34,8 +34,16 @@ li {
     color: #fff;
 }
                         /* LOGO */
-.logo {
+#logo {
     font-size: 32px;
+    background-color: #41C685;
+    font-family: Lobster;
+    width: 260px;
+    text-align: center;
+}
+
+#logo img{
+    height: 30px;
 }
                         /* NAVBAR MENU */
 .menu {
@@ -88,7 +96,7 @@ li {
     color: #fff;
 }
 
-/* --------------------- NAVBAR STYLING --------------------- */
+/* --------------------- FOOTER STYLING --------------------- */
 
 
 
