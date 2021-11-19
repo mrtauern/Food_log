@@ -13,8 +13,11 @@
     }
 </script>
 <body>
-<header th:include="fragments/navbar_top :: navbar"></header>
-<div class="container">
+<header th:include="fragments/navbar_top :: navbar" class="navbar"></header>
+
+<div th:include="fragments/navbar_top :: leftbar" id="leftBar"></div>
+
+<div id="content">
     <div class="row">
         <div class="w-75 p-3" id="inner_container" style="background-color:#bbb;">
 
@@ -125,7 +128,7 @@
         </div>
     </div>
 </div>
-<div th:include="fragments/navbar_top :: bottom_bar"></div>
+<footer th:include="fragments/navbar_top :: bottom_bar"></footer>
 
 </body>
 </html>

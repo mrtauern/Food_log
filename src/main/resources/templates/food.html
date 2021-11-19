@@ -9,7 +9,11 @@
     }
 </script>
 <body>
-<header th:include="fragments/navbar_top :: navbar"></header>
+<header th:include="fragments/navbar_top :: navbar" class="navbar"></header>
+
+<div th:include="fragments/navbar_top :: leftbar" id="leftBar"></div>
+
+<div id="content">
 
 <form id="searchForm" th:action="@{/food}">
     Filter: <input type="text" name="keyword" id="keyword" placeholder="Search for name"  size="50" th:value="${keyword}" required />
@@ -18,7 +22,6 @@
     &nbsp;
     <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
 </form>
-<div class="container">
     <div id="inner_container">
         <br> <br>
         <h1>Food List</h1>
@@ -58,6 +61,6 @@
         </div>
 </div>
 
-<div th:include="fragments/navbar_top :: bottom_bar"></div>
+<footer th:include="fragments/navbar_top :: bottom_bar"></footer>
 </body>
 </html>
