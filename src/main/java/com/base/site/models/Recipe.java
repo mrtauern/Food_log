@@ -26,14 +26,23 @@ public class Recipe implements Serializable {
     @Column(name = "total_weight")
     private double total_weight;
 
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="fk_user_id", nullable = false)
     private Users fkUser;
 
+    /*
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "recipe_food",
         joinColumns = {@JoinColumn(name = "fk_recipe_id", referencedColumnName = "id", nullable = false, updatable = false)},
         inverseJoinColumns = {@JoinColumn(name = "fk_food_id", referencedColumnName = "id", nullable = false, updatable = false)})
         private Set<Food> foods = new HashSet<>();
-
+    */
+    /*
+    @ManyToMany(mappedBy = "recipes", fetch = FetchType.LAZY)
+    private Set<Food> foods = new HashSet<>();
+     */
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    Set<RecipeFood> amounts;
 }
