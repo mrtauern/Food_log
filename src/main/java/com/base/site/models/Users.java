@@ -2,15 +2,12 @@ package com.base.site.models;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -81,6 +78,9 @@ public class Users implements Serializable {
     @Column(name = "bmi")
     private double bmi = 1;
 
+    @OneToMany(mappedBy="fkUser", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<Recipe> recipies;
     /*
     @Basic
     @Column(name = "fk_user_type_id")
