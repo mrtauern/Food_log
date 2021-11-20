@@ -60,7 +60,7 @@ public class DbInitializer implements CommandLineRunner {
         */
 
         //----------------------------------RECIPES-------------------------------
-
+        //Do not enable wont work yet
         /*
         log.info("Inside the DbInitializer");
 
@@ -103,11 +103,12 @@ public class DbInitializer implements CommandLineRunner {
 
         recipeFoodRepository.save(recipeFood);
 */
+        /*
         ArrayList<RecipeFood> recipeFoods = (ArrayList<RecipeFood>) recipeFoodRepository.findAll();
         for (RecipeFood rf: recipeFoods) {
             log.info("Happy days amount: "+rf.getAmount()+" food: "+rf.getFood().getName()+" recipe weight: "+rf.getRecipe().getTotal_weight());
         }
-
+        */
         //Recipe recipe = recipeRepository.findById(5L).get();
         //log.info("Recipe weight: "+recipe.getTotal_weight());
         //log.info("Recipe size: "+recipe.getFoods().size());
