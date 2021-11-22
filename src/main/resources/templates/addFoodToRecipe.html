@@ -7,7 +7,7 @@
 <body>
 <header th:include="fragments/navbar_top :: navbar"></header>
 
-<form id="searchForm" th:action="@{/addFoodToRecipe}">
+<form id="searchForm" th:action="@{/addFoodToRecipe/{recipeId}(recipeId=${recipeId})}">
     <div th:include="fragments/food_list/food_list :: searchFilterHTML"></div>
 </form>
 <div class="container">
