@@ -73,6 +73,7 @@ public class DailyLogController {
 
         List<DailyLog> dailyLogs = dailyLogService.findAll();
         List<DailyLog> dailyLogsFoods = new ArrayList<>();
+        List<DailyLog> dailyLogsPrivateFoods = new ArrayList<>();
         List<DailyLog> dailyLogsExercises = new ArrayList<>();
         //List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
 
@@ -88,7 +89,9 @@ public class DailyLogController {
 
                 if(dailyLog.getFood() != null) {
                     dailyLogsFoods.add(dailyLog);
-                } else if (dailyLog.getFkExercise() != null){
+                }else if(dailyLog.getPrivateFood() != null) {
+                    dailyLogsPrivateFoods.add(dailyLog);
+                }else if (dailyLog.getFkExercise() != null){
                     dailyLogsExercises.add(dailyLog);
                 }
             }
@@ -102,6 +105,7 @@ public class DailyLogController {
         model.addAttribute("sSelectedDate", date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         model.addAttribute("foods", dailyLogsFoods);
+        model.addAttribute("pfoods", dailyLogsPrivateFoods);
         model.addAttribute("exercises", dailyLogsExercises);
         model.addAttribute("keyword", keyword);
 
