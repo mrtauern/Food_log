@@ -1,9 +1,11 @@
 package com.base.site.services;
 
 import com.base.site.models.Recipe;
+import com.base.site.models.RecipeFood;
 import com.base.site.models.Users;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("RecipeService")
@@ -17,4 +19,7 @@ public interface RecipeService {
     void deleteById(Long id);
 
     void delete(Recipe recipe);
+
+    //List<RecipeFood> findAllByUser(Users loggedInUser);
+    List<Recipe> findAllFkUser(Users loggedInUser);
 }
