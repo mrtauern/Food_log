@@ -39,6 +39,10 @@ header.navbar {
     box-shadow: 0px 1px 10px #AAAAAA;
 
     z-index: 1;
+
+    position: fixed;
+
+    width: 100%;
 }
 
 nav{
@@ -225,6 +229,8 @@ div#leftBar{
 
     background-color: #41C685;
 
+    margin-top: 53px;
+
     width: 260px;
     height: 100%;
 
@@ -288,6 +294,7 @@ div#content{
 
     display: inline-block;
 
+    margin-top: 53px;
     margin-left: 260px;
 }
 
@@ -334,6 +341,14 @@ div.actionBar a{
 
 .table td.actionButtons{
     text-align: right;
+}
+
+/* --------------------- CALORIE_COUNT STYLING --------------------- */
+
+div.contentBox.calorieCount{
+    color: #FFFFFF;
+
+    background-color: #41C685;
 }
 
 /* --------------------- FORM_BOX STYLING --------------------- */
