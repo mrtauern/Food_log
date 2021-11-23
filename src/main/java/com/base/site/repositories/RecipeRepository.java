@@ -10,6 +10,5 @@ import java.util.List;
 
 @Repository("RecipeRepository")
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
-    //List<RecipeFood> findAllByUser(Users loggedInUser);
     List<Recipe> findAllByFkUser(Users loggedInUser);
 }

@@ -49,9 +49,4 @@ public class RecipeServiceImpl implements RecipeService{
         return recipeRepository.findAllByFkUser(loggedInUser);
     }
 
-    /*
-    @Override
-    public List<RecipeFood> findAllByUser(Users loggedInUser) {
-        return recipeRepository.findAllByUser(loggedInUser);
-    }*/
 }

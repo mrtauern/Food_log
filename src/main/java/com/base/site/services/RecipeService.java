@@ -20,6 +20,5 @@ public interface RecipeService {
 
     void delete(Recipe recipe);
 
-    //List<RecipeFood> findAllByUser(Users loggedInUser);
     List<Recipe> findAllFkUser(Users loggedInUser);
 }
