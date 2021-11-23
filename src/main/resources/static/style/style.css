@@ -16,6 +16,8 @@ body {
     /* font-family: cursive; */
     background-color: #EEEEEE;
     height: 100%;
+    width: 100%;
+    position: absolute;
 }
 a {
     text-decoration: none;
@@ -253,7 +255,7 @@ header.navbar .services:hover .dropdown {
     display: block;
 }
 
-/* --------------------- FOOTER STYLING --------------------- */
+/* --------------------- OLD BOTTOM_BAR STYLING --------------------- */
 
 .bottom_bar {
     overflow: hidden;
@@ -264,8 +266,110 @@ header.navbar .services:hover .dropdown {
     color: #fff;
 }
 
-/*------   Daily Log     ------
-* {box-sizing: border-box;}
+/* --------------------- FOOTER STYLING --------------------- */
+
+footer {
+    overflow: visible;
+    background-color: #333;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    color: #fff;
+
+    padding-top: 50px;
+}
+
+footer a{
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+footer a:hover{
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+
+footer div.innerFooter{
+    width: 1200px;
+
+    margin: 0 auto;
+    padding: 40px 0;
+}
+
+footer div.innerFooter.top{
+
+    border-bottom: #FFFFFF 1px solid;
+    border-top: #FFFFFF 1px solid;
+}
+
+footer div.innerFooter.top a{
+    margin-top: 10px;
+
+    display: block;
+}
+
+footer div.innerFooter.top h4{
+    margin-bottom: 40px;
+
+    display: block;
+}
+
+footer div.innerFooter.top div.collumn{
+    vertical-align: top;
+
+    width: 297px;
+
+    display: inline-block;
+}
+
+footer div.innerFooter.top div.collumn.one{
+    font-size: 32px;
+    font-family: Lobster, sans-serif;
+}
+
+footer div.innerFooter.bottom{
+
+}
+
+footer div.innerFooter.bottom a{
+    float: right;
+
+    margin-right: 20px;
+}
+
+/* --------------------- DAILY LOG --------------------- */
+
+div.innerCalorie{
+    width: 100%;
+}
+
+div.innerCalorie div.collumn{
+    text-align: center;
+
+    width: calc( 100% / 3 - 3px);
+
+    display: inline-block;
+
+    position: relative;
+}
+
+div.innerCalorie div.collumn span.value{
+    font-size: 32px;
+}
+
+div.innerCalorie div.collumn span.type{
+    font-size: 16px;
+}
+
+div.innerCalorie div.collumn.left{
+
+}
+
+div.innerCalorie div.collumn.left span.value{
+    font-size: 42px;
+}
+
+/* {box-sizing: border-box;}
 .column { float: left; padding: 15px;}
 .left, .right {width:25%}
 .middle{width: 40%;}
@@ -360,7 +464,7 @@ div#leftBar ul li.selected:hover{
 /* --------------------- CONTENT STYLING --------------------- */
 
 div#content{
-    height: 100%;
+    height: calc(100% - 53px);
     width: calc(100% - 265px);
 
     display: inline-block;
@@ -377,6 +481,8 @@ div.contentBox{
 
     margin: 80px;
     padding: 40px;
+
+    overflow: auto;
 }
 
 div.actionBar{
@@ -391,6 +497,7 @@ div.actionBar input{
     border: none;
     background-color: #DDDDDD;
     padding: 4px 4px;
+    width: 200px;
 }
 
 div.actionBar a{
@@ -433,6 +540,8 @@ div.formBox{
     margin: 80px auto;
 
     max-width: 600px;
+
+    overflow: auto;
 }
 
 div.formBox form{
@@ -516,4 +625,20 @@ div.formBox.login div.signUp{
     color: #FFFFFF;
 
     background-color: #41C685;
+}
+
+/* --------------------- SELECT DATE --------------------- */
+
+form.selectDate{
+    display: inline-block;
+}
+
+div.contentBox.selectDate{
+    text-align: center;
+
+    background: none;
+
+    box-shadow: none;
+
+    padding: 0;
 }

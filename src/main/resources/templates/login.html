@@ -26,11 +26,11 @@
             <input type="text" id="username" name="username"/>
             <label for="password">Password</label>
             <input type="password" id="password" name="password"/>
-            <button type="submit" class="btn">Sign in</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Sign in</button>
           </fieldset>
         </form>
-        <a href="/password_reset">Reset password</a>
-        <a href="/signup">create user</a>
+        <a href="/password_reset">Forgot my password</a>
+        <!--<a href="/signup">create user</a>-->
       </div>
       <div class="signUp">
         <form action="#" th:action="@{/signup}" th:object="${user}" method="post">
@@ -53,10 +53,10 @@
             <!--<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>-->
             <label for="userTypeString">Sex</label>
             <select name="userTypeString" id="userTypeString">
-              <option value="User_male" selected>Male</option>
-              <option value="User_female">Female</option>
+              <option value="User_male" selected><i class="fas fa-mars"></i> Male</option>
+              <option value="User_female"><i class="fas fa-venus"></i> Female</option>
             </select>
-            <button type="submit"  class="btn">Sign up</button>
+            <button type="submit" class="btn"><i class="fas fa-user-plus"></i> Sign up</button>
           </fieldset>
         </form>
       </div>

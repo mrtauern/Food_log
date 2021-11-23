@@ -37,9 +37,9 @@
                 <td><i class="fas fa-user"></i> <span th:text="${user.firstname + ' ' + user.lastname}"></span></td>
                 <td><i class="fas fa-envelope"></i> <span th:text="${user.username}"></span></td>
                 <td class="actionButtons">
-                    <a th:href="${'/editUser/' + user.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                    <a th:href="@{'/password_reset_user/'+${user.id}}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Reset Password</a>
-                    <a th:href="@{'/delete_user_confirm/'+${user.id}}" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                    <a th:href="${'/editUser/' + user.id}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                    <a th:href="@{'/password_reset_user/'+${user.id}}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-sync-alt"></i> Reset Password</a>
+                    <a th:href="@{'/delete_user_confirm/'+${user.id}}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
                 </td>
             </tr>
             </tbody>
