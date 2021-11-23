@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="fragments/head :: styles"></head>
+<body>
+    <header th:include="fragments/navbar_top :: navbar"></header>
+
+    <div class="formBox">
+
+        <h1>Create recipe</h1>
+        <form th:action="@{createRecipe}" th:object="${recipe}" method="POST">
+
+            <label for="name">Recipe name</label>
+            <input type="text" th:name="name" id="name" th:required="required">
+
+            <label for="total_weight">Recipe total weight (Gram)</label>
+            <input type="number" th:name="total_weight" id="total_weight" th:required="required">
+
+            <div>
+                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Next</button>
+                <button type="button" class="btn mr-2 btn-sm"><i class="fas fa-times"></i> Cancel</button>
+            </div>
+
+        </form>
+
+
+
+    </div>
+
+    <footer th:include="fragments/navbar_top :: bottom_bar"></footer>
+</body>
+</html>

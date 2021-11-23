@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: styles">
+</head>
+
+<body>
+<header th:include="fragments/navbar_top :: navbar"></header>
+
+<form id="searchForm" th:action="@{/addFoodToRecipe/{recipeId}(recipeId=${recipeId})}">
+    <div th:include="fragments/food_list/food_list :: searchFilterHTML"></div>
+</form>
+<div class="container">
+    <div id="inner_container">
+        <br> <br>
+        <h1>Food List</h1>
+        <a href="/recipes" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Done adding food</a>
+        <br/><br/>
+        <table id="foodTable" border="1" cellpadding="10">
+            <thead th:include="fragments/food_list/food_list :: addFoodTableHeader"></thead>
+            <tbody th:include="fragments/food_list/food_list :: addFoodTableBody_recipe"></tbody>
+        </table>
+
+    </div>
+</div>
+
+<div th:include="fragments/navbar_top :: bottom_bar"></div>
+</body>
+</html>
