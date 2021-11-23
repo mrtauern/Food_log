@@ -21,8 +21,8 @@
     <label for="password">Password</label>
     <input type="password" th:field="*{password}" id="password" placeholder="password" required>
     <!--<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>-->
-    <label for="userType">Sex</label>
-    <select th:name="userType" id="userType">
+    <label for="userTypeString">Sex</label>
+    <select name="userTypeString" id="userTypeString">
         <option value="User_male" selected>Male</option>
         <option value="User_female">Female</option>
     </select>
