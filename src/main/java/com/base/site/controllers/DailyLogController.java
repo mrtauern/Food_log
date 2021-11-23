@@ -75,6 +75,7 @@ public class DailyLogController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
 
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString, formatter);
 
@@ -161,9 +162,11 @@ public class DailyLogController {
         //model.addAttribute("exerciseList", exerciseList);
         //model.addAttribute("keyword", keyword);
 
-        model.addAttribute("selectedPage", "dailyLog");
-
         model.addAttribute("weight", usersService.getLatestWeight(date));
+
+        model.addAttribute("selectedPage", "dailyLog");
+        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
+        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
         return DAILY_LOG;
     }

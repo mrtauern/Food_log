@@ -9,6 +9,8 @@ import com.base.site.services.EmailService;
 import com.base.site.services.UserTypeService;
 import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,10 +65,14 @@ public class AccountController {
     @GetMapping("/userList")
     public String userList(Model model){
         log.info("userList called");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
 
         model.addAttribute("users", usersService.findAll());
         model.addAttribute("pageTitle", "User list");
         model.addAttribute("selectedPage", "user");
+        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
+        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
         return USER_LIST;
     }
@@ -74,11 +80,15 @@ public class AccountController {
     @GetMapping("/createUser")
     public String createUser(Model model){
         log.info("createUser get called");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
 
         model.addAttribute("users", new Users());
         //model.addAttribute("userTypes", userTypeService.findAll());
         model.addAttribute("pageTitle", "Create user");
         model.addAttribute("selectedPage", "user");
+        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
+        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
         return CREATE_USER;
     }
@@ -131,6 +141,8 @@ public class AccountController {
     @GetMapping("/editUser/{id}")
     public String editUser(@PathVariable(value = "id") Long id, Model model){
         log.info("editUser get called");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
 
         Users user = usersService.findById(id);
 
@@ -145,6 +157,8 @@ public class AccountController {
         //model.addAttribute("userTypes", userTypeService.findAll());
         model.addAttribute("pageTitle", "Edit user");
         model.addAttribute("selectedPage", "user");
+        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
+        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
         return EDIT_USER;
     }
@@ -213,11 +227,16 @@ public class AccountController {
     @GetMapping("/delete_user_confirm/{id}")
     public String deleteUser(@PathVariable("id") long id, Model model) {
         log.info("delete_user_confirm called userId: "+id);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
 
         Users user = usersService.findById(id);
 
         model.addAttribute("user", user);
+        model.addAttribute("pageTitle", "Delete user");
         model.addAttribute("selectedPage", "user");
+        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
+        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
         return DELETE_USER_CONFIRM;
     }
@@ -230,8 +249,16 @@ public class AccountController {
     }
 
     @GetMapping("/dashboard")
-    public String admin_dashboard() {
+    public String admin_dashboard(Model model) {
         log.info("dashboard getmapping called...");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+
+        model.addAttribute("pageTitle", "User list");
+        model.addAttribute("selectedPage", "dashboard");
+        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
+        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+
         return DASHBOARD;
     }
 }

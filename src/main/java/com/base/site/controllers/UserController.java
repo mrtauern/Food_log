@@ -22,6 +22,7 @@ public class UserController {
     Logger log = Logger.getLogger(UserController.class.getName());
 
     private final String INDEX = "index";
+    private final String FRONTPAGE = "frontPage";
     private final String DAILYLOG = "dailyLog";
     private final String DASHBOARD = "dashboard";
     private final String UPDATE_USER = "update-user";
@@ -33,6 +34,19 @@ public class UserController {
     UsersRepo usersRepo;
     @Autowired
     UsersService usersService;
+
+    @GetMapping("/")
+    public String index(Model model) {
+        log.info("Usercontroller / getmapping called...");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+        if(loggedInUser.getRoles().equals("USER")) {
+            return REDIRECT+DAILYLOG;
+        } else if(loggedInUser.getRoles().equals("ADMIN")) {
+            return REDIRECT+DASHBOARD;
+        }
+        return FRONTPAGE;
+    }
 
     @GetMapping("/index")
     public String showUserList(Model model) {
