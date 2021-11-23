@@ -105,7 +105,6 @@ public class RecipeController {
         List<PrivateFood> pfoodlist = privateFoodService.findAllByKeyword(keyword);
 
         model.addAttribute("recipeId", recipeId);
-        //model.addAttribute("food", new Food());
         model.addAttribute("foodlist", foodlist);
         model.addAttribute("pfoodlist", pfoodlist);
         model.addAttribute("keyword", keyword);
@@ -113,14 +112,6 @@ public class RecipeController {
 
         return ADD_FOOD_TO_RECIPE;
     }
-//
-//    @GetMapping("/addFoodToRecipe/{foodId}/{recipeId}")
-//    public String addFoodToRecipe(@PathVariable("foodId")long foodId, @PathVariable("recipeId")long recipeId,Model model) {
-//        log.info("addFoodToRecipe Getmapping is called with recipeId: "+recipeId+" and foodId: "+foodId);
-//
-//
-//        return SAVE_FOOD_TO_RECIPE;
-//    }
 
     @PostMapping("/saveRecipeFood/{foodId}/{recipeId}")
     public String saveRecipeFood(@PathVariable("foodId")long foodId, @PathVariable("recipeId")long recipeId, RecipeFood recipeFood) {
