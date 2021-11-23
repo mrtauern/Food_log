@@ -41,13 +41,12 @@
                 <table border="1" cellpadding="10">
                     <thead>
                     <tr>
-                        <th>Food ID</th>
-                        <th>U Name</th>
-                        <th>Food ID</th>
+                        <th>DailyLog ID</th>
+                        <th>Users Name</th>
+                        <th>Food Name</th>
                         <th>Log type</th>
                         <td>Date</td>
                         <th>Amount</th>
-                        <!--<th>Private Food ID</th> -->
                         <td>Action</td>
                     </tr>
                     </thead>
@@ -62,6 +61,18 @@
                         <td>
                             <a th:href="@{/updateDailyLog/{id}(id=${food.id})}">Edit</a>
                             <a th:href="@{/deleteDailyLog/{id}(id=${food.id})}">Delete</a>
+                        </td>
+                    </tr>
+                    <tr th:each="pfood : ${pfoods}">
+                        <td th:text="${pfood?.id}">DailyLog ID</td>
+                        <td th:text="${pfood?.fkUser?.firstname}">Name</td>
+                        <td th:text="${pfood?.privateFood?.name}">Food Name</td>
+                        <td th:text="${pfood?.fkLogType?.type}">Type</td>
+                        <td th:text="${pfood?.sDatetime}">Date</td>
+                        <td th:text="${pfood?.amount}">Amount</td>
+                        <td>
+                            <a th:href="@{/updateDailyLogPfood/{id}(id=${pfood.id})}">Edit</a>
+                            <a th:href="@{/deleteDailyLog/{id}(id=${pfood.id})}">Delete</a>
                         </td>
                     </tr>
                     </tbody>

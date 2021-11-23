@@ -107,6 +107,19 @@ public class FoodController {
 
         return "createDailyLog";
     }
+
+    @GetMapping("/createDailyLogPfood/{id}")
+    public String createDailyLogPfood(@PathVariable(value = "id") Long id,Model model,DailyLog dailyLog) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+        PrivateFood pfoods = privateFoodService.findById(id);
+        model.addAttribute("dailyLog", dailyLog);
+        model.addAttribute("foods", pfoods);
+        model.addAttribute("logType", logTypeService.findAll());
+        log.info("  createDailyLogPfood is called ");
+
+        return "createDailyLogPfood";
+    }
     @PostMapping("/saveDailyLog")
     public String saveDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,Food food, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -121,6 +134,20 @@ public class FoodController {
         return  "redirect:/" + "dailyLog";
     }
 
+    @PostMapping("/saveDailyLogPfood")
+    public String saveDailyLogPfood(@ModelAttribute("dailyLog") DailyLog dailyLog,PrivateFood privateFood, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+        PrivateFood pfoodId = privateFoodService.findById(privateFood.getId());
+        dailyLog.setFkUser(loggedInUser);
+        dailyLog.setPrivateFood(pfoodId);
+
+        dailyLogService.save(dailyLog);
+
+        log.info("  PostMapping saveDailyLogPfood is called ");
+        return  "redirect:/" + "dailyLog";
+    }
+
     @GetMapping("/updateDailyLog/{id}")
     public String updateDailyLog(@PathVariable(value = "id") Long id, Model model) {
         DailyLog dailyLog = dailyLogService.findById(id);
@@ -132,7 +159,29 @@ public class FoodController {
     }
 
     @PostMapping("/updateDailyLog")
-    public String updateDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,Food food, Model model) {
+    public String updateDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+        dailyLog.setFkUser(loggedInUser);
+
+        dailyLogService.save(dailyLog);
+
+        log.info("  PostMapping updateDailyLog is called ");
+        return  "redirect:/" + "dailyLog";
+    }
+
+    @GetMapping("/updateDailyLogPfood/{id}")
+    public String updateDailyLogPfood(@PathVariable(value = "id") Long id, Model model) {
+        DailyLog dailyLog = dailyLogService.findById(id);
+        model.addAttribute("dailyLog", dailyLog);
+        model.addAttribute("logType", logTypeService.findAll());
+        log.info("  GetMapping updateDailyLog is called ");
+
+        return "updateDailyLogPfood";
+    }
+
+    @PostMapping("/updateDailyLogPfood")
+    public String updateDailyLogPfood(@ModelAttribute("dailyLog") DailyLog dailyLog, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
         dailyLog.setFkUser(loggedInUser);
