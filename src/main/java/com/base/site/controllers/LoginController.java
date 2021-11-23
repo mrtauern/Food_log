@@ -56,14 +56,21 @@ public class LoginController {
     }
 
     @PostMapping("/signup")
-    public String addUser(@Valid Users user, BindingResult result, @RequestParam String userType) {
+    public String addUser(@Valid Users user, BindingResult result, @RequestParam String userTypeString) {
         log.info("signup postmapping called in logincontroller...");
         if (result.hasErrors()) {
+            log.info("creating user failed....");
+            log.info("username: "+user.getUsername());
+            log.info("firstname: "+user.getFirstname());
+            log.info("lastname: "+user.getLastname());
+            log.info("usertype: "+userTypeString);
+            log.info(result.toString());
+
             return "add-user";
         }
         Users foundUser = usersRepo.findUsersByUsername(user.getUsername());
         if(foundUser == null){
-            UserType userTypeObject = userTypeService.findByType(userType);
+            UserType userTypeObject = userTypeService.findByType(userTypeString);
             user.setUserType(userTypeObject);
             user.setRoles("USER");
             String pass = passwordEncoder.encode(user.getPassword());
