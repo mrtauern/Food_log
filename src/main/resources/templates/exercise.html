@@ -22,7 +22,7 @@
     <div id="inner_container">
         <br> <br>
         <h1>Exercise List to choose from</h1>
-        <a th:href="@{/addExercise.html}" >Create New Exercise</a>
+        <a th:href="@{/createExercise}" >Create New Exercise</a>
         <br/><br/>
         <table id="foodTable" border="1" cellpadding="10">
             <thead>
@@ -38,28 +38,10 @@
                 <td th:text="${ex.kcalBurnedPerMin}">Length</td>
                 <td th:text="${ex.name}">Type ID</td>
                 <td>
-                    <a th:href="@{/updateExerciseInDailyLog.html/{id}(id=${ex.id})}">Edit</a>
-                    <a th:href="@{/deleteExerciseInDailyLog/{id}(id=${ex.id})}">Delete</a>
+                    <a th:href="@{/updateExercise/{id}(id=${ex.id})}">Edit</a>
+                    <a th:href="@{/deleteExercise/{id}(id=${ex.id})}">Delete</a>
                 </td>
             </tr>
-            </tbody>
-        </table>
-
-        <h3>This is added in daily log</h3>
-        <table border="5" cellpadding="20">
-            <thead>
-            <tr>
-                <th>Exercise ID</th>
-                <th>Training Time</th>
-                <th>Training Name</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="edList : ${edList}">
-                <td th:text="${edList?.fkExercise?.id}">Exercise ID</td>
-                <td th:text="${edList.amount}">Training Time min</td>
-                <td th:text="${edList?.fkExercise?.name}">Exercise Name</td>
-                </tr>
             </tbody>
         </table>
         </div>
