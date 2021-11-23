@@ -21,8 +21,75 @@ li {
 }
 
 
+/* --------------------- OLD NAVBAR STYLING --------------------- */
 
-/* --------------------- NAVBAR STYLING --------------------- */
+nav.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px;
+    background-color: #333;
+    color: #fff;
+}
+nav.navbar .nav-links a {
+    color: #fff;
+}
+/* LOGO */
+nav.navbar .logo {
+    font-size: 32px;
+}
+/* NAVBAR MENU */
+nav.navbar .menu {
+    display: flex;
+    /* gap: 1em; */
+    font-size: 18px;
+}
+nav.navbar .menu li:hover {
+    background-color: #4c9e9e;
+    /* border-radius: 10px; */
+    transition: 0.3s ease;
+    position: relative;
+}
+nav.navbar .menu li {
+    padding: 5px 14px;
+}
+/* DROPDOWN MENU */
+nav.navbar .services {
+    position: relative;
+}
+nav.navbar .dropdown {
+    background-color: rgb(1, 139, 139);
+    padding: 1em 0;
+    position: absolute; /*WITH RESPECT TO PARENT*/
+    display: none;
+    /* border-radius: 8px; */
+    top: 35px;
+}
+nav.navbar .dropdown li + li {
+    margin-top: 10px;
+}
+nav.navbar .dropdown li {
+    padding: 0.5em 1em;
+    width: 8em;
+    text-align: center;
+}
+nav.navbar .dropdown li:hover {
+    background-color: #4c9e9e;
+}
+nav.navbar .services:hover .dropdown {
+    display: block;
+}
+
+.bottom_bar {
+    overflow: hidden;
+    background-color: #333;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    color: #fff;
+}
+
+/* --------------------- HEADER STYLING --------------------- */
 
 header.navbar {
     display: flex;
@@ -45,15 +112,15 @@ header.navbar {
     width: 100%;
 }
 
-nav{
+header.navbar nav{
     height: 53px;
 }
 
-nav ul{
+header.navbar nav ul{
     margin-bottom: 0;
 }
 
-.nav-links a {
+header.navbar .nav-links a {
     color: #000000;
     text-decoration: none;
 
@@ -69,7 +136,7 @@ nav ul{
     text-decoration: none;
 }*/
 
-.nav-links a img{
+header.navbar .nav-links a img{
     height: 40px;
 
     /*margin: 0 5px 4px 0;*/
@@ -78,7 +145,7 @@ nav ul{
     border-radius: 50%;
 }
                         /* LOGO */
-#logo {
+header.navbar #logo {
     font-size: 32px;
     font-family: Lobster;
     text-align: center;
@@ -90,19 +157,19 @@ nav ul{
     height: 53px;
 }
 
-#logo img{
+header.navbar #logo img{
     height: 30px;
     margin: 0 5px 4px 0;
 }
                         /* NAVBAR MENU */
-.menu {
+header.navbar .menu {
     display: flex;
     /* gap: 1em; */
     font-size: 18px;
 
     height: 100%;
 }
-.menu li:hover {
+header.navbar .menu li:hover {
     /*background-color: #4c9e9e;*/
     background-color: #000000;
     /* border-radius: 10px; */
@@ -110,31 +177,32 @@ nav ul{
     position: relative;
 }
 
-.menu li:hover a{
+header.navbar .menu li:hover a{
     color: #FFFFFF;
     text-decoration: none;
 }
 
-.menu li:hover ul li a{
+header.navbar .menu li:hover ul li a{
     color: #000000;
     text-decoration: none;
 }
 
-.menu li:hover ul li:hover a{
+header.navbar .menu li:hover ul li:hover a{
     color: #FFFFFF;
     text-decoration: none;
 }
 
-.menu li {
+header.navbar .menu li {
     /*padding: 5px 14px;*/
 }
                         /* DROPDOWN MENU */
-.services {
+header.navbar .services {
     position: relative;
 
     height: 100%;
 }
-.dropdown {
+
+header.navbar .dropdown {
     /*background-color: rgb(1, 139, 139);*/
     background-color: #FFFFFF;
     /*padding: 1em 0;*/
@@ -145,10 +213,10 @@ nav ul{
     /* border-radius: 8px; */
     /*top: 35px;*/
 }
-.dropdown li + li {
+header.navbar .dropdown li + li {
     /*margin-top: 10px;*/
 }
-.dropdown li {
+header.navbar .dropdown li {
     /*padding: 0.5em 1em;*/
     /*width: 8em;*/
     width: 100%;
@@ -157,28 +225,28 @@ nav ul{
     /*text-align: center;*/
 }
 
-.dropdown li:hover {
+header.navbar .dropdown li:hover {
     /*background-color: #4c9e9e;*/
     background-color: #000000;
 }
 
-.dropdown li a{
+header.navbar .dropdown li a{
     color: #000000;
     padding-top: 14px;
 }
 
-.dropdown li a:hover{
+header.navbar .dropdown li a:hover{
     color: #FFFFFF;
 }
 
-.dropdown li form button.logout{
+header.navbar .dropdown li form button.logout{
     height: 43px;
     width: calc( 100% - 10px );
 
     margin: 5px;
 }
 
-.services:hover .dropdown {
+header.navbar .services:hover .dropdown {
     display: block;
 }
 

@@ -66,6 +66,7 @@ public class AccountController {
 
         model.addAttribute("users", usersService.findAll());
         model.addAttribute("pageTitle", "User list");
+        model.addAttribute("selectedPage", "user");
 
         return USER_LIST;
     }
@@ -77,6 +78,7 @@ public class AccountController {
         model.addAttribute("users", new Users());
         //model.addAttribute("userTypes", userTypeService.findAll());
         model.addAttribute("pageTitle", "Create user");
+        model.addAttribute("selectedPage", "user");
 
         return CREATE_USER;
     }
@@ -142,6 +144,7 @@ public class AccountController {
         model.addAttribute("users", user);
         //model.addAttribute("userTypes", userTypeService.findAll());
         model.addAttribute("pageTitle", "Edit user");
+        model.addAttribute("selectedPage", "user");
 
         return EDIT_USER;
     }
@@ -214,6 +217,7 @@ public class AccountController {
         Users user = usersService.findById(id);
 
         model.addAttribute("user", user);
+        model.addAttribute("selectedPage", "user");
 
         return DELETE_USER_CONFIRM;
     }

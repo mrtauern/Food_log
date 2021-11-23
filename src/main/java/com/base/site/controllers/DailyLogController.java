@@ -132,6 +132,8 @@ public class DailyLogController {
         //model.addAttribute("exerciseList", exerciseList);
         //model.addAttribute("keyword", keyword);
 
+        model.addAttribute("selectedPage", "dailyLog");
+
         model.addAttribute("weight", usersService.getLatestWeight(date));
 
         return DAILY_LOG;

@@ -40,6 +40,7 @@ public class FoodController {
 
         model.addAttribute("foodlist", foodlist);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("selectedPage", "food");
 
         log.info("  get mapping food is called");
 

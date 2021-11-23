@@ -1,4 +1,51 @@
 <div th:fragment="navbar">
+    <nav class="navbar">
+        <!-- LOGO -->
+        <div class="logo">🥦 Food Log</div>
+        <!-- NAVIGATION MENU -->
+        <ul class="nav-links">
+            <!-- USING CHECKBOX HACK -->
+            <!-- <input type="checkbox" id="checkbox_toggle" /> -->
+            <!-- <label for="checkbox_toggle" class="hamburger">&#9776;</label> -->
+            <!-- NAVIGATION MENUS -->
+            <div class="menu">
+                <li><a href="/dailyLog">Daily Log</a></li>
+
+                <!--Admin services-->
+                <li class="services">
+                    <a href="/">Services</a>
+                    <!-- DROPDOWN MENU -->
+                    <ul class="dropdown">
+                        <li><a href="/userList">Users</a></li>
+                        <li><a href="/exercise">Exercise</a></li>
+                        <li><a href="/food">Food</a></li>
+                    </ul>
+                </li>
+                <!--User services-->
+                <li class="services">
+                    <a href="/">Account</a>
+                    <!-- DROPDOWN MENU -->
+                    <ul class="dropdown">
+                        <li><a href="/recipes">Recipes</a></li>
+                        <li><a href="/privateFood">Private Food</a></li>
+                        <li><a href="/weightOptions">Weight Options</a></li>
+                        <li>
+                            <form th:action="@{/user_logout}" method="post">
+                                <input type="submit" value="Logout" />
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+
+                <li><a href="/">Pricing</a></li>
+                <li><a href="/">About</a></li>
+                <li><a href="/">Contact</a></li>
+            </div>
+        </ul>
+    </nav>
+</div>
+
+<header th:fragment="header">
         <!-- LOGO -->
         <div id="logo"><img src="../static/image/logo.png" th:src="@{/image/logo.png}"> Food Log</div>
         <!-- NAVIGATION MENU -->
@@ -48,20 +95,24 @@
                 </div>
             </ul>
         </nav>
-</div>
+</header>
 
 <div th:fragment="bottom_bar">
     <div class="bottom_bar">Billy bumse fjæs</div>
 </div>
 
-<div th:fragment="leftbar">
+<footer th:fragment="footer">
+    <div class="bottom_bar">Billy bumse fjæs</div>
+</footer>
+
+<div th:fragment="leftMenu">
     <ul>
-        <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        <li><a href="/dailyLog"><i class="fas fa-clipboard-list"></i> Daily log</a></li>
-        <li class="selected"><a href="/userList"><i class="fas fa-user"></i> User</a></li>
-        <li><a href="/exercise"><i class="fas fa-running"></i> Exercise</a></li>
-        <li><a href="/food"><i class="fas fa-hamburger"></i> Food</a></li>
-        <li><a href="#"><i class="fas fa-dollar-sign"></i> Price</a></li>
-        <li><a href="#"><i class="fas fa-ellipsis-h"></i> Other</a></li>
+        <li th:classappend="${selectedPage == 'dashboard'} ? selected : null"><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li th:classappend="${selectedPage == 'dailyLog'} ? selected : null"><a href="/dailyLog"><i class="fas fa-clipboard-list"></i> Daily log</a></li>
+        <li th:classappend="${selectedPage == 'user'} ? selected : null"><a href="/userList"><i class="fas fa-user"></i> User</a></li>
+        <li  th:classappend="${selectedPage == 'exercise'} ? selected : null"><a href="/exercise"><i class="fas fa-running"></i> Exercise</a></li>
+        <li th:classappend="${selectedPage == 'food'} ? selected : null"><a href="/food"><i class="fas fa-hamburger"></i> Food</a></li>
+        <li th:classappend="${selectedPage == 'price'} ? selected : null"><a href="#"><i class="fas fa-dollar-sign"></i> Price</a></li>
+        <li  th:classappend="${selectedPage == 'other'} ? selected : null"><a href="#"><i class="fas fa-ellipsis-h"></i> Other</a></li>
     </ul>
 </div>
