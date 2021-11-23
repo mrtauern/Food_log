@@ -2,15 +2,12 @@ package com.base.site.models;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -81,6 +78,9 @@ public class Users implements Serializable {
     @Column(name = "bmi")
     private double bmi = 1;
 
+    @OneToMany(mappedBy="fkUser", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<Recipe> recipies;
     /*
     @Basic
     @Column(name = "fk_user_type_id")
@@ -102,7 +102,11 @@ public class Users implements Serializable {
             cascade = CascadeType.ALL)
     private Set<PrivateFood> privateFoods;
 
-    public Users(String firstname, String lastname, String username, String password, UserType userType, String roles, double bmi) {
+    @Basic
+    @Column(name = "kcal_modifier")
+    private int kcal_modifier;
+
+    public Users(String firstname, String lastname, String username, String password, UserType userType, String roles, double bmi, LocalDate birthday) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;
@@ -110,6 +114,7 @@ public class Users implements Serializable {
         this.userType = userType;
         this.roles = roles;
         this.bmi = bmi;
+        this.birthday = birthday;
     }
 
     public static long getSerialVersionUID() {
@@ -132,13 +137,13 @@ public class Users implements Serializable {
 
             if (userType.getType().equals("User_male")) {
                 bmr = (int)((10 * getCurrentWeight()) + (6.25 * getHeight()) - ((5 * age) + 5));
-                bmr = (int)(bmr*1.2);
+                bmr = (int)(bmr*1.4);
             } else if(userType.getType().equals("User_female")) {
                 bmr = (int)((10 * getCurrentWeight()) + (6.25 * getHeight()) - ((5 * age) - 161));
-                bmr = (int)(bmr*1.2);
+                bmr = (int)(bmr*1.4);
             }
         }
-        return bmr;
+        return bmr+(kcal_modifier);
     }
 
     @Override
