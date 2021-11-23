@@ -15,4 +15,5 @@ public interface FoodRepo extends JpaRepository<Food, Long> {
     @Query("SELECT f FROM Food f WHERE CONCAT(f.name) LIKE %?1%")
     public List<Food> search(String keyword);
 
+    Food findByName(String name);
 }

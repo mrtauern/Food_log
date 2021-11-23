@@ -10,27 +10,35 @@
             <!-- NAVIGATION MENUS -->
             <div class="menu">
                 <li><a href="/dailyLog">Daily Log</a></li>
-                <li><a href="/food">Food</a></li>
-                <li><a href="/privateFood">PrivateFood</a></li>
-                <li>
-                    <form th:action="@{/user_logout}" method="post">
-                        <input type="submit" value="Logout" />
-                    </form>
-                </li>
-                <li><a href="/">Home</a></li>
-                <li><a href="/">About</a></li>
+
+                <!--Admin services-->
                 <li class="services">
                     <a href="/">Services</a>
                     <!-- DROPDOWN MENU -->
                     <ul class="dropdown">
                         <li><a href="/userList">Users</a></li>
                         <li><a href="/exercise">Exercise</a></li>
-                        <li><a href="/">Dropdown 2</a></li>
-                        <li><a href="/">Dropdown 3</a></li>
-                        <li><a href="/">Dropdown 4</a></li>
+                        <li><a href="/food">Food</a></li>
                     </ul>
                 </li>
+                <!--User services-->
+                <li class="services">
+                    <a href="/">Account</a>
+                    <!-- DROPDOWN MENU -->
+                    <ul class="dropdown">
+                        <li><a href="/recipes">Recipes</a></li>
+                        <li><a href="/privateFood">Private Food</a></li>
+                        <li><a href="/weightOptions">Weight Options</a></li>
+                        <li>
+                            <form th:action="@{/user_logout}" method="post">
+                                <input type="submit" value="Logout" />
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+
                 <li><a href="/">Pricing</a></li>
+                <li><a href="/">About</a></li>
                 <li><a href="/">Contact</a></li>
             </div>
         </ul>
