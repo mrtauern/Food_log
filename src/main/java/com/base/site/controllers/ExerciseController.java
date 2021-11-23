@@ -48,6 +48,44 @@ public class ExerciseController {
         return "exercise";
     }
 
+
+
+    @GetMapping("/createExercise")
+    public String createExercise(Model model) {
+
+        Exercise exercise = new Exercise();
+        model.addAttribute("exercise", exercise);
+        log.info("  createExercise is called ");
+
+        return "createExercise";
+    }
+
+    @PostMapping("/saveExercise")
+    public String saveExercise(@ModelAttribute("food") Exercise exercise, Model model) {
+        exerciseService.save(exercise);
+        log.info("  PostMapping saveExercise is called ");
+
+        return  "redirect:/" + "exercise";
+    }
+
+    @GetMapping("/updateExercise/{id}")
+    public String updateExercise(@PathVariable(value = "id") Long id, Model model) {
+        Exercise exercise = exerciseService.findById(id);
+        model.addAttribute("exercise", exercise);
+        log.info("  GetMapping updateExercise is called ");
+
+        return "updateExercise";
+    }
+
+    @GetMapping("/deleteExercise/{id}")
+    public String deleteExercise(@PathVariable(value = "id") Long id, Model model) {
+        this.exerciseService.deleteById(id);
+        log.info("  GetMapping deleteExercise is called ");
+
+        return "redirect:/" + "exercise";
+    }
+
+
     @GetMapping("/addExerciseToDailyLog")
     public String addExerciseToDailyLog(Model model, Exercise exercise, DailyLog dailyLog, @Param("keyword") String keyword) {
         log.info("  get mapping addExerciseToDailyLog is called");

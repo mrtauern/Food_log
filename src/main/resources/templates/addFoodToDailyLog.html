@@ -13,11 +13,7 @@
 <header th:include="fragments/navbar_top :: navbar"></header>
 
 <form id="searchForm" th:action="@{/addFoodToDailyLog}">
-    Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required />
-    &nbsp;
-    <input type="submit" value="Search" />
-    &nbsp;
-    <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+    <div th:include="fragments/food_list/food_list :: searchFilterHTML"></div>
 </form>
 <div class="container">
     <div id="inner_container">
@@ -25,6 +21,7 @@
         <h1>Food List</h1>
         <br/><br/>
         <table id="foodTable" border="1" cellpadding="10">
+
             <thead>
             <tr>
                 <th>  Food ID </th>
@@ -49,6 +46,18 @@
                 <td th:text="${foods.energy_kcal}">Kcal</td>
                 <td>
                     <a th:href="@{/createDailyLog/{id}(id=${foods.id})}">Add To Daily Log</a>
+                </td>
+            </tr>
+            <tr th:each="food : ${pfoodlist}">
+                <td th:text="${food.id}">Food ID</td>
+                <td th:text="${food.name}">Name</td>
+                <td th:text="${food.protein}">Protein</td>
+                <td th:text="${food.carbohydrates}">Carbohydrates</td>
+                <td th:text="${food.fat}">Fat</td>
+                <td th:text="${food.energyKilojoule}">Kilojoule</td>
+                <td th:text="${food.energyKcal}">Kcal</td>
+                <td>
+                    <a th:href="@{/createDailyLogPfood/{id}(id=${food.id})}">Add To Daily Log</a>
                 </td>
             </tr>
             </tbody>
