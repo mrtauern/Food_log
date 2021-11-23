@@ -131,13 +131,15 @@ public class RecipeController {
         Recipe recipe = recipeService.findById(recipeId);
 
 
-        if(loggedInUser.getId() == recipe.getId()) {
+        if(loggedInUser.getId() == recipe.getFkUser().getId()) {
+            log.info("hello1");
             recipeFood.setRecipe(recipe);
             recipeFood.setFood(foodService.findById(foodId));
             recipeFoodService.save(recipeFood);
 
             return REDIRECT+ADD_FOOD_TO_RECIPE+"/"+recipeId;
         } else {
+            log.info("hello2");
             return REDIRECT+RECIPES;
         }
 
