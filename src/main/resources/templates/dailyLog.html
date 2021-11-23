@@ -88,8 +88,8 @@
             <tr th:each="breakfast : ${breakfasts}">
                 <!--<td th:text="${food?.id}">DailyLog ID</td>-->
                 <!--<td th:text="${food?.fkUser?.firstname}">Name</td>-->
-                <td><i class="fas fa-drumstick-bite"></i> <span th:text="${breakfast?.food?.name}"></span></td>
-                <!--<td><i class="fas fa-text-height"></i> <span th:text="${breakfast?.fkLogType?.type}"></span></td>-->
+                <td class="name"><i class="fas fa-drumstick-bite"></i> <span th:text="${breakfast?.food?.name}"></span></td>
+                <!--<td><i class="fas fa-text-height"></i> <span th:text="${lunch?.fkLogType?.type}"></span></td>-->
                 <!--<td th:text="${food?.sDatetime}">Date</td>-->
                 <td><i class="fas fa-balance-scale-left"></i> <span th:text="${breakfast?.amount}"></span></td>
                 <td class="actionButtons">
@@ -119,7 +119,7 @@
             <tr th:each="lunch : ${lunches}">
                 <!--<td th:text="${food?.id}">DailyLog ID</td>-->
                 <!--<td th:text="${food?.fkUser?.firstname}">Name</td>-->
-                <td><i class="fas fa-drumstick-bite"></i> <span th:text="${lunch?.food?.name}"></span></td>
+                <td class="name"><i class="fas fa-drumstick-bite"></i> <span th:text="${lunch?.food?.name}"></span></td>
                 <!--<td><i class="fas fa-text-height"></i> <span th:text="${lunch?.fkLogType?.type}"></span></td>-->
                 <!--<td th:text="${food?.sDatetime}">Date</td>-->
                 <td><i class="fas fa-balance-scale-left"></i> <span th:text="${lunch?.amount}"></span></td>
@@ -150,7 +150,7 @@
             <tr th:each="dinner : ${dinners}">
                 <!--<td th:text="${food?.id}">DailyLog ID</td>-->
                 <!--<td th:text="${food?.fkUser?.firstname}">Name</td>-->
-                <td><i class="fas fa-drumstick-bite"></i> <span th:text="${dinner?.food?.name}"></span></td>
+                <td class="name"><i class="fas fa-drumstick-bite"></i> <span th:text="${dinner?.food?.name}"></span></td>
                 <!--<td><i class="fas fa-text-height"></i> <span th:text="${dinner?.fkLogType?.type}"></span></td>-->
                 <!--<td th:text="${food?.sDatetime}">Date</td>-->
                 <td><i class="fas fa-balance-scale-left"></i> <span th:text="${dinner?.amount}"></span></td>
@@ -181,7 +181,7 @@
             <tr th:each="miscellanea : ${miscellaneous}">
                 <!--<td th:text="${food?.id}">DailyLog ID</td>-->
                 <!--<td th:text="${food?.fkUser?.firstname}">Name</td>-->
-                <td><i class="fas fa-drumstick-bite"></i> <span th:text="${miscellanea?.food?.name}"></span></td>
+                <td class="name"><i class="fas fa-drumstick-bite"></i> <span th:text="${miscellanea?.food?.name}"></span></td>
                 <!--<td><i class="fas fa-text-height"></i> <span th:text="${miscellanea?.fkLogType?.type}"></span></td>-->
                 <!--<td th:text="${food?.sDatetime}">Date</td>-->
                 <td><i class="fas fa-balance-scale-left"></i> <span th:text="${miscellanea?.amount}"></span></td>
@@ -208,16 +208,16 @@
             <thead>
             <tr>
                 <!--<th>dailyLog ID</th>-->
-                <th>Minuttes</th>
                 <th>Name</th>
+                <th>Minuttes</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="exercise : ${exercises}">
                 <!--<td th:text="${exercise?.id}">dailyLog ID</td>-->
+                <td class="name"><i class="fas fa-running"></i> <span th:text="${exercise?.fkExercise?.name}"></span></td>
                 <td><i class="fas fa-clock"></i> <span th:text="${exercise?.amount}"></span></td>
-                <td><i class="fas fa-running"></i> <span th:text="${exercise?.fkExercise?.name}"></span></td>
                 <td class="actionButtons">
                     <a th:href="@{/updateExerciseInDailyLog/{id}(id=${exercise.id})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
                     <a th:href="@{/deleteExerciseFromDailyLog/{id}(id=${exercise.id})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>

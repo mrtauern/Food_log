@@ -523,6 +523,10 @@ div.actionBar a{
     text-align: right;
 }
 
+.table td.name{
+    width: 70%;
+}
+
 /* --------------------- CALORIE_COUNT STYLING --------------------- */
 
 div.contentBox.calorieCount{
