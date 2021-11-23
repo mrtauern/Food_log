@@ -72,8 +72,11 @@ public class DailyLogController {
     @GetMapping({"/dailyLog", "/dailyLog/{date}"})
     public String dailyLog(Model model,@Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString) throws ParseException {
         log.info("Getmapping called for dailylog for specific date: "+dateString);
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
+
+        DailyLog weightLog = new DailyLog();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString, formatter);
@@ -82,13 +85,8 @@ public class DailyLogController {
         List<DailyLog> dailyLogsFoods = new ArrayList<>();
         List<DailyLog> dailyLogsPrivateFoods = new ArrayList<>();
         List<DailyLog> dailyLogsExercises = new ArrayList<>();
-        //List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
-
-        //SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        //Date enteredDate = dateFormat.parse(date);
 
         for (DailyLog dailyLog: dailyLogs) {
-            //String timeStamp = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             if(dailyLog.getDatetime().equals(date) && loggedInUser.getId() == dailyLog.getFkUser().getId()) {
 
                 String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
@@ -100,11 +98,11 @@ public class DailyLogController {
                     dailyLogsPrivateFoods.add(dailyLog);
                 }else if (dailyLog.getFkExercise() != null){
                     dailyLogsExercises.add(dailyLog);
+                }else if(dailyLog.getFkLogType().getType().equals("Weight")) {
+                    weightLog = dailyLog;
                 }
             }
         }
-
-        //LocalDate localDate = enteredDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
         Date currentDate = new Date();
         LocalDate today = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -115,7 +113,6 @@ public class DailyLogController {
         model.addAttribute("pfoods", dailyLogsPrivateFoods);
         model.addAttribute("exercises", dailyLogsExercises);
         model.addAttribute("keyword", keyword);
-
 
         // +/- Day
         model.addAttribute("tomorrow", date.plusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
@@ -132,11 +129,8 @@ public class DailyLogController {
         model.addAttribute("bmr", loggedInUser.getBMR(usersService.getLatestWeight(date).getAmount()));
         model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(date, loggedInUser));
         model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(date, loggedInUser));
-        //model.addAttribute("list", logListUserDate);
-        //model.addAttribute("exerciseList", exerciseList);
-        //model.addAttribute("keyword", keyword);
 
-        model.addAttribute("weight", usersService.getLatestWeight(date));
+        model.addAttribute("weight", weightLog);
 
         return DAILY_LOG;
     }
