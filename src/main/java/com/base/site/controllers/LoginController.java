@@ -89,6 +89,7 @@ public class LoginController {
 
     @PostMapping("/password_reset")
     public String confirmReset(UserPassResetCode resetCode) throws MessagingException, IOException {
+        log.info("username: "+resetCode.getUsername());
         UserPassResetCode foundResetCode = uprcRepository.findByUsername(resetCode.getUsername());
         Users foundUser = usersRepo.findUsersByUsername(resetCode.getUsername());
 
