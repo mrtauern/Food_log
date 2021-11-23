@@ -1,0 +1,54 @@
+<div th:fragment="searchFilterHTML">
+    Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required />
+    &nbsp;
+    <input type="submit" value="Search" />
+    &nbsp;
+    <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+</div>
+
+<thead th:fragment="addFoodTableHeader" class="container">
+    <tr>
+        <th>  Food ID </th>
+        <th> Name  </th>
+        <th> Protein </th>
+        <th> Carbohydrates </th>
+        <th> Fat </th>
+        <td> Kilojoule </td>
+        <th> Kcal </th>
+        <td> Action </td>
+
+    </tr>
+</thead>
+
+<tbody th:fragment="addFoodTableBody_dailyLog">
+    <tr th:each="foods : ${foodlist}">
+        <td th:text="${foods.id}">Food ID</td>
+        <td th:text="${foods.name}">Name</td>
+        <td th:text="${foods.protein}">Protein</td>
+        <td th:text="${foods.carbohydrates}">Carbohydrates</td>
+        <td th:text="${foods.fat}">Fat</td>
+        <td th:text="${foods.energy_kilojoule}">Kilojoule</td>
+        <td th:text="${foods.energy_kcal}">Kcal</td>
+        <td>
+            <a th:href="@{/createDailyLog/{id}(id=${foods.id})}">Add food</a>
+        </td>
+    </tr>
+</tbody>
+
+<tbody th:fragment="addFoodTableBody_recipe">
+    <tr th:each="foods : ${foodlist}">
+        <td th:text="${foods.id}">Food ID</td>
+        <td th:text="${foods.name}">Name</td>
+        <td th:text="${foods.protein}">Protein</td>
+        <td th:text="${foods.carbohydrates}">Carbohydrates</td>
+        <td th:text="${foods.fat}">Fat</td>
+        <td th:text="${foods.energy_kilojoule}">Kilojoule</td>
+        <td th:text="${foods.energy_kcal}">Kcal</td>
+        <td>
+            <form method="post" th:action="@{/saveRecipeFood/{foodId}/{recipeId}(recipeId=${recipeId}, foodId=${foods.id})}" th:object="${recipeFood}">
+                <input type="number" th:name="amount" id="amount" placeholder="amount (Gram)" th:required="required">
+                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Add Food</button>
+            </form>
+        </td>
+    </tr>
+</tbody>

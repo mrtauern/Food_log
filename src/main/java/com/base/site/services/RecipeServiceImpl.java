@@ -1,11 +1,14 @@
 package com.base.site.services;
 
 import com.base.site.models.Recipe;
+import com.base.site.models.RecipeFood;
+import com.base.site.models.Users;
 import com.base.site.repositories.RecipeRepository;
 import com.base.site.repositories.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -40,4 +43,10 @@ public class RecipeServiceImpl implements RecipeService{
     public void delete(Recipe recipe) {
         recipeRepository.delete(recipe);
     }
+
+    @Override
+    public List<Recipe> findAllFkUser(Users loggedInUser) {
+        return recipeRepository.findAllByFkUser(loggedInUser);
+    }
+
 }

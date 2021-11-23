@@ -45,4 +45,8 @@ public class Recipe implements Serializable {
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     Set<RecipeFood> amounts;
+
+    @Basic
+    @Column(name = "name")
+    private String name;
 }
