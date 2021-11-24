@@ -72,39 +72,82 @@ public class DailyLogController {
     @GetMapping({"/dailyLog", "/dailyLog/{date}"})
     public String dailyLog(Model model,@Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString) throws ParseException {
         log.info("Getmapping called for dailylog for specific date: "+dateString);
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
+
+        DailyLog weightLog = new DailyLog();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString, formatter);
 
         List<DailyLog> dailyLogs = dailyLogService.findAll();
         List<DailyLog> dailyLogsFoods = new ArrayList<>();
+        List<DailyLog> dailyLogsBreakfast = new ArrayList<>();
+        List<DailyLog> dailyLogsLunch = new ArrayList<>();
+        List<DailyLog> dailyLogsDinner = new ArrayList<>();
+        List<DailyLog> dailyLogsMiscellaneous = new ArrayList<>();
         List<DailyLog> dailyLogsPrivateFoods = new ArrayList<>();
         List<DailyLog> dailyLogsExercises = new ArrayList<>();
-        //List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
-
-        //SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        //Date enteredDate = dateFormat.parse(date);
 
         for (DailyLog dailyLog: dailyLogs) {
-            //String timeStamp = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             if(dailyLog.getDatetime().equals(date) && loggedInUser.getId() == dailyLog.getFkUser().getId()) {
 
                 String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                 dailyLog.setSDatetime(sDatetime);
 
-                if(dailyLog.getFood() != null) {
+                if(dailyLog.getFood() != null || dailyLog.getPrivateFood() != null) {
                     dailyLogsFoods.add(dailyLog);
-                }else if(dailyLog.getPrivateFood() != null) {
-                    dailyLogsPrivateFoods.add(dailyLog);
+                    String logType = dailyLog.getFkLogType().getType();
+
+                    switch (logType){
+                        case "Breakfast":
+                            dailyLogsBreakfast.add(dailyLog);
+                            break;
+                        case "Lunch":
+                            dailyLogsLunch.add(dailyLog);
+                            break;
+                        case "Dinner":
+                            dailyLogsDinner.add(dailyLog);
+                            break;
+                        case "Miscellaneous":
+                            dailyLogsMiscellaneous.add(dailyLog);
+                            break;
+                        case "Weight":
+                            weightLog = dailyLog;
+                            break;
+                        default:
+                            log.info("UPS... Something went wrong!");
+                    }
+                    /*
+                    int logType = dailyLog.getFkLogType().getId().intValue();
+
+                    switch (logType){
+                        case 1:
+                            dailyLogsBreakfast.add(dailyLog);
+                            break;
+                        case 2:
+                            dailyLogsLunch.add(dailyLog);
+                            break;
+                        case 3:
+                            dailyLogsDinner.add(dailyLog);
+                            break;
+                        case 4:
+                            dailyLogsMiscellaneous.add(dailyLog);
+                            break;
+                        default:
+                            log.info("UPS... Something went wrong!");
+                    }
+                    */
+
+
                 }else if (dailyLog.getFkExercise() != null){
                     dailyLogsExercises.add(dailyLog);
+                }else if(dailyLog.getFkLogType().getType().equals("Weight")) {
+                    weightLog = dailyLog;
                 }
             }
         }
-
-        //LocalDate localDate = enteredDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
         Date currentDate = new Date();
         LocalDate today = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -112,10 +155,13 @@ public class DailyLogController {
         model.addAttribute("sSelectedDate", date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         model.addAttribute("foods", dailyLogsFoods);
-        model.addAttribute("pfoods", dailyLogsPrivateFoods);
+        model.addAttribute("breakfasts", dailyLogsBreakfast);
+        model.addAttribute("lunches", dailyLogsLunch);
+        model.addAttribute("dinners", dailyLogsDinner);
+        model.addAttribute("miscellaneous", dailyLogsMiscellaneous);
+        //model.addAttribute("pfoods", dailyLogsPrivateFoods);
         model.addAttribute("exercises", dailyLogsExercises);
         model.addAttribute("keyword", keyword);
-
 
         // +/- Day
         model.addAttribute("tomorrow", date.plusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
@@ -132,11 +178,12 @@ public class DailyLogController {
         model.addAttribute("bmr", loggedInUser.getBMR(usersService.getLatestWeight(date).getAmount()));
         model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(date, loggedInUser));
         model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(date, loggedInUser));
-        //model.addAttribute("list", logListUserDate);
-        //model.addAttribute("exerciseList", exerciseList);
-        //model.addAttribute("keyword", keyword);
 
-        model.addAttribute("weight", usersService.getLatestWeight(date));
+        model.addAttribute("weight", weightLog);
+
+        model.addAttribute("selectedPage", "dailyLog");
+        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
+        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
         return DAILY_LOG;
     }

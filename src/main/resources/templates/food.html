@@ -9,17 +9,67 @@
     }
 </script>
 <body>
-<header th:include="fragments/navbar_top :: navbar"></header>
+<header th:include="fragments/navbar_top :: header" class="navbar"></header>
 
-<form id="searchForm" th:action="@{/food}">
+<div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
+
+<div id="content">
+
+<!--<form id="searchForm" th:action="@{/food}">
     Filter: <input type="text" name="keyword" id="keyword" placeholder="Search for name"  size="50" th:value="${keyword}" required />
     &nbsp;
     <input type="submit" value="Search" />
     &nbsp;
     <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
-</form>
-<div class="container">
-    <div id="inner_container">
+</form>-->
+
+    <div class="contentBox">
+        <h1>Food List</h1>
+
+        <div class="actionBar">
+
+            <form th:action="@{/food}">
+                <input type="text" name="keyword" placeholder="Search...">
+            </form>
+
+            <a href="/createFood" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Create Food</a>
+
+        </div>
+
+        <table  class="table table-sm">
+            <thead>
+            <tr>
+                <!--<th>Food ID</th>-->
+                <th>Name</th>
+                <th>Protein</th>
+                <th>Carbohydrates</th>
+                <th>Fat</th>
+                <th>Kilojoule</th>
+                <th>Kcal</th>
+                <th></th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="food : ${foodlist}">
+                <!--<td th:text="${food.id}">Food ID</td>-->
+                <td><i class="fas fa-drumstick-bite"></i> <span th:text="${food.name}"></span></td>
+                <td th:text="${food.protein}">Protein</td>
+                <td th:text="${food.carbohydrates}">Carbohydrates</td>
+                <td th:text="${food.fat}">Fat</td>
+                <td th:text="${food.energy_kilojoule}">Kilojoule</td>
+                <td th:text="${food.energy_kcal}">Kcal</td>
+                <td>
+                    <a th:href="@{/updateFood/{id}(id=${food.id})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                    <a th:href="@{/deleteFood/{id}(id=${food.id})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <!--<div id="inner_container">
         <br> <br>
         <h1>Food List</h1>
         <a th:href="@{/createFood}" >Create New Food</a>
@@ -55,9 +105,9 @@
             </tbody>
         </table>
 
-        </div>
+        </div>-->
 </div>
 
-<div th:include="fragments/navbar_top :: bottom_bar"></div>
+<footer th:include="fragments/navbar_top :: footer"></footer>
 </body>
 </html>
