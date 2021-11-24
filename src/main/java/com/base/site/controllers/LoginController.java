@@ -45,7 +45,8 @@ public class LoginController {
     Logger log = Logger.getLogger(LoginController.class.getName());
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
+        model.addAttribute("user", new Users());
         return "login";
     }
 
@@ -89,6 +90,7 @@ public class LoginController {
 
     @PostMapping("/password_reset")
     public String confirmReset(UserPassResetCode resetCode) throws MessagingException, IOException {
+        log.info("username: "+resetCode.getUsername());
         UserPassResetCode foundResetCode = uprcRepository.findByUsername(resetCode.getUsername());
         Users foundUser = usersRepo.findUsersByUsername(resetCode.getUsername());
 
@@ -137,7 +139,7 @@ public class LoginController {
             mail.setContent("If you didnt request this change please contact up emidially on email: foodlog.dk@gmail.com");
 
             emailService.sendmail(mail);
-            return "login";
+            return "redirect:/login";
         }
 
         return "redirect:/password-reset";

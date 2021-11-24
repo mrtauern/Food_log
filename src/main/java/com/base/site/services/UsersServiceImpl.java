@@ -96,6 +96,7 @@ public class UsersServiceImpl implements UsersService {
                     weightLog.setDatetime(logdate.getDatetime());
                     weightLog.setFkLogType(logdate.getFkLogType());
                     weightLog.setAmount(logdate.getAmount());
+                    weightLog.setId(logdate.getId());
 
                 }
             }

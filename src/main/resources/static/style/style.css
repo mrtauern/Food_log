@@ -1,6 +1,10 @@
+/* --------------------- FONTS --------------------- */
+
 @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i');
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&subset=latin-ext');
 @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+/* --------------------- GENERAL --------------------- */
 
 * {
     margin: 0;
@@ -11,6 +15,9 @@
 body {
     /* font-family: cursive; */
     background-color: #EEEEEE;
+    height: 100%;
+    width: 100%;
+    position: absolute;
 }
 a {
     text-decoration: none;
@@ -19,10 +26,9 @@ li {
     list-style: none;
 }
 
+/* --------------------- OLD NAVBAR STYLING --------------------- */
 
-
-/* --------------------- NAVBAR STYLING --------------------- */
-.navbar {
+nav.navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -30,33 +36,33 @@ li {
     background-color: #333;
     color: #fff;
 }
-.nav-links a {
+nav.navbar .nav-links a {
     color: #fff;
 }
-                        /* LOGO */
-.logo {
+/* LOGO */
+nav.navbar .logo {
     font-size: 32px;
 }
-                        /* NAVBAR MENU */
-.menu {
+/* NAVBAR MENU */
+nav.navbar .menu {
     display: flex;
     /* gap: 1em; */
     font-size: 18px;
 }
-.menu li:hover {
+nav.navbar .menu li:hover {
     background-color: #4c9e9e;
     /* border-radius: 10px; */
     transition: 0.3s ease;
     position: relative;
 }
-.menu li {
+nav.navbar .menu li {
     padding: 5px 14px;
 }
-                        /* DROPDOWN MENU */
-.services {
+/* DROPDOWN MENU */
+nav.navbar .services {
     position: relative;
 }
-.dropdown {
+nav.navbar .dropdown {
     background-color: rgb(1, 139, 139);
     padding: 1em 0;
     position: absolute; /*WITH RESPECT TO PARENT*/
@@ -64,18 +70,18 @@ li {
     /* border-radius: 8px; */
     top: 35px;
 }
-.dropdown li + li {
+nav.navbar .dropdown li + li {
     margin-top: 10px;
 }
-.dropdown li {
+nav.navbar .dropdown li {
     padding: 0.5em 1em;
     width: 8em;
     text-align: center;
 }
-.dropdown li:hover {
+nav.navbar .dropdown li:hover {
     background-color: #4c9e9e;
 }
-.services:hover .dropdown {
+nav.navbar .services:hover .dropdown {
     display: block;
 }
 
@@ -88,12 +94,284 @@ li {
     color: #fff;
 }
 
-/* --------------------- NAVBAR STYLING --------------------- */
+/* --------------------- HEADER STYLING --------------------- */
 
+header.navbar {
+    display: flex;
 
+    align-items: center;
+    justify-content: space-between;
 
-/*------   Daily Log     ------
-* {box-sizing: border-box;}
+    padding: 0px;
+
+    background-color: #FFFF;
+
+    color: #000000;
+
+    box-shadow: 0px 1px 10px #AAAAAA;
+
+    z-index: 1;
+
+    position: fixed;
+
+    width: 100%;
+}
+
+header.navbar nav{
+    height: 53px;
+}
+
+header.navbar nav ul{
+    margin-bottom: 0;
+}
+
+header.navbar .nav-links a {
+    color: #000000;
+    text-decoration: none;
+
+    height: 53px;
+
+    padding: 6px 14px;
+
+    display: block;
+}
+
+/*.nav-links a:hover {
+    color: #FFFFFF;
+    text-decoration: none;
+}*/
+
+header.navbar .nav-links a img{
+    height: 40px;
+
+    /*margin: 0 5px 4px 0;*/
+    margin-left: 10px;
+
+    border-radius: 50%;
+}
+                        /* LOGO */
+header.navbar #logo {
+    font-size: 32px;
+    font-family: Lobster;
+    text-align: center;
+    color: #FFFFFF;
+
+    background-color: #41C685;
+
+    width: 260px;
+    height: 53px;
+}
+
+header.navbar #logo img{
+    height: 30px;
+    margin: 0 5px 4px 0;
+}
+                        /* NAVBAR MENU */
+header.navbar .menu {
+    display: flex;
+    /* gap: 1em; */
+    font-size: 18px;
+
+    height: 100%;
+}
+header.navbar .menu li:hover {
+    /*background-color: #4c9e9e;*/
+    background-color: #000000;
+    /* border-radius: 10px; */
+    transition: 0.3s ease;
+    position: relative;
+}
+
+header.navbar .menu li:hover a{
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+header.navbar .menu li:hover ul li a{
+    color: #000000;
+    text-decoration: none;
+}
+
+header.navbar .menu li:hover ul li:hover a{
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+header.navbar .menu li {
+    /*padding: 5px 14px;*/
+}
+                        /* DROPDOWN MENU */
+header.navbar .services {
+    position: relative;
+
+    height: 100%;
+}
+
+header.navbar .dropdown {
+    /*background-color: rgb(1, 139, 139);*/
+    background-color: #FFFFFF;
+    /*padding: 1em 0;*/
+    position: absolute; /*WITH RESPECT TO PARENT*/
+    display: none;
+
+    width: 100%;
+    /* border-radius: 8px; */
+    /*top: 35px;*/
+}
+header.navbar .dropdown li + li {
+    /*margin-top: 10px;*/
+}
+header.navbar .dropdown li {
+    /*padding: 0.5em 1em;*/
+    /*width: 8em;*/
+    width: 100%;
+    height: 100%;
+
+    /*text-align: center;*/
+}
+
+header.navbar .dropdown li:hover {
+    /*background-color: #4c9e9e;*/
+    background-color: #000000;
+}
+
+header.navbar .dropdown li a{
+    color: #000000;
+    padding-top: 14px;
+}
+
+header.navbar .dropdown li a:hover{
+    color: #FFFFFF;
+}
+
+header.navbar .dropdown li form button.logout{
+    height: 43px;
+    width: calc( 100% - 10px );
+
+    margin: 5px;
+}
+
+header.navbar .services:hover .dropdown {
+    display: block;
+}
+
+/* --------------------- OLD BOTTOM_BAR STYLING --------------------- */
+
+.bottom_bar {
+    overflow: hidden;
+    background-color: #333;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    color: #fff;
+}
+
+/* --------------------- FOOTER STYLING --------------------- */
+
+footer {
+    overflow: visible;
+    background-color: #333;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    color: #fff;
+
+    padding-top: 50px;
+
+    /*box-shadow: inset 0 6px 10px -7px #888888;*/
+}
+
+footer a{
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+footer a:hover{
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+
+footer div.innerFooter{
+    width: 1200px;
+
+    margin: 0 auto;
+    padding: 40px 0;
+}
+
+footer div.innerFooter.top{
+
+    border-bottom: #FFFFFF 1px solid;
+    border-top: #FFFFFF 1px solid;
+}
+
+footer div.innerFooter.top a{
+    margin-top: 10px;
+
+    display: block;
+}
+
+footer div.innerFooter.top h4{
+    margin-bottom: 40px;
+
+    display: block;
+}
+
+footer div.innerFooter.top div.collumn{
+    vertical-align: top;
+
+    width: 297px;
+
+    display: inline-block;
+}
+
+footer div.innerFooter.top div.collumn.one{
+    font-size: 32px;
+    font-family: Lobster, sans-serif;
+}
+
+footer div.innerFooter.bottom{
+
+}
+
+footer div.innerFooter.bottom a{
+    float: right;
+
+    margin-right: 20px;
+}
+
+/* --------------------- DAILY LOG --------------------- */
+
+div.innerCalorie{
+    width: 100%;
+}
+
+div.innerCalorie div.collumn{
+    text-align: center;
+
+    width: calc( 100% / 3 - 3px);
+
+    display: inline-block;
+
+    position: relative;
+}
+
+div.innerCalorie div.collumn span.value{
+    font-size: 32px;
+}
+
+div.innerCalorie div.collumn span.type{
+    font-size: 16px;
+}
+
+div.innerCalorie div.collumn.left{
+
+}
+
+div.innerCalorie div.collumn.left span.value{
+    font-size: 42px;
+}
+
+/* {box-sizing: border-box;}
 .column { float: left; padding: 15px;}
 .left, .right {width:25%}
 .middle{width: 40%;}
@@ -121,6 +399,82 @@ li {
 
 /*------   Calendar    ------*/
 
+/* --------------------- LEFT_BAR STYLING --------------------- */
+
+div#leftBar{
+    color: #FFFFFF;
+
+    background-color: #41C685;
+
+    margin-top: 53px;
+
+    width: 260px;
+    height: 100%;
+
+    display: inline-block;
+
+    position: fixed;
+}
+
+div#leftBar ul{
+
+}
+
+div#leftBar ul li{
+    font-size: 18px;
+
+    height: 50px;
+
+    vertical-align: middle;
+}
+
+div#leftBar ul li a{
+    color: #FFFFFF;
+    text-decoration: none;
+
+    width: 100%;
+    height: 100%;
+
+    padding-left: 20px;
+    padding-top: 12px;
+
+    display: block;
+}
+
+div#leftBar ul li:hover{
+    color: #41C685;
+
+    background-color: #FFFFFF;
+}
+
+div#leftBar ul li:hover a{
+    color: #41C685;
+}
+
+div#leftBar ul li.selected {
+    border-right: #FFFFFF solid 6px;
+
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+div#leftBar ul li.selected:hover{
+    color: #41C685;
+
+    background-color: #FFFFFF;
+}
+
+/* --------------------- CONTENT STYLING --------------------- */
+
+div#content{
+    height: calc(100% - 53px);
+    width: calc(100% - 265px);
+
+    display: inline-block;
+
+    margin-top: 53px;
+    margin-left: 260px;
+}
+
 /* --------------------- CONTENT_BOX STYLING --------------------- */
 
 div.contentBox{
@@ -129,6 +483,8 @@ div.contentBox{
 
     margin: 80px;
     padding: 40px;
+
+    overflow: auto;
 }
 
 div.actionBar{
@@ -143,10 +499,40 @@ div.actionBar input{
     border: none;
     background-color: #DDDDDD;
     padding: 4px 4px;
+    width: 200px;
 }
 
 div.actionBar a{
     float: right;
+}
+
+.table thead th{
+    border: none;
+}
+
+.table tbody tr:hover{
+    background-color: #EEEEEE;
+}
+
+.table td{
+    border: none;
+    vertical-align: middle;
+}
+
+.table td.actionButtons{
+    text-align: right;
+}
+
+.table td.name{
+    width: 70%;
+}
+
+/* --------------------- CALORIE_COUNT STYLING --------------------- */
+
+div.contentBox.calorieCount{
+    color: #FFFFFF;
+
+    background-color: #41C685;
 }
 
 /* --------------------- FORM_BOX STYLING --------------------- */
@@ -160,6 +546,8 @@ div.formBox{
     margin: 80px auto;
 
     max-width: 600px;
+
+    overflow: auto;
 }
 
 div.formBox form{
@@ -205,4 +593,68 @@ div.formBox form div button{
 
     margin: 0 !IMPORTANT;
     margin-left: 8px !IMPORTANT;
+}
+
+/* --------------------- LOGIN PAGE --------------------- */
+
+div#content.login{
+    margin-left: 0;
+
+    width: 100%;
+
+    background-image: url("../image/login_bg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+div.formBox.login{
+    padding: 0;
+
+    height: 600px;
+}
+
+div.formBox.login div{
+    width: 50%;
+    height: 100%;
+
+    padding: 40px;
+
+    float: left;
+}
+
+div.formBox.login div.signIn{
+
+}
+
+div.formBox.login div.signUp{
+    color: #FFFFFF;
+
+    background-color: #41C685;
+}
+
+/* --------------------- FRONT PAGE --------------------- */
+
+div#content.login{
+    margin-left: 0;
+
+    width: 100%;
+
+    background-color: #FFFFFF;
+}
+
+/* --------------------- SELECT DATE --------------------- */
+
+form.selectDate{
+    display: inline-block;
+}
+
+div.contentBox.selectDate{
+    text-align: center;
+
+    background: none;
+
+    box-shadow: none;
+
+    padding: 0;
 }

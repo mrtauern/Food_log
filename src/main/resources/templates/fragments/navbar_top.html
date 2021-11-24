@@ -45,6 +45,163 @@
     </nav>
 </div>
 
+<header th:fragment="header">
+        <!-- LOGO -->
+        <div id="logo"><img src="../static/image/logo.png" th:src="@{/image/logo.png}"> Food Log</div>
+        <!-- NAVIGATION MENU -->
+        <nav>
+            <ul class="nav-links">
+                <!-- USING CHECKBOX HACK -->
+                <!-- <input type="checkbox" id="checkbox_toggle" /> -->
+                <!-- <label for="checkbox_toggle" class="hamburger">&#9776;</label> -->
+                <!-- NAVIGATION MENUS -->
+                <div class="menu">
+                    <!--<li><a href="/dailyLog">Daily Log</a></li>-->
+
+                    <!--Admin services-->
+                    <!--<li class="services">
+                        <a href="/">Services</a>
+                        <>!-- DROPDOWN MENU --<>
+                        <ul class="dropdown">
+                            <li><a href="/userList">Users</a></li>
+                            <li><a href="/exercise">Exercise</a></li>
+                            <li><a href="/food">Food</a></li>
+                        </ul>
+                    </li>-->
+                    <!--User services-->
+                    <li class="services">
+                        <a href="#">
+                            <th:block th:text="${user_name}"></th:block>
+                            <th:block th:switch="${user_gender}">
+                                <img th:case="User_male" src="../static/image/male_placeholder.png" th:src="@{/image/male_placeholder.png}">
+                                <img th:case="User_female" src="../static/image/male_placeholder.png" th:src="@{/image/female_placeholder.png}">
+                            </th:block>
+                        </a>
+
+                        <!-- DROPDOWN MENU -->
+                        <ul class="dropdown">
+                            <li><a href="/privateFood"><i class="fas fa-pizza-slice"></i> Private Food</a></li>
+                            <li><a href="/weightOptions"><i class="fas fa-weight"></i> Weight Options</a></li>
+                            <li><a href="/recipes"><i class="fas fa-cloud-meatball"></i> Recipes</a></li>
+                            <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+                            <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                            <li>
+                                <form th:action="@{/user_logout}" method="post">
+                                    <button type="submit" class="btn btn-danger mr-2 logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!--<li><a href="/">Pricing</a></li>
+                    <li><a href="/">About</a></li>
+                    <li><a href="/">Contact</a></li>-->
+                </div>
+            </ul>
+        </nav>
+</header>
+
+<div th:fragment="loginHeader">
+    <!-- LOGO -->
+    <div id="logo"><img src="../static/image/logo.png" th:src="@{/image/logo.png}"> Food Log</div>
+    <!-- NAVIGATION MENU -->
+    <nav>
+        <ul class="nav-links">
+            <!-- USING CHECKBOX HACK -->
+            <!-- <input type="checkbox" id="checkbox_toggle" /> -->
+            <!-- <label for="checkbox_toggle" class="hamburger">&#9776;</label> -->
+            <!-- NAVIGATION MENUS -->
+            <div class="menu">
+                <!--<li><a href="/dailyLog">Daily Log</a></li>-->
+
+                <!--Admin services-->
+                <!--<li class="services">
+                    <a href="/">Services</a>
+                    <>!-- DROPDOWN MENU --<>
+                    <ul class="dropdown">
+                        <li><a href="/userList">Users</a></li>
+                        <li><a href="/exercise">Exercise</a></li>
+                        <li><a href="/food">Food</a></li>
+                    </ul>
+                </li>-->
+                <!--User services-->
+                <!--<li class="services">
+                    <a href="#">
+                        Svend Sviskefjæs
+                        <img src="../static/image/male_placeholder.png" th:src="@{/image/male_placeholder.png}">
+                    </a>
+
+                    <!- DROPDOWN MENU ->
+                    <ul class="dropdown">
+                        <li><a href="/privateFood"><i class="fas fa-pizza-slice"></i> Private Food</a></li>
+                        <li><a href="/weightOptions"><i class="fas fa-weight"></i> Weight Options</a></li>
+                        <li><a href="/weightOptions"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="/weightOptions"><i class="fas fa-cog"></i> Settings</a></li>
+                        <li>
+                            <form th:action="@{/user_logout}" method="post">
+                                <button type="submit" class="btn btn-danger mr-2 logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>-->
+
+                <!--<li><a href="/">Pricing</a></li>
+                <li><a href="/">About</a></li>
+                <li><a href="/">Contact</a></li>-->
+            </div>
+        </ul>
+    </nav>
+</div>
+
 <div th:fragment="bottom_bar">
     <div class="bottom_bar">Billy bumse fjæs</div>
+</div>
+
+<footer th:fragment="footer">
+    <div class="innerFooter top">
+        <div class="collumn one">Food Log</div>
+        <div class="collumn two">
+            <h4>Food Log</h4>
+            <a href="#">Contact us</a>
+            <a href="#">Business</a>
+            <a href="#">Press</a>
+            <a href="#">About Food Log</a>
+            <a href="#">Job at Food Log</a>
+        </div>
+        <div class="collumn three">
+            <h4>Costumer service</h4>
+            <a href="#">Add credit card</a>
+            <a href="#">Frequently asked questions</a>
+            <a href="#">Personal data policy</a>
+            <a href="#">Cookie policy</a>
+            <a href="#">Terms and Conditions</a>
+        </div>
+        <div class="collumn four">
+            <h4>Food Log A/S</h4>
+            <p>
+                Vernersvej 4, 5. sal TV. <br>
+                2345 Verners by<br>
+                CVR-nr: 12 34 56 78
+            </p>
+        </div>
+    </div>
+    <div class="innerFooter bottom">
+        ©2021 FOOD LOG
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+</footer>
+
+<div th:fragment="leftMenu">
+    <ul>
+        <li th:classappend="${selectedPage == 'dashboard'} ? selected : null"><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li th:classappend="${selectedPage == 'dailyLog'} ? selected : null"><a href="/dailyLog"><i class="fas fa-clipboard-list"></i> Daily log</a></li>
+        <li th:classappend="${selectedPage == 'user'} ? selected : null"><a href="/userList"><i class="fas fa-user"></i> User</a></li>
+        <li  th:classappend="${selectedPage == 'exercise'} ? selected : null"><a href="/exercise"><i class="fas fa-running"></i> Exercise</a></li>
+        <li th:classappend="${selectedPage == 'food'} ? selected : null"><a href="/food"><i class="fas fa-hamburger"></i> Food</a></li>
+        <li th:classappend="${selectedPage == 'price'} ? selected : null"><a href="#"><i class="fas fa-dollar-sign"></i> Price</a></li>
+        <li  th:classappend="${selectedPage == 'other'} ? selected : null"><a href="#"><i class="fas fa-ellipsis-h"></i> Other</a></li>
+    </ul>
 </div>
