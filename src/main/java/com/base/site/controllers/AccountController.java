@@ -38,8 +38,10 @@ public class AccountController {
     Logger log = Logger.getLogger(AccountController.class.getName());
 
     private final String USER_LIST = "userList";
+    private final String USER_INFO = "userInfo";
     private final String CREATE_USER = "createUser";
     private final String EDIT_USER = "editUser";
+    private final String EDIT_USER_PROFILE = "editUserProfile";
     private final String DELETE_USER_CONFIRM = "delete_user_confirm";
     private final String DASHBOARD = "dashboard";
     private final String REDIRECT = "redirect:/";
@@ -264,5 +266,77 @@ public class AccountController {
         model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
         return DASHBOARD;
+    }
+
+    @GetMapping("/userInfo")
+    public String userInfo(Model model){
+        log.info("userInfo called");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+
+        model.addAttribute("users", usersService.findAll());
+        model.addAttribute("pageTitle", "User Personal Info");
+        model.addAttribute("loggedIn", loggedInUser);
+        model.addAttribute("selectedPage", "user");
+        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
+        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+
+        return USER_INFO;
+    }
+
+    @GetMapping("/editUserProfile/{id}")
+    public String editUserProfile(@PathVariable( value ="id") Long id, Model model) {
+        log.info("editUserProfile get called");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+
+        Users user = usersService.findById(id);
+
+        String sBirthday = user.getBirthday().toString();
+        log.info("sBirthday: "+sBirthday);
+
+        user.setSBirthday(sBirthday);
+
+        model.addAttribute("user", user);
+        model.addAttribute("pageTitle", "Edit user Profile");
+        model.addAttribute("selectedPage", "user");
+        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
+        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+
+        return EDIT_USER_PROFILE;
+    }
+    @PostMapping("/editUserProfile")
+    public String editUserProfile(@ModelAttribute("users") Users user){
+        log.info("editUserProfile post called");
+
+        Date birthday = new Date();
+        String sBirthday = user.getSBirthday();
+        log.info("New birthday: " + sBirthday);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            birthday = dateFormat.parse(sBirthday);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Timestamp ts=new Timestamp(birthday.getTime());
+        LocalDate bday = Instant.ofEpochMilli(birthday.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        user.setBirthday(bday);
+
+        try {
+            user.setUserType(userTypeService.findById((long)4));
+            Users userData = usersService.findById(user.getId());
+            user.setPassword(userData.getPassword());
+            user.setRegisterDate(userData.getRegisterDate());
+            user.setKcal_modifier(userData.getKcal_modifier());
+            user.setRoles(userData.getRoles());
+            usersService.save(user);
+        } catch (Exception e){
+            log.info("Something went wrong with crating an user");
+            log.info(e.toString());
+        }
+
+        return REDIRECT + USER_INFO;
     }
 }

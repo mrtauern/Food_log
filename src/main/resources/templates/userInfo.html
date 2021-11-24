@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="fragments/head :: styles"></head>
+<body>
+    <header th:include="fragments/navbar_top :: header" class="navbar"></header>
+
+    <div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
+
+    <div id="content">
+
+        <div class="contentBox">
+
+        <h1>User Personal Info</h1>
+
+
+            <table class="table table-sm">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Birthday</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${loggedIn}">
+                <td><i class="fas fa-user"></i> <span th:text="${user.firstname + ' ' + user.lastname}"></span></td>
+                <td><i class="fas fa-envelope"></i> <span th:text="${user.username}"></span></td>
+                <td><i class="fas fa-envelope"></i> <span th:text="${user.birthday}"></span></td>
+                <td class="actionButtons">
+                    <a th:href="${'/editUserProfile/' + user.id}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                    <a th:href="@{'/password_reset_user/'+${user.id}}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-sync-alt"></i> Reset Password</a>
+                    <a th:href="@{'/delete_user_confirm/'+${user.id}}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        </div>
+
+    </div>
+
+    <footer th:include="fragments/navbar_top :: footer"></footer>
+</body>
+</html>
