@@ -4,6 +4,7 @@ import com.base.site.models.*;
 import com.base.site.repositories.FoodRepo;
 import com.base.site.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.core.Authentication;
@@ -37,6 +38,31 @@ public class FoodController {
 
 
     @GetMapping("/food")
+    public String food(Model model, @Param("keyword") String keyword) {
+        log.info("  get mapping food is called");
+        List<Food> foodlist = foodService.findAllByKeyword(keyword);
+
+        model.addAttribute("foodlist", foodlist);
+
+        return findPaginated(1, model);
+    }
+
+    @GetMapping("/page/{pageNo}")
+    public String findPaginated(@PathVariable(value = "pageNo")int pageNo, Model model){
+        int pageSize = 15;
+
+        Page<Food> page = foodService.findPaginated(pageNo,pageSize);
+        List<Food> listFood = page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalFood", page.getTotalElements());
+        model.addAttribute("listFood", listFood);
+
+        return "food";
+    }
+    /*
+    @GetMapping("/food")
     public String food(Model model, Food food, @Param("keyword") String keyword) {
         log.info("  get mapping food is called");
 
@@ -53,7 +79,7 @@ public class FoodController {
 
             return "food";
     }
-
+     */
     @GetMapping("/createFood")
     public String createFood(Model model) {
         log.info("  createFood is called ");

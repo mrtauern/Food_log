@@ -51,7 +51,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="food : ${foodlist}">
+            <tr th:each="food : ${listFood}">
                 <!--<td th:text="${food.id}">Food ID</td>-->
                 <td><i class="fas fa-drumstick-bite"></i> <span th:text="${food.name}"></span></td>
                 <td th:text="${food.protein}">Protein</td>
@@ -67,6 +67,30 @@
             </tbody>
         </table>
 
+        <div th:if = "${totalPages > 1}" >
+            <div class="row col-sm-10">
+                <div class="col-sm-2">
+                    Antal Mad: [[${totalFood}]]
+                </div>
+
+                <div class= "col-sm-2">
+                    <span th:each="i: ${#numbers.sequence(1,totalPages)}">
+                        <a th:if="${currentPage != i}" th:href="@{/page/${i}}">[[${i}]]</a>
+                        <span th:unless="${currentPage != i}">[[${i}]]</span>
+                    </span>
+                </div>
+
+                <div class= "col-sm-1">
+                    <a th:if="${currentPage < totalPages}" th:href="@{'/page/'+ ${currentPage - 1}}">Previous</a>
+                    <span th:unless="${currentPage < totalPages}">Previous</span>
+                </div>
+
+                <div class= "col-sm-1">
+                    <a th:if="${currentPage < totalPages}" th:href="@{'/page/'+ ${currentPage + 1}}">Next</a>
+                    <span th:unless="${currentPage < totalPages}">Next</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!--<div id="inner_container">
