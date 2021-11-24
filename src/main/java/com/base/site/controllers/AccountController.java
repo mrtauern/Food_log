@@ -188,6 +188,10 @@ public class AccountController {
         try {
             //niklas... temporary till users is correctly mapped
             user.setUserType(userTypeService.findById((long)4));
+            Users userData = usersService.findById(user.getId());
+            user.setPassword(userData.getPassword());
+            user.setRegisterDate(userData.getRegisterDate());
+            user.setKcal_modifier(userData.getKcal_modifier());
             usersService.save(user);
         } catch (Exception e){
             log.info("Something went wrong with crating an user");

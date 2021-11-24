@@ -180,6 +180,7 @@ public class DailyLogController {
         model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(date, loggedInUser));
 
         model.addAttribute("weight", weightLog);
+        //model.addAttribute("date", dateString);
 
         model.addAttribute("selectedPage", "dailyLog");
         model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
