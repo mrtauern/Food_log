@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -87,28 +89,36 @@ public class FoodController {
             return "redirect:/" + "food";
     }
 
-    @GetMapping("/addFoodToDailyLog")
-    public String addFoodToDailyLog(Model model,Food food, DailyLog dailyLog, PrivateFood privateFood, @Param("keyword") String keyword) {
+    @GetMapping({"/addFoodToDailyLog", "/addFoodToDailyLog/{date}"})
+    public String addFoodToDailyLog(Model model, @Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString) {
         log.info("  get mapping addFoodToDailyLog is called");
         List<Food> foodlist = foodService.findAllByKeyword(keyword);
         List<PrivateFood> pfoodlist = privateFoodService.findAllByKeyword(keyword);
 
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+
         model.addAttribute("foodlist", foodlist);
+        model.addAttribute("date", date.toString());
         model.addAttribute("pfoodlist", pfoodlist);
         model.addAttribute("keyword", keyword);
-
 
         return "addFoodToDailyLog";
     }
 
-    @GetMapping("/createDailyLog/{id}")
-    public String createDailyLog(@PathVariable(value = "id") Long id,Model model,DailyLog dailyLog) {
+    @GetMapping({"/createDailyLog/{id}", "/createDailyLog/{id}/{date}"})
+    public String createDailyLog(@PathVariable(value = "id") Long id,@PathVariable(required = false, value = "date") String dateString,Model model,DailyLog dailyLog) {
         log.info("  createDailyLog is called ");
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
+
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+        dailyLog.setDatetime(date);
+
         Food foods = foodService.findById(id);
         model.addAttribute("dailyLog", dailyLog);
         model.addAttribute("foods", foods);
+        model.addAttribute("date", date.toString());
         model.addAttribute("logType", logTypeService.findAll());
 
         return "createDailyLog";
@@ -126,18 +136,22 @@ public class FoodController {
 
         return "createDailyLogPfood";
     }
-    @PostMapping("/saveDailyLog")
-    public String saveDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,Food food, Model model) {
+
+    @PostMapping({"/saveDailyLog", "/saveDailyLog/{date}"})
+    public String saveDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,Food food, @PathVariable(required = false, value = "date") String dateString, Model model) {
         log.info("  PostMapping saveDailyLog is called ");
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
         Food foodId = foodService.findById(food.getId());
         dailyLog.setFkUser(loggedInUser);
         dailyLog.setFood(foodId);
-
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+        dailyLog.setDatetime(date);
+        String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         dailyLogService.save(dailyLog);
 
-        return  "redirect:/" + "dailyLog";
+        return  "redirect:/" + "dailyLog/"+sDatetime;
     }
 
     @PostMapping("/saveDailyLogPfood")
@@ -154,26 +168,38 @@ public class FoodController {
         return  "redirect:/" + "dailyLog";
     }
 
-    @GetMapping("/updateDailyLog/{id}")
-    public String updateDailyLog(@PathVariable(value = "id") Long id, Model model) {
+    @GetMapping({"/updateDailyLog/{id}", "/updateDailyLog/{id}/{date}"})
+    public String updateDailyLog(@PathVariable(value = "id") Long id, Model model, @PathVariable(required = false, value = "date") String dateString) {
         log.info("  GetMapping updateDailyLog is called ");
         DailyLog dailyLog = dailyLogService.findById(id);
+
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        //LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString, formatter);
+
+        //LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
         model.addAttribute("dailyLog", dailyLog);
+        model.addAttribute("date", dateString);
         model.addAttribute("logType", logTypeService.findAll());
 
         return "updateDailyLog";
     }
 
-    @PostMapping("/updateDailyLog")
-    public String updateDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Model model) {
+    @PostMapping({"/updateDailyLog", "/updateDailyLog/{date}"})
+    public String updateDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Model model, @PathVariable(required = false, value = "date") String dateString) {
         log.info("  PostMapping updateDailyLog is called ");
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
-        dailyLog.setFkUser(loggedInUser);
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString, formatter);
+        //LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+
+        dailyLog.setFkUser(loggedInUser);
+        dailyLog.setDatetime(date);
         dailyLogService.save(dailyLog);
 
-        return  "redirect:/" + "dailyLog";
+        return  "redirect:/" + "dailyLog/"+dateString;
     }
 
     @GetMapping("/updateDailyLogPfood/{id}")

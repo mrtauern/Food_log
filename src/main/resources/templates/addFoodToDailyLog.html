@@ -45,7 +45,7 @@
                 <td th:text="${foods.energy_kilojoule}">Kilojoule</td>
                 <td th:text="${foods.energy_kcal}">Kcal</td>
                 <td>
-                    <a th:href="@{/createDailyLog/{id}(id=${foods.id})}">Add To Daily Log</a>
+                    <a th:href="@{/createDailyLog/{id}/{date}(id=${foods.id},date=${date})}">Add To Daily Log</a>
                 </td>
             </tr>
             <tr th:each="food : ${pfoodlist}">
@@ -57,7 +57,7 @@
                 <td th:text="${food.energyKilojoule}">Kilojoule</td>
                 <td th:text="${food.energyKcal}">Kcal</td>
                 <td>
-                    <a th:href="@{/createDailyLogPfood/{id}(id=${food.id})}">Add To Daily Log</a>
+                    <a th:href="@{/createDailyLogPfood/{id}/{date}(id=${food.id},date=${date})}">Add To Daily Log</a>
                 </td>
             </tr>
             </tbody>

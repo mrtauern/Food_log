@@ -98,6 +98,28 @@ public class DailyLogController {
 
                 if(dailyLog.getFood() != null || dailyLog.getPrivateFood() != null) {
                     dailyLogsFoods.add(dailyLog);
+                    String logType = dailyLog.getFkLogType().getType();
+
+                    switch (logType){
+                        case "Breakfast":
+                            dailyLogsBreakfast.add(dailyLog);
+                            break;
+                        case "Lunch":
+                            dailyLogsLunch.add(dailyLog);
+                            break;
+                        case "Dinner":
+                            dailyLogsDinner.add(dailyLog);
+                            break;
+                        case "Miscellaneous":
+                            dailyLogsMiscellaneous.add(dailyLog);
+                            break;
+                        case "Weight":
+                            weightLog = dailyLog;
+                            break;
+                        default:
+                            log.info("UPS... Something went wrong!");
+                    }
+                    /*
                     int logType = dailyLog.getFkLogType().getId().intValue();
 
                     switch (logType){
@@ -116,6 +138,8 @@ public class DailyLogController {
                         default:
                             log.info("UPS... Something went wrong!");
                     }
+                    */
+
 
                 }else if (dailyLog.getFkExercise() != null){
                     dailyLogsExercises.add(dailyLog);
