@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name="reset_passcode")
+@Table(name="reset_code")
 public class UserPassResetCode {
 
     @Id

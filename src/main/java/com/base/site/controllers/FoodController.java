@@ -192,14 +192,15 @@ public class FoodController {
         Users loggedInUser = usersService.findByUserName(auth.getName());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString, formatter);
-        //LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+        //LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString, formatter);
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
 
         dailyLog.setFkUser(loggedInUser);
         dailyLog.setDatetime(date);
         dailyLogService.save(dailyLog);
 
-        return  "redirect:/" + "dailyLog/"+dateString;
+
+        return  "redirect:/" + "dailyLog/"+dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     @GetMapping("/updateDailyLogPfood/{id}")
@@ -224,12 +225,13 @@ public class FoodController {
         return  "redirect:/" + "dailyLog";
     }
 
-    @GetMapping("/deleteDailyLog/{id}")
-    public String deleteDailyLog(@PathVariable(value = "id") Long id, Model model) {
+    @GetMapping({"/deleteDailyLog/{id}", "/deleteDailyLog/{id}/{date}"})
+    public String deleteDailyLog(@PathVariable(value = "id") Long id, @PathVariable(required = false, value = "date") String dateString) {
         log.info("  GetMapping deleteDailyLog is called ");
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
         this.dailyLogService.deleteById(id);
 
-        return "redirect:/" + "dailyLog";
+        return "redirect:/" + "dailyLog/"+date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
 

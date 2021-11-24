@@ -94,8 +94,8 @@
                 <!--<td th:text="${food?.sDatetime}">Date</td>-->
                 <td><i class="fas fa-balance-scale-left"></i> <span th:text="${breakfast?.amount}"></span></td>
                 <td class="actionButtons">
-                    <a th:href="@{/updateDailyLog/{id}/{date} (id=${breakfast.id}, date=${date})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                    <a th:href="@{/deleteDailyLog/{id} (id=${breakfast.id})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                    <a th:href="@{/updateDailyLog/{id}/{date} (id=${breakfast.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                    <a th:href="@{/deleteDailyLog/{id}/{date} (id=${breakfast.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
                 </td>
             </tr>
             </tbody>
@@ -125,8 +125,8 @@
                 <!--<td th:text="${food?.sDatetime}">Date</td>-->
                 <td><i class="fas fa-balance-scale-left"></i> <span th:text="${lunch?.amount}"></span></td>
                 <td class="actionButtons">
-                    <a th:href="@{/updateDailyLog/{id}/{date}(id=${lunch.id}, date=${date})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                    <a th:href="@{/deleteDailyLog/{id} (id=${lunch.id})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                    <a th:href="@{/updateDailyLog/{id}/{date}(id=${lunch.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                    <a th:href="@{/deleteDailyLog/{id}/{date}(id=${lunch.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
                 </td>
             </tr>
             </tbody>
@@ -156,8 +156,8 @@
                 <!--<td th:text="${food?.sDatetime}">Date</td>-->
                 <td><i class="fas fa-balance-scale-left"></i> <span th:text="${dinner?.amount}"></span></td>
                 <td class="actionButtons">
-                    <a th:href="@{/updateDailyLog/{id}/{date}(id=${dinner.id}, date=${date})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                    <a th:href="@{/deleteDailyLog/{id}/{date}(id=${dinner.id})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                    <a th:href="@{/updateDailyLog/{id}/{date}(id=${dinner.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                    <a th:href="@{/deleteDailyLog/{id}/{date}(id=${dinner.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
                 </td>
             </tr>
             </tbody>
@@ -187,8 +187,8 @@
                 <!--<td th:text="${food?.sDatetime}">Date</td>-->
                 <td><i class="fas fa-balance-scale-left"></i> <span th:text="${miscellanea?.amount}"></span></td>
                 <td class="actionButtons">
-                    <a th:href="@{/updateDailyLog/{id}/{date}(id=${miscellanea.id}, date=${date})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                    <a th:href="@{/deleteDailyLog/{id}/{date}(id=${miscellanea.id})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                    <a th:href="@{/updateDailyLog/{id}/{date}(id=${miscellanea.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                    <a th:href="@{/deleteDailyLog/{id}/{date}(id=${miscellanea.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
                 </td>
             </tr>
             </tbody>

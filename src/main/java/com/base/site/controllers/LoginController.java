@@ -138,7 +138,7 @@ public class LoginController {
             mail.setContent("If you didnt request this change please contact up emidially on email: foodlog.dk@gmail.com");
 
             emailService.sendmail(mail);
-            return "login";
+            return "redirect:/login";
         }
 
         return "redirect:/password-reset";

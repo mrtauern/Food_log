@@ -52,11 +52,11 @@ public class Users implements Serializable {
     @Column(name = "birthday")
     private LocalDate birthday;
 
-    @Setter(AccessLevel.NONE)
+    //@Setter(AccessLevel.NONE)
     @Basic
     @Column(name = "register_date")
     @CreationTimestamp
-    private Timestamp redisterDate;
+    private Timestamp registerDate;
 
     @Basic
     @Column(name = "start_weight")
