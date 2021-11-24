@@ -12,10 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -34,6 +31,11 @@ public class ExerciseController {
     Logger log = Logger.getLogger(ExerciseController.class.getName());
 
     public ExerciseController() {}
+
+    @RequestMapping("/ab")
+    public @ResponseBody String greeting() {
+        return "Hello, World";
+    }
 
     @GetMapping("/exercise")
     public String exercise(Model model, Exercise exercise, @Param("keyword") String keyword) {

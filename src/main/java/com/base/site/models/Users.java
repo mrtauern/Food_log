@@ -106,6 +106,15 @@ public class Users implements Serializable {
     @Column(name = "kcal_modifier")
     private int kcal_modifier;
 
+    public Users(Long id, String firstname, String lastname, String username, String password, int height) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.username = username;
+        this.password = password;
+        this.height = height;
+    }
+
     public Users(String firstname, String lastname, String username, String password, UserType userType, String roles, double bmi, LocalDate birthday) {
         this.firstname = firstname;
         this.lastname = lastname;
