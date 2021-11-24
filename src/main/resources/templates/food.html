@@ -89,6 +89,11 @@
                     <a th:if="${currentPage < totalPages}" th:href="@{'/page/'+ ${currentPage + 1}}">Next</a>
                     <span th:unless="${currentPage < totalPages}">Next</span>
                 </div>
+
+                <div class= "col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/page/'+ ${totalPages}}">Last</a>
+                <span th:unless="${currentPage < totalPages}">Last</span>
+            </div>
             </div>
         </div>
     </div>
