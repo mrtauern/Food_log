@@ -45,7 +45,8 @@ public class LoginController {
     Logger log = Logger.getLogger(LoginController.class.getName());
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
+        model.addAttribute("user", new Users());
         return "login";
     }
 

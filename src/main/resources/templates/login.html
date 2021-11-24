@@ -1,32 +1,68 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
-<head>
+
 
   <!--<head th:include="fragments/head :: styles">-->
-  <title tiles:fragment="title">Messages : Create</title>
-</head>
+  <!--<title tiles:fragment="title">Messages : Create</title>-->
+<head th:include="fragments/head :: styles"></head>
 <body>
-  <!-- <header th:include="fragments/navbar_top :: navbar"></header> -->
-  <div tiles:fragment="content">
-    <form name="f" th:action="@{/login}" method="post">
-      <fieldset>
-        <legend>Please Login</legend>
-        <div th:if="${param.error}" class="alert alert-error">
-          Invalid username and password.
-        </div>
-        <div th:if="${param.logout}" class="alert alert-success">
-          You have been logged out.
-        </div>
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username"/>
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password"/>
-        <div class="form-actions">
-          <button type="submit" class="btn">Log in</button>
-        </div>
-      </fieldset>
-    </form>
-    <div><a href="/password_reset">Reset password</a> </div>
-    <div><a href="/signup">create user</a> </div>
+
+  <header th:include="fragments/navbar_top :: loginHeader" class="navbar"></header>
+    <!-- <header th:include="fragments/navbar_top :: navbar"></header> -->
+  <div id="content" class="login">
+
+    <!--<div tiles:fragment="content">-->
+    <div class="formBox login">
+      <div class="signIn">
+        <form name="f" th:action="@{/login}" method="post">
+          <fieldset>
+            <legend>Sign in</legend>
+            <p th:if="${param.error}" class="alert alert-error">
+              Invalid Email and password.
+            </p>
+            <p th:if="${param.logout}" class="alert alert-success">
+              You have been logged out.
+            </p>
+            <label for="username">Email</label>
+            <input type="text" id="username" name="username"/>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password"/>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Sign in</button>
+          </fieldset>
+        </form>
+        <a href="/password_reset">Forgot my password</a>
+        <!--<a href="/signup">create user</a>-->
+      </div>
+      <div class="signUp">
+        <form action="#" th:action="@{/signup}" th:object="${user}" method="post">
+          <fieldset>
+            <legend>Sign up</legend>
+            <label for="Firstname">Firstname:</label>
+            <input type="text" th:field="*{firstname}" id="firstname" placeholder="Firstname" required>
+            <!--<span th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></span>-->
+
+            <label for="Lastname">Lastname:</label>
+            <input type="text" th:field="*{lastname}" id="lastname" placeholder="Lastname" required>
+            <!--<span th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></span>-->
+
+            <label for="username">Email</label>
+            <input type="text" th:field="*{username}" id="username" placeholder="Email" required>
+            <!--<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>-->
+
+            <label for="password">Password</label>
+            <input type="password" th:field="*{password}" id="password" placeholder="password" required>
+            <!--<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>-->
+            <label for="userTypeString">Sex</label>
+            <select name="userTypeString" id="userTypeString">
+              <option value="User_male" selected><i class="fas fa-mars"></i> Male</option>
+              <option value="User_female"><i class="fas fa-venus"></i> Female</option>
+            </select>
+            <button type="submit" class="btn"><i class="fas fa-user-plus"></i> Sign up</button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+
   </div>
+  <footer th:include="fragments/navbar_top :: footer"></footer>
 </body>
 </html>

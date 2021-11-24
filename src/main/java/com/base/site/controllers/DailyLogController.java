@@ -83,6 +83,10 @@ public class DailyLogController {
 
         List<DailyLog> dailyLogs = dailyLogService.findAll();
         List<DailyLog> dailyLogsFoods = new ArrayList<>();
+        List<DailyLog> dailyLogsBreakfast = new ArrayList<>();
+        List<DailyLog> dailyLogsLunch = new ArrayList<>();
+        List<DailyLog> dailyLogsDinner = new ArrayList<>();
+        List<DailyLog> dailyLogsMiscellaneous = new ArrayList<>();
         List<DailyLog> dailyLogsPrivateFoods = new ArrayList<>();
         List<DailyLog> dailyLogsExercises = new ArrayList<>();
 
@@ -92,10 +96,27 @@ public class DailyLogController {
                 String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                 dailyLog.setSDatetime(sDatetime);
 
-                if(dailyLog.getFood() != null) {
+                if(dailyLog.getFood() != null || dailyLog.getPrivateFood() != null) {
                     dailyLogsFoods.add(dailyLog);
-                }else if(dailyLog.getPrivateFood() != null) {
-                    dailyLogsPrivateFoods.add(dailyLog);
+                    int logType = dailyLog.getFkLogType().getId().intValue();
+
+                    switch (logType){
+                        case 1:
+                            dailyLogsBreakfast.add(dailyLog);
+                            break;
+                        case 2:
+                            dailyLogsLunch.add(dailyLog);
+                            break;
+                        case 3:
+                            dailyLogsDinner.add(dailyLog);
+                            break;
+                        case 4:
+                            dailyLogsMiscellaneous.add(dailyLog);
+                            break;
+                        default:
+                            log.info("UPS... Something went wrong!");
+                    }
+
                 }else if (dailyLog.getFkExercise() != null){
                     dailyLogsExercises.add(dailyLog);
                 }else if(dailyLog.getFkLogType().getType().equals("Weight")) {
@@ -110,7 +131,11 @@ public class DailyLogController {
         model.addAttribute("sSelectedDate", date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         model.addAttribute("foods", dailyLogsFoods);
-        model.addAttribute("pfoods", dailyLogsPrivateFoods);
+        model.addAttribute("breakfasts", dailyLogsBreakfast);
+        model.addAttribute("lunches", dailyLogsLunch);
+        model.addAttribute("dinners", dailyLogsDinner);
+        model.addAttribute("miscellaneous", dailyLogsMiscellaneous);
+        //model.addAttribute("pfoods", dailyLogsPrivateFoods);
         model.addAttribute("exercises", dailyLogsExercises);
         model.addAttribute("keyword", keyword);
 
@@ -131,6 +156,10 @@ public class DailyLogController {
         model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(date, loggedInUser));
 
         model.addAttribute("weight", weightLog);
+
+        model.addAttribute("selectedPage", "dailyLog");
+        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
+        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
         return DAILY_LOG;
     }
