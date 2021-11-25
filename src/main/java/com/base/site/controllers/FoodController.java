@@ -11,10 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -44,20 +41,28 @@ public class FoodController {
 
         model.addAttribute("foodlist", foodlist);
 
-        return findPaginated(1, model);
+        return findPaginated(model,1 ,"name", "asc" );
     }
 
     @GetMapping("/page/{pageNo}")
-    public String findPaginated(@PathVariable(value = "pageNo")int pageNo, Model model){
+    public String findPaginated(Model model, @PathVariable(value = "pageNo")int pageNo,
+                                @RequestParam("sortField")String sortField,
+                                @RequestParam("sortDir")String sortDir
+    ){
         int pageSize = 15;
 
-        Page<Food> page = foodService.findPaginated(pageNo,pageSize);
+        Page<Food> page = foodService.findPaginated(pageNo,pageSize, sortField,sortInt, sortDir);
         List<Food> listFood = page.getContent();
 
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalFood", page.getTotalElements());
         model.addAttribute("listFood", listFood);
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
         return "food";
     }

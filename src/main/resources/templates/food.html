@@ -40,12 +40,19 @@
             <thead>
             <tr>
                 <!--<th>Food ID</th>-->
-                <th>Name</th>
-                <th>Protein</th>
-                <th>Carbohydrates</th>
-                <th>Fat</th>
-                <th>Kilojoule</th>
-                <th>Kcal</th>
+                <th><a th:href="@{'/page/'+ ${currentPage} + '?sortField=name&sortDir=' + ${reverseSortDir}}">
+                    Name </a>
+                </th>
+                <th><a th:href="@{'/page/'+ ${currentPage} + '?sortField=protein&sortDir=' + ${reverseSortDir}}">
+                    Protein </a></th>
+                <th><a th:href="@{'/page/'+ ${currentPage} + '?sortField=carbohydrates&sortDir=' + ${reverseSortDir}}">
+                    Carbohydrates </a></th>
+                <th><a th:href="@{'/page/'+ ${currentPage} + '?sortField=fat&sortDir=' + ${reverseSortDir}}">
+                    Fat </a></th>
+                <th><a th:href="@{'/page/'+ ${currentPage} + '?sortField=energy_kilojoule&sortDir=' + ${reverseSortDir}}">
+                    KiloJoule </a></th>
+                <th><a th:href="@{'/page/'+ ${currentPage} + '?sortField=energy_kcal&sortDir=' + ${reverseSortDir}}">
+                    Kcal </a></th>
                 <th></th>
 
             </tr>
