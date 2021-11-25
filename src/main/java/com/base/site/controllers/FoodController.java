@@ -77,26 +77,6 @@ public class FoodController {
 
         return "food";
     }
-/*
-    @GetMapping("/foods")
-    public String food(Model model, Food food, @Param("keyword") String keyword) {
-        log.info("  get mapping food is called");
-
-        List<Food> foodlist = foodService.findAllByKeyword(keyword);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-
-        model.addAttribute("foodlist", foodlist);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("pageTitle", "User list");
-        model.addAttribute("selectedPage", "food");
-        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
-        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
-
-            return "foods";
-    }
-
- */
 
     @GetMapping("/createFood")
     public String createFood(Model model) {
