@@ -34,11 +34,6 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public List<Food> findAll(Food food, Sort keywordSort) {
-        return null;
-    }
-
-    @Override
         public Food save(Food food) {
             return foodRepo.save(food);
         }
@@ -62,6 +57,7 @@ public class FoodServiceImpl implements FoodService {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         return this.foodRepo.findAll(pageable);
     }
+
 }
 
 
