@@ -20,39 +20,43 @@ public class FoodServiceImpl implements FoodService {
     @Autowired
     FoodRepo foodRepo;
 
-        @Override
-        public List<Food> findAll() {
-            return (List<Food>) foodRepo.findAll();
-        }
+    @Override
+    public List<Food> findAll() {
+        return (List<Food>) foodRepo.findAll();
+    }
 
-        @Override
-        public List<Food> findAllByKeyword(String keyword) {
-            if (keyword != null) {
-                return foodRepo.search(keyword);
-            }
-            return (List<Food>) foodRepo.findAll();
+    @Override
+    public List<Food> findAllByKeyword(String keyword) {
+        if (keyword != null) {
+            return foodRepo.search(keyword);
         }
+        return (List<Food>) foodRepo.findAll();
+    }
 
-        @Override
+    @Override
+    public List<Food> findAll(Food food, Sort keywordSort) {
+        return null;
+    }
+
+    @Override
         public Food save(Food food) {
             return foodRepo.save(food);
         }
 
-        @Override
-        public Food findById(Long id) {
+    @Override
+    public Food findById(Long id) {
 
-            return foodRepo.findById(id).get();
-        }
-
-        @Override
-        public void deleteById(Long Id) {
-            this.foodRepo.deleteById(Id);
-        }
+        return foodRepo.findById(id).get();
+    }
 
     @Override
-    public Page<Food> findPaginated(int pageNo, int pageSize,String sortField,int sortInt, String sortDirection) {
+    public void deleteById(Long Id) {
+        this.foodRepo.deleteById(Id);
+    }
+
+    @Override
+    public Page<Food> findPaginated(int pageNo, int pageSize,String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending():
-                Sort.by(sortInt).ascending():
                 Sort.by(sortField).descending();
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);

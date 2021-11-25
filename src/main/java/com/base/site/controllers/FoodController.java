@@ -37,9 +37,9 @@ public class FoodController {
     @GetMapping("/food")
     public String food(Model model, @Param("keyword") String keyword) {
         log.info("  get mapping food is called");
-        List<Food> foodlist = foodService.findAllByKeyword(keyword);
+        //List<Food> foodlist = foodService.findAllByKeyword(keyword);
 
-        model.addAttribute("foodlist", foodlist);
+        //model.addAttribute("foodlist", foodlist);
 
         return findPaginated(model,1 ,"name", "asc" );
     }
@@ -48,10 +48,10 @@ public class FoodController {
     public String findPaginated(Model model, @PathVariable(value = "pageNo")int pageNo,
                                 @RequestParam("sortField")String sortField,
                                 @RequestParam("sortDir")String sortDir
-    ){
+                                ){
         int pageSize = 15;
 
-        Page<Food> page = foodService.findPaginated(pageNo,pageSize, sortField,sortInt, sortDir);
+        Page<Food> page = foodService.findPaginated(pageNo,pageSize, sortField, sortDir);
         List<Food> listFood = page.getContent();
 
         model.addAttribute("currentPage", pageNo);
@@ -59,7 +59,6 @@ public class FoodController {
         model.addAttribute("totalFood", page.getTotalElements());
         model.addAttribute("listFood", listFood);
 
-        model.addAttribute("sortField", sortField);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
