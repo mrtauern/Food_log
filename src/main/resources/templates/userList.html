@@ -2,6 +2,11 @@
 <html lang="en">
 
 <head th:include="fragments/head :: styles"></head>
+<script type="text/javascript">
+    function clearSearch() {
+        window.location = "[[@{/userList}]]";
+    }
+</script>
 <body>
     <header th:include="fragments/navbar_top :: header" class="navbar"></header>
 
@@ -15,8 +20,10 @@
 
             <div class="actionBar">
 
-                <form>
-                    <input type="text" placeholder="Search...">
+                <form th:action="@{/userList}">
+                    <input type="text" placeholder="Search... for name or email" th:value="${keyword}">
+                    <input type="submit" value="Search" />
+                    <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
                 </form>
 
                 <a href="/createUser" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Create user</a>
@@ -27,13 +34,21 @@
             <table class="table table-sm">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Email</th>
+<!--                <th>Name</th>-->
+<!--                <th>Email</th>-->
+
+                <th>
+                    <a th:href="@{'/page/'+ ${currentPage} + '?sortField=firstname&sortDir=' + ${reverseSortDir}}">Name </a>
+                </th>
+                <th>
+                    <a th:href="@{'/page/'+ ${currentPage} + '?sortField=username&sortDir=' + ${reverseSortDir}}">Email </a>
+                </th>
+
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="user : ${users}">
+            <tr th:each="user : ${listUser}">
                 <td><i class="fas fa-user"></i> <span th:text="${user.firstname + ' ' + user.lastname}"></span></td>
                 <td><i class="fas fa-envelope"></i> <span th:text="${user.username}"></span></td>
                 <td class="actionButtons">
@@ -44,9 +59,34 @@
             </tr>
             </tbody>
         </table>
+            <div th:if = "${totalPages > 1}">
+                <div class = "row col-sm-10">
+                    <div class = "col-sm-2">
+                        Antal User:  [[${totalUser}]]
+                    </div>
+                    <div class = "col-sm-2">
+                 <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                  <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+                  <span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+                 </span>
+                    </div>
+                    <div class = "col-sm-1">
+                        <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage - 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>
+                        <span th:unless="${currentPage < totalPages}">Previous</span>
+                    </div>
+                    <div class = "col-sm-1">
+                        <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+                        <span th:unless="${currentPage < totalPages}">Next</span>
+                    </div>
+
+                    <div class="col-sm-1">
+                        <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last Page</a>
+                        <span th:unless="${currentPage < totalPages}">Last Page</span>
+                    </div>
+                </div>
+            </div>
 
         </div>
-
     </div>
 
     <footer th:include="fragments/navbar_top :: footer"></footer>

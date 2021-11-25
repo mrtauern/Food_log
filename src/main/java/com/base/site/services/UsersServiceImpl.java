@@ -7,6 +7,9 @@ import com.base.site.repositories.DailyLogRepo;
 import com.base.site.repositories.LogTypeRepository;
 import com.base.site.repositories.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,8 @@ import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Logger;
+
+import static org.springframework.data.domain.PageRequest.of;
 
 @Service("UsersService")
 public class UsersServiceImpl implements UsersService {
@@ -110,7 +115,18 @@ public class UsersServiceImpl implements UsersService {
             weightLog.setFkLogType(log_type);
             return weightLog;
         }
+    }
 
+    @Override
+    public Page<Users> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection, String keyword) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending():
+                Sort.by(sortField).descending();
 
+        Pageable pageable = of(pageNo - 1, pageSize, sort);
+
+        if (keyword != null) {
+            return usersRepo.findAll(keyword, pageable);
+        }
+        return this.usersRepo.findAll(pageable);
     }
 }

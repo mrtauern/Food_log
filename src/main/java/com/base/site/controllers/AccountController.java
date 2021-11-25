@@ -9,6 +9,8 @@ import com.base.site.services.EmailService;
 import com.base.site.services.UserTypeService;
 import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -65,6 +67,43 @@ public class AccountController {
     EmailService emailService;
 
     @GetMapping("/userList")
+    public String userList(Model model , @Param("keyword") String keyword) {
+        log.info("userList called");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("users", usersService.findAll());
+        model.addAttribute("pageTitle", "User list");
+        model.addAttribute("selectedPage", "user");
+        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
+        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+
+
+        return findPaginated(model,1 ,"firstname", "asc", keyword );
+    }
+
+    @GetMapping("/page/{pageNo}")
+    public String findPaginated(Model model, @PathVariable(value = "pageNo")int pageNo, @RequestParam("sortField")String sortField,
+                                             @RequestParam("sortDir")String sortDir, @Param("keyword") String keyword ){
+        int pageSize = 5;
+        Page<Users> page = usersService.findPaginated(pageNo,pageSize, sortField, sortDir, keyword);
+        List<Users> listUser = page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalUser", page.getTotalElements());
+
+        model.addAttribute("listUser", listUser);
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+        return USER_LIST;
+    }
+/*
+    @GetMapping("/userList")
     public String userList(Model model){
         log.info("userList called");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -77,7 +116,7 @@ public class AccountController {
         model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
         return USER_LIST;
-    }
+    } */
 
     @GetMapping("/createUser")
     public String createUser(Model model){

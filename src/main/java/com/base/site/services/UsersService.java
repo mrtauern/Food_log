@@ -2,6 +2,7 @@ package com.base.site.services;
 
 import com.base.site.models.DailyLog;
 import com.base.site.models.Users;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,4 +25,7 @@ public interface UsersService {
     String generatePassword();
     Users findUsersByUsername(String username);
     DailyLog getLatestWeight(LocalDate date);
+
+    Page<Users> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection, String keyword);
+
 }
