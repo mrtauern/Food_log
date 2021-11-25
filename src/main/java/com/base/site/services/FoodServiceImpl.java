@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.data.domain.PageRequest.of;
+
 @Service("FoodService")
 public class FoodServiceImpl implements FoodService {
 
@@ -25,10 +27,12 @@ public class FoodServiceImpl implements FoodService {
         return (List<Food>) foodRepo.findAll();
     }
 
+
     @Override
     public List<Food> findAllByKeyword(String keyword) {
         if (keyword != null) {
-            return foodRepo.search(keyword);
+            //return foodRepo.search(keyword);
+            return foodRepo.findAll();
         }
         return (List<Food>) foodRepo.findAll();
     }
@@ -50,11 +54,15 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public Page<Food> findPaginated(int pageNo, int pageSize,String sortField, String sortDirection) {
+    public Page<Food> findPaginated(int pageNo, int pageSize,String sortField, String sortDirection, String keyword) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending():
                 Sort.by(sortField).descending();
 
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Pageable pageable = of(pageNo - 1, pageSize, sort);
+
+        if (keyword != null) {
+            return foodRepo.findAll(keyword, pageable);
+        }
         return this.foodRepo.findAll(pageable);
     }
 

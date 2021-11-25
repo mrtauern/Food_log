@@ -37,12 +37,8 @@ public class FoodController {
     @GetMapping("/food")
     public String food(Model model , @Param("keyword") String keyword) {
         log.info("  get mapping food is called");
-        log.info("  get mapping keyword is called :: " + keyword);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
-        List<Food> foodlistSearched = foodService.findAllByKeyword(keyword);
-
-        log.info("  get mapping foodlistSearched is called :: " + foodlistSearched);
 
         model.addAttribute("keyword", keyword);
         model.addAttribute("pageTitle", "User list");
@@ -50,10 +46,8 @@ public class FoodController {
         model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
         model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
-        model.addAttribute("foodlistSearched", foodlistSearched);
 
-
-        return findPaginated(model,1 ,"name", "asc", "keyword" );
+        return findPaginated(model,1 ,"name", "asc", keyword );
     }
 
     @GetMapping("/page/{pageNo}")
@@ -64,7 +58,7 @@ public class FoodController {
                                 ){
         int pageSize = 15;
 
-        Page<Food> page = foodService.findPaginated(pageNo,pageSize, sortField, sortDir);
+        Page<Food> page = foodService.findPaginated(pageNo,pageSize, sortField, sortDir, keyword);
         List<Food> listFood = page.getContent();
         List<Food> foodlistSearched = foodService.findAllByKeyword(keyword);
 
