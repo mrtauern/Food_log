@@ -24,4 +24,6 @@ public interface UsersService {
     String generatePassword();
     Users findUsersByUsername(String username);
     DailyLog getLatestWeight(LocalDate date);
+
+    Users getLoggedInUser();
 }

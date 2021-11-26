@@ -24,6 +24,8 @@ public class UsersServiceImpl implements UsersService {
 
     Logger log = Logger.getLogger(UsersServiceImpl.class.getName());
 
+    private Users loggedInUser;
+
     @Autowired
     UsersRepo usersRepo;
 
@@ -112,5 +114,13 @@ public class UsersServiceImpl implements UsersService {
         }
 
 
+    }
+
+    public Users getLoggedInUser() {
+        if (loggedInUser==null) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            loggedInUser = usersRepo.findUsersByUsername(auth.getName());
+        }
+        return loggedInUser;
     }
 }

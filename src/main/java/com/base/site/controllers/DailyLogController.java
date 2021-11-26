@@ -11,7 +11,9 @@ import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -70,11 +72,13 @@ public class DailyLogController {
     }
 
     @GetMapping({"/dailyLog", "/dailyLog/{date}"})
+
     public String dailyLog(Model model,@Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString) throws ParseException {
         log.info("Getmapping called for dailylog for specific date: "+dateString);
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
+        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        //Users loggedInUser = usersService.findByUserName(auth.getName());
+        //log.info("test123:::::"+auth.getPrincipal().);
 
         DailyLog weightLog = new DailyLog();
 
@@ -91,7 +95,7 @@ public class DailyLogController {
         List<DailyLog> dailyLogsExercises = new ArrayList<>();
 
         for (DailyLog dailyLog: dailyLogs) {
-            if(dailyLog.getDatetime().equals(date) && loggedInUser.getId() == dailyLog.getFkUser().getId()) {
+            if(dailyLog.getDatetime().equals(date) && usersService.getLoggedInUser().getId() == dailyLog.getFkUser().getId()) {
 
                 String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                 dailyLog.setSDatetime(sDatetime);
@@ -175,16 +179,16 @@ public class DailyLogController {
         model.addAttribute("nextMonth", date.plusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         model.addAttribute("previousMonth", date.minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
-        model.addAttribute("bmr", loggedInUser.getBMR(usersService.getLatestWeight(date).getAmount()));
-        model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(date, loggedInUser));
-        model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(date, loggedInUser));
+        model.addAttribute("bmr", usersService.getLoggedInUser().getBMR(usersService.getLatestWeight(date).getAmount()));
+        model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(date, usersService.getLoggedInUser()));
+        model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(date, usersService.getLoggedInUser()));
 
         model.addAttribute("weight", weightLog);
         //model.addAttribute("date", dateString);
 
         model.addAttribute("selectedPage", "dailyLog");
-        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
-        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+        model.addAttribute("user_name", usersService.getLoggedInUser().getFirstname() + " " + usersService.getLoggedInUser().getLastname());
+        model.addAttribute("user_gender", usersService.getLoggedInUser().getUserType().getType());
 
         return DAILY_LOG;
     }
