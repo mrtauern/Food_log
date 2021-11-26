@@ -47,18 +47,18 @@ public class FoodController {
         model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
 
-        return findPaginated(model,1 ,"name", "asc", keyword );
+        return findPaginatedFood(model,1 ,"name", "asc", keyword );
     }
 
-    @GetMapping("/page/{pageNo}")
-    public String findPaginated(Model model, @PathVariable(value = "pageNo")int pageNo,
+    @GetMapping("/pageFood/{pageNo}")
+    public String findPaginatedFood(Model model, @PathVariable(value = "pageNo")int pageNo,
                                 @RequestParam("sortField")String sortField,
                                 @RequestParam("sortDir")String sortDir,
                                 @Param("keyword") String keyword
                                 ){
         int pageSize = 15;
 
-        Page<Food> page = foodService.findPaginated(pageNo,pageSize, sortField, sortDir, keyword);
+        Page<Food> page = foodService.findPaginatedFood(pageNo,pageSize, sortField, sortDir, keyword);
         List<Food> listFood = page.getContent();
         List<Food> foodlistSearched = foodService.findAllByKeyword(keyword);
 
