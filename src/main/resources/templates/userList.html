@@ -43,7 +43,7 @@
                 <th>
                     <a th:href="@{'/pageUser/'+ ${currentPage} + '?sortField=username&sortDir=' + ${reverseSortDir}}">Email </a>
                 </th>
-                <th> Enable/Lock </th>
+                <th> Locked </th>
                 <th></th>
             </tr>
             </thead>
@@ -52,13 +52,15 @@
                 <td><i class="fas fa-user"></i> <span th:text="${user.firstname + ' ' + user.lastname}"></span></td>
                 <td><i class="fas fa-envelope"></i> <span th:text="${user.username}"></span></td>
                 <td>
-                    <form action="/action_page.php">
-                        <input type="checkbox" id="Enable" name="Enable" value="Enable">
-                        <label for="Enable"> Enable the user</label><br>
-                        <input type="checkbox" id="Lock" name="Lock" value="Lock">
-                        <label for="Lock"> Lock the user</label><br>
+                    <form action="/adminActionAccountNonLocked" method="get">
+                        <input type="hidden" th:value="${user.id}" th:name="id" />
+                        <th:block th:if="${user.accountNonLocked == 0}">
+                            <input type="checkbox" id="locked" th:name="locked" checked onChange="this.form.submit()"/>
+                        </th:block>
+                        <th:block th:if="${user.accountNonLocked == 1}">
+                            <input type="checkbox" id="locked" name="locked" onChange="this.form.submit()"/>
+                        </th:block>
 
-                        <input type="submit" value="Submit">
                     </form>
                 </td>
                 <td class="actionButtons">
