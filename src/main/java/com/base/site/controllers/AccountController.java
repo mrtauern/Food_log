@@ -1,9 +1,6 @@
 package com.base.site.controllers;
 
-import com.base.site.models.Mail;
-import com.base.site.models.UserPassResetCode;
-import com.base.site.models.UserType;
-import com.base.site.models.Users;
+import com.base.site.models.*;
 import com.base.site.repositories.UPRCRepository;
 import com.base.site.services.EmailService;
 import com.base.site.services.UserTypeService;
@@ -80,6 +77,7 @@ public class AccountController {
         model.addAttribute("users", usersService.findAll());
         model.addAttribute("pageTitle", "User list");
         model.addAttribute("selectedPage", "user");
+        model.addAttribute("user", new Users());
         model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
         model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
@@ -106,6 +104,23 @@ public class AccountController {
 
         return USER_LIST;
     }
+
+    @GetMapping("/adminActionAccountNonLocked")
+    public String accountLockUnlock(@RequestParam("id") long id, @RequestParam(required = false, value = "locked") boolean locked) {
+        log.info("Getmapping adminActionAccountNonLocked called with id: "+id+" and status locked: "+locked);
+        Users user = usersService.findById(id);
+        if (locked == false) {
+            log.info("account unlock requested");
+            user.setAccountNonLocked(1);
+        } else {
+            log.info("account lock requested");
+            user.setAccountNonLocked(0);
+        }
+        usersService.save(user);
+
+        return REDIRECT+USER_LIST;
+    }
+
 /*
     @GetMapping("/userList")
     public String userList(Model model){

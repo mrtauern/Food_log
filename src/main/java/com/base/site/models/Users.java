@@ -78,6 +78,10 @@ public class Users implements Serializable {
     @Column(name = "bmi")
     private double bmi = 1;
 
+    @Basic
+    @Column(name = "account_non_locked")
+    private int accountNonLocked;
+
     @OneToMany(mappedBy="fkUser", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Set<Recipe> recipies;

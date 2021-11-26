@@ -43,7 +43,7 @@
                 <th>
                     <a th:href="@{'/pageUser/'+ ${currentPage} + '?sortField=username&sortDir=' + ${reverseSortDir}}">Email </a>
                 </th>
-
+                <th> Locked </th>
                 <th></th>
             </tr>
             </thead>
@@ -51,6 +51,18 @@
             <tr th:each="user : ${listUser}">
                 <td><i class="fas fa-user"></i> <span th:text="${user.firstname + ' ' + user.lastname}"></span></td>
                 <td><i class="fas fa-envelope"></i> <span th:text="${user.username}"></span></td>
+                <td>
+                    <form action="/adminActionAccountNonLocked" method="get">
+                        <input type="hidden" th:value="${user.id}" th:name="id" />
+                        <th:block th:if="${user.accountNonLocked == 0}">
+                            <input type="checkbox" id="locked" th:name="locked" checked onChange="this.form.submit()"/>
+                        </th:block>
+                        <th:block th:if="${user.accountNonLocked == 1}">
+                            <input type="checkbox" id="locked" name="locked" onChange="this.form.submit()"/>
+                        </th:block>
+
+                    </form>
+                </td>
                 <td class="actionButtons">
                     <a th:href="${'/editUser/' + user.id}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
                     <a th:href="@{'/password_reset_user/'+${user.id}}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-sync-alt"></i> Reset Password</a>
