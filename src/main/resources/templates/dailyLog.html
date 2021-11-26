@@ -28,7 +28,8 @@
             <b>Kcal left: </b><span th:text="${kcalLeft}"></span><br>-->
             <div class="collumn">
                 <span class="value" th:text="${bmr}"></span><br>
-                <span class="type">TOTAL</span>
+                <span class="type">TOTAL</span><br>
+
             </div>
             <div class="collumn left">
                 <span class="value" th:text="${kcalLeft}"></span><br>
@@ -39,6 +40,13 @@
                 <span class="type">USED</span>
             </div>
         </div>
+
+    </div>
+    <div class="contentBox">
+        <h1>Nutrition</h1>
+        <p class="type">Protein: <span th:text="${nutrition.protein}"></span> Gram</p>
+        <p class="type">Carbohydrates: <span th:text="${nutrition.carbohydrates}"></span> Gram</p>
+        <p class="type">Fat: <span th:text="${nutrition.fat}"></span> Gram</p>
     </div>
 
     <div class="contentBox selectDate">

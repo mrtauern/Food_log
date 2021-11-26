@@ -2,12 +2,10 @@ package com.base.site.controllers;
 
 import com.base.site.models.DailyLog;
 import com.base.site.models.Exercise;
+import com.base.site.models.Food;
 import com.base.site.models.Users;
-import com.base.site.services.DailyLogService;
-import com.base.site.services.ExerciseService;
+import com.base.site.services.*;
 
-import com.base.site.services.LogTypeService;
-import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
@@ -42,6 +40,8 @@ public class DailyLogController {
     UsersService usersService;
     @Autowired
     LogTypeService logTypeService;
+    @Autowired
+    FoodService foodService;
 
     private final String DAILY_LOG = "dailyLog";
     private final String WEIGHT_OPTIONS = "editWeightOptions";
@@ -76,11 +76,9 @@ public class DailyLogController {
     public String dailyLog(Model model,@Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString) throws ParseException {
         log.info("Getmapping called for dailylog for specific date: "+dateString);
 
-        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        //Users loggedInUser = usersService.findByUserName(auth.getName());
-        //log.info("test123:::::"+auth.getPrincipal().);
-
         DailyLog weightLog = new DailyLog();
+
+        Food nutrition = new Food("nutrition",0.0,0.0,0.0,0.0,0.0);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString, formatter);
@@ -107,15 +105,19 @@ public class DailyLogController {
                     switch (logType){
                         case "Breakfast":
                             dailyLogsBreakfast.add(dailyLog);
+                            nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog);
                             break;
                         case "Lunch":
                             dailyLogsLunch.add(dailyLog);
+                            nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog);
                             break;
                         case "Dinner":
                             dailyLogsDinner.add(dailyLog);
+                            nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog);
                             break;
                         case "Miscellaneous":
                             dailyLogsMiscellaneous.add(dailyLog);
+                            nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog);
                             break;
                         case "Weight":
                             weightLog = dailyLog;
@@ -123,27 +125,6 @@ public class DailyLogController {
                         default:
                             log.info("UPS... Something went wrong!");
                     }
-                    /*
-                    int logType = dailyLog.getFkLogType().getId().intValue();
-
-                    switch (logType){
-                        case 1:
-                            dailyLogsBreakfast.add(dailyLog);
-                            break;
-                        case 2:
-                            dailyLogsLunch.add(dailyLog);
-                            break;
-                        case 3:
-                            dailyLogsDinner.add(dailyLog);
-                            break;
-                        case 4:
-                            dailyLogsMiscellaneous.add(dailyLog);
-                            break;
-                        default:
-                            log.info("UPS... Something went wrong!");
-                    }
-                    */
-
 
                 }else if (dailyLog.getFkExercise() != null){
                     dailyLogsExercises.add(dailyLog);
@@ -182,6 +163,8 @@ public class DailyLogController {
         model.addAttribute("bmr", usersService.getLoggedInUser().getBMR(usersService.getLatestWeight(date).getAmount()));
         model.addAttribute("kcalUsed", dailyLogService.getKcalUsed(date, usersService.getLoggedInUser()));
         model.addAttribute("kcalLeft", dailyLogService.getKcalLeft(date, usersService.getLoggedInUser()));
+        model.addAttribute("nutrition", nutrition);
+        log.info("nutrition ------ fat: "+nutrition.getFat()+" carbs: "+nutrition.getCarbohydrates()+" protein: "+nutrition.getProtein());
 
         model.addAttribute("weight", weightLog);
         //model.addAttribute("date", dateString);

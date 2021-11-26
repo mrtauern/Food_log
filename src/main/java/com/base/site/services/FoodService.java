@@ -15,5 +15,7 @@ public interface FoodService {
     Food findById(Long id);
     void deleteById(Long id);
 
+    Food setAddFoodNutritionFromDailylog(Food nutrition, DailyLog dailyLog);
+
     //List<Food> findAllNotInList (DailyLog dailyLog);
 }
