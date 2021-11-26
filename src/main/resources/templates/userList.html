@@ -43,7 +43,7 @@
                 <th>
                     <a th:href="@{'/pageUser/'+ ${currentPage} + '?sortField=username&sortDir=' + ${reverseSortDir}}">Email </a>
                 </th>
-
+                <th> Enable/Lock </th>
                 <th></th>
             </tr>
             </thead>
@@ -51,6 +51,16 @@
             <tr th:each="user : ${listUser}">
                 <td><i class="fas fa-user"></i> <span th:text="${user.firstname + ' ' + user.lastname}"></span></td>
                 <td><i class="fas fa-envelope"></i> <span th:text="${user.username}"></span></td>
+                <td>
+                    <form action="/action_page.php">
+                        <input type="checkbox" id="Enable" name="Enable" value="Enable">
+                        <label for="Enable"> Enable the user</label><br>
+                        <input type="checkbox" id="Lock" name="Lock" value="Lock">
+                        <label for="Lock"> Lock the user</label><br>
+
+                        <input type="submit" value="Submit">
+                    </form>
+                </td>
                 <td class="actionButtons">
                     <a th:href="${'/editUser/' + user.id}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
                     <a th:href="@{'/password_reset_user/'+${user.id}}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-sync-alt"></i> Reset Password</a>
