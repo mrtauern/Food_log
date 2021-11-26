@@ -62,6 +62,8 @@ class DailyLogControllerTest {
     private UsersRepo usersRepo;
     @MockBean
     private LogTypeServiceImpl logTypeService;
+    @MockBean
+    private FoodServiceImpl foodService;
 
     @BeforeEach
     void setUp() {
@@ -149,6 +151,7 @@ class DailyLogControllerTest {
         Mockito.when(usersService.getLatestWeight(LocalDate.now())).thenReturn(dailyLog1);
         Mockito.when(usersService.getLatestWeight(LocalDate.now()).getAmount()).thenReturn((double)115);
         Mockito.when(usersService.getLoggedInUser()).thenReturn(loggedInUser);
+        //Mockito.when(foodService.setAddFoodNutritionFromDailylog())
 
         Mockito.when(loggedInUser.getBMR(usersService.getLatestWeight(LocalDate.now()).getAmount())).thenReturn(3000);
 
