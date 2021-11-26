@@ -29,6 +29,8 @@ public class UsersServiceImpl implements UsersService {
 
     Logger log = Logger.getLogger(UsersServiceImpl.class.getName());
 
+    private Users loggedInUser;
+
     @Autowired
     UsersRepo usersRepo;
 
@@ -128,5 +130,13 @@ public class UsersServiceImpl implements UsersService {
             return usersRepo.findAll(keyword, pageable);
         }
         return this.usersRepo.findAll(pageable);
+    }
+
+    public Users getLoggedInUser() {
+        if (loggedInUser==null) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            loggedInUser = usersRepo.findUsersByUsername(auth.getName());
+        }
+        return loggedInUser;
     }
 }

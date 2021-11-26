@@ -29,4 +29,10 @@ public class Exercise {
     @OneToMany(mappedBy="fkExercise", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Set<DailyLog> dailyLogs;
+
+    public Exercise(Long id, Integer kcalBurnedPerMin, String name) {
+        this.id = id;
+        this.kcalBurnedPerMin = kcalBurnedPerMin;
+        this.name = name;
+    }
 }

@@ -25,7 +25,6 @@ public interface UsersService {
     String generatePassword();
     Users findUsersByUsername(String username);
     DailyLog getLatestWeight(LocalDate date);
-
     Page<Users> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection, String keyword);
-
+    Users getLoggedInUser();
 }
