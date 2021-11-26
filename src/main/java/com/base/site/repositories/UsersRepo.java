@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface UsersRepo extends JpaRepository<Users, Long> {
     Users findUsersByUsername(String username);
 
-    @Query("SELECT u FROM Users u WHERE CONCAT(u.firstname , u.lastname, u.username)  LIKE %?1%")
+    @Query("SELECT u FROM Users u WHERE CONCAT(u.firstname , u.lastname, u.username, u.registerDate)  LIKE %?1%")
     public Page<Users> findAll(String key, Pageable pageable);
 }

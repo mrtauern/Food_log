@@ -68,7 +68,11 @@ public class AccountController {
 
     @GetMapping("/userList")
     public String userList(Model model , @Param("keyword") String keyword) {
-        log.info("userList called");
+        if (keyword != null) {
+            log.info("userList is called with Search String :: " + keyword);
+        }else {
+            log.info("userList is called");
+        }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
 
@@ -80,7 +84,7 @@ public class AccountController {
         model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
 
-        return findPaginated(model,1 ,"firstname", "asc", keyword );
+        return findPaginated(model ,1 ,"firstname", "asc", keyword );
     }
 
     @GetMapping("/page/{pageNo}")

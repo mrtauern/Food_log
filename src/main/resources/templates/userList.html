@@ -21,7 +21,7 @@
             <div class="actionBar">
 
                 <form th:action="@{/userList}">
-                    <input type="text" placeholder="Search... for name or email" th:value="${keyword}">
+                    <input type="text" name="keyword"  placeholder="Search for name or email" th:value="${keyword}">
                     <input type="submit" value="Search" />
                     <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
                 </form>
