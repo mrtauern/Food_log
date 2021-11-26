@@ -4,16 +4,14 @@ import com.base.site.models.*;
 import com.base.site.repositories.FoodRepo;
 import com.base.site.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -37,21 +35,47 @@ public class FoodController {
 
 
     @GetMapping("/food")
-    public String food(Model model, Food food, @Param("keyword") String keyword) {
+    public String food(Model model , @Param("keyword") String keyword) {
         log.info("  get mapping food is called");
-
-        List<Food> foodlist = foodService.findAllByKeyword(keyword);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
 
-        model.addAttribute("foodlist", foodlist);
         model.addAttribute("keyword", keyword);
         model.addAttribute("pageTitle", "User list");
         model.addAttribute("selectedPage", "food");
         model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
         model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
-            return "food";
+
+        return findPaginated(model,1 ,"name", "asc", keyword );
+    }
+
+    @GetMapping("/page/{pageNo}")
+    public String findPaginated(Model model, @PathVariable(value = "pageNo")int pageNo,
+                                @RequestParam("sortField")String sortField,
+                                @RequestParam("sortDir")String sortDir,
+                                @Param("keyword") String keyword
+                                ){
+        int pageSize = 15;
+
+        Page<Food> page = foodService.findPaginated(pageNo,pageSize, sortField, sortDir, keyword);
+        List<Food> listFood = page.getContent();
+        List<Food> foodlistSearched = foodService.findAllByKeyword(keyword);
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalFood", page.getTotalElements());
+
+        model.addAttribute("listFood", listFood);
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+        model.addAttribute("foodlistSearched", foodlistSearched);
+
+
+        return "food";
     }
 
     @GetMapping("/createFood")

@@ -29,7 +29,11 @@
         <div class="actionBar">
 
             <form th:action="@{/food}">
-                <input type="text" name="keyword" placeholder="Search...">
+                <input type="text" name="keyword" placeholder="Search For a Food Name" th:value="${keyword}" >
+                <input type="submit" value="Search" />
+
+                <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+
             </form>
 
             <a href="/createFood" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Create Food</a>
@@ -40,18 +44,32 @@
             <thead>
             <tr>
                 <!--<th>Food ID</th>-->
-                <th>Name</th>
-                <th>Protein</th>
-                <th>Carbohydrates</th>
-                <th>Fat</th>
-                <th>Kilojoule</th>
-                <th>Kcal</th>
+                <th>
+                    <a th:href="@{'/page/'+ ${currentPage} + '?sortField=name&sortDir=' + ${reverseSortDir}}">Name </a>
+                </th>
+                <th>
+                    <a th:href="@{'/page/'+ ${currentPage} + '?sortField=protein&sortDir=' + ${reverseSortDir}}">Protein </a>
+                </th>
+                <th>
+                    <a th:href="@{'/page/'+ ${currentPage} + '?sortField=carbohydrates&sortDir=' + ${reverseSortDir}}">Carbohydrates </a>
+                </th>
+                <th>
+                    <a th:href="@{'/page/'+ ${currentPage} + '?sortField=fat&sortDir=' + ${reverseSortDir}}">Fat </a>
+                </th>
+                <th>
+                    KiloJoule
+<!--                <a th:href="@{'/page/'+ ${currentPage} + '?sortField=energy_kilojoule &sortDir=' + ${reverseSortDir}}">KiloJoule </a>-->
+                </th>
+                <th>
+                    Kcal
+<!--                <a th:href="@{'/page/'+ ${currentPage} + '?sortField=energy_kcal &sortDir=' + ${reverseSortDir}}">Kcal </a>-->
+                </th>
                 <th></th>
 
             </tr>
             </thead>
             <tbody>
-            <tr th:each="food : ${foodlist}">
+            <tr th:each="food : ${listFood}">
                 <!--<td th:text="${food.id}">Food ID</td>-->
                 <td><i class="fas fa-drumstick-bite"></i> <span th:text="${food.name}"></span></td>
                 <td th:text="${food.protein}">Protein</td>
@@ -67,6 +85,32 @@
             </tbody>
         </table>
 
+        <div th:if = "${totalPages > 1}">
+            <div class = "row col-sm-10">
+                <div class = "col-sm-2">
+                    Antal Mad:  [[${totalFood}]]
+                </div>
+                <div class = "col-sm-2">
+                 <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                  <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+                  <span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+                 </span>
+                </div>
+                <div class = "col-sm-1">
+                    <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage - 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>
+                    <span th:unless="${currentPage < totalPages}">Previous</span>
+                </div>
+                <div class = "col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+                <span th:unless="${currentPage < totalPages}">Next</span>
+                </div>
+
+                <div class="col-sm-1">
+                    <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last Page</a>
+                    <span th:unless="${currentPage < totalPages}">Last Page</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!--<div id="inner_container">
