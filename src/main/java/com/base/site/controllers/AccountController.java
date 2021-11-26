@@ -87,7 +87,7 @@ public class AccountController {
         return findPaginated(model ,1 ,"firstname", "asc", keyword );
     }
 
-    @GetMapping("/page/{pageNo}")
+    @GetMapping("/pageUser/{pageNo}")
     public String findPaginated(Model model, @PathVariable(value = "pageNo")int pageNo, @RequestParam("sortField")String sortField,
                                              @RequestParam("sortDir")String sortDir, @Param("keyword") String keyword ){
         int pageSize = 5;
