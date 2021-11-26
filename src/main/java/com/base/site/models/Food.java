@@ -47,4 +47,6 @@ public class Food {
             cascade = CascadeType.ALL)
     Set<RecipeFood> amounts;
 
+    public Food(String nutrition, double protein, double carbohydrates, double fat, double energy_kilojoule, double energy_kcal) {
+    }
 }
