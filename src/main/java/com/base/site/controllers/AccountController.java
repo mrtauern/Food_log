@@ -137,13 +137,14 @@ public class AccountController {
         return USER_LIST;
     } */
 
-    @GetMapping("/createUser")
-    public String createUser(Model model){
+    @GetMapping({"/createUser","createUser/{userExists}"})
+    public String createUser(Model model, @PathVariable(required = false, value = "userExists") String userExists){
         log.info("createUser get called");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
 
         model.addAttribute("users", new Users());
+        model.addAttribute("userExists", userExists);
         //model.addAttribute("userTypes", userTypeService.findAll());
         model.addAttribute("pageTitle", "Create user");
         model.addAttribute("selectedPage", "user");
@@ -186,9 +187,13 @@ public class AccountController {
         try {
             //niklas... temporary till users is correctly mapped
             user.setUserType(userTypeService.findById((long)4));
+            if(usersService.findByUserName(user.getUsername()) == null) {
+                usersService.save(user);
+                emailController.sendEmail(user.getUsername(), "custom", emailMessage);
+            } else {
+                return REDIRECT+CREATE_USER+"/userExists";
+            }
 
-            usersService.save(user);
-            emailController.sendEmail(user.getUsername(), "custom", emailMessage);
         } catch (Exception e){
             log.info("Something went wrong with crating an user");
             log.info(e.toString());
