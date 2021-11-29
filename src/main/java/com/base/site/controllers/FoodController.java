@@ -37,15 +37,12 @@ public class FoodController {
     @GetMapping("/food")
     public String food(Model model , @Param("keyword") String keyword) {
         log.info("  get mapping food is called");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
 
         model.addAttribute("keyword", keyword);
         model.addAttribute("pageTitle", "User list");
         model.addAttribute("selectedPage", "food");
-        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
-        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return findPaginatedFood(model,1 ,"name", "asc", keyword );
     }
@@ -151,8 +148,7 @@ public class FoodController {
     @GetMapping("/createDailyLogPfood/{id}")
     public String createDailyLogPfood(@PathVariable(value = "id") Long id,Model model,DailyLog dailyLog) {
         log.info("  createDailyLogPfood is called ");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
+
         PrivateFood pfoods = privateFoodService.findById(id);
         model.addAttribute("dailyLog", dailyLog);
         model.addAttribute("foods", pfoods);
@@ -197,10 +193,6 @@ public class FoodController {
         log.info("  GetMapping updateDailyLog is called ");
         DailyLog dailyLog = dailyLogService.findById(id);
 
-        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        //LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString, formatter);
-
-        //LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
         model.addAttribute("dailyLog", dailyLog);
         model.addAttribute("date", dateString);
         model.addAttribute("logType", logTypeService.findAll());
@@ -216,7 +208,6 @@ public class FoodController {
         Users loggedInUser = usersService.findByUserName(auth.getName());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        //LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString, formatter);
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
 
         dailyLog.setFkUser(loggedInUser);

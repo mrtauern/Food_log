@@ -49,7 +49,7 @@
             </thead>
             <tbody>
             <tr th:each="user : ${listUser}">
-                <td><i class="fas fa-user"></i> <span th:text="${user.firstname + ' ' + user.lastname}"></span></td>
+                <td><i class="fas fa-user"></i> <span th:text="${user.getFullName()}"></span></td>
                 <td><i class="fas fa-envelope"></i> <span th:text="${user.username}"></span></td>
                 <td>
                     <form action="/adminActionAccountNonLocked" method="get">

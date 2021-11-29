@@ -167,4 +167,12 @@ public class Users implements Serializable {
                 ", roles='" + roles + '\'' +
                 '}';
     }
+
+    public String getFullName() {
+        return getFirstname()+" "+getLastname();
+    }
+
+    public String getUserTypeString() {
+        return getUserType().getType();
+    }
 }

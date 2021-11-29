@@ -76,8 +76,8 @@ public class AccountController {
         model.addAttribute("pageTitle", "User list");
         model.addAttribute("selectedPage", "user");
         model.addAttribute("user", new Users());
-        model.addAttribute("user_name", usersService.getLoggedInUser().getFirstname() + " " + usersService.getLoggedInUser().getLastname());
-        model.addAttribute("user_gender", usersService.getLoggedInUser().getUserType().getType());
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
 
         return findPaginated(model ,1 ,"firstname", "asc", keyword );
@@ -128,10 +128,8 @@ public class AccountController {
         model.addAttribute("userExists", userExists);
         model.addAttribute("pageTitle", "Create user");
         model.addAttribute("selectedPage", "user");
-        model.addAttribute("user_name", usersService.getLoggedInUser().getFirstname() + " " + usersService.getLoggedInUser().getLastname());
-        model.addAttribute("user_gender", usersService.getLoggedInUser().getUserType().getType());
-        //model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
-        //model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return CREATE_USER;
     }
@@ -174,19 +172,16 @@ public class AccountController {
 
         Users user = usersService.findById(id);
 
-        //String sBirthday = new SimpleDateFormat("yyyy-MM-dd").format(user.getBirthday());
         //created by Niklas to fit with change to LocalDate in users
         String sBirthday = user.getBirthday().toString();
-        log.info("sBirthday: "+sBirthday);
 
         user.setSBirthday(sBirthday);
 
         model.addAttribute("users", user);
-        //model.addAttribute("userTypes", userTypeService.findAll());
         model.addAttribute("pageTitle", "Edit user");
         model.addAttribute("selectedPage", "user");
-        model.addAttribute("user_name", usersService.getLoggedInUser().getFirstname() + " " + usersService.getLoggedInUser().getLastname());
-        model.addAttribute("user_gender", usersService.getLoggedInUser().getUserType().getType());
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return EDIT_USER;
     }
@@ -249,8 +244,8 @@ public class AccountController {
         model.addAttribute("user", user);
         model.addAttribute("pageTitle", "Delete user");
         model.addAttribute("selectedPage", "user");
-        model.addAttribute("user_name", usersService.getLoggedInUser().getFirstname() + " " + usersService.getLoggedInUser().getLastname());
-        model.addAttribute("user_gender", usersService.getLoggedInUser().getUserType().getType());
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return DELETE_USER_CONFIRM;
     }
@@ -268,8 +263,8 @@ public class AccountController {
 
         model.addAttribute("pageTitle", "User list");
         model.addAttribute("selectedPage", "dashboard");
-        model.addAttribute("user_name", usersService.getLoggedInUser().getFirstname() + " " + usersService.getLoggedInUser().getLastname());
-        model.addAttribute("user_gender", usersService.getLoggedInUser().getUserType().getType());
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return DASHBOARD;
     }
@@ -282,8 +277,8 @@ public class AccountController {
         model.addAttribute("pageTitle", "User Personal Info");
         model.addAttribute("loggedIn", usersService.getLoggedInUser());
         model.addAttribute("selectedPage", "user");
-        model.addAttribute("user_name", usersService.getLoggedInUser().getFirstname() + " " + usersService.getLoggedInUser().getLastname());
-        model.addAttribute("user_gender", usersService.getLoggedInUser().getUserType().getType());
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return USER_INFO;
     }
@@ -302,8 +297,8 @@ public class AccountController {
         model.addAttribute("user", user);
         model.addAttribute("pageTitle", "Edit user Profile");
         model.addAttribute("selectedPage", "user");
-        model.addAttribute("user_name", usersService.getLoggedInUser().getFirstname() + " " + usersService.getLoggedInUser().getLastname());
-        model.addAttribute("user_gender", usersService.getLoggedInUser().getUserType().getType());
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return EDIT_USER_PROFILE;
     }

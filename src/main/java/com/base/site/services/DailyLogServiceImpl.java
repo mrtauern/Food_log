@@ -180,8 +180,8 @@ public class DailyLogServiceImpl implements DailyLogService {
         model.addAttribute("weight", dailyLogWrapper.getWeight());
 
         model.addAttribute("selectedPage", "dailyLog");
-        model.addAttribute("user_name", usersService.getLoggedInUser().getFirstname() + " " + usersService.getLoggedInUser().getLastname());
-        model.addAttribute("user_gender", usersService.getLoggedInUser().getUserType().getType());
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
 
         return model;

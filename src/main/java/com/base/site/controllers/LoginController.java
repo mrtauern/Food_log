@@ -57,7 +57,6 @@ public class LoginController {
     @GetMapping("/signup")
     public String showSignUpForm(Model model) {
         model.addAttribute("user", new Users());
-        //model.addAttribute("userExists",userExists);
         return "add-user";
     }
 
