@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -76,6 +77,7 @@ public class LoginController {
             user.setRoles("USER");
             String pass = passwordEncoder.encode(user.getPassword());
             user.setPassword(pass);
+            user.setBirthday(LocalDate.parse("1900-01-01"));
             usersRepo.save(user);
         }
 
