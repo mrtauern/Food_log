@@ -8,8 +8,6 @@ import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,13 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -149,7 +140,9 @@ public class AccountController {
 
         try {
             //niklas... temporary till users is correctly mapped
+            //hardcoded usertype we should change this
             user.setUserType(userTypeService.findById((long)4));
+            //
             if(usersService.findByUserName(user.getUsername()) == null) {
                 usersService.save(user);
                 emailController.sendEmail(user.getUsername(), "custom", emailMessage);
@@ -194,7 +187,9 @@ public class AccountController {
 
         try {
             //niklas... temporary till users is correctly mapped
+            //harcoded usertype we should change this
             user.setUserType(userTypeService.findById((long)4));
+            //
             Users userData = usersService.findById(user.getId());
             user.setPassword(userData.getPassword());
             user.setRegisterDate(userData.getRegisterDate());
@@ -209,8 +204,7 @@ public class AccountController {
     }
   
     @GetMapping("/password_reset_user/{id}")
-    public String passwordResetUser(@PathVariable(value = "id") long id, Model model) throws MessagingException, IOException {
-        //UserPassResetCode foundResetCode = uprcRepository.findByUsername(resetCode.getUsername());
+    public String passwordResetUser(@PathVariable(value = "id") long id) throws MessagingException, IOException {
         Users foundUser = usersService.findById(id);
         UserPassResetCode resetCode = new UserPassResetCode();
 
@@ -309,7 +303,9 @@ public class AccountController {
         user.setBirthday(usersService.getBirthdayFromString(user.getSBirthday()));
 
         try {
+            //hardcoded usertype, we should change this
             user.setUserType(userTypeService.findById((long)4));
+            //
             Users userData = usersService.findById(user.getId());
             user.setPassword(userData.getPassword());
             user.setRegisterDate(userData.getRegisterDate());
