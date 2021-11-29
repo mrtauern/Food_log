@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -31,11 +33,6 @@ public class ExerciseController {
     Logger log = Logger.getLogger(ExerciseController.class.getName());
 
     public ExerciseController() {}
-
-    @RequestMapping("/ab")
-    public @ResponseBody String greeting() {
-        return "Hello, World";
-    }
 
     @GetMapping("/exercise")
     public String exercise(Model model, Exercise exercise, @Param("keyword") String keyword) {
@@ -88,21 +85,32 @@ public class ExerciseController {
     }
 
 
-    @GetMapping("/addExerciseToDailyLog")
-    public String addExerciseToDailyLog(Model model, Exercise exercise, DailyLog dailyLog, @Param("keyword") String keyword) {
+    @GetMapping({"/addExerciseToDailyLog", "/addExerciseToDailyLog/{date}"})
+    public String addExerciseToDailyLog(Model model, @Param("keyword") String keyword,
+                                        @PathVariable(required = false, value = "date") String dateString) {
         log.info("  get mapping addExerciseToDailyLog is called");
         List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
+
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+
+        model.addAttribute("date", date.toString());
+
 
         model.addAttribute("exerciseList", exerciseList);
         model.addAttribute("keyword", keyword);
 
         return "addExerciseToDailyLog";
     }
-
-    @GetMapping("/createExerciseInDailyLog/{id}")
-    public String createExerciseInDailyLog(@PathVariable(value = "id") Long id, Model model, DailyLog dailyLog) {
+    @GetMapping({"/createExerciseInDailyLog/{id}", "/createExerciseInDailyLog/{id}/{date}"})
+    public String createExerciseInDailyLog(@PathVariable(value = "id") Long id, Model model, DailyLog dailyLog,
+                                            @PathVariable(required = false, value = "date") String dateString) {
         log.info("  Get mapping createExerciseInDailyLog is called ");
+
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+        dailyLog.setDatetime(date);
         Exercise exercise = exerciseService.findById(id);
+
+        model.addAttribute("date", date.toString());
 
         model.addAttribute("logType", logTypeService.findAll());
         model.addAttribute("dailyLog", dailyLog);
@@ -110,13 +118,16 @@ public class ExerciseController {
 
         return "createExerciseInDailyLog";
     }
-    @PostMapping("/saveExerciseInDailyLog")
-    public String saveExerciseInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Exercise exercise, Model model) {
+    @PostMapping({"/saveExerciseInDailyLog", "/saveExerciseInDailyLog/{date}"})
+    public String saveExerciseInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Exercise exercise, Model model,
+                                         @PathVariable(required = false, value = "date") String dateString) {
         log.info("  Post Mapping saveExerciseInDailyLog is called ");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
         Exercise exerciseId = exerciseService.findById(exercise.getId());
-        log.info("----> Exercise Id From Save dailylog :::"+ exerciseId);
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+        dailyLog.setDatetime(date);
+        String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
         dailyLog.setFkExercise(exerciseId);
         dailyLog.setFkUser(loggedInUser);
@@ -124,40 +135,51 @@ public class ExerciseController {
 
         dailyLogService.save(dailyLog);
 
-        return  "redirect:/" + "dailyLog";
+        return  "redirect:/" + "dailyLog/"+sDatetime;
 
     }
-
-    @GetMapping("/updateExerciseInDailyLog/{id}")
-    public String updateExerciseInDailyLog(@PathVariable(value = "id") Long id, Model model) {
+    @GetMapping({"/updateExerciseInDailyLog/{id}", "/updateExerciseInDailyLog/{id}/{date}"})
+    public String updateExerciseInDailyLog(@PathVariable(value = "id") Long id, Model model,
+                                           @PathVariable(required = false, value = "date") String dateString) {
         log.info("  GetMapping updateExerciseInDailyLog is called ");
         DailyLog dailyLog= dailyLogService.findById(id);
+        model.addAttribute("date", dateString);
+
         model.addAttribute("dailyLog", dailyLog);
 
         return "updateExerciseInDailyLog";
     }
 
-    @PostMapping("/updateExerciseInDailyLog")
-    public String updateExerciseInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Model model) {
+    @PostMapping({"/updateExerciseInDailyLog", "/updateExerciseInDailyLog/{date}"})
+    public String updateExerciseInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,
+                                           @PathVariable(required = false, value = "date") String dateString) {
         log.info("  Post Mapping updateExerciseInDailyLog is called ");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+
+        dailyLog.setDatetime(date);
 
         dailyLog.setFkUser(loggedInUser);
         dailyLog.setFkLogType(logTypeService.findByType("Exercise"));
 
         dailyLogService.save(dailyLog);
 
-        return  "redirect:/" + "dailyLog";
+        return  "redirect:/" + "dailyLog/"+dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
     }
 
-    @GetMapping("/deleteExerciseFromDailyLog/{id}")
-    public String deleteExerciseFromDailyLog(@PathVariable(value = "id") Long id, Model model) {
+    @GetMapping({"/deleteExerciseFromDailyLog/{id}", "/deleteExerciseFromDailyLog/{id}/{date}"})
+    public String deleteExerciseFromDailyLog(@PathVariable(value = "id") Long id,
+                                             @PathVariable(required = false, value = "date") String dateString) {
         log.info("  GetMapping deleteEExerciseFromDailyLog is called ");
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+
         this.dailyLogService.deleteById(id);
 
-        return "redirect:/" + "dailyLog";
+        return "redirect:/" + "dailyLog/"+date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
 }
