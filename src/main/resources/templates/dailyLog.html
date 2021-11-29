@@ -253,7 +253,7 @@
           <tbody>
 
           <tr>
-              <th:block th:if="${weight?.amount != 0.0 and weight.id != 0}">
+              <th:block th:if="${weight?.amount != 0.0 and weight?.id != 0 and weight?.amount != null}">
                   <td th:text="${weight?.amount}">Weight</td>
                   <td>
                       <a th:href="@{/updateCurrentWeight/{id}(id=${weight?.id})}">Edit</a>
