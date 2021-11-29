@@ -17,8 +17,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.servlet.ModelAndView;
 
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -36,9 +38,16 @@ class ExerciseControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-
+    @MockBean
+    private DailyLogServiceImpl dailyLogService;
+    @MockBean
+    private UsersServiceImpl usersService;
+    @MockBean
+    private LogTypeServiceImpl logTypeService;
     @MockBean
     private ExerciseServiceImpl exerciseService;
+    @MockBean
+    private UsersRepo usersRepo;
     @MockBean
     private ExerciseRepository exerciseRepository;
     @Mock
@@ -70,10 +79,19 @@ class ExerciseControllerTest {
 
     @Test
     public void save_exercise_OK() throws Exception {
-
         Exercise newExercoce = new Exercise(1L, 22, "run");
         when(mockedExerciseRepo.save(any(Exercise.class))).thenReturn(newExercoce);
 
+    }
+
+    @Test
+    public void checkIfExerciseExist() throws Exception {
+        Exercise newExercoce = new Exercise(1L, 22, "run");
+        mockedExerciseRepo.save(newExercoce);
+        //when(mockedExerciseRepo.save(any(Exercise.class))).thenReturn(newExercoce);
+        Optional<Exercise> exist = mockedExerciseRepo.findById(1l);
+
+        assertThat(exist).isNotNull();
     }
 
     @Test
