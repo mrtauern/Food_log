@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -45,15 +46,18 @@ public class LoginController {
 
     Logger log = Logger.getLogger(LoginController.class.getName());
 
-    @GetMapping("/login")
-    public String login(Model model) {
+    @GetMapping({"/login","/login/{userExists}"})
+    public String login(Model model, @PathVariable(required = false, value = "userExists") String userExists) {
+        log.info("login getmapping called... userExists? "+userExists);
         model.addAttribute("user", new Users());
+        model.addAttribute("userExists", userExists);
         return "login";
     }
 
     @GetMapping("/signup")
     public String showSignUpForm(Model model) {
         model.addAttribute("user", new Users());
+        //model.addAttribute("userExists",userExists);
         return "add-user";
     }
 
@@ -79,9 +83,10 @@ public class LoginController {
             user.setPassword(pass);
             user.setBirthday(LocalDate.parse("1900-01-01"));
             usersRepo.save(user);
+            return "redirect:/index";
         }
 
-        return "redirect:/index";
+        return "redirect:/login/user_exists";
     }
 
     @GetMapping("/password_reset")

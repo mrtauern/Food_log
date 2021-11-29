@@ -9,7 +9,11 @@
   <header th:include="fragments/navbar_top :: loginHeader" class="navbar"></header>
     <!-- <header th:include="fragments/navbar_top :: navbar"></header> -->
   <div id="content" class="login">
-
+    <th:block th:if="${userExists != null}">
+      <div class="alert alert-warning" role="alert">
+        <p>Username already exists</p>
+      </div>
+    </th:block>
     <!--<div tiles:fragment="content">-->
     <div class="formBox login">
       <div class="signIn">
