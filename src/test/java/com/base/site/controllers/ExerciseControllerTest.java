@@ -4,6 +4,8 @@ import com.base.site.models.*;
 import com.base.site.repositories.ExerciseRepository;
 import com.base.site.repositories.UsersRepo;
 import com.base.site.services.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -53,6 +55,10 @@ class ExerciseControllerTest {
     @Mock
     private ExerciseRepository mockedExerciseRepo;
 
+    @AfterEach
+    void tearDown() {
+        mockedExerciseRepo.deleteAll();
+    }
 
     @Test
     public void testRepoIsNotNull()  throws Exception  {
@@ -86,20 +92,24 @@ class ExerciseControllerTest {
 
     @Test
     public void checkIfExerciseExist() throws Exception {
-        Exercise newExercoce = new Exercise(1L, 22, "run");
-        mockedExerciseRepo.save(newExercoce);
-        //when(mockedExerciseRepo.save(any(Exercise.class))).thenReturn(newExercoce);
+        //Given
+        Exercise newExercise = new Exercise(1L, 22, "run");
+
+        //When
         Optional<Exercise> exist = mockedExerciseRepo.findById(1l);
 
+        //Then
         assertThat(exist).isNotNull();
     }
 
     @Test
+    @Disabled
     void updateExercise() throws Exception{
 
     }
 
     @Test
+    @Disabled
     void deleteExercise() throws Exception{
     }
 }
