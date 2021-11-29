@@ -73,6 +73,8 @@ public class AccountController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
 
+        Long userId = loggedInUser.getId();
+
         model.addAttribute("keyword", keyword);
         model.addAttribute("users", usersService.findAll());
         model.addAttribute("pageTitle", "User list");
@@ -80,6 +82,7 @@ public class AccountController {
         model.addAttribute("user", new Users());
         model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
         model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+        model.addAttribute("loggedInUserId", userId);
 
 
         return findPaginated(model ,1 ,"firstname", "asc", keyword );
@@ -108,15 +111,23 @@ public class AccountController {
     @GetMapping("/adminActionAccountNonLocked")
     public String accountLockUnlock(@RequestParam("id") long id, @RequestParam(required = false, value = "locked") boolean locked) {
         log.info("Getmapping adminActionAccountNonLocked called with id: "+id+" and status locked: "+locked);
-        Users user = usersService.findById(id);
-        if (locked == false) {
-            log.info("account unlock requested");
-            user.setAccountNonLocked(1);
-        } else {
-            log.info("account lock requested");
-            user.setAccountNonLocked(0);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
+
+        if(loggedInUser.getId() != id) {
+
+            Users user = usersService.findById(id);
+
+            if (locked == false) {
+                log.info("account unlock requested");
+                user.setAccountNonLocked(1);
+            } else {
+                log.info("account lock requested");
+                user.setAccountNonLocked(0);
+            }
+            usersService.save(user);
         }
-        usersService.save(user);
 
         return REDIRECT+USER_LIST;
     }
@@ -209,23 +220,27 @@ public class AccountController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
 
-        Users user = usersService.findById(id);
+        if(loggedInUser.getId() != id) {
+            Users user = usersService.findById(id);
 
-        //String sBirthday = new SimpleDateFormat("yyyy-MM-dd").format(user.getBirthday());
-        //created by Niklas to fit with change to LocalDate in users
-        String sBirthday = user.getBirthday().toString();
-        log.info("sBirthday: "+sBirthday);
+            //String sBirthday = new SimpleDateFormat("yyyy-MM-dd").format(user.getBirthday());
+            //created by Niklas to fit with change to LocalDate in users
+            String sBirthday = user.getBirthday().toString();
+            log.info("sBirthday: " + sBirthday);
 
-        user.setSBirthday(sBirthday);
+            user.setSBirthday(sBirthday);
 
-        model.addAttribute("users", user);
-        //model.addAttribute("userTypes", userTypeService.findAll());
-        model.addAttribute("pageTitle", "Edit user");
-        model.addAttribute("selectedPage", "user");
-        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
-        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+            model.addAttribute("users", user);
+            //model.addAttribute("userTypes", userTypeService.findAll());
+            model.addAttribute("pageTitle", "Edit user");
+            model.addAttribute("selectedPage", "user");
+            model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
+            model.addAttribute("user_gender", loggedInUser.getUserType().getType());
 
-        return EDIT_USER;
+            return EDIT_USER;
+        } else {
+            return REDIRECT + USER_LIST;
+        }
     }
 
     @PostMapping("/editUser")
@@ -269,28 +284,32 @@ public class AccountController {
     @GetMapping("/password_reset_user/{id}")
     public String passwordResetUser(@PathVariable(value = "id") long id, Model model) throws MessagingException, IOException {
         //UserPassResetCode foundResetCode = uprcRepository.findByUsername(resetCode.getUsername());
-        Users foundUser = usersService.findById(id);
-        UserPassResetCode resetCode = new UserPassResetCode();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loggedInUser = usersService.findByUserName(auth.getName());
 
-        if (foundUser != null) {
-            resetCode.setUsername(foundUser.getUsername());
-            resetCode.setCode(resetCode.generateCode());
-            resetCode.setUsed(false);
-            uprcRepository.save(resetCode);
+        if(loggedInUser.getId() != id) {
+            Users foundUser = usersService.findById(id);
+            UserPassResetCode resetCode = new UserPassResetCode();
 
-            log.info("mail with link and code being sent to user with email: " + resetCode.getUsername());
-            Mail mail = new Mail();
-            mail.setRecipient(resetCode.getUsername());
-            mail.setTopic("Your password on Food Log have been requested to be reset");
-            mail.setContent("To complete the password reset click the link Http://localhost:8080/password_reset_code and type in the username and code: " + resetCode.getCode());
+            if (foundUser != null) {
+                resetCode.setUsername(foundUser.getUsername());
+                resetCode.setCode(resetCode.generateCode());
+                resetCode.setUsed(false);
+                uprcRepository.save(resetCode);
 
-            emailService.sendmail(mail);
+                log.info("mail with link and code being sent to user with email: " + resetCode.getUsername());
+                Mail mail = new Mail();
+                mail.setRecipient(resetCode.getUsername());
+                mail.setTopic("Your password on Food Log have been requested to be reset");
+                mail.setContent("To complete the password reset click the link Http://localhost:8080/password_reset_code and type in the username and code: " + resetCode.getCode());
 
-            return REDIRECT + USER_LIST;
-        } else {
-            log.info("user not found or code already sent");
-            return REDIRECT + USER_LIST;
+                emailService.sendmail(mail);
+            } else {
+                log.info("user not found or code already sent");
+            }
         }
+
+        return REDIRECT + USER_LIST;
     }
   
     @GetMapping("/delete_user_confirm/{id}")
@@ -299,15 +318,20 @@ public class AccountController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
 
-        Users user = usersService.findById(id);
+        if(loggedInUser.getId() != id) {
 
-        model.addAttribute("user", user);
-        model.addAttribute("pageTitle", "Delete user");
-        model.addAttribute("selectedPage", "user");
-        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
-        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+            Users user = usersService.findById(id);
 
-        return DELETE_USER_CONFIRM;
+            model.addAttribute("user", user);
+            model.addAttribute("pageTitle", "Delete user");
+            model.addAttribute("selectedPage", "user");
+            model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
+            model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+
+            return DELETE_USER_CONFIRM;
+        } else {
+            return REDIRECT + USER_LIST;
+        }
     }
 
     @PostMapping("/delete_user_confirm/{id}")
