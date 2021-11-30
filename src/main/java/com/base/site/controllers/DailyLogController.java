@@ -186,42 +186,56 @@ public class DailyLogController {
         return ADD_WEIGHT;
     }
 
-    @GetMapping("/createCurrentWeight")
-    public String createCurrentWeight( Model model, DailyLog dailyLog) {
+
+    @GetMapping({"/createCurrentWeight", "/createCurrentWeight/{date}"})
+    public String createCurrentWeight( Model model, DailyLog dailyLog,
+                                       @PathVariable(required = false, value = "date") String dateString) {
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+
+        model.addAttribute("date", date.toString());
         model.addAttribute("dailyLog", dailyLog);
         log.info("  Get mapping createCurrentWeight is called ");
 
         return CREATE_WEIGHT;
     }
-    @PostMapping("/saveCurrentWeight")
-    public String saveCurrentWeight(@ModelAttribute("dailyLog") DailyLog dailyLog, Model model) {
+    @PostMapping({"/saveCurrentWeight", "/saveCurrentWeight/{date}"})
+    public String saveCurrentWeight(@ModelAttribute("dailyLog") DailyLog dailyLog,
+                                    @PathVariable(required = false, value = "date") String dateString) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
+
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+        dailyLog.setDatetime(date);
+        String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
         dailyLog.setFkLogType(logTypeService.findByType("Weight"));
         dailyLog.setFkUser(loggedInUser);
         log.info("weight"+dailyLog.getAmount());
         dailyLogService.save(dailyLog);
         log.info("  Post Mapping saveCurrentWeight is called ");
 
-        return  REDIRECT + DAILY_LOG;
-
+        return  REDIRECT + DAILY_LOG+"/"+ sDatetime;
     }
 
-    @GetMapping("/updateCurrentWeight/{id}")
-    public String updateCurrentWeight(@PathVariable(value = "id") Long id, Model model) {
+    @GetMapping({"/updateCurrentWeight/{id}", "/updateCurrentWeight/{id}/{date}"})
+    public String updateCurrentWeight(@PathVariable(value = "id") Long id, Model model,
+                                      @PathVariable(required = false, value = "date") String dateString) {
         DailyLog dailyLog = dailyLogService.findById(id);
+
+        model.addAttribute("date", dateString);
         model.addAttribute("dailyLog", dailyLog);
         log.info("  GetMapping updateCurrentWeight is called ");
 
         return UPDATE_WEIGHT;
     }
-
-    @GetMapping("/deleteCurrentWeight/{id}")
-    public String deleteCurrentWeight(@PathVariable(value = "id") Long id, Model model) {
-        this.dailyLogService.deleteById(id);
+    @GetMapping({"/deleteCurrentWeight/{id}", "/deleteCurrentWeight/{id}/{date}"})
+    public String deleteCurrentWeight(@PathVariable(value = "id") Long id,
+                                      @PathVariable(required = false, value = "date") String dateString) {
         log.info("  GetMapping deleteCurrentWeight is called ");
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+        this.dailyLogService.deleteById(id);
 
-        return  REDIRECT + DAILY_LOG;
+        return  REDIRECT + DAILY_LOG+ "/"+date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     @GetMapping("/weightOptions")

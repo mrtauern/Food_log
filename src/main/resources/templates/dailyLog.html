@@ -240,7 +240,7 @@
       <h1>Weight</h1>
 
       <div class="actionBar">
-        <a th:href="@{/createCurrentWeight}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add Weight</a>
+          <a th:href="${'/createCurrentWeight/'+sSelectedDate}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add Weight</a>
       </div>
       <table border="1" cellpadding="10">
           <thead>
@@ -256,8 +256,8 @@
               <th:block th:if="${weight?.amount != 0.0 and weight.id != 0}">
                   <td th:text="${weight?.amount}">Weight</td>
                   <td>
-                      <a th:href="@{/updateCurrentWeight/{id}(id=${weight?.id})}">Edit</a>
-                      <a th:href="@{/deleteCurrentWeight/{id}(id=${weight?.id})}">Delete</a>
+                      <a th:href="@{/updateCurrentWeight/{id}/{date} (id=${weight?.id}, date=${sSelectedDate})}">Edit</a>
+                      <a th:href="@{/deleteCurrentWeight/{id}/{date} (id=${weight?.id}, date=${sSelectedDate})}">Delete</a>
                   </td>
               </th:block>
 
