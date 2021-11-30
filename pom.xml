@@ -139,6 +139,20 @@
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity5</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.icegreen</groupId>
+            <artifactId>greenmail-junit5</artifactId>
+            <version>1.6.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>4.1.1</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -154,6 +168,16 @@
                     <artifactId>hamcrest-core</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.icegreen</groupId>
+            <artifactId>greenmail-junit5</artifactId>
+            <version>1.6.5</version>
+            <scope>compile</scope>
         </dependency>
         <!--<dependency>
             <groupId>org.testng</groupId>
