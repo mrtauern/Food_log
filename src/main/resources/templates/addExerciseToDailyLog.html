@@ -38,7 +38,8 @@
                 <td th:text="${ex.kcalBurnedPerMin}">burned pr. min</td>
                 <td th:text="${ex.name}">name</td>
                 <td>
-                    <a th:href="@{/createExerciseInDailyLog/{id}(id=${ex.id})}">Add To Daily Log</a>
+                    <a th:href="@{/createExerciseInDailyLog/{id}/{date}(id=${ex.id},date=${date})}">Add To Daily Log</a>
+
                 </td>
             </tr>
             </tbody>

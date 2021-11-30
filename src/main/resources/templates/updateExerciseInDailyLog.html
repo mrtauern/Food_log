@@ -8,7 +8,7 @@
 <div class="container">
   <div id="inner_container">
     <h1>Update Exercise in DailyLog</h1>
-    <form action="#" th:action="@{/updateExerciseInDailyLog}" th:object ="${dailyLog}" method="POST">
+    <form action="#" th:action="@{/updateExerciseInDailyLog/{date} (date=${date})}" th:object ="${dailyLog}" method="POST">
       <input type="hidden" th:field="*{id}" />
       <input type="hidden" name="userId" th:field="*{fkUser.id}" />
       <input type="hidden" name="userId" th:field="*{fkExercise.id}" />

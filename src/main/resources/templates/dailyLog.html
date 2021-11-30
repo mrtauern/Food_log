@@ -209,7 +209,7 @@
 
         <div class="actionBar">
 
-            <a th:href="@{/addExerciseToDailyLog}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add Exercise</a>
+            <a th:href="${'/addExerciseToDailyLog/'+sSelectedDate}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add Exercise</a>
 
         </div>
 
@@ -228,8 +228,8 @@
                 <td class="name"><i class="fas fa-running"></i> <span th:text="${exercise?.fkExercise?.name}"></span></td>
                 <td><i class="fas fa-clock"></i> <span th:text="${exercise?.amount}"></span></td>
                 <td class="actionButtons">
-                    <a th:href="@{/updateExerciseInDailyLog/{id}(id=${exercise.id})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                    <a th:href="@{/deleteExerciseFromDailyLog/{id}(id=${exercise.id})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                    <a th:href="@{/updateExerciseInDailyLog/{id}/{date} (id=${exercise.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                    <a th:href="@{/deleteExerciseFromDailyLog/{id}/{date} (id=${exercise.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
                 </td>
             </tr>
             </tbody>
