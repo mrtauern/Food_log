@@ -29,6 +29,11 @@ public class PrivateFoodController {
     @Autowired
     UsersService usersService;
 
+    private final String REDIRECT = "redirect:/";
+    private final String PRIVATEFOOD = "privateFood";
+    private final String UPDATE_PRIVATEFOOD = "updatePrivateFood";
+    private final String CREATE_PRIVATEFOOD = "createPrivateFood";
+
     @GetMapping("/privateFood")
     public String privateFood(Model model, PrivateFood privateFood, @Param("keyword") String keyword) {
         List<PrivateFood> pfood = privateFoodService.findAllByKeyword(keyword);
@@ -38,7 +43,7 @@ public class PrivateFoodController {
 
         log.info("  get mapping private food is called");
 
-        return "privateFood";
+        return PRIVATEFOOD;
     }
 
     @GetMapping("/createPrivateFood")
@@ -48,35 +53,36 @@ public class PrivateFoodController {
         model.addAttribute("privateFood", privateFood);
         log.info("  createPrivateFood is called ");
 
-        return "createPrivateFood";
+        return CREATE_PRIVATEFOOD;
     }
 
     @PostMapping("/savePrivateFood")
-    public String savePrivateFood(@ModelAttribute("privateFood") PrivateFood privateFood, Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-        privateFood.setFkUser(loggedInUser);
-        privateFoodService.save(privateFood);
+    public String savePrivateFood(@ModelAttribute("privateFood") PrivateFood privateFood) {
         log.info("  PostMapping savePrivateFood is called ");
 
-        return  "redirect:/" + "privateFood";
+        privateFood.setFkUser(usersService.getLoggedInUser());
+        privateFoodService.save(privateFood);
+
+        return REDIRECT + PRIVATEFOOD;
     }
 
     @GetMapping("/updatePrivateFood/{id}")
     public String updatePrivateFood(@PathVariable(value = "id") Long id, Model model) {
-        PrivateFood privateFood = privateFoodService.findById(id);
-        model.addAttribute("privateFood", privateFood);
         log.info("  GetMapping updatePrivateFood is called ");
 
-        return "updatePrivateFood";
+        PrivateFood privateFood = privateFoodService.findById(id);
+        model.addAttribute("privateFood", privateFood);
+
+        return UPDATE_PRIVATEFOOD;
     }
 
     @GetMapping("/deletePrivateFood/{id}")
     public String deletePrivateFood(@PathVariable(value = "id") Long id, Model model) {
-        this.privateFoodService.deleteById(id);
         log.info("  GetMapping deletePrivateFood by id is called ");
 
-        return "redirect:/" + "privateFood";
+        this.privateFoodService.deleteById(id);
+
+        return REDIRECT + PRIVATEFOOD;
     }
 
 }

@@ -143,6 +143,7 @@ public class FoodController {
                                  Model model,DailyLog dailyLog) {
         log.info("  createDailyLog is called ");
 
+        //move this logic to a service layer?
         if (type.equals("food")) {
             log.info("food");
             model.addAttribute("foods", foodService.findById(id));
@@ -169,6 +170,7 @@ public class FoodController {
                                @PathVariable(required = false, value = "type") String type) {
         log.info("  PostMapping saveDailyLog is called ");
 
+        //move this logic to a service layer?
         if (type.equals("food")) {
             log.info("food time day: "+dailyLog.getFkLogType().getType());
             Food foodId = foodService.findById(food.getId());

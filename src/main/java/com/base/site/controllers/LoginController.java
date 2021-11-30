@@ -73,6 +73,7 @@ public class LoginController {
 
             return "add-user";
         }
+        //move this logic to a service layer?
         Users foundUser = usersRepo.findUsersByUsername(user.getUsername());
         if(foundUser == null){
             UserType userTypeObject = userTypeService.findByType(userTypeString);
@@ -100,7 +101,7 @@ public class LoginController {
         log.info("username: "+resetCode.getUsername());
         UserPassResetCode foundResetCode = uprcRepository.findByUsername(resetCode.getUsername());
         Users foundUser = usersRepo.findUsersByUsername(resetCode.getUsername());
-
+//move this logic to a service layer?
         if(foundResetCode == null && foundUser != null) {
             resetCode.setCode(resetCode.generateCode());
             resetCode.setUsed(false);
@@ -132,7 +133,7 @@ public class LoginController {
     public String passwordResetCodeCheck(UserPassResetCode resetCode) throws MessagingException, IOException {
         UserPassResetCode foundResetCode = uprcRepository.findByUsername(resetCode.getUsername());
         Users foundUser = usersRepo.findUsersByUsername(resetCode.getUsername());
-
+//move this logic to a service layer?
         if(resetCode.getCode().equals(foundResetCode.getCode()) && foundResetCode != null && foundUser != null && foundResetCode.isUsed() == false) {
             log.info("Username and code checks out, saving new data...");
             foundUser.setPassword(passwordEncoder.encode(resetCode.getPassword()));
