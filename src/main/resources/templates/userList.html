@@ -6,6 +6,10 @@
     function clearSearch() {
         window.location = "[[@{/userList}]]";
     }
+
+    function confirm_reset(username) {
+        return confirm('Are you sure you want to reset the password for ' + username + '?');
+    }
 </script>
 <body>
     <header th:include="fragments/navbar_top :: header" class="navbar"></header>
@@ -22,8 +26,8 @@
 
                 <form th:action="@{/userList}">
                     <input type="text" name="keyword"  placeholder="Search for name or email" th:value="${keyword}">
-                    <input type="submit" value="Search" />
-                    <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+                    <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-arrow-right"></i></button>
+                    <button type="button" d="btnClear" onclick="clearSearch()" class="btn btn-secondary mr-2 btn-sm"><i class="fas fa-sync-alt"></i></button>
                 </form>
 
                 <a href="/createUser" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Create user</a>
@@ -52,21 +56,27 @@
                 <td><i class="fas fa-user"></i> <span th:text="${user.getFullName()}"></span></td>
                 <td><i class="fas fa-envelope"></i> <span th:text="${user.username}"></span></td>
                 <td>
-                    <form action="/adminActionAccountNonLocked" method="get">
-                        <input type="hidden" th:value="${user.id}" th:name="id" />
-                        <th:block th:if="${user.accountNonLocked == 0}">
-                            <input type="checkbox" id="locked" th:name="locked" checked onChange="this.form.submit()"/>
-                        </th:block>
-                        <th:block th:if="${user.accountNonLocked == 1}">
-                            <input type="checkbox" id="locked" name="locked" onChange="this.form.submit()"/>
-                        </th:block>
+                    <th:block th:if="${user.id != loggedInUser.id}">
+                        <form action="/adminActionAccountNonLocked" method="get">
+                            <input type="hidden" th:value="${user.id}" th:name="id" />
+                            <th:block th:if="${user.accountNonLocked == 0}">
+                                <input type="checkbox" id="locked" th:name="locked" checked onChange="this.form.submit()"/>
+                            </th:block>
+                            <th:block th:if="${user.accountNonLocked == 1}">
+                                <input type="checkbox" id="locked" name="locked" onChange="this.form.submit()"/>
+                            </th:block>
 
-                    </form>
+                        </form>
+                    </th:block>
                 </td>
                 <td class="actionButtons">
-                    <a th:href="${'/editUser/' + user.id}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                    <a th:href="@{'/password_reset_user/'+${user.id}}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-sync-alt"></i> Reset Password</a>
-                    <a th:href="@{'/delete_user_confirm/'+${user.id}}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                    <th:block th:if="${user.id != loggedInUserId}">
+                        <a th:href="${'/editUser/' + user.id}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                        <a th:href="@{'/password_reset_user/'+${user.id}}" class="btn btn-outline-dark mr-2 btn-sm" th:attr="onclick=|return confirm_reset('${user.firstname + ' ' + user.lastname}')|">
+                            <i class="fas fa-sync-alt"></i> Reset Password
+                        </a>
+                        <a th:href="@{'/delete_user_confirm/'+${user.id}}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                    </th:block>
                 </td>
             </tr>
             </tbody>

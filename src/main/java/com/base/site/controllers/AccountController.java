@@ -70,7 +70,6 @@ public class AccountController {
 
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
-
         return findPaginated(model ,1 ,"firstname", "asc", keyword );
     }
 
@@ -97,15 +96,20 @@ public class AccountController {
     @GetMapping("/adminActionAccountNonLocked")
     public String accountLockUnlock(@RequestParam("id") long id, @RequestParam(required = false, value = "locked") boolean locked) {
         log.info("Getmapping adminActionAccountNonLocked called with id: "+id+" and status locked: "+locked);
-        Users user = usersService.findById(id);
-        if (locked == false) {
-            log.info("account unlock requested");
-            user.setAccountNonLocked(1);
-        } else {
-            log.info("account lock requested");
-            user.setAccountNonLocked(0);
+
+        if(usersService.getLoggedInUser().getId() != id) {
+
+            Users user = usersService.findById(id);
+
+            if (locked == false) {
+                log.info("account unlock requested");
+                user.setAccountNonLocked(1);
+            } else {
+                log.info("account lock requested");
+                user.setAccountNonLocked(0);
+            }
+            usersService.save(user);
         }
-        usersService.save(user);
 
         return REDIRECT+USER_LIST;
     }
@@ -165,13 +169,18 @@ public class AccountController {
     public String editUser(@PathVariable(value = "id") Long id, Model model){
         log.info("editUser get called");
 
-        model.addAttribute("users", usersService.findUserByIdAndSetBdayString(id));
-        model.addAttribute("pageTitle", "Edit user");
-        model.addAttribute("selectedPage", "user");
+        if(usersService.getLoggedInUser().getId() != id) {
 
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+            model.addAttribute("users", usersService.findUserByIdAndSetBdayString(id));
+            model.addAttribute("pageTitle", "Edit user");
+            model.addAttribute("selectedPage", "user");
+            model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
-        return EDIT_USER;
+            return EDIT_USER;
+
+        } else {
+            return REDIRECT + USER_LIST;
+        }
     }
 
     @PostMapping("/editUser")
@@ -196,42 +205,48 @@ public class AccountController {
     }
   
     @GetMapping("/password_reset_user/{id}")
-    public String passwordResetUser(@PathVariable(value = "id") long id) throws MessagingException, IOException {
-        Users foundUser = usersService.findById(id);
-        UserPassResetCode resetCode = new UserPassResetCode();
+    public String passwordResetUser(@PathVariable(value = "id") long id, Model model) throws MessagingException, IOException {
 
-        if (foundUser != null) {
-            resetCode.setUsername(foundUser.getUsername());
-            resetCode.setCode(resetCode.generateCode());
-            resetCode.setUsed(false);
-            uprcRepository.save(resetCode);
 
-            log.info("mail with link and code being sent to user with email: " + resetCode.getUsername());
-            Mail mail = new Mail();
-            mail.setRecipient(resetCode.getUsername());
-            mail.setTopic("Your password on Food Log have been requested to be reset");
-            mail.setContent("To complete the password reset click the link Http://localhost:8080/password_reset_code and type in the username and code: " + resetCode.getCode());
+        if(usersService.getLoggedInUser().getId() != id) {
+            UserPassResetCode resetCode = new UserPassResetCode();
 
-            emailService.sendmail(mail);
+            if (usersService.findById(id) != null) {
+                resetCode.setUsername(usersService.findById(id).getUsername());
+                resetCode.setCode(resetCode.generateCode());
+                resetCode.setUsed(false);
+                uprcRepository.save(resetCode);
 
-            return REDIRECT + USER_LIST;
-        } else {
-            log.info("user not found or code already sent");
-            return REDIRECT + USER_LIST;
+                log.info("mail with link and code being sent to user with email: " + resetCode.getUsername());
+                Mail mail = new Mail();
+                mail.setRecipient(resetCode.getUsername());
+                mail.setTopic("Your password on Food Log have been requested to be reset");
+                mail.setContent("To complete the password reset click the link Http://localhost:8080/password_reset_code and type in the username and code: " + resetCode.getCode());
+
+                emailService.sendmail(mail);
+            } else {
+                log.info("user not found or code already sent");
+            }
         }
+
+        return REDIRECT + USER_LIST;
     }
   
     @GetMapping("/delete_user_confirm/{id}")
     public String deleteUser(@PathVariable("id") long id, Model model) {
         log.info("delete_user_confirm called userId: "+id);
 
-        model.addAttribute("user", usersService.findById(id));
-        model.addAttribute("pageTitle", "Delete user");
-        model.addAttribute("selectedPage", "user");
+        if(usersService.getLoggedInUser().getId() != id) {
 
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+            model.addAttribute("user", usersService.findById(id));
+            model.addAttribute("pageTitle", "Delete user");
+            model.addAttribute("selectedPage", "user");
+            model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
-        return DELETE_USER_CONFIRM;
+            return DELETE_USER_CONFIRM;
+        } else {
+            return REDIRECT + USER_LIST;
+        }
     }
 
     @PostMapping("/delete_user_confirm/{id}")
