@@ -30,9 +30,8 @@
 
             <form th:action="@{/food}">
                 <input type="text" name="keyword" placeholder="Search For a Food Name" th:value="${keyword}" >
-                <input type="submit" value="Search" />
-
-                <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-arrow-right"></i></button>
+                <button type="button" d="btnClear" onclick="clearSearch()" class="btn btn-secondary mr-2 btn-sm"><i class="fas fa-sync-alt"></i></button>
 
             </form>
 
