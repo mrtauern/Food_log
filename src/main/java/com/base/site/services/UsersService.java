@@ -29,4 +29,8 @@ public interface UsersService {
     Users getLoggedInUser();
 
     LocalDate getBirthdayFromString(String birthdayString);
+
+    void setAndSaveUserData(Users user);
+
+    Users findUserByIdAndSetBdayString(long id);
 }

@@ -162,4 +162,27 @@ public class UsersServiceImpl implements UsersService {
 
         return bday;
     }
+
+    @Override
+    public void setAndSaveUserData(Users user) {
+        user.setBirthday(getBirthdayFromString(user.getSBirthday()));
+        Users userData = findById(user.getId());
+        user.setUserType(userData.getUserType());
+        user.setPassword(userData.getPassword());
+        user.setRegisterDate(userData.getRegisterDate());
+        user.setKcal_modifier(userData.getKcal_modifier());
+        user.setAccountNonLocked(userData.getAccountNonLocked());
+        user.setRoles(userData.getRoles());
+        save(user);
+    }
+
+    @Override
+    public Users findUserByIdAndSetBdayString(long id) {
+        Users user = findById(id);
+
+        String sBirthday = user.getBirthday().toString();
+
+        user.setSBirthday(sBirthday);
+        return user;
+    }
 }

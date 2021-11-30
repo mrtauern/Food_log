@@ -19,4 +19,5 @@ public interface UserTypeService {
     void delete(UserType user);
 
     UserType findByType(String type);
+
 }

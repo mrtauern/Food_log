@@ -144,7 +144,9 @@ public class AccountController {
             user.setUserType(userTypeService.findById((long)4));
             //
             if(usersService.findByUserName(user.getUsername()) == null) {
+                user.setAccountNonLocked(1);
                 usersService.save(user);
+
                 emailController.sendEmail(user.getUsername(), "custom", emailMessage);
             } else {
                 return REDIRECT+CREATE_USER+"/userExists";
@@ -163,14 +165,7 @@ public class AccountController {
     public String editUser(@PathVariable(value = "id") Long id, Model model){
         log.info("editUser get called");
 
-        Users user = usersService.findById(id);
-
-        //created by Niklas to fit with change to LocalDate in users
-        String sBirthday = user.getBirthday().toString();
-
-        user.setSBirthday(sBirthday);
-
-        model.addAttribute("users", user);
+        model.addAttribute("users", usersService.findUserByIdAndSetBdayString(id));
         model.addAttribute("pageTitle", "Edit user");
         model.addAttribute("selectedPage", "user");
 
@@ -186,11 +181,8 @@ public class AccountController {
         user.setBirthday(usersService.getBirthdayFromString(user.getSBirthday()));
 
         try {
-            //niklas... temporary till users is correctly mapped
-            //harcoded usertype we should change this
-            user.setUserType(userTypeService.findById((long)4));
-            //
             Users userData = usersService.findById(user.getId());
+            user.setUserType(userData.getUserType());
             user.setPassword(userData.getPassword());
             user.setRegisterDate(userData.getRegisterDate());
             user.setKcal_modifier(userData.getKcal_modifier());
@@ -233,9 +225,7 @@ public class AccountController {
     public String deleteUser(@PathVariable("id") long id, Model model) {
         log.info("delete_user_confirm called userId: "+id);
 
-        Users user = usersService.findById(id);
-
-        model.addAttribute("user", user);
+        model.addAttribute("user", usersService.findById(id));
         model.addAttribute("pageTitle", "Delete user");
         model.addAttribute("selectedPage", "user");
 
@@ -281,14 +271,7 @@ public class AccountController {
     public String editUserProfile(@PathVariable( value ="id") Long id, Model model) {
         log.info("editUserProfile get called");
 
-        Users user = usersService.findById(id);
-
-        String sBirthday = user.getBirthday().toString();
-        log.info("sBirthday: "+sBirthday);
-
-        user.setSBirthday(sBirthday);
-
-        model.addAttribute("user", user);
+        model.addAttribute("user", usersService.findUserByIdAndSetBdayString(id));
         model.addAttribute("pageTitle", "Edit user Profile");
         model.addAttribute("selectedPage", "user");
 
@@ -300,18 +283,8 @@ public class AccountController {
     public String editUserProfile(@ModelAttribute("users") Users user){
         log.info("editUserProfile post called");
 
-        user.setBirthday(usersService.getBirthdayFromString(user.getSBirthday()));
-
         try {
-            //hardcoded usertype, we should change this
-            user.setUserType(userTypeService.findById((long)4));
-            //
-            Users userData = usersService.findById(user.getId());
-            user.setPassword(userData.getPassword());
-            user.setRegisterDate(userData.getRegisterDate());
-            user.setKcal_modifier(userData.getKcal_modifier());
-            user.setRoles(userData.getRoles());
-            usersService.save(user);
+            usersService.setAndSaveUserData(user);
         } catch (Exception e){
             log.info("Something went wrong with crating an user");
             log.info(e.toString());

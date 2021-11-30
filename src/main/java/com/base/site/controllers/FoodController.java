@@ -39,7 +39,7 @@ public class FoodController {
     private final String UPDATE_FOOD = "updateFood";
     private final String ADD_FOOD_TO_DAILYLOG = "addFoodToDailyLog";
     private final String CREATE_DAILYLOG = "createDailyLog";
-    private final String DAILYLOG = "dailylog";
+    private final String DAILYLOG = "dailyLog";
     private final String UPDATE_DAILYLOG = "updateDailylog";
 
 
