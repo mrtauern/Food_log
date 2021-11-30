@@ -65,6 +65,7 @@ class ExerciseControllerTest {
         assertNotNull(mockedExerciseRepo);
     }
 
+
     @Test
     void exercise() throws Exception {
         ResultActions resultActions = mockMvc.perform(get("/exercise").with(user("user")))
@@ -85,8 +86,8 @@ class ExerciseControllerTest {
 
     @Test
     public void save_exercise_OK() throws Exception {
-        Exercise newExercoce = new Exercise(1L, 22, "run");
-        when(mockedExerciseRepo.save(any(Exercise.class))).thenReturn(newExercoce);
+        Exercise newExercise = new Exercise(1L, 22, "run");
+        when(mockedExerciseRepo.save(any(Exercise.class))).thenReturn(newExercise);
 
     }
 
@@ -100,16 +101,5 @@ class ExerciseControllerTest {
 
         //Then
         assertThat(exist).isNotNull();
-    }
-
-    @Test
-    @Disabled
-    void updateExercise() throws Exception{
-
-    }
-
-    @Test
-    @Disabled
-    void deleteExercise() throws Exception{
     }
 }
