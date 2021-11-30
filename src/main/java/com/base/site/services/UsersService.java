@@ -27,4 +27,10 @@ public interface UsersService {
     DailyLog getLatestWeight(LocalDate date);
     Page<Users> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection, String keyword);
     Users getLoggedInUser();
+
+    LocalDate getBirthdayFromString(String birthdayString);
+
+    void setAndSaveUserData(Users user);
+
+    Users findUserByIdAndSetBdayString(long id);
 }

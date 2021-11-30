@@ -57,7 +57,6 @@ public class LoginController {
     @GetMapping("/signup")
     public String showSignUpForm(Model model) {
         model.addAttribute("user", new Users());
-        //model.addAttribute("userExists",userExists);
         return "add-user";
     }
 
@@ -79,6 +78,7 @@ public class LoginController {
             UserType userTypeObject = userTypeService.findByType(userTypeString);
             user.setUserType(userTypeObject);
             user.setRoles("USER");
+            user.setAccountNonLocked(1);
             String pass = passwordEncoder.encode(user.getPassword());
             user.setPassword(pass);
             user.setBirthday(LocalDate.parse("1900-01-01"));

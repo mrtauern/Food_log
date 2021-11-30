@@ -1,15 +1,17 @@
 package com.base.site.services;
 
 import com.base.site.controllers.DailyLogController;
-import com.base.site.models.DailyLog;
-import com.base.site.models.Exercise;
-import com.base.site.models.Users;
+import com.base.site.models.*;
 import com.base.site.repositories.DailyLogRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -21,6 +23,12 @@ public class DailyLogServiceImpl implements DailyLogService {
 
     @Autowired
     DailyLogRepo dailyLogRepo;
+
+    @Autowired
+    FoodService foodService;
+
+    @Autowired
+    UsersService usersService;
 
     @Override
     public List<DailyLog> findAll() {
@@ -75,6 +83,112 @@ public class DailyLogServiceImpl implements DailyLogService {
         kcalLeft = totalKcal - usedKcal;
         return kcalLeft;
     }
+
+    public DailyLogWrapper getLogs(Users loggedInUser, LocalDate date) {
+        log.info("getLogs called in dailylogServiceImpl");
+        DailyLogWrapper dailyLogWrapper = new DailyLogWrapper(findAll());
+        Food nutrition = new Food("nutrition",0.0,0.0,0.0,0.0,0.0);
+        for (DailyLog dailyLog: dailyLogWrapper.getDailyLogs()) {
+            if(dailyLog.getDatetime().equals(date) && loggedInUser.getId() == dailyLog.getFkUser().getId()) {
+
+                String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                dailyLog.setSDatetime(sDatetime);
+
+                if(dailyLog.getFood() != null || dailyLog.getPrivateFood() != null) {
+                    dailyLogWrapper.addToDailyLogsFoods(dailyLog);
+                    String logType = dailyLog.getFkLogType().getType();
+
+                    switch (logType){
+                        case "Breakfast":
+                            dailyLogWrapper.addToDailyLogsBreakfast(dailyLog);
+                            nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog);
+                            break;
+                        case "Lunch":
+                            dailyLogWrapper.addToDailyLogsLunch(dailyLog);
+                            nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog);
+                            break;
+                        case "Dinner":
+                            dailyLogWrapper.addToDailyLogsDinner(dailyLog);
+                            nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog);
+                            break;
+                        case "Miscellaneous":
+                            dailyLogWrapper.addToDailyLogsMiscellaneous(dailyLog);
+                            nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog);
+                            break;
+                        case "Weight":
+                            dailyLogWrapper.setWeight(dailyLog);
+                            break;
+                        default:
+                            log.info("UPS... Something went wrong!");
+                    }
+
+                }else if (dailyLog.getFkExercise() != null){
+                    dailyLogWrapper.addToDailyLogsExercises(dailyLog);
+                }else if(dailyLog.getFkLogType().getType().equals("Weight")) {
+                    dailyLogWrapper.setWeight(dailyLog);
+                }
+            }
+        }
+        dailyLogWrapper.setNutrition(nutrition);
+        if(dailyLogWrapper.getWeight() == null) {
+            DailyLog weight = new DailyLog();
+            weight.setId(0L);
+            weight.setAmount(0.0);
+            dailyLogWrapper.setWeight(weight);
+        }
+        return dailyLogWrapper;
+    }
+
+    public Model getDailyLogModels(Users loggedInUser, String dateString, Model model, String keyword) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString, formatter);
+
+        Date currentDate = new Date();
+        LocalDate today = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        DailyLogWrapper dailyLogWrapper = getLogs(loggedInUser, date);
+
+        model.addAttribute("today", today.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("sSelectedDate", date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+
+        model.addAttribute("foods", dailyLogWrapper.getDailyLogsFoods());
+        model.addAttribute("breakfasts", dailyLogWrapper.getDailyLogsBreakfast());
+        model.addAttribute("lunches", dailyLogWrapper.getDailyLogsLunch());
+        model.addAttribute("dinners", dailyLogWrapper.getDailyLogsDinner());
+        model.addAttribute("miscellaneous", dailyLogWrapper.getDailyLogsMiscellaneous());
+        //model.addAttribute("pfoods", dailyLogsPrivateFoods);
+        model.addAttribute("exercises", dailyLogWrapper.getDailyLogsExercises());
+        model.addAttribute("keyword", keyword);
+
+        // +/- Day
+        model.addAttribute("tomorrow", date.plusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("yesterday", date.minusDays(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+        // +/- Week
+        model.addAttribute("nextWeek", date.plusWeeks(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("previousWeek", date.minusWeeks(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+        // +/- Month
+        model.addAttribute("nextMonth", date.plusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        model.addAttribute("previousMonth", date.minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+        model.addAttribute("bmr", usersService.getLoggedInUser().getBMR(usersService.getLatestWeight(date).getAmount()));
+        model.addAttribute("kcalUsed", getKcalUsed(date, usersService.getLoggedInUser()));
+        model.addAttribute("kcalLeft", getKcalLeft(date, usersService.getLoggedInUser()));
+        model.addAttribute("nutrition", dailyLogWrapper.getNutrition());
+
+        model.addAttribute("weight", dailyLogWrapper.getWeight());
+
+        model.addAttribute("selectedPage", "dailyLog");
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+
+
+        return model;
+    }
+
+
+
 
 }
 

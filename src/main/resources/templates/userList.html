@@ -53,10 +53,10 @@
             </thead>
             <tbody>
             <tr th:each="user : ${listUser}">
-                <td><i class="fas fa-user"></i> <span th:text="${user.firstname + ' ' + user.lastname}"></span></td>
+                <td><i class="fas fa-user"></i> <span th:text="${user.getFullName()}"></span></td>
                 <td><i class="fas fa-envelope"></i> <span th:text="${user.username}"></span></td>
                 <td>
-                    <th:block th:if="${user.id != loggedInUserId}">
+                    <th:block th:if="${user.id != loggedInUser.id}">
                         <form action="/adminActionAccountNonLocked" method="get">
                             <input type="hidden" th:value="${user.id}" th:name="id" />
                             <th:block th:if="${user.accountNonLocked == 0}">

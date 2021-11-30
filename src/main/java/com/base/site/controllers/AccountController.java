@@ -8,8 +8,6 @@ import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,13 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -70,20 +61,14 @@ public class AccountController {
         }else {
             log.info("userList is called");
         }
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-
-        Long userId = loggedInUser.getId();
 
         model.addAttribute("keyword", keyword);
         model.addAttribute("users", usersService.findAll());
         model.addAttribute("pageTitle", "User list");
         model.addAttribute("selectedPage", "user");
         model.addAttribute("user", new Users());
-        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
-        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
-        model.addAttribute("loggedInUserId", userId);
 
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return findPaginated(model ,1 ,"firstname", "asc", keyword );
     }
@@ -112,10 +97,7 @@ public class AccountController {
     public String accountLockUnlock(@RequestParam("id") long id, @RequestParam(required = false, value = "locked") boolean locked) {
         log.info("Getmapping adminActionAccountNonLocked called with id: "+id+" and status locked: "+locked);
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-
-        if(loggedInUser.getId() != id) {
+        if(usersService.getLoggedInUser().getId() != id) {
 
             Users user = usersService.findById(id);
 
@@ -132,35 +114,17 @@ public class AccountController {
         return REDIRECT+USER_LIST;
     }
 
-/*
-    @GetMapping("/userList")
-    public String userList(Model model){
-        log.info("userList called");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-
-        model.addAttribute("users", usersService.findAll());
-        model.addAttribute("pageTitle", "User list");
-        model.addAttribute("selectedPage", "user");
-        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
-        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
-
-        return USER_LIST;
-    } */
 
     @GetMapping({"/createUser","createUser/{userExists}"})
     public String createUser(Model model, @PathVariable(required = false, value = "userExists") String userExists){
         log.info("createUser get called");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
 
         model.addAttribute("users", new Users());
         model.addAttribute("userExists", userExists);
-        //model.addAttribute("userTypes", userTypeService.findAll());
         model.addAttribute("pageTitle", "Create user");
         model.addAttribute("selectedPage", "user");
-        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
-        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return CREATE_USER;
     }
@@ -173,33 +137,20 @@ public class AccountController {
         String encPass = passwordEncoder.encode(genPass);
         user.setPassword(encPass);
 
-        Date birthday = new Date();
-
-        String sBirthday = user.getSBirthday();
-
-        log.info("New birthday: " + sBirthday);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            birthday = dateFormat.parse(sBirthday);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
-        Timestamp ts=new Timestamp(birthday.getTime());
-        //created by Niklas to fit with change to LocalDate in users
-        LocalDate bday = Instant.ofEpochMilli(birthday.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-        user.setBirthday(bday);
+        user.setBirthday(usersService.getBirthdayFromString(user.getSBirthday()));
 
         String emailMessage = "We have created a new user for you.\n\n";
         emailMessage += "Your new password is: " + genPass;
 
         try {
             //niklas... temporary till users is correctly mapped
+            //hardcoded usertype we should change this
             user.setUserType(userTypeService.findById((long)4));
+            //
             if(usersService.findByUserName(user.getUsername()) == null) {
+                user.setAccountNonLocked(1);
                 usersService.save(user);
+
                 emailController.sendEmail(user.getUsername(), "custom", emailMessage);
             } else {
                 return REDIRECT+CREATE_USER+"/userExists";
@@ -217,27 +168,16 @@ public class AccountController {
     @GetMapping("/editUser/{id}")
     public String editUser(@PathVariable(value = "id") Long id, Model model){
         log.info("editUser get called");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
 
-        if(loggedInUser.getId() != id) {
-            Users user = usersService.findById(id);
+        if(usersService.getLoggedInUser().getId() != id) {
 
-            //String sBirthday = new SimpleDateFormat("yyyy-MM-dd").format(user.getBirthday());
-            //created by Niklas to fit with change to LocalDate in users
-            String sBirthday = user.getBirthday().toString();
-            log.info("sBirthday: " + sBirthday);
-
-            user.setSBirthday(sBirthday);
-
-            model.addAttribute("users", user);
-            //model.addAttribute("userTypes", userTypeService.findAll());
+            model.addAttribute("users", usersService.findUserByIdAndSetBdayString(id));
             model.addAttribute("pageTitle", "Edit user");
             model.addAttribute("selectedPage", "user");
-            model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
-            model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+            model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
             return EDIT_USER;
+
         } else {
             return REDIRECT + USER_LIST;
         }
@@ -247,28 +187,11 @@ public class AccountController {
     public String editUser(@ModelAttribute("users") Users user){
         log.info("editUser post called");
 
-        Date birthday = new Date();
-
-        String sBirthday = user.getSBirthday();
-
-        log.info("New birthday: " + sBirthday);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            birthday = dateFormat.parse(sBirthday);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        Timestamp ts=new Timestamp(birthday.getTime());
-        //created by Niklas to fit with change to LocalDate in users
-        LocalDate bday = Instant.ofEpochMilli(birthday.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-        user.setBirthday(bday);
+        user.setBirthday(usersService.getBirthdayFromString(user.getSBirthday()));
 
         try {
-            //niklas... temporary till users is correctly mapped
-            user.setUserType(userTypeService.findById((long)4));
             Users userData = usersService.findById(user.getId());
+            user.setUserType(userData.getUserType());
             user.setPassword(userData.getPassword());
             user.setRegisterDate(userData.getRegisterDate());
             user.setKcal_modifier(userData.getKcal_modifier());
@@ -283,16 +206,13 @@ public class AccountController {
   
     @GetMapping("/password_reset_user/{id}")
     public String passwordResetUser(@PathVariable(value = "id") long id, Model model) throws MessagingException, IOException {
-        //UserPassResetCode foundResetCode = uprcRepository.findByUsername(resetCode.getUsername());
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
 
-        if(loggedInUser.getId() != id) {
-            Users foundUser = usersService.findById(id);
+
+        if(usersService.getLoggedInUser().getId() != id) {
             UserPassResetCode resetCode = new UserPassResetCode();
 
-            if (foundUser != null) {
-                resetCode.setUsername(foundUser.getUsername());
+            if (usersService.findById(id) != null) {
+                resetCode.setUsername(usersService.findById(id).getUsername());
                 resetCode.setCode(resetCode.generateCode());
                 resetCode.setUsed(false);
                 uprcRepository.save(resetCode);
@@ -315,18 +235,13 @@ public class AccountController {
     @GetMapping("/delete_user_confirm/{id}")
     public String deleteUser(@PathVariable("id") long id, Model model) {
         log.info("delete_user_confirm called userId: "+id);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
 
-        if(loggedInUser.getId() != id) {
+        if(usersService.getLoggedInUser().getId() != id) {
 
-            Users user = usersService.findById(id);
-
-            model.addAttribute("user", user);
+            model.addAttribute("user", usersService.findById(id));
             model.addAttribute("pageTitle", "Delete user");
             model.addAttribute("selectedPage", "user");
-            model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
-            model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+            model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
             return DELETE_USER_CONFIRM;
         } else {
@@ -344,13 +259,11 @@ public class AccountController {
     @GetMapping("/dashboard")
     public String admin_dashboard(Model model) {
         log.info("dashboard getmapping called...");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
 
         model.addAttribute("pageTitle", "User list");
         model.addAttribute("selectedPage", "dashboard");
-        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
-        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return DASHBOARD;
     }
@@ -358,15 +271,13 @@ public class AccountController {
     @GetMapping("/userInfo")
     public String userInfo(Model model){
         log.info("userInfo called");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
 
         model.addAttribute("users", usersService.findAll());
         model.addAttribute("pageTitle", "User Personal Info");
-        model.addAttribute("loggedIn", loggedInUser);
+        model.addAttribute("loggedIn", usersService.getLoggedInUser());
         model.addAttribute("selectedPage", "user");
-        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
-        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return USER_INFO;
     }
@@ -374,21 +285,12 @@ public class AccountController {
     @GetMapping("/editUserProfile/{id}")
     public String editUserProfile(@PathVariable( value ="id") Long id, Model model) {
         log.info("editUserProfile get called");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
 
-        Users user = usersService.findById(id);
-
-        String sBirthday = user.getBirthday().toString();
-        log.info("sBirthday: "+sBirthday);
-
-        user.setSBirthday(sBirthday);
-
-        model.addAttribute("user", user);
+        model.addAttribute("user", usersService.findUserByIdAndSetBdayString(id));
         model.addAttribute("pageTitle", "Edit user Profile");
         model.addAttribute("selectedPage", "user");
-        model.addAttribute("user_name", loggedInUser.getFirstname() + " " + loggedInUser.getLastname());
-        model.addAttribute("user_gender", loggedInUser.getUserType().getType());
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return EDIT_USER_PROFILE;
     }
@@ -396,29 +298,8 @@ public class AccountController {
     public String editUserProfile(@ModelAttribute("users") Users user){
         log.info("editUserProfile post called");
 
-        Date birthday = new Date();
-        String sBirthday = user.getSBirthday();
-        log.info("New birthday: " + sBirthday);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            birthday = dateFormat.parse(sBirthday);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        Timestamp ts=new Timestamp(birthday.getTime());
-        LocalDate bday = Instant.ofEpochMilli(birthday.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-        user.setBirthday(bday);
-
-        try {
-            user.setUserType(userTypeService.findById((long)4));
-            Users userData = usersService.findById(user.getId());
-            user.setPassword(userData.getPassword());
-            user.setRegisterDate(userData.getRegisterDate());
-            user.setKcal_modifier(userData.getKcal_modifier());
-            user.setRoles(userData.getRoles());
-            usersService.save(user);
+            usersService.setAndSaveUserData(user);
         } catch (Exception e){
             log.info("Something went wrong with crating an user");
             log.info(e.toString());

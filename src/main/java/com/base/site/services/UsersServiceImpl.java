@@ -15,7 +15,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -133,10 +139,50 @@ public class UsersServiceImpl implements UsersService {
     }
 
     public Users getLoggedInUser() {
-        if (loggedInUser==null) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            loggedInUser = usersRepo.findUsersByUsername(auth.getName());
-        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        loggedInUser = usersRepo.findUsersByUsername(auth.getName());
+
         return loggedInUser;
+    }
+
+    public LocalDate getBirthdayFromString(String birthdayString) {
+        Date birthday = new Date();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            birthday = dateFormat.parse(birthdayString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        Timestamp ts=new Timestamp(birthday.getTime());
+        //created by Niklas to fit with change to LocalDate in users
+        LocalDate bday = Instant.ofEpochMilli(birthday.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+
+        return bday;
+    }
+
+    @Override
+    public void setAndSaveUserData(Users user) {
+        user.setBirthday(getBirthdayFromString(user.getSBirthday()));
+        Users userData = findById(user.getId());
+        user.setUserType(userData.getUserType());
+        user.setPassword(userData.getPassword());
+        user.setRegisterDate(userData.getRegisterDate());
+        user.setKcal_modifier(userData.getKcal_modifier());
+        user.setAccountNonLocked(userData.getAccountNonLocked());
+        user.setRoles(userData.getRoles());
+        save(user);
+    }
+
+    @Override
+    public Users findUserByIdAndSetBdayString(long id) {
+        Users user = findById(id);
+
+        String sBirthday = user.getBirthday().toString();
+
+        user.setSBirthday(sBirthday);
+        return user;
     }
 }
