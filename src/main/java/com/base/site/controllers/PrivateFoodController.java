@@ -36,22 +36,19 @@ public class PrivateFoodController {
 
     @GetMapping("/privateFood")
     public String privateFood(Model model, PrivateFood privateFood, @Param("keyword") String keyword) {
-        List<PrivateFood> pfood = privateFoodService.findAllByKeyword(keyword);
-
-        model.addAttribute("pfood", pfood);
-        model.addAttribute("keyword", keyword);
-
         log.info("  get mapping private food is called");
+
+        model.addAttribute("pfood", privateFoodService.findAllByKeyword(keyword));
+        model.addAttribute("keyword", keyword);
 
         return PRIVATEFOOD;
     }
 
     @GetMapping("/createPrivateFood")
     public String createPrivateFood(Model model) {
-
-        PrivateFood privateFood = new PrivateFood();
-        model.addAttribute("privateFood", privateFood);
         log.info("  createPrivateFood is called ");
+
+        model.addAttribute("privateFood", new PrivateFood());
 
         return CREATE_PRIVATEFOOD;
     }
@@ -70,8 +67,7 @@ public class PrivateFoodController {
     public String updatePrivateFood(@PathVariable(value = "id") Long id, Model model) {
         log.info("  GetMapping updatePrivateFood is called ");
 
-        PrivateFood privateFood = privateFoodService.findById(id);
-        model.addAttribute("privateFood", privateFood);
+        model.addAttribute("privateFood", privateFoodService.findById(id));
 
         return UPDATE_PRIVATEFOOD;
     }
