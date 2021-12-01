@@ -7,51 +7,38 @@
 
     <div class="contentBox">
 
-    <h1>Recipe list</h1>
-
-        <div class="actionBar">
-
-            <form>
-                <input type="text" placeholder="Search...">
-            </form>
-
-            <a href="/createRecipe" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Create recipe</a>
-
-        </div>
-
+    <h1>Recipe Info</h1>
 
         <table class="table table-striped">
         <thead class="thead-dark">
         <tr>
             <th>Name</th>
             <th>Weight (Gram)</th>
-            <th></th>
+            <th>Calories pr 100 (Gram)</th>
+
         </tr>
         </thead>
         <tbody>
             <tr th:each="recipe : ${recipe}">
                 <td th:text="${recipe.name}"></td>
                 <td th:text="${recipe.total_weight}"></td>
-                <td>
-<!--                    <a th:href="${'/editRecipe/' + recipe.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>-->
-<!--                    <a th:href="@{'/deleteRecipe_confirm/'+${recipe.id}}" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>-->
-                </td>
+                <td th:text="${recipe.total_weight}"></td>
             </tr>
         </tbody>
     </table>
 
         <table class="table table-striped">
-            <thead class="thead-dark">
+            <thead class="thead-grey">
             <tr>
                 <th>Food Name</th>
-                <th>Weight (Gram)</th>
+                <th>Food Weight (Gram)</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="recipe : ${recipeFood}">
-                <td th:text="${recipe.name}"></td>
-                <td th:text="${recipe.amounts}"></td>
+            <tr th:each="recipef : ${recipeFood}">
+                <td th:text="${recipef.food.name}"></td>
+                <td th:text="${recipef.amount}"></td>
                 <td>
                     <!--                    <a th:href="${'/editRecipe/' + recipe.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>-->
                     <!--                    <a th:href="@{'/deleteRecipe_confirm/'+${recipe.id}}" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>-->

@@ -74,20 +74,10 @@ public class RecipeController {
 
     @GetMapping("/recipeInfo/{id}")
     public String recipeInfo(Model model,Recipe recipe,@PathVariable( value ="id") Long id) {
+        log.info("  RecipeInfo getmapping is called... with id :: " + id);
 
-        /*
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-        log.info("Recipes getmapping called for user: "+loggedInUser.getUsername()+"...");
-        List<Recipe> recipes = recipeService.findAllFkUser(loggedInUser);
-
-         */
-
-
-       // model.addAttribute("recipes", recipes);
         model.addAttribute("recipe", recipeService.findRecipeById(id));
         model.addAttribute("recipeFood", recipeFoodService.findByRecipe(recipe));
-
 
         return RECIPEINFO;
     }
