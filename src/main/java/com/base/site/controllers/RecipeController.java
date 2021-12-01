@@ -72,30 +72,22 @@ public class RecipeController {
 
         return RECIPES;
     }
-    @GetMapping("/recipeInfo")
-    public String recipeInfo(Model model) {
 
+    @GetMapping("/recipeInfo/{id}")
+    public String recipeInfo(Model model,Recipe recipe,@PathVariable( value ="id") Long id) {
+
+        /*
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loggedInUser = usersService.findByUserName(auth.getName());
         log.info("Recipes getmapping called for user: "+loggedInUser.getUsername()+"...");
         List<Recipe> recipes = recipeService.findAllFkUser(loggedInUser);
 
-        if(recipes.size() > 0) {
-            for (Recipe recipe: recipes) {
-                log.info("Recipe name: "+recipe.getName()+" Total weight: "+recipe.getTotal_weight());
-                for (RecipeFood recipeFood: recipe.getAmounts()) {
-                    log.info("Amount: "+recipeFood.getAmount()+" foodname: "+recipeFood.getFood().getName());
-                }
-            }
-        }else {
-            log.info("no recipes found for user "+loggedInUser.getUsername());
-            Recipe noRecipe = new Recipe();
-            noRecipe.setName("You have no recipe's, you can create one by clicking the create recipe button.");
-            noRecipe.setTotal_weight(0);
-            recipes.add(noRecipe);
-        }
+         */
 
-        model.addAttribute("recipes", recipes);
+
+       // model.addAttribute("recipes", recipes);
+        model.addAttribute("recipe", recipeService.findRecipeById(id));
+        model.addAttribute("recipeFood", recipeFoodService.findByRecipe(recipe));
 
 
         return RECIPEINFO;

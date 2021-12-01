@@ -49,4 +49,10 @@ public class RecipeServiceImpl implements RecipeService{
         return recipeRepository.findAllByFkUser(loggedInUser);
     }
 
+    @Override
+    public Recipe findRecipeById(long id) {
+        Recipe recipe = findById(id);
+
+        return recipe;
+    }
 }
