@@ -78,6 +78,7 @@ public class RecipeController {
 
         model.addAttribute("recipe", recipeService.findRecipeById(id));
         model.addAttribute("recipeFood", recipeFoodService.findByRecipe(recipe));
+        model.addAttribute("totalCalories", recipeService.calculateCaloriesInRecipe(recipeFoodService.findByRecipe(recipe), recipeService.findRecipeById(id)));
 
         return RECIPEINFO;
     }

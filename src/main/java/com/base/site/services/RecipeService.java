@@ -24,5 +24,7 @@ public interface RecipeService {
 
     Recipe findRecipeById(long id);
 
+    double calculateCaloriesInRecipe (List<RecipeFood> recipeFoods, Recipe recipe);
+
 }
 

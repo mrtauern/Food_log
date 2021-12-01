@@ -19,6 +19,9 @@ public class RecipeServiceImpl implements RecipeService{
     @Autowired
     RecipeRepository recipeRepository;
 
+    @Autowired
+    RecipeFoodService recipeFoodService;
+
     @Override
     public List<Recipe> findAll() {
         return recipeRepository.findAll();
@@ -54,5 +57,15 @@ public class RecipeServiceImpl implements RecipeService{
         Recipe recipe = findById(id);
 
         return recipe;
+    }
+
+    @Override
+    public double calculateCaloriesInRecipe(List<RecipeFood> recipeFoods, Recipe recipe) {
+        double total = 0;
+        for (RecipeFood recipeFood : recipeFoods) {
+            total += (recipeFood.getFood().getEnergy_kcal()*recipeFood.getAmount()) / 100;
+        }
+        total = (total/recipe.getTotal_weight())*100;
+        return total;
     }
 }
