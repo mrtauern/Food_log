@@ -36,13 +36,12 @@ public class UserController {
     UsersService usersService;
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index() {
         log.info("Usercontroller / getmapping called...");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-        if(loggedInUser.getRoles().equals("USER")) {
+
+        if(usersService.getLoggedInUser().getRoles().equals("USER")) {
             return REDIRECT+DAILYLOG;
-        } else if(loggedInUser.getRoles().equals("ADMIN")) {
+        } else if(usersService.getLoggedInUser().getRoles().equals("ADMIN")) {
             return REDIRECT+DASHBOARD;
         }
         return FRONTPAGE;
@@ -51,11 +50,10 @@ public class UserController {
     @GetMapping("/index")
     public String showUserList(Model model) {
         log.info("Usercontroller /index getmapping called...");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-        if(loggedInUser.getRoles().equals("USER")) {
+
+        if(usersService.getLoggedInUser().getRoles().equals("USER")) {
             return REDIRECT+DAILYLOG;
-        } else if(loggedInUser.getRoles().equals("ADMIN")) {
+        } else if(usersService.getLoggedInUser().getRoles().equals("ADMIN")) {
             return REDIRECT+DASHBOARD;
         }
         return INDEX;

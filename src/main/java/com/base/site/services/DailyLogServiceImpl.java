@@ -28,6 +28,9 @@ public class DailyLogServiceImpl implements DailyLogService {
     FoodService foodService;
 
     @Autowired
+    PrivateFoodService privateFoodService;
+
+    @Autowired
     UsersService usersService;
 
     @Override
@@ -101,19 +104,40 @@ public class DailyLogServiceImpl implements DailyLogService {
                     switch (logType){
                         case "Breakfast":
                             dailyLogWrapper.addToDailyLogsBreakfast(dailyLog);
-                            nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog);
+                            if(dailyLog.getFood()!=null) {
+                                nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "food");
+                            }
+                            if(dailyLog.getPrivateFood()!=null) {
+                                nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "pfood");
+                            }
+
                             break;
                         case "Lunch":
                             dailyLogWrapper.addToDailyLogsLunch(dailyLog);
-                            nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog);
+                            if(dailyLog.getFood()!=null) {
+                                nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "food");
+                            }
+                            if(dailyLog.getPrivateFood()!=null) {
+                                nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "pfood");
+                            }
                             break;
                         case "Dinner":
                             dailyLogWrapper.addToDailyLogsDinner(dailyLog);
-                            nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog);
+                            if(dailyLog.getFood()!=null) {
+                                nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "food");
+                            }
+                            if(dailyLog.getPrivateFood()!=null) {
+                                nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "pfood");
+                            }
                             break;
                         case "Miscellaneous":
                             dailyLogWrapper.addToDailyLogsMiscellaneous(dailyLog);
-                            nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog);
+                            if(dailyLog.getFood()!=null) {
+                                nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "food");
+                            }
+                            if(dailyLog.getPrivateFood()!=null) {
+                                nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "pfood");
+                            }
                             break;
                         case "Weight":
                             dailyLogWrapper.setWeight(dailyLog);

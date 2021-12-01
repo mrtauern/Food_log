@@ -45,8 +45,8 @@
                 <td th:text="${pfood.protein}">Protein</td>
                 <td th:text="${pfood.carbohydrates}">Carbohydrates</td>
                 <td th:text="${pfood.fat}">Fat</td>
-                <td th:text="${pfood.energyKilojoule}">Kilojoule</td>
-                <td th:text="${pfood.energyKcal}">Kcal</td>
+                <td th:text="${pfood.energy_kilojoule}">Kilojoule</td>
+                <td th:text="${pfood.energy_kcal}">Kcal</td>
                 <td th:text="${pfood.fkUser.firstname}">User</td>
                 <td>
                     <a th:href="@{/updatePrivateFood/{id}(id=${pfood.id})}">Edit</a>
