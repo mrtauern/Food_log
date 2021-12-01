@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="fragments/head :: styles"></head>
+<body>
+    <header th:include="fragments/navbar_top :: navbar"></header>
+
+    <div class="formBox">
+
+        <h1>Edit your recipe</h1>
+        <form th:action="@{editRecipe}"  method="POST">
+
+            <label for="name">Recipe name</label>
+            <input type="text" th:name="name" id="name" th:value="${recipe.name}" th:required="required">
+
+            <label for="total_weight">Recipe total weight (Gram)</label>
+            <input type="number" th:name="total_weight" id="total_weight" th:value="${recipe.total_weight}" th:required="required">
+
+                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Save </button>
+                <button onclick="location.href='/recipes';" type="button" class="btn mr-2 btn-sm"><i class="fas fa-long-arrow-alt-left"></i> Back</button>
+
+        </form>
+        <br><br>
+        <h1>Edit your foods in recipe</h1>
+
+        <table class="table table-striped">
+            <thead class="thead-grey">
+            <tr>
+                <th>Food Name in this recipe</th>
+                <th>Food Weight (Gram)</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="recipef : ${recipeFood}">
+                <td th:text="${recipef.food.name}"></td>
+<!--                <td th:text="${recipef.amount}">-->
+                <td>
+                    <input type="text" th:text="${recipef.amount}" id="lastname" th:required="required">
+
+                </td>
+
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <footer th:include="fragments/navbar_top :: bottom_bar"></footer>
+</body>
+</html>
