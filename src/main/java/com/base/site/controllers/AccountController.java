@@ -187,9 +187,11 @@ public class AccountController {
     public String editUser(@ModelAttribute("users") Users user){
         log.info("editUser post called");
 
+
         user.setBirthday(usersService.getBirthdayFromString(user.getSBirthday()));
 
         try {
+            //move to servicelayer?
             Users userData = usersService.findById(user.getId());
             user.setUserType(userData.getUserType());
             user.setPassword(userData.getPassword());
@@ -208,6 +210,7 @@ public class AccountController {
     public String passwordResetUser(@PathVariable(value = "id") long id, Model model) throws MessagingException, IOException {
 
 
+        //logic should be in a service method??
         if(usersService.getLoggedInUser().getId() != id) {
             UserPassResetCode resetCode = new UserPassResetCode();
 

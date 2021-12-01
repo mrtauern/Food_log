@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 
 @Controller
 public class ExerciseController {
+
     @Autowired
     ExerciseService exerciseService;
     @Autowired
@@ -31,6 +32,15 @@ public class ExerciseController {
     LogTypeService logTypeService;
 
     Logger log = Logger.getLogger(ExerciseController.class.getName());
+
+    private final String REDIRECT = "redirect:/";
+    private final String EXERCISE = "exercise";
+    private final String CREATE_EXERCISE = "createExercise";
+    private final String UPDATE_EXERCISE = "updateExercise";
+    private final String DAILYLOG = "dailyLog";
+    private final String ADD_EXERCISE_TO_DAILYLOG = "addExerciseToDailyLog";
+    private final String CREATE_EXERCISE_IN_DAILYLOG = "createExerciseInDailyLog";
+    private final String UPDATE_EXERCISE_IN_DAILYLOG = "updateExerciseInDailyLog";
 
     public ExerciseController() {}
 
@@ -44,7 +54,7 @@ public class ExerciseController {
         model.addAttribute("edList", edList);
         model.addAttribute("keyword", keyword);
 
-        return "exercise";
+        return EXERCISE;
     }
 
 
@@ -56,7 +66,7 @@ public class ExerciseController {
         model.addAttribute("exercise", exercise);
         log.info("  createExercise is called ");
 
-        return "createExercise";
+        return CREATE_EXERCISE;
     }
 
     @PostMapping("/saveExercise")
@@ -64,7 +74,7 @@ public class ExerciseController {
         exerciseService.save(exercise);
         log.info("  PostMapping saveExercise is called ");
 
-        return  "redirect:/" + "exercise";
+        return  REDIRECT + EXERCISE;
     }
 
     @GetMapping("/updateExercise/{id}")
@@ -73,7 +83,7 @@ public class ExerciseController {
         model.addAttribute("exercise", exercise);
         log.info("  GetMapping updateExercise is called ");
 
-        return "updateExercise";
+        return UPDATE_EXERCISE;
     }
 
     @GetMapping("/deleteExercise/{id}")
@@ -81,7 +91,7 @@ public class ExerciseController {
         this.exerciseService.deleteById(id);
         log.info("  GetMapping deleteExercise is called ");
 
-        return "redirect:/" + "exercise";
+        return REDIRECT + EXERCISE;
     }
 
 
@@ -99,7 +109,7 @@ public class ExerciseController {
         model.addAttribute("exerciseList", exerciseList);
         model.addAttribute("keyword", keyword);
 
-        return "addExerciseToDailyLog";
+        return ADD_EXERCISE_TO_DAILYLOG;
     }
     @GetMapping({"/createExerciseInDailyLog/{id}", "/createExerciseInDailyLog/{id}/{date}"})
     public String createExerciseInDailyLog(@PathVariable(value = "id") Long id, Model model, DailyLog dailyLog,
@@ -116,26 +126,25 @@ public class ExerciseController {
         model.addAttribute("dailyLog", dailyLog);
         model.addAttribute("exercise", exercise);
 
-        return "createExerciseInDailyLog";
+        return CREATE_EXERCISE_IN_DAILYLOG;
     }
     @PostMapping({"/saveExerciseInDailyLog", "/saveExerciseInDailyLog/{date}"})
     public String saveExerciseInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Exercise exercise, Model model,
                                          @PathVariable(required = false, value = "date") String dateString) {
         log.info("  Post Mapping saveExerciseInDailyLog is called ");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
+
         Exercise exerciseId = exerciseService.findById(exercise.getId());
-        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
-        dailyLog.setDatetime(date);
+
+        dailyLog.setDatetime(dateString == null ? LocalDate.now() : LocalDate.parse(dateString));
         String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
         dailyLog.setFkExercise(exerciseId);
-        dailyLog.setFkUser(loggedInUser);
+        dailyLog.setFkUser(usersService.getLoggedInUser());
         dailyLog.setFkLogType(logTypeService.findByType("Exercise"));
 
         dailyLogService.save(dailyLog);
 
-        return  "redirect:/" + "dailyLog/"+sDatetime;
+        return  REDIRECT + DAILYLOG +"/"+sDatetime;
 
     }
     @GetMapping({"/updateExerciseInDailyLog/{id}", "/updateExerciseInDailyLog/{id}/{date}"})
@@ -147,27 +156,24 @@ public class ExerciseController {
 
         model.addAttribute("dailyLog", dailyLog);
 
-        return "updateExerciseInDailyLog";
+        return UPDATE_EXERCISE_IN_DAILYLOG;
     }
 
     @PostMapping({"/updateExerciseInDailyLog", "/updateExerciseInDailyLog/{date}"})
     public String updateExerciseInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,
                                            @PathVariable(required = false, value = "date") String dateString) {
         log.info("  Post Mapping updateExerciseInDailyLog is called ");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
 
         dailyLog.setDatetime(date);
 
-        dailyLog.setFkUser(loggedInUser);
+        dailyLog.setFkUser(usersService.getLoggedInUser());
         dailyLog.setFkLogType(logTypeService.findByType("Exercise"));
 
         dailyLogService.save(dailyLog);
 
-        return  "redirect:/" + "dailyLog/"+dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return  REDIRECT + DAILYLOG+"/"+dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
     }
 
@@ -179,7 +185,7 @@ public class ExerciseController {
 
         this.dailyLogService.deleteById(id);
 
-        return "redirect:/" + "dailyLog/"+date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return REDIRECT + DAILYLOG +"/"+date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
 }

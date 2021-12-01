@@ -18,7 +18,7 @@ public interface FoodService {
     void deleteById(Long id);
     Page<Food> findPaginatedFood(int pageNo, int pageSize, String sortField, String sortDirection, String keyword);
 
-    Food setAddFoodNutritionFromDailylog(Food nutrition, DailyLog dailyLog);
+    Food setAddFoodNutritionFromDailylog(Food nutrition, DailyLog dailyLog, String type);
 
     //List<Food> findAllNotInList (DailyLog dailyLog);
 }

@@ -53,12 +53,13 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public Food setAddFoodNutritionFromDailylog(Food nutrition, DailyLog dailyLog) {
-        double fat = (dailyLog.getFood().getFat()*dailyLog.getAmount())/100;
-        double carbs = (dailyLog.getFood().getCarbohydrates()*dailyLog.getAmount())/100;
-        double protein = (dailyLog.getFood().getProtein()*dailyLog.getAmount())/100;
-        double kj = (dailyLog.getFood().getEnergy_kilojoule()*dailyLog.getAmount())/100;
-        double kcal = (dailyLog.getFood().getEnergy_kcal()*dailyLog.getAmount())/100;
+    public Food setAddFoodNutritionFromDailylog(Food nutrition, DailyLog dailyLog, String type) {
+        double fat = type.equals("food") ? (dailyLog.getFood().getFat()*dailyLog.getAmount())/100 : (dailyLog.getPrivateFood().getFat()*dailyLog.getAmount())/100;
+        double carbs = type.equals("food") ? (dailyLog.getFood().getCarbohydrates()*dailyLog.getAmount())/100 : (dailyLog.getPrivateFood().getCarbohydrates()*dailyLog.getAmount())/100;
+        double protein = type.equals("food") ? (dailyLog.getFood().getProtein()*dailyLog.getAmount())/100 : (dailyLog.getPrivateFood().getProtein()*dailyLog.getAmount())/100;
+        double kj = type.equals("food") ? (dailyLog.getFood().getEnergy_kilojoule()*dailyLog.getAmount())/100 : (dailyLog.getPrivateFood().getEnergy_kilojoule()*dailyLog.getAmount())/100;
+        double kcal = type.equals("food") ? (dailyLog.getFood().getEnergy_kcal()*dailyLog.getAmount())/100 : (dailyLog.getPrivateFood().getEnergy_kcal()*dailyLog.getAmount())/100;
+
         nutrition.setFat(nutrition.getFat()+fat);
         nutrition.setCarbohydrates(nutrition.getCarbohydrates()+carbs);
         nutrition.setProtein(nutrition.getProtein()+protein);

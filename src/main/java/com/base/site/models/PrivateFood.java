@@ -19,8 +19,8 @@ public class PrivateFood {
     private Integer protein;
     private Integer carbohydrates;
     private Integer fat;
-    private Double energyKilojoule;
-    private Double energyKcal;
+    private Double energy_kilojoule;
+    private Double energy_kcal;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "fk_user_id", nullable = false)

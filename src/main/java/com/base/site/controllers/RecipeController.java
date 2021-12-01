@@ -46,20 +46,19 @@ public class RecipeController {
     @GetMapping("/recipes")
     public String recipes(Model model) {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-        log.info("Recipes getmapping called for user: "+loggedInUser.getUsername()+"...");
-        List<Recipe> recipes = recipeService.findAllFkUser(loggedInUser);
+        log.info("Recipes getmapping called...");
+        List<Recipe> recipes = recipeService.findAllFkUser(usersService.getLoggedInUser());
 
         if(recipes.size() > 0) {
+            /*
             for (Recipe recipe: recipes) {
                 log.info("Recipe name: "+recipe.getName()+" Total weight: "+recipe.getTotal_weight());
                 for (RecipeFood recipeFood: recipe.getAmounts()) {
                     log.info("Amount: "+recipeFood.getAmount()+" foodname: "+recipeFood.getFood().getName());
                 }
-            }
+            }*/
         }else {
-            log.info("no recipes found for user "+loggedInUser.getUsername());
+            log.info("no recipes found for user ");
             Recipe noRecipe = new Recipe();
             noRecipe.setName("You have no recipe's, you can create one by clicking the create recipe button.");
             noRecipe.setTotal_weight(0);
@@ -85,10 +84,7 @@ public class RecipeController {
     public String createRecipe(@ModelAttribute("recipe") Recipe recipe) {
         log.info("  PostMapping createRecipe is called...");
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-
-        recipe.setFkUser(loggedInUser);
+        recipe.setFkUser(usersService.getLoggedInUser());
         recipe = recipeService.save(recipe);
 
         log.info("Recipe id: "+recipe.getId());
@@ -117,13 +113,8 @@ public class RecipeController {
     public String saveRecipeFood(@PathVariable("foodId")long foodId, @PathVariable("recipeId")long recipeId, RecipeFood recipeFood) {
         log.info("saveRecipeFood Postmapping is called with recipeId: "+recipeId+" and foodId: "+foodId+" recipeFood:::"+recipeFood.getAmount());
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loggedInUser = usersService.findByUserName(auth.getName());
-        Recipe recipe = recipeService.findById(recipeId);
-
-
-        if(loggedInUser.getId() == recipe.getFkUser().getId()) {
-            recipeFood.setRecipe(recipe);
+        if(usersService.getLoggedInUser().getId() == recipeService.findById(recipeId).getFkUser().getId()) {
+            recipeFood.setRecipe(recipeService.findById(recipeId));
             recipeFood.setFood(foodService.findById(foodId));
             recipeFoodService.save(recipeFood);
 

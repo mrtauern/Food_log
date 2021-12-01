@@ -1,5 +1,6 @@
 package com.base.site.services;
 
+import com.base.site.models.DailyLog;
 import com.base.site.models.Food;
 import com.base.site.models.PrivateFood;
 import com.base.site.repositories.PrivateFoodRepo;
@@ -42,4 +43,5 @@ public class PrivateFoodServiceImpl implements PrivateFoodService{
     public void deleteById(Long id) {
         this.privateFoodRepo.deleteById(id);
     }
+
 }

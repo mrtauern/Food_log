@@ -2,6 +2,7 @@ package com.base.site.services;
 
 import com.base.site.models.DailyLog;
 import com.base.site.models.LogType;
+import com.base.site.models.UserType;
 import com.base.site.models.Users;
 import com.base.site.repositories.DailyLogRepo;
 import com.base.site.repositories.LogTypeRepository;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -45,6 +47,12 @@ public class UsersServiceImpl implements UsersService {
 
     @Autowired
     LogTypeRepository logTypeRepo;
+
+    @Autowired
+    UserTypeService userTypeService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public List<Users> findAll(){
@@ -183,6 +191,19 @@ public class UsersServiceImpl implements UsersService {
         String sBirthday = user.getBirthday().toString();
 
         user.setSBirthday(sBirthday);
+        return user;
+    }
+
+    @Override
+    public Users setAndSaveNewUser(Users user, String userTypeString) {
+        UserType userTypeObject = userTypeService.findByType(userTypeString);
+        user.setUserType(userTypeObject);
+        user.setRoles("USER");
+        user.setAccountNonLocked(1);
+        String pass = passwordEncoder.encode(user.getPassword());
+        user.setPassword(pass);
+        user.setBirthday(LocalDate.parse("1900-01-01"));
+        save(user);
         return user;
     }
 }

@@ -33,4 +33,6 @@ public interface UsersService {
     void setAndSaveUserData(Users user);
 
     Users findUserByIdAndSetBdayString(long id);
+
+    Users setAndSaveNewUser(Users user, String userTypeString);
 }
