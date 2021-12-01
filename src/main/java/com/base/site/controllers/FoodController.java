@@ -189,7 +189,7 @@ public class FoodController {
         dailyLog.setDatetime(date);
         String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         dailyLogService.save(dailyLog);
-
+        //------------------
         return  REDIRECT+DAILYLOG+"/"+sDatetime;
     }
 
