@@ -21,4 +21,10 @@ public interface RecipeService {
     void delete(Recipe recipe);
 
     List<Recipe> findAllFkUser(Users loggedInUser);
+
+    Recipe findRecipeById(long id);
+
+    double calculateCaloriesInRecipe (List<RecipeFood> recipeFoods, Recipe recipe);
+
 }
+

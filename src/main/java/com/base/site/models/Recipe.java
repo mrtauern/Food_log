@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -41,7 +42,10 @@ public class Recipe implements Serializable {
     /*
     @ManyToMany(mappedBy = "recipes", fetch = FetchType.LAZY)
     private Set<Food> foods = new HashSet<>();
-     */
+    */
+
+    //private List<RecipeFood> recipeFoods;
+
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     Set<RecipeFood> amounts;
@@ -53,4 +57,16 @@ public class Recipe implements Serializable {
     @Basic
     @Column(name = "archived")
     private boolean archived;
+  
+    public double getCalculateCaloriesInRecipe() {
+        double total = 0;
+        for (RecipeFood recipeFood : amounts) {
+            total += (recipeFood.getFood().getEnergy_kcal()*recipeFood.getAmount()) / 100;
+        }
+        total = (total/getTotal_weight())*100;
+        return total;
+    }
+  
+
+
 }

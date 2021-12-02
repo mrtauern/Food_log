@@ -22,6 +22,7 @@ public class RecipeController {
     Logger log = Logger.getLogger(DailyLogController.class.getName());
 
     private final String RECIPES = "recipes";
+    private final String RECIPEINFO = "recipeInfo";
     private final String CREATE_RECIPE = "createRecipe";
     private final String ADD_FOOD_TO_RECIPE = "addFoodToRecipe";
     private final String SAVE_FOOD_TO_RECIPE = "saveFoodToRecipe";
@@ -71,6 +72,17 @@ public class RecipeController {
 
 
         return RECIPES;
+    }
+
+    @GetMapping("/recipeInfo/{id}")
+    public String recipeInfo(Model model,Recipe recipe,@PathVariable( value ="id") Long id) {
+        log.info("  RecipeInfo getmapping is called... with id :: " + id);
+
+        model.addAttribute("recipe", recipeService.findRecipeById(id));
+        model.addAttribute("recipeFood", recipeFoodService.findByRecipe(recipe));
+        model.addAttribute("totalCalories", recipeService.calculateCaloriesInRecipe(recipeFoodService.findByRecipe(recipe), recipeService.findRecipeById(id)));
+
+        return RECIPEINFO;
     }
 
     @GetMapping("/createRecipe")
