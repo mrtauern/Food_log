@@ -1,0 +1,30 @@
+<div th:fragment="searchFilterHTML">
+    Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required />
+    &nbsp;
+    <input type="submit" value="Search" />
+    &nbsp;
+    <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+</div>
+
+<thead th:fragment="addFoodTableHeader" class="container">
+    <tr>
+        <th>Food Name in this recipe</th>
+        <th>Food Weight (Gram)</th>
+        <td> Add New weight </td>
+
+    </tr>
+</thead>
+
+<tbody th:fragment="addFoodTableBody_recipe">
+    <tr th:each="recipef : ${recipeFood}">
+        <td th:text="${recipef.food.name}"></td>
+        <td th:text="${recipef.amount}"></td>
+        <td>
+            <form method="post" th:action="@{/saveFoodInRecipe/{foodId}/{recipeId}(recipeId=${recipeId}, foodId=${recipef.food.id})}" th:object="${recipeFood}">
+                <input type="number" th:name="amount" id="amount" placeholder="amount (Gram)" th:required="required">
+                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Add Food</button>
+                <a th:href="@{/removeFoodFromRecipe/{recipeId}/{id}(recipeId=${recipef.recipe.id}, id=${recipef.id} )}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+            </form>
+        </td>
+    </tr>
+</tbody>

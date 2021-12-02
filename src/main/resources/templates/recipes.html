@@ -39,7 +39,8 @@
                         <td th:text="${recipe.CalculateCaloriesInRecipe}"></td>
                         <td>
                             <a th:href="${'/recipeInfo/' + recipe.id}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fab fa-readme"> Read More</i></a>
-                            <a th:href="${'/editRecipe/' + recipe.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+<!--                            <a th:href="${'/editRecipe/' + recipe.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>-->
+                            <a th:href="${'/editRecipeTest/' + recipe.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
                             <a th:href="@{'/archiveRecipe/true/'+${recipe.id}}" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Archive</a>
                         </td>
                     </th:block>

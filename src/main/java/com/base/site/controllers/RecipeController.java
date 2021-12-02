@@ -4,18 +4,13 @@ import com.base.site.models.*;
 import com.base.site.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -26,6 +21,10 @@ public class RecipeController {
     private final String RECIPES = "recipes";
     private final String RECIPEINFO = "recipeInfo";
     private final String EDITRECIPE = "editRecipe";
+    private final String EDITRECIPETEST = "editRecipeTest";
+    private final String EDIT_FOOD_IN_RECIPE = "EditFoodInRecipe";
+
+
     private final String CREATE_RECIPE = "createRecipe";
     private final String ADD_FOOD_TO_RECIPE = "addFoodToRecipe";
     private final String SAVE_FOOD_TO_RECIPE = "saveFoodToRecipe";
@@ -84,24 +83,68 @@ public class RecipeController {
         model.addAttribute("recipe", recipeService.findRecipeById(id));
         model.addAttribute("recipeFood", recipeFoodService.findByRecipe(recipe));
         model.addAttribute("totalCalories", recipeService.calculateCaloriesInRecipe(recipeFoodService.findByRecipe(recipe), recipeService.findRecipeById(id)));
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return RECIPEINFO;
     }
     @GetMapping("/editRecipe/{id}")
-    public String editRecipe(@PathVariable("id") long id, Model model, Recipe recipe) {
+    public String editRecipe(@PathVariable(value = "id") long id, Model model, Recipe recipe) {
         log.info("editRecipe /edit/id getmapping called... id: "+id);
+
         model.addAttribute("recipe", recipeService.findRecipeById(id));
         model.addAttribute("recipeFood", recipeFoodService.findByRecipe(recipe));
-        model.addAttribute("totalCalories", recipeService.calculateCaloriesInRecipe(recipeFoodService.findByRecipe(recipe), recipeService.findRecipeById(id)));
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return EDITRECIPE;
     }
-    @PostMapping("/editRecipe/{id}")
-    public String editRecipe(@PathVariable("id") long id,Model model) {
-        Recipe recipe = recipeService.findRecipeById(id);
-        recipeService.save(recipe);
 
-        return REDIRECT+RECIPEINFO;
+    @PostMapping("/editRecipe")
+    public String saveRecipe(@ModelAttribute("recipe") Recipe recipe, Model model) {
+        log.info("  PostMapping editRecipe is called...");
+
+        recipe.setFkUser(usersService.getLoggedInUser());
+        recipeService.save(recipe);
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+
+
+        return  REDIRECT+RECIPES;
+    }
+
+    @GetMapping("removeFoodFromRecipe/{recipeId}/{id}")
+    public String removeStudentFromClass(@PathVariable("id")long id,@PathVariable("recipeId")long recipeId ) {
+        log.info("removeFoodFromRecipe getmapping called with RecipeFoodID = :: " + id);
+        recipeFoodService.deleteById(id);
+
+        return REDIRECT + EDITRECIPETEST+"/"+ recipeId;
+    }
+    //
+    //not done --------------------------------------
+    @GetMapping("/editFoodInRecipe/{recipeId}/{recipeFoodId}")
+    public String editFoodInRecipe(@PathVariable("recipeId")long recipeId,@PathVariable("recipeFoodId")long recipeFoodId, Recipe recipe, Model model) {
+        log.info("editFoodInRecipe Getmapping is called with recipeId: "+recipeId);
+
+        List<RecipeFood> foodlist = recipeFoodService.findByRecipe(recipe);
+
+        model.addAttribute("recipeId", recipeId);
+        model.addAttribute("foodlist", foodlist);
+        model.addAttribute("recipeFood", recipeFoodService.findByRecipe(recipe));
+
+        return EDIT_FOOD_IN_RECIPE;
+    }
+//not done --------------------------------------
+    @PostMapping("/saveFoodInRecipe/{foodId}/{recipeId}")
+    public String saveFoodInRecipe(@PathVariable("foodId")long foodId, @PathVariable("recipeId")long recipeId, RecipeFood recipeFood) {
+        log.info("saveFoodInRecipe Postmapping is called with recipeId: "+recipeId+" and foodId: "+foodId+" recipeFood:::"+recipeFood.getAmount());
+
+        if(usersService.getLoggedInUser().getId() == recipeService.findById(recipeId).getFkUser().getId()) {
+            recipeFood.setRecipe(recipeService.findById(recipeId));
+            recipeFood.setFood(foodService.findById(foodId));
+            recipeFoodService.save(recipeFood);
+
+            return REDIRECT+EDIT_FOOD_IN_RECIPE+"/"+recipeId;
+        } else {
+            return REDIRECT+RECIPES;
+        }
     }
 
     @GetMapping("/createRecipe")

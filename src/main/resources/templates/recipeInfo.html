@@ -3,7 +3,10 @@
 
 <head th:include="fragments/head :: styles"></head>
 <body>
-    <header th:include="fragments/navbar_top :: navbar"></header>
+<header th:include="fragments/navbar_top :: header" class="navbar"></header>
+
+<div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
+<div id="content">
 
     <div class="contentBox">
 
@@ -46,6 +49,7 @@
 
     </div>
 
-    <footer th:include="fragments/navbar_top :: bottom_bar"></footer>
+</div>
+<footer th:include="fragments/navbar_top :: footer"></footer>
 </body>
 </html>
