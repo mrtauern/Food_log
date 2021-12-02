@@ -131,10 +131,12 @@ public class RecipeController {
         log.info("Archive recipe getmapping called with id:"+id);
 
         Recipe recipe = recipeService.findById(id);
-        recipe.setArchived(status);
-        recipeService.save(recipe);
-
+        if (recipe.getFkUser().getId() == usersService.getLoggedInUser().getId()) {
+            recipe.setArchived(status);
+            recipeService.save(recipe);
+        }
         return REDIRECT+RECIPES;
+
     }
 
     @GetMapping("/showRecipeArchive")
