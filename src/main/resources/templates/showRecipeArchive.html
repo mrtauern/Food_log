@@ -7,9 +7,10 @@
 
     <div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
     <div id="content">
+
         <div class="contentBox">
 
-        <h1>Recipe list</h1>
+        <h1>Archived recipe list</h1>
 
             <div class="actionBar">
 
@@ -17,8 +18,7 @@
                     <input type="text" placeholder="Search...">
                 </form>
 
-                <a href="/createRecipe" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Create recipe</a>
-                <a href="/showRecipeArchive" class="btn btn-success mr-2 btn-sm"> Show archive</a>
+                <a href="/recipes" class="btn btn-success mr-2 btn-sm"> Show recipes</a>
 
             </div>
 
@@ -33,12 +33,11 @@
             </thead>
             <tbody>
                 <tr th:each="recipe : ${recipes}">
-                    <th:block th:if="${recipe.archived==false}">
+                    <th:block th:if="${recipe.archived==true}">
                         <td th:text="${recipe.name}"></td>
                         <td th:text="${recipe.total_weight}"></td>
                         <td>
-                            <a th:href="${'/editRecipe/' + recipe.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                            <a th:href="@{'/archiveRecipe/true/'+${recipe.id}}" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Archive</a>
+                            <a th:href="@{'/archiveRecipe/false/'+${recipe.id}}" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Activate</a>
                         </td>
                     </th:block>
                 </tr>

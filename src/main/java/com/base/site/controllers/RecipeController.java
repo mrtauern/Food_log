@@ -26,6 +26,7 @@ public class RecipeController {
     private final String ADD_FOOD_TO_RECIPE = "addFoodToRecipe";
     private final String SAVE_FOOD_TO_RECIPE = "saveFoodToRecipe";
     private final String REDIRECT = "redirect:/";
+    private final String ARCHIVED_RECIPES = "showRecipeArchive";
 
     @Autowired
     RecipeService recipeService;
@@ -66,6 +67,7 @@ public class RecipeController {
         }
 
         model.addAttribute("recipes", recipes);
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
 
         return RECIPES;
@@ -123,5 +125,37 @@ public class RecipeController {
             return REDIRECT+RECIPES;
         }
 
+    }
+
+    @GetMapping("/archiveRecipe/{status}/{id}")
+    public String archiveRecipe(@PathVariable("id")long id, @PathVariable("status")boolean status) {
+        log.info("Archive recipe getmapping called with id:"+id);
+
+        Recipe recipe = recipeService.findById(id);
+        if (recipe.getFkUser().getId() == usersService.getLoggedInUser().getId()) {
+            recipe.setArchived(status);
+            recipeService.save(recipe);
+        }
+        return REDIRECT+RECIPES;
+
+    }
+
+    @GetMapping("/showRecipeArchive")
+    public String showRecipeArchive(Model model) {
+        log.info("showRecipeArchive getmapping called...");
+        List<Recipe> recipes = recipeService.findAllFkUser(usersService.getLoggedInUser());
+
+        if(recipes.size() <= 0) {
+            log.info("no archived recipes found for user ");
+            Recipe noRecipe = new Recipe();
+            noRecipe.setName("You have no archived recipe's");
+            noRecipe.setTotal_weight(0);
+            recipes.add(noRecipe);
+        }
+
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+
+        return ARCHIVED_RECIPES;
     }
 }

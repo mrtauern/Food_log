@@ -49,4 +49,8 @@ public class Recipe implements Serializable {
     @Basic
     @Column(name = "name")
     private String name;
+
+    @Basic
+    @Column(name = "archived")
+    private boolean archived;
 }
