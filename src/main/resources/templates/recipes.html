@@ -3,48 +3,51 @@
 
 <head th:include="fragments/head :: styles"></head>
 <body>
-    <header th:include="fragments/navbar_top :: navbar"></header>
+    <header th:include="fragments/navbar_top :: header" class="navbar"></header>
 
-    <div class="contentBox">
+    <div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
+    <div id="content">
+        <div class="contentBox">
 
-    <h1>Recipe list</h1>
+        <h1>Recipe list</h1>
 
-        <div class="actionBar">
+            <div class="actionBar">
 
-            <form>
-                <input type="text" placeholder="Search...">
-            </form>
+                <form>
+                    <input type="text" placeholder="Search...">
+                </form>
 
-            <a href="/createRecipe" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Create recipe</a>
-            <a href="/showRecipeArchive" class="btn btn-success mr-2 btn-sm"> Show archive</a>
+                <a href="/createRecipe" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Create recipe</a>
+                <a href="/showRecipeArchive" class="btn btn-success mr-2 btn-sm"> Show archive</a>
+
+            </div>
+
+
+            <table class="table table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>Name</th>
+                <th>Weight (Gram)</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="recipe : ${recipes}">
+                    <th:block th:if="${recipe.archived==false}">
+                        <td th:text="${recipe.name}"></td>
+                        <td th:text="${recipe.total_weight}"></td>
+                        <td>
+                            <a th:href="${'/editRecipe/' + recipe.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                            <a th:href="@{'/archiveRecipe/true/'+${recipe.id}}" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Archive</a>
+                        </td>
+                    </th:block>
+                </tr>
+            </tbody>
+        </table>
 
         </div>
-
-
-        <table class="table table-striped">
-        <thead class="thead-dark">
-        <tr>
-            <th>Name</th>
-            <th>Weight (Gram)</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr th:each="recipe : ${recipes}">
-                <th:block th:if="${recipe.archived==false}">
-                    <td th:text="${recipe.name}"></td>
-                    <td th:text="${recipe.total_weight}"></td>
-                    <td>
-                        <a th:href="${'/editRecipe/' + recipe.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                        <a th:href="@{'/archiveRecipe/true/'+${recipe.id}}" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Archive</a>
-                    </td>
-                </th:block>
-            </tr>
-        </tbody>
-    </table>
-
     </div>
 
-    <footer th:include="fragments/navbar_top :: bottom_bar"></footer>
+    <div th:include="fragments/navbar_top :: footer"></div>
 </body>
 </html>

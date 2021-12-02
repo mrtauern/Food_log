@@ -67,6 +67,7 @@ public class RecipeController {
         }
 
         model.addAttribute("recipes", recipes);
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
 
         return RECIPES;
@@ -153,6 +154,7 @@ public class RecipeController {
         }
 
         model.addAttribute("recipes", recipes);
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return ARCHIVED_RECIPES;
     }
