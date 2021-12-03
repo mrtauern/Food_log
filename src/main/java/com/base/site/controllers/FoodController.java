@@ -80,6 +80,8 @@ public class FoodController {
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
         model.addAttribute("foodlistSearched", foodlistSearched);
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+
 
         return FOOD;
     }
