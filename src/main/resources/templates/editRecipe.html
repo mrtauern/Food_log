@@ -25,50 +25,34 @@
 
         <br><br>
         <h1>Foods in recipe</h1>
-
         <div th:object="${recipeFood}">
             <a th:href="@{/addFoodToRecipe/{recipeId}(recipeId=${recipe.id})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add Food</a>
 
             <table class="table table-striped">
                 <thead class="thead-grey">
-                <tr>
-                    <th>Food Name in this recipe</th>
-                    <th>Food Weight (Gram)</th>
-                    <th></th>
-                </tr>
+                    <tr>
+                        <th>Food Name in this recipe</th>
+                        <th>Food Weight (Gram)</th>
+                        <th></th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr th:each="recipef : ${recipeFood}">
-                    <!--<td th:text="${recipef.food.name}"></td>
-                    <td th:text="${recipef.amount}"></td>
-                    <td>
-                        <form method="post" th:action="@{/saveFoodInRecipe/{foodId}/{recipeId}(recipeId=${recipeId}, foodId=${recipef.food.id})}" th:object="${recipeFood}">
-                            <input type="number" th:name="amount" th:value="${recipef.amount}" id="amount" placeholder="amount (Gram)" th:required="required">
-                            <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Add Food</button>
-                            <a th:href="@{/removeFoodFromRecipe/{recipeId}/{id}(recipeId=${recipef.recipe.id}, id=${recipef.id} )}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
-                        </form>
-                        <a th:href="@{/removeFoodFromRecipe/{recipeId}/{id}(recipeId=${recipef.recipe.id}, id=${recipef.id} )}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
-                    </td>
-                    -->
-                    <form method="post" id="editFoodAmount" th:action="@{/saveFoodInRecipe/{foodId}/{recipeId}(recipeId=${recipef.recipe.id}, foodId=${recipef.food.id})}" th:object="${recipeFood}">
-                        <input type="hidden" th:value="${recipef.id}" th:name="id">
-                        <td th:text="${recipef.food.name}"></td>
-                        <td>
-                            <input type="number" th:name="amount" th:value="${recipef.amount}" id="amount" placeholder="amount (Gram)" th:required="required"></td>
-                        </td>
-                        <td>
-
+                    <tr th:each="recipef : ${recipeFood}">
+                        <form method="post" id="editFoodAmount" th:action="@{/saveFoodInRecipe/{foodId}/{recipeId}(recipeId=${recipef.recipe.id}, foodId=${recipef.food.id})}" th:object="${recipeFood}">
+                            <input type="hidden" th:value="${recipef.id}" th:name="id">
+                            <td th:text="${recipef.food.name}"></td>
+                            <td>
+                                <input type="number" th:name="amount" th:value="${recipef.amount}" id="amount" placeholder="amount (Gram)" th:required="required"></td>
+                            </td>
+                            <td>
                                 <button value="Confirm" form="editFoodAmount" type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Confirm</button>
-                            <a th:href="@{/removeFoodFromRecipe/{recipeId}/{id}(recipeId=${recipef.recipe.id}, id=${recipef.id} )}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
-                        </td>
-                    </form>
-
-                </tr>
+                                <a th:href="@{/removeFoodFromRecipe/{recipeId}/{id}(recipeId=${recipef.recipe.id}, id=${recipef.id} )}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                            </td>
+                        </form>
+                    </tr>
                 </tbody>
             </table>
         </div>
-
-
     </div>
 </div>
 <footer th:include="fragments/navbar_top :: footer"></footer>

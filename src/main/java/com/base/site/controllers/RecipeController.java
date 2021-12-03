@@ -116,21 +116,16 @@ public class RecipeController {
 
         return REDIRECT + EDITRECIPE+"/"+ recipeId;
     }
-    //
-    //not done --------------------------------------
+
     @GetMapping("/editFoodInRecipe/{recipeId}/{recipeFoodId}")
     public String editFoodInRecipe(@PathVariable("recipeId")long recipeId,@PathVariable("recipeFoodId")long recipeFoodId, Recipe recipe, Model model) {
         log.info("editFoodInRecipe Getmapping is called with recipeId: "+recipeId);
 
-        //List<RecipeFood> foodlist = recipeFoodService.findByRecipe(recipe);
-
         model.addAttribute("recipeId", recipeId);
-        //model.addAttribute("foodlist", foodlist);
-        //model.addAttribute("recipeFood", recipeFoodService.findByRecipe(recipe));
 
         return EDIT_FOOD_IN_RECIPE;
     }
-//not done --------------------------------------
+
     @PostMapping("/saveFoodInRecipe/{foodId}/{recipeId}")
     public String saveFoodInRecipe(@PathVariable("foodId")long foodId, @PathVariable("recipeId")long recipeId, RecipeFood recipeFood) {
         log.info("saveFoodInRecipe Postmapping is called with recipeId: "+recipeId+" and foodId: "+foodId+" recipeFood:::"+recipeFood.getAmount());
