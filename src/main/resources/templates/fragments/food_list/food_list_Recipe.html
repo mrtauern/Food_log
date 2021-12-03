@@ -10,7 +10,7 @@
     <tr>
         <th>Food Name in this recipe</th>
         <th>Food Weight (Gram)</th>
-        <td> Add New weight </td>
+        <th> Add New weight </th>
 
     </tr>
 </thead>
@@ -21,7 +21,7 @@
         <td th:text="${recipef.amount}"></td>
         <td>
             <form method="post" th:action="@{/saveFoodInRecipe/{foodId}/{recipeId}(recipeId=${recipeId}, foodId=${recipef.food.id})}" th:object="${recipeFood}">
-                <input type="number" th:name="amount" id="amount" placeholder="amount (Gram)" th:required="required">
+                <input type="number" th:name="amount" th:value="${recipef.amount}" id="amount" placeholder="amount (Gram)" th:required="required">
                 <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Add Food</button>
                 <a th:href="@{/removeFoodFromRecipe/{recipeId}/{id}(recipeId=${recipef.recipe.id}, id=${recipef.id} )}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
             </form>

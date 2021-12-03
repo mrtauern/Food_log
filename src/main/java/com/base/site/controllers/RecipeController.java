@@ -106,7 +106,6 @@ public class RecipeController {
         recipeService.save(recipe);
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
-
         return  REDIRECT+RECIPES;
     }
 
@@ -115,7 +114,7 @@ public class RecipeController {
         log.info("removeFoodFromRecipe getmapping called with RecipeFoodID = :: " + id);
         recipeFoodService.deleteById(id);
 
-        return REDIRECT + EDITRECIPETEST+"/"+ recipeId;
+        return REDIRECT + EDITRECIPE+"/"+ recipeId;
     }
     //
     //not done --------------------------------------
@@ -123,11 +122,11 @@ public class RecipeController {
     public String editFoodInRecipe(@PathVariable("recipeId")long recipeId,@PathVariable("recipeFoodId")long recipeFoodId, Recipe recipe, Model model) {
         log.info("editFoodInRecipe Getmapping is called with recipeId: "+recipeId);
 
-        List<RecipeFood> foodlist = recipeFoodService.findByRecipe(recipe);
+        //List<RecipeFood> foodlist = recipeFoodService.findByRecipe(recipe);
 
         model.addAttribute("recipeId", recipeId);
-        model.addAttribute("foodlist", foodlist);
-        model.addAttribute("recipeFood", recipeFoodService.findByRecipe(recipe));
+        //model.addAttribute("foodlist", foodlist);
+        //model.addAttribute("recipeFood", recipeFoodService.findByRecipe(recipe));
 
         return EDIT_FOOD_IN_RECIPE;
     }
@@ -137,11 +136,14 @@ public class RecipeController {
         log.info("saveFoodInRecipe Postmapping is called with recipeId: "+recipeId+" and foodId: "+foodId+" recipeFood:::"+recipeFood.getAmount());
 
         if(usersService.getLoggedInUser().getId() == recipeService.findById(recipeId).getFkUser().getId()) {
+            int amount = recipeFood.getAmount();
+            recipeFood = recipeFoodService.findById(recipeFood.getId());
+            recipeFood.setAmount(amount);
             recipeFood.setRecipe(recipeService.findById(recipeId));
             recipeFood.setFood(foodService.findById(foodId));
             recipeFoodService.save(recipeFood);
 
-            return REDIRECT+EDIT_FOOD_IN_RECIPE+"/"+recipeId;
+            return REDIRECT+EDITRECIPE+"/"+recipeId;
         } else {
             return REDIRECT+RECIPES;
         }
