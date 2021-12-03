@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="fragments/head :: styles"></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<body>
+<header th:include="fragments/navbar_top :: header" class="navbar"></header>
+
+<div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
+
+<div id="content">
+
+    <div class="contentBox">
+        <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+    </div>
+
+</div>
+
+<div th:include="fragments/navbar_top :: footer"></div>
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+    //var xValues = [50,60,70,80,90,100,110,120,130,140,150];
+    //var yValues = [7,8,8,9,9,9,10,11,14,17,15];
+
+    var yValues = [[${weights}]]
+
+    var xValues = []
+    var goal = []
+
+    /*[# th:each="date : ${dates}"]*/
+
+    //xValues.push("[(${date})]");
+
+    /*[/]*/
+
+    for(var i = 0; i < yValues.length; i++){
+        xValues.push("")
+    }
+
+    for(var i = 0; i < yValues.length; i++){
+        goal.push("[(${goal})]")
+    }
+
+    new Chart("myChart", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgba(0,0,255,1.0)",
+                borderColor: "rgba(66,198,133,1.0)",
+                data: yValues
+            },{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgba(0,0,255,1.0)",
+                borderColor: "rgba(0,0,0,1.0)",
+                data: goal
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+                yAxes: [{ticks: {min: 40, max:240}}],
+            },
+            elements: {
+                point: {
+                    radius: 0
+                }
+            }
+        }
+    });
+</script>
+</html>

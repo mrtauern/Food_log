@@ -71,8 +71,8 @@
                     <!--User services-->
                     <li class="services">
                         <a href="#">
-                            <th:block th:text="${loggedInUser.FullName}"></th:block>
-                            <th:block th:switch="${loggedInUser.UserTypeString}">
+                            <th:block th:text="${loggedInUser?.FullName}"></th:block>
+                            <th:block th:switch="${loggedInUser?.UserTypeString}">
                                 <img th:case="User_male" src="../static/image/male_placeholder.png" th:src="@{/image/male_placeholder.png}">
                                 <img th:case="User_female" src="../static/image/male_placeholder.png" th:src="@{/image/female_placeholder.png}">
                             </th:block>
