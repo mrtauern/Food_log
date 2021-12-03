@@ -70,7 +70,7 @@
                     </th:block>
                 </td>
                 <td class="actionButtons">
-                    <th:block th:if="${user.id != loggedInUserId}">
+                    <th:block th:if="${user.id != loggedInUser.id}">
                         <a th:href="${'/editUser/' + user.id}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
                         <a th:href="@{'/password_reset_user/'+${user.id}}" class="btn btn-outline-dark mr-2 btn-sm" th:attr="onclick=|return confirm_reset('${user.firstname + ' ' + user.lastname}')|">
                             <i class="fas fa-sync-alt"></i> Reset Password
