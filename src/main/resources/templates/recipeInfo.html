@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="fragments/head :: styles"></head>
+<body>
+    <header th:include="fragments/navbar_top :: navbar"></header>
+
+    <div class="contentBox">
+
+    <h1>Recipe Info</h1>
+
+        <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>Weight (Gram)</th>
+            <th>Calories pr 100 (Gram)</th>
+
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="recipe : ${recipe}">
+                <td th:text="${recipe.name}"></td>
+                <td th:text="${recipe.total_weight}"></td>
+                <td th:text="${recipe.CalculateCaloriesInRecipe}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+        <table class="table table-striped">
+            <thead class="thead-grey">
+            <tr>
+                <th>Food Name in this recipe</th>
+                <th>Food Weight (Gram)</th>
+                <th>Calories pr 100 (Gram)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="recipef : ${recipeFood}">
+                <td th:text="${recipef.food.name}"></td>
+                <td th:text="${recipef.amount}"></td>
+                <td th:text="${recipef.food.energy_kcal}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <footer th:include="fragments/navbar_top :: bottom_bar"></footer>
+</body>
+</html>
