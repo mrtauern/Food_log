@@ -172,6 +172,21 @@ public class DailyLogServiceImpl implements DailyLogService {
 
         DailyLogWrapper dailyLogWrapper = getLogs(loggedInUser, date);
 
+        List<DailyLog> dailyLogs = findAll();
+
+        List<Double> weights = new ArrayList<>();
+        List<String> dates = new ArrayList<>();
+
+        for (DailyLog dailyLog: dailyLogs) {
+            if(dailyLog.getFkUser().getId() == loggedInUser.getId() && dailyLog.getFkLogType().getType().equals("Weight")){
+                //X-axe
+                dates.add(dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+                //Y-axe
+                weights.add(dailyLog.getAmount());
+            }
+        }
+
         model.addAttribute("today", today.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         model.addAttribute("sSelectedDate", date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
@@ -207,6 +222,9 @@ public class DailyLogServiceImpl implements DailyLogService {
 
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
+        model.addAttribute("weights", weights);
+        model.addAttribute("dates", dates);
+        model.addAttribute("goal", usersService.getLoggedInUser().getGoalWeight());
 
         return model;
     }

@@ -45,6 +45,7 @@ public class DailyLogController {
     private final String ADD_WEIGHT = "addCurrentWeight";
     private final String CREATE_WEIGHT = "createCurrentWeight";
     private final String UPDATE_WEIGHT = "updateCurrentWeight";
+    private final String WEIGHT_GRAPH = "weightGraph";
     private final String ADD_EXERCISE = "addExercise";
     private final String CREATE_EXERCISE = "createExercise";
     private final String UPDATE_EXERCISE = "updateExerciseInDailyLog";
@@ -163,5 +164,37 @@ public class DailyLogController {
         return REDIRECT + DAILY_LOG;
     }
 
+    @GetMapping("/weightGraph")
+    public String weightGraph(Model model){
+        log.info("Weight graph get called");
 
+        Users loggedInUser = usersService.getLoggedInUser();
+
+        List<DailyLog> dailyLogs = dailyLogService.findAll();
+
+        List<Double> weights = new ArrayList<>();
+        List<String> dates = new ArrayList<>();
+
+        for (DailyLog dailyLog: dailyLogs) {
+            if(dailyLog.getFkUser().getId() == loggedInUser.getId() && dailyLog.getFkLogType().getType().equals("Weight")){
+                //X-axe
+                dates.add(dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+                //Y-axe
+                weights.add(dailyLog.getAmount());
+            }
+        }
+
+        for(String date: dates){
+            log.info(date);
+        }
+
+        model.addAttribute("pageTitle", "Weight graph");
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("weights", weights);
+        model.addAttribute("dates", dates);
+        model.addAttribute("goal", usersService.getLoggedInUser().getGoalWeight());
+
+        return WEIGHT_GRAPH;
+    }
  }
