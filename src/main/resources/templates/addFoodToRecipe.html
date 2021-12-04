@@ -14,7 +14,7 @@
     <div id="inner_container">
         <br> <br>
         <h1>Food List</h1>
-        <a href="/recipes" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Done adding food</a>
+        <a th:href="@{/editRecipe/{recipeId}(recipeId=${recipeId})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Done adding food</a>
         <br/><br/>
         <table id="foodTable" border="1" cellpadding="10">
             <thead th:include="fragments/food_list/food_list :: addFoodTableHeader"></thead>
