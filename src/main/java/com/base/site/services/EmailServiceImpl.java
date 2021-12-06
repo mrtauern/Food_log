@@ -2,6 +2,7 @@ package com.base.site.services;
 
 import com.base.site.controllers.EmailController;
 import com.base.site.models.Mail;
+import com.base.site.models.UserPassResetCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -49,5 +50,16 @@ public class EmailServiceImpl implements EmailService {
 
         msg.setContent(multipart);
         Transport.send(msg);
+    }
+
+    @Override
+    public void sendResetPasswordMail(UserPassResetCode resetCode) throws AddressException, MessagingException, IOException{
+        log.info("mail with link and code being sent to user with email: "+resetCode.getUsername());
+        Mail mail = new Mail();
+        mail.setRecipient(resetCode.getUsername());
+        mail.setTopic("Your password on Food Log have been requested to be reset");
+        mail.setContent("To complete the password reset click the link Http://localhost:8080/password_reset_code and type in the username and code: "+resetCode.getCode());
+
+        sendmail(mail);
     }
 }
