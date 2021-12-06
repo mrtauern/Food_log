@@ -10,62 +10,123 @@
     }
 </script>
 <body>
-<header th:include="fragments/navbar_top :: navbar"></header>
+<header th:include="fragments/navbar_top :: header" class="navbar"></header>
 
-<form id="searchForm" th:action="@{/addFoodToDailyLog}">
-    <div th:include="fragments/food_list/food_list :: searchFilterHTML"></div>
-</form>
+<div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
+
+<div id="content">
+    <div class="contentBox">
+
 <div class="container">
     <div id="inner_container">
         <br> <br>
         <h1>Food List</h1>
+        <div class="actionBar">
+            <form th:action="@{/addFoodToDailyLog}">
+                <input type="text" name="keyword" placeholder="Search For a Food Name" th:value="${keyword}" >
+                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-arrow-right"></i></button>
+                <button type="button" d="btnClear" onclick="clearSearch()" class="btn btn-secondary mr-2 btn-sm"><i class="fas fa-sync-alt"></i></button>
+            </form>
+        </div>
         <br/><br/>
-        <table id="foodTable" border="1" cellpadding="10">
 
+        <table  class="table table-sm">
             <thead>
             <tr>
-                <th>  Food ID </th>
-                <th> Name  </th>
-                <th> Protein </th>
-                <th> Carbohydrates </th>
-                <th> Fat </th>
-                <td> Kilojoule </td>
-                <th> Kcal </th>
-                <td> Action </td>
+                <th>
+                    <a th:href="@{'/pageAddFood/'+ ${currentPage} + '?sortField=name&sortDir=' + ${reverseSortDir}}">Name </a>
+                </th>
+                <th>
+                    <a th:href="@{'/pageAddFood/'+ ${currentPage} + '?sortField=protein&sortDir=' + ${reverseSortDir}}">Protein </a>
+                </th>
+                <th>
+                    <a th:href="@{'/pageAddFood/'+ ${currentPage} + '?sortField=carbohydrates&sortDir=' + ${reverseSortDir}}">Carbohydrates </a>
+                </th>
+                <th>
+                    <a th:href="@{'/pageAddFood/'+ ${currentPage} + '?sortField=fat&sortDir=' + ${reverseSortDir}}">Fat </a>
+                </th>
+                <th>
+                    KiloJoule
+                </th>
+                <th>
+                    Kcal
+                </th>
+                <th></th>
 
             </tr>
             </thead>
             <tbody>
-            <tr th:each="foods : ${foodlist}">
-                <td th:text="${foods.id}">Food ID</td>
-                <td th:text="${foods.name}">Name</td>
-                <td th:text="${foods.protein}">Protein</td>
-                <td th:text="${foods.carbohydrates}">Carbohydrates</td>
-                <td th:text="${foods.fat}">Fat</td>
-                <td th:text="${foods.energy_kilojoule}">Kilojoule</td>
-                <td th:text="${foods.energy_kcal}">Kcal</td>
-                <td>
-                    <a th:href="@{/createDailyLog/food/{id}/{date}(id=${foods.id},date=${date})}">Add To Daily Log</a>
-                </td>
-            </tr>
-            <tr th:each="food : ${pfoodlist}">
-                <td th:text="${food.id}">Food ID</td>
-                <td th:text="${food.name}">Name</td>
+            <tr th:each="food : ${listFood}">
+                <td><i class="fas fa-drumstick-bite"></i> <span th:text="${food.name}"></span></td>
                 <td th:text="${food.protein}">Protein</td>
                 <td th:text="${food.carbohydrates}">Carbohydrates</td>
                 <td th:text="${food.fat}">Fat</td>
                 <td th:text="${food.energy_kilojoule}">Kilojoule</td>
                 <td th:text="${food.energy_kcal}">Kcal</td>
                 <td>
-                    <a th:href="@{/createDailyLog/pfood/{id}/{date}(id=${food.id},date=${date})}">Add To Daily Log</a>
+                    <a th:href="@{/createDailyLog/food/{id}/{date}(id=${food.id},date=${date})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add To Daily Log</a>
                 </td>
             </tr>
             </tbody>
         </table>
 
-    </div>
-</div>
 
-<div th:include="fragments/navbar_top :: bottom_bar"></div>
-</body>
-</html>
+               <div id="pgination" th:if = "${totalPages > 1}" th:with="pageUrlPostfix = '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} ">
+                   <nav aria-label="Page navigation example">
+                       <ul class="pagination" th:with="pageUrlPrefix = '/pageAddFood/'">
+                           <li class="page-item" th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                               <a class="page-link"  th:href="@{${pageUrlPrefix} + '1' +  ${pageUrlPostfix}}">First</a>
+                           </li>
+                           <li class="page-item" th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                               <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage - 1} +  ${pageUrlPostfix}}">Previous</a>
+                           </li>
+                           <th:block th:if="${totalPages <= 10}">
+                               <li th:each="i: ${#numbers.sequence(1, totalPages)}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                                   <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix}}">[[${i}]]</a>
+                               </li>
+                           </th:block>
+
+                           <th:block th:if="${totalPages > 10}">
+
+                               <th:block th:if="${currentPage <= 5 || currentPage > totalPages - 4}">
+                                   <li th:each="i: ${#numbers.sequence(1, 5)}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                                       <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix}}">[[${i}]]</a>
+                                   </li>
+                                   <a class="page-link"  th:href="@{${pageUrlPrefix} + '6' +  ${pageUrlPostfix}}">...</a>
+
+                                   <li th:each="i: ${#numbers.sequence(totalPages - 4 , totalPages)}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                                       <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix}}">[[${i}]]</a>
+                                   </li>
+                               </th:block>
+
+                               <th:block th:if="${currentPage > 5 && currentPage < totalPages - 4}">
+                                   <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage - 5 } +  ${pageUrlPostfix}}">...</a>
+                                   <li th:each="i: ${#numbers.sequence(currentPage - 4 , currentPage + 4 )}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                                       <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix}}">[[${i}]]</a>
+                                   </li>
+                                   <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage + 5 } +  ${pageUrlPostfix}}">...</a>
+                               </th:block>
+
+                           </th:block>
+
+                           <li class="page-item" th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                               <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage + 1} +  ${pageUrlPostfix}}">Next</a>
+                           </li>
+
+                           <li class="page-item" th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                               <a class="page-link"  th:href="@{${pageUrlPrefix} + ${totalPages} +  ${pageUrlPostfix}}">Last</a>
+                           </li>
+                       </ul>
+                   </nav>
+               </div>
+           </div>
+
+
+           </div>
+       </div>
+       </div>
+       </div>
+
+       <footer th:include="fragments/navbar_top :: footer"></footer>
+       </body>
+       </html>
