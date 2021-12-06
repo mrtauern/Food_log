@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.logging.Logger;
@@ -48,14 +49,25 @@ public class UserController {
     }
 
     @GetMapping("/index")
-    public String showUserList(Model model) {
+    public String showUserList(Model model, RedirectAttributes redAt) {
         log.info("Usercontroller /index getmapping called...");
+
+        if(usersService.getLoggedInUser().getStartWeight() > 0 && usersService.getLoggedInUser().getGoalWeight() > 0){
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "Log in success");
+        } else {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "warning");
+            redAt.addFlashAttribute("message", "Please set a Start weight and Goal weight");
+        }
 
         if(usersService.getLoggedInUser().getRoles().equals("USER")) {
             return REDIRECT+DAILYLOG;
         } else if(usersService.getLoggedInUser().getRoles().equals("ADMIN")) {
             return REDIRECT+DASHBOARD;
         }
+
         return INDEX;
     }
 
