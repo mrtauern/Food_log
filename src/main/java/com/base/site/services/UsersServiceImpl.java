@@ -168,7 +168,6 @@ public class UsersServiceImpl implements UsersService {
 
 
         Timestamp ts=new Timestamp(birthday.getTime());
-        //created by Niklas to fit with change to LocalDate in users
         LocalDate bday = Instant.ofEpochMilli(birthday.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 
         return bday;

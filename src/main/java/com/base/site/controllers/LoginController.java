@@ -109,7 +109,7 @@ public class LoginController {
 
     @PostMapping("/password_reset_code")
     public String passwordResetCodeCheck(UserPassResetCode resetCode) throws MessagingException, IOException {
-        usersService.updateUserPassword(resetCode);
+       return usersService.updateUserPassword(resetCode);
 
     }
 
