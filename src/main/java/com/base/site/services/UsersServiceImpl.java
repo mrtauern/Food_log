@@ -1,9 +1,6 @@
 package com.base.site.services;
 
-import com.base.site.models.DailyLog;
-import com.base.site.models.LogType;
-import com.base.site.models.UserType;
-import com.base.site.models.Users;
+import com.base.site.models.*;
 import com.base.site.repositories.DailyLogRepo;
 import com.base.site.repositories.LogTypeRepository;
 import com.base.site.repositories.UsersRepo;
@@ -53,6 +50,12 @@ public class UsersServiceImpl implements UsersService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    UPRCService uprcService;
+
+    @Autowired
+    EmailService emailService;
 
     @Override
     public List<Users> findAll(){
@@ -205,5 +208,34 @@ public class UsersServiceImpl implements UsersService {
         user.setBirthday(LocalDate.parse("1900-01-01"));
         save(user);
         return user;
+    }
+
+    @Override
+    public String updateUserPassword(UserPassResetCode resetCode) {
+        UserPassResetCode foundResetCode = uprcService.findByUsername(resetCode.getUsername());
+        Users foundUser = findUsersByUsername(resetCode.getUsername());
+//move this logic to a service layer?
+        if(resetCode.getCode().equals(foundResetCode.getCode()) && foundResetCode != null && foundUser != null && foundResetCode.isUsed() == false) {
+            log.info("Username and code checks out, saving new data...");
+            foundUser.setPassword(passwordEncoder.encode(resetCode.getPassword()));
+            save(foundUser);
+            uprcService.delete(foundResetCode);
+            log.info("Sending email to user informing that password have been changed...");
+            Mail mail = new Mail();
+
+            mail.setRecipient(resetCode.getUsername());
+            mail.setTopic("Your password on Food Log have been changed!");
+            mail.setContent("If you didnt request this change please contact up emidially on email: foodlog.dk@gmail.com");
+            try {
+                emailService.sendmail(mail);
+                return "redirect:/login";
+            } catch (Exception e) {
+                log.info("an error occured during sending of mail un method updateUserPassword (UserServiceImpl)");
+            }
+
+
+        }
+
+        return "redirect:/password-reset";
     }
 }

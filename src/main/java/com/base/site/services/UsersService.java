@@ -1,6 +1,7 @@
 package com.base.site.services;
 
 import com.base.site.models.DailyLog;
+import com.base.site.models.UserPassResetCode;
 import com.base.site.models.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -35,4 +36,6 @@ public interface UsersService {
     Users findUserByIdAndSetBdayString(long id);
 
     Users setAndSaveNewUser(Users user, String userTypeString);
+
+    String updateUserPassword(UserPassResetCode resetCode);
 }
