@@ -16,6 +16,8 @@
         <form method="post" th:action="@{/editUser}" th:object="${users}">
             <input type="hidden" th:field="*{id}" id="id" th:required="required">
 
+            <input type="hidden" th:field="*{accountNonLocked}" id="accountNonLocked" th:required="required">
+
             <label for="firstname">Firstname</label>
             <input type="text" th:field="*{firstname}" id="firstname" th:required="required">
 
