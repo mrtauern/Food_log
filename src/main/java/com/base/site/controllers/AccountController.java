@@ -2,18 +2,25 @@ package com.base.site.controllers;
 
 import com.base.site.models.*;
 import com.base.site.repositories.UPRCRepository;
+import com.base.site.security.SecurityConfig;
 import com.base.site.services.EmailService;
 import com.base.site.services.UserTypeService;
 import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
@@ -34,6 +41,9 @@ public class AccountController {
     private final String EDIT_USER_PROFILE = "editUserProfile";
     private final String DELETE_USER_CONFIRM = "delete_user_confirm";
     private final String DASHBOARD = "dashboard";
+    private final String LOGIN = "login";
+    private final String INDEX = "index";
+
     private final String REDIRECT = "redirect:/";
 
     @Autowired
@@ -47,6 +57,9 @@ public class AccountController {
 
     @Autowired
     EmailController emailController;
+
+    @Autowired
+    LoginController loginController;
 
     @Autowired
     UPRCRepository uprcRepository;
@@ -239,7 +252,7 @@ public class AccountController {
     public String deleteUser(@PathVariable("id") long id, Model model) {
         log.info("delete_user_confirm called userId: "+id);
 
-        if(usersService.getLoggedInUser().getId() != id) {
+        if(usersService.getLoggedInUser().getId() == id) {
 
             model.addAttribute("user", usersService.findById(id));
             model.addAttribute("pageTitle", "Delete user");
@@ -253,10 +266,15 @@ public class AccountController {
     }
 
     @PostMapping("/delete_user_confirm/{id}")
-    public String deleteUser(@PathVariable("id") long id) {
+    public String deleteUser(@PathVariable("id") long id, HttpServletRequest request, HttpServletResponse response) {
         log.info("delete_user_confirm confirmed... deleting user with  userId: "+id);
+
         usersService.deleteById(id);
-        return REDIRECT + USER_LIST;
+        loginController.fetchSignoutSite(request, response);
+
+        log.info("delete_user_confirm confirmed...  Sessio and cookies is deletet: "+id);
+
+        return REDIRECT + LOGIN;
     }
 
     @GetMapping("/dashboard")
