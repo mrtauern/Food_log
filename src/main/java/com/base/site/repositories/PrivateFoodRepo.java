@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository ("PrivateFoodRepo")
 public interface PrivateFoodRepo extends JpaRepository <PrivateFood, Long> {
 
-    @Query("SELECT pf FROM PrivateFood pf WHERE CONCAT(f.name) LIKE %?1%")
+    @Query("SELECT pf FROM PrivateFood pf WHERE CONCAT(pf.name) LIKE %?1%")
     public Page<PrivateFood> findAll(String key, Pageable pageable);
 }

@@ -152,12 +152,14 @@ public class FoodController {
         model.addAttribute("totalFood", page.getTotalElements());
 
         model.addAttribute("listFood", listFood);
+        model.addAttribute("listPrivateFood", listPrivateFood);
 
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
         model.addAttribute("foodlistSearched", foodlistSearched);
+        model.addAttribute("privateFoodlistSearched", privateFoodlistSearched);
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return ADD_FOOD_TO_DAILYLOG;
