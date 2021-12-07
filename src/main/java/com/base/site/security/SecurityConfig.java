@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 import java.util.logging.Logger;
@@ -76,7 +77,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/user_logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
-                .permitAll();
+                .permitAll()
+                ;
                 //.loginPage("/login");
 
         /*old

@@ -82,7 +82,6 @@ public class FoodController {
         model.addAttribute("foodlistSearched", foodlistSearched);
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
-
         return FOOD;
     }
 
@@ -124,16 +123,44 @@ public class FoodController {
     @GetMapping({"/addFoodToDailyLog", "/addFoodToDailyLog/{date}"})
     public String addFoodToDailyLog(Model model, @Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString) {
         log.info("  get mapping addFoodToDailyLog is called");
-        List<Food> foodlist = foodService.findAllByKeyword(keyword);
-        List<PrivateFood> pfoodlist = privateFoodService.findAllByKeyword(keyword);
-
-
-        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
-
-        model.addAttribute("foodlist", foodlist);
-        model.addAttribute("date", date.toString());
-        model.addAttribute("pfoodlist", pfoodlist);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("pageTitle", "User list");
+        model.addAttribute("selectedPage", "food");
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+
+        return findPaginatedAddFood(model,1 ,"name", "asc", keyword );
+        //return ADD_FOOD_TO_DAILYLOG;
+    }
+    @GetMapping("/pageAddFood/{pageNo}")
+    public String findPaginatedAddFood(Model model, @PathVariable(value = "pageNo")int pageNo,
+                                    @RequestParam("sortField")String sortField,
+                                    @RequestParam("sortDir")String sortDir,
+                                    @Param("keyword") String keyword
+    ){
+        int pageSize = 10;
+
+        Page<Food> page = foodService.findPaginatedFood(pageNo,pageSize, sortField, sortDir, keyword);
+        Page<PrivateFood> privateFoodPage = privateFoodService.findPaginatedAddFood(pageNo,pageSize, sortField, sortDir, keyword);
+        List<Food> listFood = page.getContent();
+        List<PrivateFood> listPrivateFood = privateFoodPage.getContent();
+        List<Food> foodlistSearched = foodService.findAllByKeyword(keyword);
+        List<PrivateFood> privateFoodlistSearched = privateFoodService.findAllByKeyword(keyword);
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalFood", page.getTotalElements());
+
+        model.addAttribute("listFood", listFood);
+        model.addAttribute("listPrivateFood", listPrivateFood);
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+        model.addAttribute("foodlistSearched", foodlistSearched);
+        model.addAttribute("privateFoodlistSearched", privateFoodlistSearched);
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return ADD_FOOD_TO_DAILYLOG;
     }

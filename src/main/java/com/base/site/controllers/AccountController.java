@@ -2,6 +2,7 @@ package com.base.site.controllers;
 
 import com.base.site.models.*;
 import com.base.site.repositories.UPRCRepository;
+import com.base.site.security.SecurityConfig;
 import com.base.site.services.EmailService;
 import com.base.site.services.UPRCService;
 import com.base.site.services.UserTypeService;
@@ -9,12 +10,19 @@ import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
@@ -35,6 +43,9 @@ public class AccountController {
     private final String EDIT_USER_PROFILE = "editUserProfile";
     private final String DELETE_USER_CONFIRM = "delete_user_confirm";
     private final String DASHBOARD = "dashboard";
+    private final String LOGIN = "login";
+    private final String INDEX = "index";
+
     private final String REDIRECT = "redirect:/";
 
     @Autowired
@@ -51,6 +62,9 @@ public class AccountController {
 
     @Autowired
     UPRCService uprcService;
+  
+    @Autowired
+    LoginController loginController;
 
     @Autowired
     EmailService emailService;
@@ -95,7 +109,7 @@ public class AccountController {
     }
 
     @GetMapping("/adminActionAccountNonLocked")
-    public String accountLockUnlock(@RequestParam("id") long id, @RequestParam(required = false, value = "locked") boolean locked) {
+    public String accountLockUnlock(@RequestParam("id") long id, @RequestParam(required = false, value = "locked") boolean locked, RedirectAttributes redAt) {
         log.info("Getmapping adminActionAccountNonLocked called with id: "+id+" and status locked: "+locked);
 
         if(usersService.getLoggedInUser().getId() != id) {
@@ -105,11 +119,21 @@ public class AccountController {
             if (locked == false) {
                 log.info("account unlock requested");
                 user.setAccountNonLocked(1);
+
+                redAt.addFlashAttribute("showMessage", true);
+                redAt.addFlashAttribute("messageType", "success");
+                redAt.addFlashAttribute("message", "User is successfully unlocked");
             } else {
                 log.info("account lock requested");
                 user.setAccountNonLocked(0);
+
+                redAt.addFlashAttribute("showMessage", true);
+                redAt.addFlashAttribute("messageType", "success");
+                redAt.addFlashAttribute("message", "User is successfully Locked");
             }
             usersService.save(user);
+
+
         }
 
         return REDIRECT+USER_LIST;
@@ -131,31 +155,12 @@ public class AccountController {
     }
 
     @PostMapping("/createUser")
-    public String createUser(@ModelAttribute("users") Users user){
+
+    public String createUser(@ModelAttribute("users") Users user, @RequestParam(value = "user_type") String userType, RedirectAttributes redAt){
         log.info("createUser post called");
 
-        String genPass = usersService.generatePassword();
-        String encPass = passwordEncoder.encode(genPass);
-        user.setPassword(encPass);
-
-        user.setBirthday(usersService.getBirthdayFromString(user.getSBirthday()));
-
-        String emailMessage = "We have created a new user for you.\n\n";
-        emailMessage += "Your new password is: " + genPass;
-
         try {
-            //niklas... temporary till users is correctly mapped
-            //hardcoded usertype we should change this
-            user.setUserType(userTypeService.findById((long)4));
-            //
-            if(usersService.findByUserName(user.getUsername()) == null) {
-                user.setAccountNonLocked(1);
-                usersService.save(user);
-
-                emailController.sendEmail(user.getUsername(), "custom", emailMessage);
-            } else {
-                return REDIRECT+CREATE_USER+"/userExists";
-            }
+            redAt = usersService.generateUserAndSave(user, userType, redAt);
 
         } catch (Exception e){
             log.info("Something went wrong with crating an user");
@@ -185,7 +190,7 @@ public class AccountController {
     }
 
     @PostMapping("/editUser")
-    public String editUser(@ModelAttribute("users") Users user){
+    public String editUser(@ModelAttribute("users") Users user, RedirectAttributes redAt){
         log.info("editUser post called");
 
 
@@ -193,16 +198,16 @@ public class AccountController {
 
         try {
             //move to servicelayer?
-            Users userData = usersService.findById(user.getId());
-            user.setUserType(userData.getUserType());
-            user.setPassword(userData.getPassword());
-            user.setRegisterDate(userData.getRegisterDate());
-            user.setKcal_modifier(userData.getKcal_modifier());
-            usersService.save(user);
+            usersService.saveEditUserData(user);
+
         } catch (Exception e){
             log.info("Something went wrong with crating an user");
             log.info(e.toString());
         }
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "User is successfully updated");
 
         return REDIRECT + USER_LIST;
     }
@@ -213,7 +218,20 @@ public class AccountController {
 
         return REDIRECT + USER_LIST;
     }
-  
+
+    @GetMapping("/delete_own_user")
+    public String deleteOwnUser( Model model) {
+        log.info("delete_own_user called userId: ");
+
+            model.addAttribute("pageTitle", "Delete user");
+            model.addAttribute("selectedPage", "user");
+            model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+
+            return "/delete_own_user";
+    }
+
+
+
     @GetMapping("/delete_user_confirm/{id}")
     public String deleteUser(@PathVariable("id") long id, Model model) {
         log.info("delete_user_confirm called userId: "+id);
@@ -232,10 +250,15 @@ public class AccountController {
     }
 
     @PostMapping("/delete_user_confirm/{id}")
-    public String deleteUser(@PathVariable("id") long id) {
+    public String deleteUser(@PathVariable("id") long id, HttpServletRequest request, HttpServletResponse response) {
         log.info("delete_user_confirm confirmed... deleting user with  userId: "+id);
+
         usersService.deleteById(id);
-        return REDIRECT + USER_LIST;
+        loginController.fetchSignoutSite(request, response);
+
+        log.info("delete_user_confirm confirmed...  Sessio and cookies is deletet: "+id);
+
+        return REDIRECT + LOGIN;
     }
 
     @GetMapping("/dashboard")
