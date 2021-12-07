@@ -58,9 +58,6 @@ public class AccountController {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    EmailController emailController;
-
-    @Autowired
     UPRCService uprcService;
   
     @Autowired

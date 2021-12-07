@@ -71,8 +71,6 @@ class AccountControllerTest {
     @MockBean
     private UserTypeServiceImpl userTypeService;
     @MockBean
-    private EmailController emailController;
-    @MockBean
     private UPRCRepository uprcRepository;
     @MockBean
     private EmailServiceImpl emailService;
