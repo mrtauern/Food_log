@@ -242,6 +242,7 @@ public class UsersServiceImpl implements UsersService {
             emailService.sendmail(mail);
         } else {
             log.info("something went wrong when creating the user");
+
         }
 
 
