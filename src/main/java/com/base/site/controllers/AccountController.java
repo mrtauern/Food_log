@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
@@ -107,7 +108,7 @@ public class AccountController {
     }
 
     @GetMapping("/adminActionAccountNonLocked")
-    public String accountLockUnlock(@RequestParam("id") long id, @RequestParam(required = false, value = "locked") boolean locked) {
+    public String accountLockUnlock(@RequestParam("id") long id, @RequestParam(required = false, value = "locked") boolean locked, RedirectAttributes redAt) {
         log.info("Getmapping adminActionAccountNonLocked called with id: "+id+" and status locked: "+locked);
 
         if(usersService.getLoggedInUser().getId() != id) {
@@ -117,11 +118,21 @@ public class AccountController {
             if (locked == false) {
                 log.info("account unlock requested");
                 user.setAccountNonLocked(1);
+
+                redAt.addFlashAttribute("showMessage", true);
+                redAt.addFlashAttribute("messageType", "success");
+                redAt.addFlashAttribute("message", "User is successfully unlocked");
             } else {
                 log.info("account lock requested");
                 user.setAccountNonLocked(0);
+
+                redAt.addFlashAttribute("showMessage", true);
+                redAt.addFlashAttribute("messageType", "success");
+                redAt.addFlashAttribute("message", "User is successfully Locked");
             }
             usersService.save(user);
+
+
         }
 
         return REDIRECT+USER_LIST;
@@ -143,7 +154,7 @@ public class AccountController {
     }
 
     @PostMapping("/createUser")
-    public String createUser(@ModelAttribute("users") Users user){
+    public String createUser(@ModelAttribute("users") Users user, RedirectAttributes redAt){
         log.info("createUser post called");
 
         String genPass = usersService.generatePassword();
@@ -165,8 +176,16 @@ public class AccountController {
                 usersService.save(user);
 
                 emailController.sendEmail(user.getUsername(), "custom", emailMessage);
+
+                redAt.addFlashAttribute("showMessage", true);
+                redAt.addFlashAttribute("messageType", "success");
+                redAt.addFlashAttribute("message", "User is successfully created");
             } else {
-                return REDIRECT+CREATE_USER+"/userExists";
+                //return REDIRECT+CREATE_USER+"/userExists";
+
+                redAt.addFlashAttribute("showMessage", true);
+                redAt.addFlashAttribute("messageType", "error");
+                redAt.addFlashAttribute("message", "User with this e-mail already exists");
             }
 
         } catch (Exception e){
@@ -197,7 +216,7 @@ public class AccountController {
     }
 
     @PostMapping("/editUser")
-    public String editUser(@ModelAttribute("users") Users user){
+    public String editUser(@ModelAttribute("users") Users user, RedirectAttributes redAt){
         log.info("editUser post called");
 
 
@@ -215,6 +234,10 @@ public class AccountController {
             log.info("Something went wrong with crating an user");
             log.info(e.toString());
         }
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "User is successfully updated");
 
         return REDIRECT + USER_LIST;
     }

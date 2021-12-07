@@ -7,6 +7,7 @@ import com.base.site.models.Users;
 import com.base.site.repositories.UPRCRepository;
 import com.base.site.repositories.UsersRepo;
 import com.base.site.services.EmailService;
+import com.base.site.services.UPRCService;
 import com.base.site.services.UserTypeService;
 import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class LoginController {
     UserTypeService userTypeService;
 
     @Autowired
-    UPRCRepository uprcRepository;
+    UPRCService uprcService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -109,26 +110,9 @@ public class LoginController {
     public String confirmReset(UserPassResetCode resetCode) throws MessagingException, IOException {
         log.info("username: "+resetCode.getUsername());
 
-        //move this logic to a service layer?
-        if(uprcRepository.findByUsername(resetCode.getUsername()) == null && usersService.findUsersByUsername(resetCode.getUsername()) != null) {
-            resetCode.setCode(resetCode.generateCode());
-            resetCode.setUsed(false);
-            uprcRepository.save(resetCode);
-
-            log.info("mail with link and code being sent to user with email: "+resetCode.getUsername());
-            Mail mail = new Mail();
-            mail.setRecipient(resetCode.getUsername());
-            mail.setTopic("Your password on Food Log have been requested to be reset");
-            mail.setContent("To complete the password reset click the link Http://localhost:8080/password_reset_code and type in the username and code: "+resetCode.getCode());
-
-            emailService.sendmail(mail);
-
-            return "redirect:/password_reset_code";
-        } else {
-            log.info("user not found or code already sent");
-            return "password-reset";
-        }
-        //return "redirect:/index";
+        resetCode = uprcService.generateAndSaveCode(resetCode);
+        emailService.sendResetPasswordMail(resetCode);
+        return "redirect:/password_reset_code";
     }
 
     @GetMapping("/password_reset_code")
@@ -139,14 +123,14 @@ public class LoginController {
 
     @PostMapping("/password_reset_code")
     public String passwordResetCodeCheck(UserPassResetCode resetCode) throws MessagingException, IOException {
-        UserPassResetCode foundResetCode = uprcRepository.findByUsername(resetCode.getUsername());
+        UserPassResetCode foundResetCode = uprcService.findByUsername(resetCode.getUsername());
         Users foundUser = usersService.findUsersByUsername(resetCode.getUsername());
 //move this logic to a service layer?
         if(resetCode.getCode().equals(foundResetCode.getCode()) && foundResetCode != null && foundUser != null && foundResetCode.isUsed() == false) {
             log.info("Username and code checks out, saving new data...");
             foundUser.setPassword(passwordEncoder.encode(resetCode.getPassword()));
             usersService.save(foundUser);
-            uprcRepository.delete(foundResetCode);
+            uprcService.delete(foundResetCode);
             log.info("Sending email to user informing that password have been changed...");
             Mail mail = new Mail();
 
