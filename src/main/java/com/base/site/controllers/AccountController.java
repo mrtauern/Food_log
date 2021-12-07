@@ -192,12 +192,8 @@ public class AccountController {
 
         try {
             //move to servicelayer?
-            Users userData = usersService.findById(user.getId());
-            user.setUserType(userData.getUserType());
-            user.setPassword(userData.getPassword());
-            user.setRegisterDate(userData.getRegisterDate());
-            user.setKcal_modifier(userData.getKcal_modifier());
-            usersService.save(user);
+            usersService.saveEditUserData(user);
+
         } catch (Exception e){
             log.info("Something went wrong with crating an user");
             log.info(e.toString());

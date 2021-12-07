@@ -35,4 +35,6 @@ public interface UsersService {
     Users findUserByIdAndSetBdayString(long id);
 
     Users setAndSaveNewUser(Users user, String userTypeString);
+
+    void saveEditUserData(Users user);
 }

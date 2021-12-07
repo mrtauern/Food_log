@@ -206,4 +206,14 @@ public class UsersServiceImpl implements UsersService {
         save(user);
         return user;
     }
+
+    @Override
+    public void saveEditUserData(Users user) {
+        Users userData = findById(user.getId());
+        user.setUserType(userData.getUserType());
+        user.setPassword(userData.getPassword());
+        user.setRegisterDate(userData.getRegisterDate());
+        user.setKcal_modifier(userData.getKcal_modifier());
+        save(user);
+    }
 }
