@@ -39,10 +39,7 @@ public class UserController {
     public String index() {
         log.info("Usercontroller / getmapping called...");
 
-        if(usersService.getLoggedInUser().getId().equals(null)) {
-            return REDIRECT+INDEX;
-        }
-        else if(usersService.getLoggedInUser().getRoles().equals("USER")) {
+        if(usersService.getLoggedInUser().getRoles().equals("USER")) {
             return REDIRECT+DAILYLOG;
         } else if(usersService.getLoggedInUser().getRoles().equals("ADMIN")) {
             return REDIRECT+DASHBOARD;
