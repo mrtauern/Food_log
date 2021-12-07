@@ -43,6 +43,12 @@
             <label for="height">Height (cm)</label>
             <input type="number" th:name="height" id="height" th:required="required">
 
+            <label for="user_type">Gender</label>
+            <select th:name="user_type" id="user_type">
+                <option value="User_male" selected>Male</option>
+                <option value="User_female">Female</option>
+            </select>
+
             <label for="roles">Role</label>
             <select th:name="roles" id="roles">
                 <option value="USER" selected>USER</option>

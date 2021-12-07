@@ -1,9 +1,6 @@
 package com.base.site.services;
 
-import com.base.site.models.DailyLog;
-import com.base.site.models.LogType;
-import com.base.site.models.UserType;
-import com.base.site.models.Users;
+import com.base.site.models.*;
 import com.base.site.repositories.DailyLogRepo;
 import com.base.site.repositories.LogTypeRepository;
 import com.base.site.repositories.UsersRepo;
@@ -15,7 +12,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -53,6 +53,9 @@ public class UsersServiceImpl implements UsersService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    EmailService emailService;
 
     @Override
     public List<Users> findAll(){
@@ -205,5 +208,53 @@ public class UsersServiceImpl implements UsersService {
         user.setBirthday(LocalDate.parse("1900-01-01"));
         save(user);
         return user;
+    }
+
+    @Override
+    public void saveEditUserData(Users user) {
+        Users userData = findById(user.getId());
+        user.setUserType(userData.getUserType());
+        user.setPassword(userData.getPassword());
+        user.setRegisterDate(userData.getRegisterDate());
+        user.setKcal_modifier(userData.getKcal_modifier());
+        save(user);
+    }
+
+    @Override
+    public RedirectAttributes generateUserAndSave(Users user, String userType, RedirectAttributes redAt) throws MessagingException, IOException {
+        String genPass = generatePassword();
+        String encPass = passwordEncoder.encode(genPass);
+        user.setPassword(encPass);
+
+        user.setBirthday(getBirthdayFromString(user.getSBirthday()));
+
+        String emailMessage = "We have created a new user for you.\n\n";
+        emailMessage += "Your new password is: " + genPass;
+
+        user.setUserType(userTypeService.findByType(userType));
+
+        if(findByUserName(user.getUsername()) == null) {
+            user.setAccountNonLocked(1);
+            save(user);
+            Mail mail = new Mail();
+            mail.setRecipient(user.getUsername());
+            mail.setTopic("Your user have been created on food log");
+            mail.setContent(emailMessage);
+            emailService.sendmail(mail);
+
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "User is successfully created");
+
+        } else {
+            log.info("something went wrong when creating the user");
+
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "User with this e-mail already exists");
+        }
+
+        return redAt;
+
     }
 }

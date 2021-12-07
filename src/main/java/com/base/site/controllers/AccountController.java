@@ -154,39 +154,12 @@ public class AccountController {
     }
 
     @PostMapping("/createUser")
-    public String createUser(@ModelAttribute("users") Users user, RedirectAttributes redAt){
+
+    public String createUser(@ModelAttribute("users") Users user, @RequestParam(value = "user_type") String userType, RedirectAttributes redAt){
         log.info("createUser post called");
 
-        String genPass = usersService.generatePassword();
-        String encPass = passwordEncoder.encode(genPass);
-        user.setPassword(encPass);
-
-        user.setBirthday(usersService.getBirthdayFromString(user.getSBirthday()));
-
-        String emailMessage = "We have created a new user for you.\n\n";
-        emailMessage += "Your new password is: " + genPass;
-
         try {
-            //niklas... temporary till users is correctly mapped
-            //hardcoded usertype we should change this
-            user.setUserType(userTypeService.findById((long)4));
-            //
-            if(usersService.findByUserName(user.getUsername()) == null) {
-                user.setAccountNonLocked(1);
-                usersService.save(user);
-
-                emailController.sendEmail(user.getUsername(), "custom", emailMessage);
-
-                redAt.addFlashAttribute("showMessage", true);
-                redAt.addFlashAttribute("messageType", "success");
-                redAt.addFlashAttribute("message", "User is successfully created");
-            } else {
-                //return REDIRECT+CREATE_USER+"/userExists";
-
-                redAt.addFlashAttribute("showMessage", true);
-                redAt.addFlashAttribute("messageType", "error");
-                redAt.addFlashAttribute("message", "User with this e-mail already exists");
-            }
+            redAt = usersService.generateUserAndSave(user, userType, redAt);
 
         } catch (Exception e){
             log.info("Something went wrong with crating an user");
@@ -224,12 +197,8 @@ public class AccountController {
 
         try {
             //move to servicelayer?
-            Users userData = usersService.findById(user.getId());
-            user.setUserType(userData.getUserType());
-            user.setPassword(userData.getPassword());
-            user.setRegisterDate(userData.getRegisterDate());
-            user.setKcal_modifier(userData.getKcal_modifier());
-            usersService.save(user);
+            usersService.saveEditUserData(user);
+
         } catch (Exception e){
             log.info("Something went wrong with crating an user");
             log.info(e.toString());

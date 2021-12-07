@@ -4,7 +4,10 @@ import com.base.site.models.DailyLog;
 import com.base.site.models.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -35,4 +38,8 @@ public interface UsersService {
     Users findUserByIdAndSetBdayString(long id);
 
     Users setAndSaveNewUser(Users user, String userTypeString);
+
+    void saveEditUserData(Users user);
+
+    RedirectAttributes generateUserAndSave(Users user, String userType, RedirectAttributes redAt) throws MessagingException, IOException;
 }
