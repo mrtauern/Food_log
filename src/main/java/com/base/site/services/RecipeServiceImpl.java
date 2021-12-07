@@ -61,11 +61,21 @@ public class RecipeServiceImpl implements RecipeService{
 
     @Override
     public double calculateCaloriesInRecipe(List<RecipeFood> recipeFoods, Recipe recipe) {
+        double food = 0;
+
+        double pfood = 0;
         double total = 0;
+
         for (RecipeFood recipeFood : recipeFoods) {
-            total += (recipeFood.getFood().getEnergy_kcal()*recipeFood.getAmount()) / 100;
+            food += (recipeFood.getFood().getEnergy_kcal()*recipeFood.getAmount()) / 100;
+            log.info("recipeServiceImpl --- ::"+ food);
+            pfood +=(recipeFood.getPrivateFood().getEnergy_kcal()*recipeFood.getAmount())/ 100;
+            log.info("recipeServiceImpl --- ::"+ pfood);
+
         }
-        total = (total/recipe.getTotal_weight())*100;
+        total = ((food+pfood)/(recipe.getTotal_weight()))*100;
+        log.info("recipeServiceImpl --- ::"+ total);
+
         return total;
     }
 }

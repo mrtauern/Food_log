@@ -30,4 +30,8 @@ public class PrivateFood {
             cascade = CascadeType.ALL)
     private Set<DailyLog> dailyLogs;
 
+    @OneToMany(mappedBy = "privateFood", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    Set<RecipeFood> amounts;
+
 }

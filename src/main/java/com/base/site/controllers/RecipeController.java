@@ -174,7 +174,7 @@ public class RecipeController {
 
         return ADD_FOOD_TO_RECIPE;
     }
-//    @PostMapping({"/saveDailyLog/{type}", "/saveDailyLog/{type}/{date}"})
+
     @PostMapping("/saveRecipeFood/{type}/{id}/{recipeId}")
     public String saveRecipeFood(@PathVariable(required = false, value = "type") String type,
                                  @PathVariable("recipeId")long recipeId,
@@ -190,7 +190,6 @@ public class RecipeController {
                 recipeFood.setFood(foodIds);
             }
             if (type.equals("foodp")) {
-                log.info("foodp ");
                 PrivateFood foodIdp = privateFoodService.findById(privateFood.getId());
                 recipeFood.setPrivateFood(foodIdp);
             }
