@@ -18,6 +18,10 @@ public class RecipeFoodServiceImpl implements RecipeFoodService{
 
     @Autowired
     RecipeFoodRepository recipeFoodRepository;
+    @Autowired
+    RecipeService recipeService;
+    @Autowired
+    FoodService foodService;
 
     @Override
     public List<RecipeFood> findAll() {
@@ -48,5 +52,15 @@ public class RecipeFoodServiceImpl implements RecipeFoodService{
     @Override
     public void delete(RecipeFood recipeFood) {
         recipeFoodRepository.delete(recipeFood);
+    }
+
+    @Override
+    public void saveRecipeFoodData(RecipeFood recipeFood, long foodId, long recipeId) {
+        int amount = recipeFood.getAmount();
+        recipeFood = findById(recipeFood.getId());
+        recipeFood.setAmount(amount);
+        recipeFood.setRecipe(recipeService.findById(recipeId));
+        recipeFood.setFood(foodService.findById(foodId));
+        save(recipeFood);
     }
 }

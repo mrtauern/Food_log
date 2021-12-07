@@ -22,4 +22,5 @@ public interface RecipeFoodService {
 
     void delete(RecipeFood recipeFood);
 
+    void saveRecipeFoodData(RecipeFood recipeFood, long foodId, long recipeId);
 }
