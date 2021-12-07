@@ -3,6 +3,9 @@ package com.base.site.services;
 import com.base.site.models.UserPassResetCode;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+
 @Service("UPRCService")
 public interface UPRCService {
     UserPassResetCode findByUsername(String username);
@@ -10,4 +13,6 @@ public interface UPRCService {
     void delete(UserPassResetCode userPassResetCode);
 
     UserPassResetCode generateAndSaveCode(UserPassResetCode resetCode);
+
+    void adminResetUserPassword(long id) throws MessagingException, IOException;
 }

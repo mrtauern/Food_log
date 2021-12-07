@@ -55,6 +55,9 @@ public class UsersServiceImpl implements UsersService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
+    UPRCService uprcService;
+
+    @Autowired
     EmailService emailService;
 
     @Override
@@ -168,7 +171,6 @@ public class UsersServiceImpl implements UsersService {
 
 
         Timestamp ts=new Timestamp(birthday.getTime());
-        //created by Niklas to fit with change to LocalDate in users
         LocalDate bday = Instant.ofEpochMilli(birthday.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 
         return bday;
@@ -211,7 +213,35 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public void saveEditUserData(Users user) {
+    public String updateUserPassword(UserPassResetCode resetCode) {
+        UserPassResetCode foundResetCode = uprcService.findByUsername(resetCode.getUsername());
+        Users foundUser = findUsersByUsername(resetCode.getUsername());
+
+        if(resetCode.getCode().equals(foundResetCode.getCode()) && foundResetCode != null && foundUser != null && foundResetCode.isUsed() == false) {
+            log.info("Username and code checks out, saving new data...");
+            foundUser.setPassword(passwordEncoder.encode(resetCode.getPassword()));
+            save(foundUser);
+            uprcService.delete(foundResetCode);
+            log.info("Sending email to user informing that password have been changed...");
+            Mail mail = new Mail();
+
+            mail.setRecipient(resetCode.getUsername());
+            mail.setTopic("Your password on Food Log have been changed!");
+            mail.setContent("If you didnt request this change please contact up emidially on email: foodlog.dk@gmail.com");
+            try {
+                emailService.sendmail(mail);
+                return "redirect:/login";
+            } catch (Exception e) {
+                log.info("an error occured during sending of mail un method updateUserPassword (UserServiceImpl)");
+            }
+
+
+        }
+
+        return "redirect:/password-reset";
+    }
+    
+   public void saveEditUserData(Users user) {
         Users userData = findById(user.getId());
         user.setUserType(userData.getUserType());
         user.setPassword(userData.getPassword());
@@ -255,6 +285,5 @@ public class UsersServiceImpl implements UsersService {
         }
 
         return redAt;
-
     }
 }

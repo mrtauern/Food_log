@@ -123,26 +123,8 @@ public class LoginController {
 
     @PostMapping("/password_reset_code")
     public String passwordResetCodeCheck(UserPassResetCode resetCode) throws MessagingException, IOException {
-        UserPassResetCode foundResetCode = uprcService.findByUsername(resetCode.getUsername());
-        Users foundUser = usersService.findUsersByUsername(resetCode.getUsername());
-//move this logic to a service layer?
-        if(resetCode.getCode().equals(foundResetCode.getCode()) && foundResetCode != null && foundUser != null && foundResetCode.isUsed() == false) {
-            log.info("Username and code checks out, saving new data...");
-            foundUser.setPassword(passwordEncoder.encode(resetCode.getPassword()));
-            usersService.save(foundUser);
-            uprcService.delete(foundResetCode);
-            log.info("Sending email to user informing that password have been changed...");
-            Mail mail = new Mail();
+       return usersService.updateUserPassword(resetCode);
 
-            mail.setRecipient(resetCode.getUsername());
-            mail.setTopic("Your password on Food Log have been changed!");
-            mail.setContent("If you didnt request this change please contact up emidially on email: foodlog.dk@gmail.com");
-
-            emailService.sendmail(mail);
-            return "redirect:/login";
-        }
-
-        return "redirect:/password-reset";
     }
 
 }

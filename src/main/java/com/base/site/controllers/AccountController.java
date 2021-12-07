@@ -4,6 +4,7 @@ import com.base.site.models.*;
 import com.base.site.repositories.UPRCRepository;
 import com.base.site.security.SecurityConfig;
 import com.base.site.services.EmailService;
+import com.base.site.services.UPRCService;
 import com.base.site.services.UserTypeService;
 import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +61,10 @@ public class AccountController {
     EmailController emailController;
 
     @Autowired
-    LoginController loginController;
-
+    UPRCService uprcService;
+  
     @Autowired
-    UPRCRepository uprcRepository;
+    LoginController loginController;
 
     @Autowired
     EmailService emailService;
@@ -213,29 +214,7 @@ public class AccountController {
   
     @GetMapping("/password_reset_user/{id}")
     public String passwordResetUser(@PathVariable(value = "id") long id, Model model) throws MessagingException, IOException {
-
-
-        //logic should be in a service method??
-        if(usersService.getLoggedInUser().getId() != id) {
-            UserPassResetCode resetCode = new UserPassResetCode();
-
-            if (usersService.findById(id) != null) {
-                resetCode.setUsername(usersService.findById(id).getUsername());
-                resetCode.setCode(resetCode.generateCode());
-                resetCode.setUsed(false);
-                uprcRepository.save(resetCode);
-
-                log.info("mail with link and code being sent to user with email: " + resetCode.getUsername());
-                Mail mail = new Mail();
-                mail.setRecipient(resetCode.getUsername());
-                mail.setTopic("Your password on Food Log have been requested to be reset");
-                mail.setContent("To complete the password reset click the link Http://localhost:8080/password_reset_code and type in the username and code: " + resetCode.getCode());
-
-                emailService.sendmail(mail);
-            } else {
-                log.info("user not found or code already sent");
-            }
-        }
+        uprcService.adminResetUserPassword(id);
 
         return REDIRECT + USER_LIST;
     }
