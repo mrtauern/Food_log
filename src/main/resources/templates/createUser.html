@@ -44,20 +44,22 @@
             <input type="number" th:name="height" id="height" th:required="required">
 
             <label for="user_type">Gender</label>
-            <select th:name="user_type" id="user_type">
-                <option value="User_male" selected>Male</option>
+            <select th:name="user_type" id="user_type" th:required="required">
+                <option value="" selected disabled>-Select gender-</option>
+                <option value="User_male">Male</option>
                 <option value="User_female">Female</option>
             </select>
 
             <label for="roles">Role</label>
-            <select th:name="roles" id="roles">
-                <option value="USER" selected>USER</option>
+            <select th:name="roles" id="roles" th:required="required">
+                <option value="" selected disabled>-Select role-</option>
+                <option value="USER">USER</option>
                 <option value="ADMIN">ADMIN</option>
             </select>
 
             <div>
-                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Create</button>
-                <button type="button" class="btn mr-2 btn-sm" onclick="location.href='/userList';"><i class="fas fa-times"></i> Cancel</button>
+                <button type="button" class="btn btn-outline-dark mr-2 btn-sm" onclick="location.href='/userList';">Cancel <i class="fas fa-times"></i></button>
+                <button type="submit" class="btn btn-primary mr-2 btn-sm">Create <i class="fas fa-check"></i></button>
             </div>
         </form>
 

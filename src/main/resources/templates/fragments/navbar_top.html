@@ -47,7 +47,7 @@
 
 <header th:fragment="header">
         <!-- LOGO -->
-        <div id="logo"><img src="../static/image/logo.png" th:src="@{/image/logo.png}"> Food Log</div>
+        <div id="logo"><img src="../static/image/logo.png" th:src="@{/image/logo.png}">Food Log</div>
 <!--    <a th:href="${'/dailyLog'}"  id="logo"><img src="../static/image/logo.png" th:src="@{/image/logo.png}"> Food Log</a>-->
     <!-- NAVIGATION MENU -->
         <nav>
@@ -109,7 +109,7 @@
 
     <div id="message" th:classappend="${showMessage} ? 'show' : ''" th:switch="${messageType}">
         <div id="innerMessage" class="success" th:case="success">
-            <i class="fas fa-check-circle"></i> <span th:text="${message}"></span> <a href="#" id="closeMessage"><i class="fas fa-times"></i></a>
+            <div><i class="fas fa-check-circle"></i></div> <div><span th:text="${message}"></span></div> <div><a href="#" id="closeMessage"><i class="fas fa-times"></i></a></div>
         </div>
         <div id="innerMessage" class="warning" th:case="warning">
             <i class="fas fa-exclamation-circle"></i> <span th:text="${message}"></span> <a href="#" id="closeMessage"><i class="fas fa-times"></i></a>
