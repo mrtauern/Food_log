@@ -74,14 +74,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/user_logout"))
-                    .logoutUrl("/user_logout")
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID")
-                    .permitAll()
-                    .and()
-                .exceptionHandling().
-                    accessDeniedPage("/403")
+                .logoutUrl("/user_logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
                 ;
                 //.loginPage("/login");
 

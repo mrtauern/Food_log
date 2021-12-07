@@ -247,12 +247,25 @@ public class AccountController {
 
         return REDIRECT + USER_LIST;
     }
-  
+
+    @GetMapping("/delete_own_user")
+    public String deleteOwnUser( Model model) {
+        log.info("delete_own_user called userId: ");
+
+            model.addAttribute("pageTitle", "Delete user");
+            model.addAttribute("selectedPage", "user");
+            model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+
+            return "/delete_own_user";
+    }
+
+
+
     @GetMapping("/delete_user_confirm/{id}")
     public String deleteUser(@PathVariable("id") long id, Model model) {
         log.info("delete_user_confirm called userId: "+id);
 
-        if(usersService.getLoggedInUser().getId() == id) {
+        if(usersService.getLoggedInUser().getId() != id) {
 
             model.addAttribute("user", usersService.findById(id));
             model.addAttribute("pageTitle", "Delete user");
