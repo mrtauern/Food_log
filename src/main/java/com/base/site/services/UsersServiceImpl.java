@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -220,7 +221,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public void generateUserAndSave(Users user, String userType) throws MessagingException, IOException {
+    public RedirectAttributes generateUserAndSave(Users user, String userType, RedirectAttributes redAt) throws MessagingException, IOException {
         String genPass = generatePassword();
         String encPass = passwordEncoder.encode(genPass);
         user.setPassword(encPass);
@@ -240,11 +241,20 @@ public class UsersServiceImpl implements UsersService {
             mail.setTopic("Your user have been created on food log");
             mail.setContent(emailMessage);
             emailService.sendmail(mail);
+
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "User is successfully created");
+
         } else {
             log.info("something went wrong when creating the user");
 
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "User with this e-mail already exists");
         }
 
+        return redAt;
 
     }
 }

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="fragments/head :: styles"></head>
+
+<body>
+<header th:include="fragments/navbar_top :: header" class="navbar"></header>
+
+<div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
+
+<div id="content">
+    <form action="#" th:action="@{/delete_user_confirm/{id}(id=${loggedInUser.id})}" th:object="${loggedInUser}" method="post">
+        <div class="alert alert-danger">
+            <strong>Danger!</strong> Are you sure you wish to delete the user <span th:text="${loggedInUser.username}" />
+        </div>
+        <input type="submit" value="Delete User">
+    </form>
+</div>
+
+<footer th:include="fragments/navbar_top :: footer"></footer>
+</body>
+</html>
