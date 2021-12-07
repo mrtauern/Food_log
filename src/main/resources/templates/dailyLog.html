@@ -12,6 +12,10 @@
     function clearSearch() {
         window.location = "[[@{/dailyLog}]]";
     }
+
+    function confirm_delete(name) {
+        return confirm('Are you sure you want to delete "' + name + '" from daily log?');
+    }
 </script>
 <body>
 <header th:include="fragments/navbar_top :: header" class="navbar"></header>
@@ -68,7 +72,7 @@
                         <td><i class="fas fa-balance-scale-left"></i> <span th:text="${breakfast?.amount}"></span></td>
                         <td class="actionButtons">
                             <a th:href="@{/updateDailyLog/food/{id}/{date} (id=${breakfast.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                            <a th:href="@{/deleteDailyLog/{id}/{date} (id=${breakfast.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <a th:href="@{/deleteDailyLog/{id}/{date} (id=${breakfast.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${breakfast?.food?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                         </td>
                     </th:block>
                     <th:block th:if="${breakfast?.privateFood?.name!=null}">
@@ -76,7 +80,7 @@
                         <td><i class="fas fa-balance-scale-left"></i> <span th:text="${breakfast?.amount}"></span></td>
                         <td class="actionButtons">
                             <a th:href="@{/updateDailyLog/pfood/{id}/{date} (id=${breakfast.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                            <a th:href="@{/deleteDailyLog/{id}/{date} (id=${breakfast.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <a th:href="@{/deleteDailyLog/{id}/{date} (id=${breakfast.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${breakfast?.privateFood?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                         </td>
                     </th:block>
 
@@ -101,7 +105,7 @@
                         <td><i class="fas fa-balance-scale-left"></i> <span th:text="${lunch?.amount}"></span></td>
                         <td class="actionButtons">
                             <a th:href="@{/updateDailyLog/food/{id}/{date}(id=${lunch.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                            <a th:href="@{/deleteDailyLog/{id}/{date}(id=${lunch.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <a th:href="@{/deleteDailyLog/{id}/{date}(id=${lunch.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${lunch?.food?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                         </td>
                     </th:block>
                     <th:block th:if="${lunch?.privateFood?.name!=null}">
@@ -109,7 +113,7 @@
                         <td><i class="fas fa-balance-scale-left"></i> <span th:text="${lunch?.amount}"></span></td>
                         <td class="actionButtons">
                             <a th:href="@{/updateDailyLog/pfood/{id}/{date}(id=${lunch.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                            <a th:href="@{/deleteDailyLog/{id}/{date}(id=${lunch.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <a th:href="@{/deleteDailyLog/{id}/{date}(id=${lunch.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${lunch?.privateFood?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                         </td>
                     </th:block>
                 </tr>
@@ -133,7 +137,7 @@
                         <td><i class="fas fa-balance-scale-left"></i> <span th:text="${dinner?.amount}"></span></td>
                         <td class="actionButtons">
                             <a th:href="@{/updateDailyLog/food/{id}/{date}(id=${dinner.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                            <a th:href="@{/deleteDailyLog/{id}/{date}(id=${dinner.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <a th:href="@{/deleteDailyLog/{id}/{date}(id=${dinner.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${dinner?.food?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                         </td>
                     </th:block>
                     <th:block th:if="${dinner?.privateFood?.name!=null}">
@@ -141,7 +145,7 @@
                         <td><i class="fas fa-balance-scale-left"></i> <span th:text="${dinner?.amount}"></span></td>
                         <td class="actionButtons">
                             <a th:href="@{/updateDailyLog/pfood/{id}/{date}(id=${dinner.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                            <a th:href="@{/deleteDailyLog/{id}/{date}(id=${dinner.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <a th:href="@{/deleteDailyLog/{id}/{date}(id=${dinner.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${dinner?.privateFood?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                         </td>
                     </th:block>
                 </tr>
@@ -168,7 +172,7 @@
                         <td><i class="fas fa-balance-scale-left"></i> <span th:text="${miscellanea?.amount}"></span></td>
                         <td class="actionButtons">
                             <a th:href="@{/updateDailyLog/food/{id}/{date}(id=${miscellanea.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                            <a th:href="@{/deleteDailyLog/food/{id}/{date}(id=${miscellanea.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <a th:href="@{/deleteDailyLog/food/{id}/{date}(id=${miscellanea.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${miscellanea?.food?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                         </td>
                     </th:block>
                     <th:block th:if="${miscellanea?.privateFood?.name!=null}">
@@ -176,7 +180,7 @@
                         <td><i class="fas fa-balance-scale-left"></i> <span th:text="${lunch?.amount}"></span></td>
                         <td class="actionButtons">
                             <a th:href="@{/updateDailyLog/pfood/{id}/{date}(id=${miscellanea.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                            <a th:href="@{/deleteDailyLog/pfood/{id}/{date}(id=${miscellanea.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <a th:href="@{/deleteDailyLog/pfood/{id}/{date}(id=${miscellanea.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${miscellanea?.privateFood?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                         </td>
                     </th:block>
                 </tr>
@@ -208,7 +212,7 @@
                     <td><i class="fas fa-clock"></i> <span th:text="${exercise?.amount}"></span></td>
                     <td class="actionButtons">
                         <a th:href="@{/updateExerciseInDailyLog/{id}/{date} (id=${exercise.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                        <a th:href="@{/deleteExerciseFromDailyLog/{id}/{date} (id=${exercise.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                        <a th:href="@{/deleteExerciseFromDailyLog/{id}/{date} (id=${exercise.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${exercise?.fkExercise?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                     </td>
                 </tr>
                 </tbody>
@@ -236,7 +240,7 @@
                       <td th:text="${weight?.amount}">Weight</td>
                       <td>
                           <a th:href="@{/updateCurrentWeight/{id}/{date} (id=${weight?.id}, date=${sSelectedDate})}">Edit</a>
-                          <a th:href="@{/deleteCurrentWeight/{id}/{date} (id=${weight?.id}, date=${sSelectedDate})}">Delete</a>
+                          <a th:href="@{/deleteCurrentWeight/{id}/{date} (id=${weight?.id}, date=${sSelectedDate})}"th:attr="onclick=|return confirm_delete('${'weight for ' + sSelectedDate}')|">Delete</a>
                       </td>
                   </th:block>
 

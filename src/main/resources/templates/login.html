@@ -19,7 +19,7 @@
       <div class="signIn">
         <form name="f" th:action="@{/login}" method="post">
           <fieldset>
-            <legend>Sign in</legend>
+            <h2>Sign in</h2>
             <p th:if="${param.error}" class="alert alert-error">
               Invalid Email and password.
             </p>
@@ -39,7 +39,7 @@
       <div class="signUp">
         <form action="#" th:action="@{/signup}" th:object="${user}" method="post">
           <fieldset>
-            <legend>Sign up</legend>
+            <h2>Sign up</h2>
             <label for="Firstname">Firstname:</label>
             <input type="text" th:field="*{firstname}" id="firstname" placeholder="Firstname" th:required="required">
             <!--<span th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></span>-->
