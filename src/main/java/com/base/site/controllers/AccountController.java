@@ -130,32 +130,11 @@ public class AccountController {
     }
 
     @PostMapping("/createUser")
-    public String createUser(@ModelAttribute("users") Users user){
+    public String createUser(@ModelAttribute("users") Users user, @RequestParam(value = "user_type") String userType){
         log.info("createUser post called");
 
-        String genPass = usersService.generatePassword();
-        String encPass = passwordEncoder.encode(genPass);
-        user.setPassword(encPass);
-
-        user.setBirthday(usersService.getBirthdayFromString(user.getSBirthday()));
-
-        String emailMessage = "We have created a new user for you.\n\n";
-        emailMessage += "Your new password is: " + genPass;
-
         try {
-            //niklas... temporary till users is correctly mapped
-            //hardcoded usertype we should change this
-            user.setUserType(userTypeService.findById((long)4));
-            //
-            if(usersService.findByUserName(user.getUsername()) == null) {
-                user.setAccountNonLocked(1);
-                usersService.save(user);
-
-                emailController.sendEmail(user.getUsername(), "custom", emailMessage);
-            } else {
-                return REDIRECT+CREATE_USER+"/userExists";
-            }
-
+            usersService.generateUserAndSave(user, userType);
         } catch (Exception e){
             log.info("Something went wrong with crating an user");
             log.info(e.toString());

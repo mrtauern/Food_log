@@ -5,6 +5,8 @@ import com.base.site.models.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -37,4 +39,6 @@ public interface UsersService {
     Users setAndSaveNewUser(Users user, String userTypeString);
 
     void saveEditUserData(Users user);
+
+    void generateUserAndSave(Users user, String userType) throws MessagingException, IOException;
 }
