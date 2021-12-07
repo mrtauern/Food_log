@@ -45,7 +45,22 @@
         <td th:text="${foods.energy_kilojoule}">Kilojoule</td>
         <td th:text="${foods.energy_kcal}">Kcal</td>
         <td>
-            <form method="post" th:action="@{/saveRecipeFood/{foodId}/{recipeId}(recipeId=${recipeId}, foodId=${foods.id})}" th:object="${recipeFood}">
+            <form method="post" th:action="@{/saveRecipeFood/foods/{foodId}/{recipeId}(recipeId=${recipeId}, foodId=${foods.id})}" th:object="${recipeFood}">
+                <input type="number" th:name="amount" id="amount" placeholder="amount (Gram)" th:required="required">
+                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Add Food</button>
+            </form>
+        </td>
+    </tr>
+    <tr th:each="foodp : ${pfoodlist}">
+        <td th:text="${foodp.id}">Food ID</td>
+        <td th:text="${foodp.name}">Name</td>
+        <td th:text="${foodp.protein}">Protein</td>
+        <td th:text="${foodp.carbohydrates}">Carbohydrates</td>
+        <td th:text="${foodp.fat}">Fat</td>
+        <td th:text="${foodp.energy_kilojoule}">Kilojoule</td>
+        <td th:text="${foodp.energy_kcal}">Kcal</td>
+        <td>
+            <form method="post" th:action="@{/saveRecipeFood/foodp/{foodId}/{recipeId}(recipeId=${recipeId}, foodId=${foodp.id})}" th:object="${recipeFood}">
                 <input type="number" th:name="amount" id="amount" placeholder="amount (Gram)" th:required="required">
                 <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Add Food</button>
             </form>

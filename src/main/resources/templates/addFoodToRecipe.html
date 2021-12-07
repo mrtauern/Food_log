@@ -3,16 +3,29 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:include="fragments/head :: styles">
 </head>
-
+<script type="text/javascript">
+    function clearSearch() {
+        window.location = "[[@{/addFoodToRecipe/{recipeId}(recipeId=${recipeId})}]]";
+    }
+</script>
 <body>
-<header th:include="fragments/navbar_top :: navbar"></header>
+<header th:include="fragments/navbar_top :: header" class="navbar"></header>
 
+<div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
+<!--
 <form id="searchForm" th:action="@{/addFoodToRecipe/{recipeId}(recipeId=${recipeId})}">
     <div th:include="fragments/food_list/food_list :: searchFilterHTML"></div>
 </form>
-<div class="container">
-    <div id="inner_container">
-        <br> <br>
+-->
+<div id="content">
+    <div class="contentBox">
+        <div class="actionBar">
+            <form th:action="@{/addFoodToRecipe/{recipeId}(recipeId=${recipeId})}">
+                <input type="text" name="keyword" placeholder="Search For a Food Name" th:value="${keyword}" >
+                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-arrow-right"></i></button>
+                <button type="button" d="btnClear" onclick="clearSearch()" class="btn btn-secondary mr-2 btn-sm"><i class="fas fa-sync-alt"></i></button>
+            </form>
+        </div>
         <h1>Food List</h1>
         <a th:href="@{/editRecipe/{recipeId}(recipeId=${recipeId})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Done adding food</a>
         <br/><br/>
@@ -20,10 +33,9 @@
             <thead th:include="fragments/food_list/food_list :: addFoodTableHeader"></thead>
             <tbody th:include="fragments/food_list/food_list :: addFoodTableBody_recipe"></tbody>
         </table>
-
     </div>
 </div>
 
-<div th:include="fragments/navbar_top :: bottom_bar"></div>
+<footer th:include="fragments/navbar_top :: footer"></footer>
 </body>
 </html>
