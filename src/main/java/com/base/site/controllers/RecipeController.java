@@ -131,12 +131,7 @@ public class RecipeController {
         log.info("saveFoodInRecipe Postmapping is called with recipeId: "+recipeId+" and foodId: "+foodId+" recipeFood:::"+recipeFood.getAmount());
 
         if(usersService.getLoggedInUser().getId() == recipeService.findById(recipeId).getFkUser().getId()) {
-            int amount = recipeFood.getAmount();
-            recipeFood = recipeFoodService.findById(recipeFood.getId());
-            recipeFood.setAmount(amount);
-            recipeFood.setRecipe(recipeService.findById(recipeId));
-            recipeFood.setFood(foodService.findById(foodId));
-            recipeFoodService.save(recipeFood);
+            recipeFoodService.saveRecipeFoodData(recipeFood, foodId, recipeId);
 
             return REDIRECT+EDITRECIPE+"/"+recipeId;
         } else {
@@ -170,12 +165,9 @@ public class RecipeController {
     public String addFoodToRecipe(@PathVariable("recipeId")long recipeId, @Param("keyword") String keyword, Model model) {
         log.info("addFoodToRecipe Getmapping is called with recipeId: "+recipeId);
 
-        List<Food> foodlist = foodService.findAllByKeyword(keyword);
-        List<PrivateFood> pfoodlist = privateFoodService.findAllByKeyword(keyword);
-
         model.addAttribute("recipeId", recipeId);
-        model.addAttribute("foodlist", foodlist);
-        model.addAttribute("pfoodlist", pfoodlist);
+        model.addAttribute("foodlist", foodService.findAllByKeyword(keyword));
+        model.addAttribute("pfoodlist", privateFoodService.findAllByKeyword(keyword));
         model.addAttribute("keyword", keyword);
         model.addAttribute("recipeFood", new RecipeFood());
 
