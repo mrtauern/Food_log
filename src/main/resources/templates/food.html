@@ -24,7 +24,7 @@
 </form>-->
 
     <div class="contentBox">
-        <h1>Food List</h1>
+        <h2>Food List</h2>
 
         <div class="actionBar">
 
@@ -35,7 +35,7 @@
 
             </form>
 
-            <a href="/createFood" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Create Food</a>
+            <a href="/createFood" class="btn btn-success mr-2 btn-sm">Create Food <i class="fas fa-plus-circle"></i></a>
 
         </div>
 
@@ -76,7 +76,7 @@
                 <td th:text="${food.fat}">Fat</td>
                 <td th:text="${food.energy_kilojoule}">Kilojoule</td>
                 <td th:text="${food.energy_kcal}">Kcal</td>
-                <td>
+                <td class="actionButtons">
                     <a th:href="@{/updateFood/{id}(id=${food.id})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
                     <a th:href="@{/deleteFood/{id}(id=${food.id})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
                 </td>

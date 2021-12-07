@@ -9,12 +9,19 @@
 <div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
 
 <div id="content">
-    <form action="#" th:action="@{/delete_user_confirm/{id}(id=${user.id})}" th:object="${user}" method="post">
-        <div class="alert alert-danger">
-            <strong>Danger!</strong> Are you sure you wish to delete the user <span th:text="${user.username}" />
-        </div>
-        <input type="submit" value="Delete User">
-    </form>
+    <div class="formBox">
+        <h2 class="warning"><i class="fas fa-exclamation-triangle"></i> Delete user</h2>
+        <p>
+            Are you sure you wish to delete the user <b><span th:text="${user.username}" /></b>?<br>
+            This action can not be undone!
+        </p>
+        <form action="#" th:action="@{/delete_user_confirm/{id}(id=${user.id})}" th:object="${user}" method="post">
+            <div>
+                <button type="button" class="btn btn-outline-dark mr-2 btn-sm" onclick="location.href='/userList';">Cancel <i class="fas fa-times"></i></button>
+                <button type="submit" class="btn btn-danger mr-2 btn-sm">Delete <i class="fas fa-trash-alt"></i></button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <footer th:include="fragments/navbar_top :: footer"></footer>

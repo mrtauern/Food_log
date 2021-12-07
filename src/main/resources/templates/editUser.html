@@ -11,7 +11,7 @@
 
     <div class="formBox">
 
-        <h1>Edit user</h1>
+        <h2>Edit user</h2>
 
         <form method="post" th:action="@{/editUser}" th:object="${users}">
             <input type="hidden" th:field="*{id}" id="id" th:required="required">

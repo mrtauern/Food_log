@@ -124,8 +124,8 @@ public class FoodController {
     public String addFoodToDailyLog(Model model, @Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString) {
         log.info("  get mapping addFoodToDailyLog is called");
         model.addAttribute("keyword", keyword);
-        model.addAttribute("pageTitle", "User list");
-        model.addAttribute("selectedPage", "food");
+        model.addAttribute("pageTitle", "Add food to daily log");
+        model.addAttribute("selectedPage", "dailyLog");
 
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
@@ -189,6 +189,10 @@ public class FoodController {
         model.addAttribute("type", type);
         model.addAttribute("date", date.toString());
         model.addAttribute("logType", logTypeService.findAll());
+        model.addAttribute("pageTitle", "Add food to daily log");
+        model.addAttribute("selectedPage", "dailyLog");
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return CREATE_DAILYLOG;
     }

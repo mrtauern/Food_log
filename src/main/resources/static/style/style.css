@@ -31,6 +31,29 @@ li {
     list-style: none;
 }
 
+h1{
+
+}
+
+h2{
+    font-size: 25px;
+    font-weight: 900;
+}
+
+h2 i{
+    font-size: 28px;
+    line-height: 34px;
+}
+
+.warning{
+    color: #dc3545;
+}
+
+h3{
+    font-size: 18px;
+    font-weight: 100;
+}
+
 /* --------------------- OLD NAVBAR STYLING --------------------- */
 
 nav.navbar {
@@ -523,6 +546,8 @@ div#content{
     margin-top: 53px;
     margin-left: 260px;
 
+    padding-top: 40px;
+
     float: left;
 }
 
@@ -532,10 +557,14 @@ div.contentBox{
     background-color: white;
     box-shadow: 5px 10px 8px #999999;
 
-    margin: 80px;
+    margin: 40px 40px 0 40px;
     padding: 40px;
 
     overflow: auto;
+}
+
+div.contentBox:last-of-type{
+    margin-bottom: 40px;
 }
 
 div.actionBar{
@@ -586,8 +615,8 @@ div.actionBar a i{
     text-align: right;
 }
 
-.table td.name{
-    width: 70%;
+.table th.name{
+    width: 55%;
 }
 
 /* --------------------- CALORIE_COUNT STYLING --------------------- */
@@ -634,7 +663,7 @@ div.formBox form input{
     border: #000000 solid 1px;
     border-radius: 4px;
 
-    background-color: transparent;
+    background-color: #FFFFFF;
 
     padding: 8px 8px;
     margin-bottom: 20px;
@@ -654,7 +683,7 @@ div.formBox form select{
     border: #000000 solid 1px;
     border-radius: 4px;
 
-    background-color: transparent;
+    background-color: #FFFFFF;
 
     padding: 8px 8px;
     margin-bottom: 20px;
@@ -730,6 +759,24 @@ div.formBox.login div.signUp{
     color: #FFFFFF;
 
     background-color: #41C685;
+}
+
+div.formBox.login div button{
+    width: 100%;
+
+    text-align: left;
+    font-weight: bold;
+    font-size: 16px;
+
+    padding: 10px 15px;
+}
+
+div.formBox.login div button i{
+    float: right;
+
+    padding-top: 4px;
+
+    font-size: 16px;
 }
 
 /* --------------------- FRONT PAGE --------------------- */
