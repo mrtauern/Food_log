@@ -176,7 +176,7 @@ public class FoodController {
             log.info("food");
             model.addAttribute("foods", foodService.findById(id));
         }
-        if (type.equals("pfood")) {
+        else if (type.equals("pfood")) {
             log.info("pfood ");
             model.addAttribute("foods", privateFoodService.findById(id));
         }

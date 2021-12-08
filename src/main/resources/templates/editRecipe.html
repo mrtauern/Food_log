@@ -38,9 +38,18 @@
                 </thead>
                 <tbody>
                     <tr th:each="recipef : ${recipeFood}">
-                        <form method="post" id="editFoodAmount" th:action="@{/saveFoodInRecipe/{foodId}/{recipeId}(recipeId=${recipef.recipe.id}, foodId=${recipef.food.id})}" th:object="${recipeFood}">
+                        <form method="post" id="editFoodAmount" th:action="@{/saveFoodInRecipe/{type}/{recipeId}(recipeId=${recipef.recipe.id} , type=${type})}" th:object="${recipeFood}">
                             <input type="hidden" th:value="${recipef.id}" th:name="id">
-                            <td th:text="${recipef.food.name}"></td>
+                            <input th:if="${type}=='foods'" type="hidden" name="userId" th:field="*{food.id}" />
+                            <input th:if="${type}=='foodp'" type="hidden" name="userId" th:field="*{privateFood.id}" />
+
+                            <th:block th:if="${recipef.food?.name!=null}">
+                            <td class="name"><i class="fas fa-drumstick-bite"></i> <span th:text="${recipef.food?.name}"></span></td>
+                            </th:block>
+                            <th:block th:if="${recipef.privateFood?.name!=null}">
+                                <td class="name"><i class="fas fa-drumstick-bite"></i> <span th:text="${recipef.privateFood?.name}"></span></td>
+                            </th:block>
+
                             <td>
                                 <input type="number" th:name="amount" th:value="${recipef.amount}" id="amount" placeholder="amount (Gram)" th:required="required"></td>
                             </td>
