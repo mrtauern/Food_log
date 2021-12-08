@@ -72,10 +72,6 @@ public class AccountController {
     @Autowired
     EmailService emailService;
 
-
-    @Autowired
-    UsersRepo usersRepo;
-
     @Autowired
     DailyLogService dailyLogService;
 
