@@ -861,6 +861,11 @@ div#message div#innerMessage.unknown{
     color: #FFFFFF;
 }
 
+div#message div#innerMessage.death{
+    background-color: #000000;
+    color: #dc3545;
+}
+
 div#message div#innerMessage div{
     display: inline-block;
 

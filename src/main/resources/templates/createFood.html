@@ -3,37 +3,43 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:include="fragments/head :: styles"></head>
 <body>
-<header th:include="fragments/navbar_top :: navbar"></header>
+<header th:include="fragments/navbar_top :: header" class="navbar"></header>
+
+<div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
 
 
-<div class="container">
-  <div id="inner_container">
-    <h1>Create Food</h1>
+<div id="content">
+  <div class="formBox">
+    <h2>Create Food</h2>
 
     <form action="#" th:action="@{/saveFood}" th:object ="${food}" method="POST">
 
       <label  class="col-form-label">Name </label>
-      <input type="text" th:field = "*{name}" placeholder=" Name" class="form-control mb-4 col-4">
+      <input type="text" th:field = "*{name}" placeholder=" Name" th:required="required">
 
       <label  class="col-form-label">Protein </label>
-      <input type="number" th:field = "*{protein}" placeholder=" Protein g" class="form-control mb-4 col-4">
+      <input type="number" th:field = "*{protein}" placeholder=" Protein g" th:required="required">
 
       <label  class="col-form-label">Carbohyrates </label>
-      <input type="text" th:field = "*{carbohydrates}" placeholder=" Carb g" class="form-control mb-4 col-4">
+      <input type="text" th:field = "*{carbohydrates}" placeholder=" Carb g" th:required="required">
 
       <label  class="col-form-label">Fat</label>
-      <input type="text" th:field = "*{fat}" required placeholder=" Fat g" class="form-control mb-4 col-4">
+      <input type="text" th:field = "*{fat}" required placeholder=" Fat g" th:required="required">
 
       <label  class="col-form-label">Kilojoule </label>
-      <input type="text" th:field = "*{energy_kilojoule}" placeholder=" Kilojoule" class="form-control mb-4 col-4">
+      <input type="text" th:field = "*{energy_kilojoule}" placeholder=" Kilojoule" th:required="required">
 
       <label  class="col-form-label">Kcal</label>
-      <input type="text" th:field = "*{energy_kcal}" required placeholder=" Kcal" class="form-control mb-4 col-4">
-      <button type="submit" class="form-control mb-4 col-4" >Create Food</button>
+      <input type="text" th:field = "*{energy_kcal}" required placeholder=" Kcal" th:required="required">
+
+      <div>
+        <button type="button" class="btn btn-outline-dark mr-2 btn-sm" onclick="location.href='/food';">Cancel <i class="fas fa-times"></i></button>
+        <button type="submit" class="btn btn-primary mr-2 btn-sm">Create <i class="fas fa-check"></i></button>
+      </div>
     </form>
   </div>
 </div>
 
-<div th:include="fragments/navbar_top :: bottom_bar"></div>
+<footer th:include="fragments/navbar_top :: footer"></footer>
 </body>
 </html>

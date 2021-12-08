@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -89,35 +90,45 @@ public class FoodController {
     public String createFood(Model model) {
         log.info("  createFood is called ");
 
-            Food food = new Food();
-            model.addAttribute("food", food);
+        Food food = new Food();
+        model.addAttribute("food", food);
 
-            return CREATE_FOOD;
+        return CREATE_FOOD;
     }
 
     @PostMapping("/saveFood")
-    public String saveFood(@ModelAttribute("food") Food food, Model model) {
+    public String saveFood(@ModelAttribute("food") Food food, Model model, RedirectAttributes redAt) {
         log.info("  PostMapping saveFood is called ");
-            foodService.save(food);
+        foodService.save(food);
 
-            return  REDIRECT+FOOD;
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", food.getName() + " is successfully saved");
+
+        return  REDIRECT+FOOD;
     }
 
     @GetMapping("/updateFood/{id}")
     public String updateFood(@PathVariable(value = "id") Long id, Model model) {
         log.info("  GetMapping updateFood is called ");
-            Food food = foodService.findById(id);
-            model.addAttribute("food", food);
+        Food food = foodService.findById(id);
+        model.addAttribute("food", food);
 
-            return UPDATE_FOOD;
+        return UPDATE_FOOD;
     }
 
     @GetMapping("/deleteFood/{id}")
-    public String deleteFood(@PathVariable(value = "id") Long id, Model model) {
+    public String deleteFood(@PathVariable(value = "id") Long id, Model model, RedirectAttributes redAt) {
         log.info("  GetMapping deleteFoodbyId is called ");
-            this.foodService.deleteById(id);
 
-            return REDIRECT+FOOD;
+        String name = foodService.findById(id).getName();
+        this.foodService.deleteById(id);
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", name + " is successfully deleted");
+
+        return REDIRECT+FOOD;
     }
 
     @GetMapping({"/addFoodToDailyLog", "/addFoodToDailyLog/{date}"})
