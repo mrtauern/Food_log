@@ -2,11 +2,9 @@ package com.base.site.controllers;
 
 import com.base.site.models.*;
 import com.base.site.repositories.UPRCRepository;
+import com.base.site.repositories.UsersRepo;
 import com.base.site.security.SecurityConfig;
-import com.base.site.services.EmailService;
-import com.base.site.services.UPRCService;
-import com.base.site.services.UserTypeService;
-import com.base.site.services.UsersService;
+import com.base.site.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -24,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -45,8 +44,12 @@ public class AccountController {
     private final String DASHBOARD = "dashboard";
     private final String LOGIN = "login";
     private final String INDEX = "index";
+    private final String FRONTPAGE = "frontPage";
+    private final String DAILYLOG = "dailyLog";
+    private final String DELETE_OWN_USER = "delete_own_user";
 
     private final String REDIRECT = "redirect:/";
+
 
     @Autowired
     UsersService usersService;
@@ -65,6 +68,64 @@ public class AccountController {
 
     @Autowired
     EmailService emailService;
+
+    @Autowired
+    DailyLogService dailyLogService;
+
+    @GetMapping("/")
+    public String index() {
+        log.info("Usercontroller / getmapping called...");
+
+        if(usersService.getLoggedInUser().getRoles().equals("USER")) {
+            return REDIRECT+DAILYLOG;
+        } else if(usersService.getLoggedInUser().getRoles().equals("ADMIN")) {
+            return REDIRECT+DASHBOARD;
+        }
+        return FRONTPAGE;
+    }
+
+    @GetMapping("/index")
+    public String showUserList(Model model, RedirectAttributes redAt) {
+        log.info(" AccountController /index getmapping called...");
+
+        LocalDate date = LocalDate.now();
+
+        Users user = usersService.getLoggedInUser();
+
+        List<DailyLog> dailyLogs = dailyLogService.findAll();
+
+        int weightRecordsThisWeek = 0;
+
+        for(DailyLog dailyLog: dailyLogs){
+            if(dailyLog.getFkUser().getId() == user.getId()){
+                if(dailyLog.getDatetime().isAfter(date.minusWeeks(1))){
+                    weightRecordsThisWeek++;
+                }
+            }
+        }
+
+        if(!(usersService.getLoggedInUser().getStartWeight() > 0) || !(usersService.getLoggedInUser().getGoalWeight() > 0)){
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "warning");
+            redAt.addFlashAttribute("message", "Log in success! - Please set a Start weight and Goal weight!");
+        } else if(!(weightRecordsThisWeek > 0)) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "warning");
+            redAt.addFlashAttribute("message", "Log in success! - Please set a new current weight!");
+        } else {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "Log in success!");
+        }
+
+        if(usersService.getLoggedInUser().getRoles().equals("USER")) {
+            return REDIRECT+DAILYLOG;
+        } else if(usersService.getLoggedInUser().getRoles().equals("ADMIN")) {
+            return REDIRECT+DASHBOARD;
+        }
+
+        return INDEX;
+    }
 
     @GetMapping("/userList")
     public String userList(Model model , @Param("keyword") String keyword) {
@@ -224,7 +285,7 @@ public class AccountController {
             model.addAttribute("selectedPage", "user");
             model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
-            return "/delete_own_user";
+            return DELETE_OWN_USER;
     }
 
 
