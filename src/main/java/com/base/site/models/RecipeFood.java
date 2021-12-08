@@ -28,7 +28,10 @@ public class RecipeFood {
     @Column(name = "amount")
     int amount;
 
+
     @ManyToOne
     @JoinColumn(name = "fk_private_food_id")
     PrivateFood privateFood;
+
+
 }

@@ -57,7 +57,7 @@ public class Recipe implements Serializable {
     @Basic
     @Column(name = "archived")
     private boolean archived;
-  
+
     public double getCalculateCaloriesInRecipe() {
         double total = 0;
         for (RecipeFood recipeFood : amounts) {
@@ -66,14 +66,8 @@ public class Recipe implements Serializable {
             } else if (recipeFood.getPrivateFood() != null) {
                 total +=( recipeFood.getPrivateFood().getEnergy_kcal()*recipeFood.getAmount()) / 100;
             }
-
-
         }
-        //total = food + pfood;
         total = (total/getTotal_weight())*100;
         return total;
     }
-  
-
-
 }

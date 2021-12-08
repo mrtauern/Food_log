@@ -42,10 +42,12 @@ public class Food {
     @ManyToMany(mappedBy = "foods", fetch = FetchType.LAZY)
     private Set<Recipe> recipes = new HashSet<>();
     */
-
+/*
     @OneToMany(mappedBy = "food", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     Set<RecipeFood> amounts;
+
+ */
 
     public Food(String nutrition, double protein, double carbohydrates, double fat, double energy_kilojoule, double energy_kcal) {
     }
