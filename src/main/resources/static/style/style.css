@@ -179,16 +179,16 @@ header.navbar .nav-links a img{
 }
                         /* LOGO */
 header.navbar #logo {
-    /*font-size: 32px;*/
-    font-size: 28px;
+    font-size: 32px;
+    /*font-size: 28px;*/
     line-height: initial;
-    /*font-family: Lobster;*/
-    font-family: Comfortaa;
+    font-family: Lobster;
+    /*font-family: Comfortaa;*/
     text-align: center;
     color: #FFFFFF;
-    text-decoration: underline;
+    /*text-decoration: underline;*/
 
-    padding-top: 10px;
+    padding-top: 5px;
 
     background-color: #41C685;
 
@@ -198,7 +198,7 @@ header.navbar #logo {
 
 header.navbar #logo img{
     height: 30px;
-    margin: 0 15px 4px 0;
+    margin: 0 10px 4px 0;
 }
                         /* NAVBAR MENU */
 header.navbar .menu {
@@ -419,16 +419,20 @@ div.innerCalorie div.collumn{
 
 div.innerCalorie div.collumn span.value{
     font-size: 32px;
+    font-weight: 100;
 }
 
 div.innerCalorie div.collumn span.type{
-    font-size: 16px;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 div.innerCalorie div.collumn.left{
     width: 100%;
 
     padding-bottom: 20px;
+
+    margin: 20px 0;
 }
 
 div.innerCalorie div.collumn.left span.value{

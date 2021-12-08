@@ -3,22 +3,27 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:include="fragments/head :: styles"></head>
 <body>
-<header th:include="fragments/navbar_top :: navbar"></header>
+<header th:include="fragments/navbar_top :: header" class="navbar"></header>
 
-<div class="container">
-  <div id="inner_container">
-    <h1>Add Current Wight To Log</h1>
+<div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
+
+<div id="content">
+  <div class="formBox">
+    <h2>Add Current Weight To daily Log</h2>
 
     <form action="#" th:action="@{/saveCurrentWeight/{date}(date=${date})}" th:object ="${dailyLog}" method="POST">
 
-      <label  class="col-form-label">Current Weight </label>
-      <input type="text" th:field = "*{amount}" placeholder="Enter your Weight" class="form-control mb-4 col-4">
+      <label  class="col-form-label">Current Weight (kg):</label>
+      <input type="text" th:field = "*{amount}" placeholder="Enter your Weight" th:required="required">
 
-      <button type="submit" class="form-control mb-4 col-4" >Add Current weight to Log</button>
+      <div>
+        <button type="button" class="btn btn-outline-dark mr-2 btn-sm" onclick="location.href='/dailyLog';">Cancel <i class="fas fa-times"></i></button>
+        <button type="submit" class="btn btn-success mr-2 btn-sm">Add <i class="fas fa-plus-circle"></i></button>
+      </div>
     </form>
   </div>
 </div>
 
-<div th:include="fragments/navbar_top :: bottom_bar"></div>
+<footer th:include="fragments/navbar_top :: footer"></footer>
 </body>
 </html>

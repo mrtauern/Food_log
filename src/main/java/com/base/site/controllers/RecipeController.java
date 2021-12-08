@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -108,20 +109,27 @@ public class RecipeController {
     }
 
     @PostMapping("/editRecipe")
-    public String saveRecipe(@ModelAttribute("recipe") Recipe recipe, Model model) {
+    public String saveRecipe(@ModelAttribute("recipe") Recipe recipe, Model model, RedirectAttributes redAt) {
         log.info("  PostMapping editRecipe is called...");
 
         recipe.setFkUser(usersService.getLoggedInUser());
         recipeService.save(recipe);
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Recipe is successfully updated");
 
         return  REDIRECT+RECIPES;
     }
 
     @GetMapping("removeFoodFromRecipe/{recipeId}/{id}")
-    public String removeStudentFromClass(@PathVariable("id")long id,@PathVariable("recipeId")long recipeId ) {
+    public String removeStudentFromClass(@PathVariable("id")long id,@PathVariable("recipeId")long recipeId, RedirectAttributes redAt) {
         log.info("removeFoodFromRecipe getmapping called with RecipeFoodID = :: " + id);
         recipeFoodService.deleteById(id);
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Food is successfully removed from recipe");
 
         return REDIRECT + EDITRECIPE+"/"+ recipeId;
     }
@@ -139,14 +147,22 @@ public class RecipeController {
     }
 
     @PostMapping("/saveFoodInRecipe/{foodId}/{recipeId}")
-    public String saveFoodInRecipe(@PathVariable("foodId")long foodId, @PathVariable("recipeId")long recipeId, RecipeFood recipeFood) {
+    public String saveFoodInRecipe(@PathVariable("foodId")long foodId, @PathVariable("recipeId")long recipeId, RecipeFood recipeFood, RedirectAttributes redAt) {
         log.info("saveFoodInRecipe Postmapping is called with recipeId: "+recipeId+" and foodId: "+foodId+" recipeFood:::"+recipeFood.getAmount());
 
         if(usersService.getLoggedInUser().getId() == recipeService.findById(recipeId).getFkUser().getId()) {
             recipeFoodService.saveRecipeFoodData(recipeFood, foodId, recipeId);
 
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "Food is successfully saved in recipe");
+
             return REDIRECT+EDITRECIPE+"/"+recipeId;
         } else {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You can only edit your own recipe");
+
             return REDIRECT+RECIPES;
         }
     }
@@ -164,7 +180,7 @@ public class RecipeController {
     }
 
     @PostMapping("/createRecipe")
-    public String createRecipe(@ModelAttribute("recipe") Recipe recipe) {
+    public String createRecipe(@ModelAttribute("recipe") Recipe recipe, RedirectAttributes redAt) {
         log.info("  PostMapping createRecipe is called...");
 
         recipe.setFkUser(usersService.getLoggedInUser());
@@ -197,7 +213,7 @@ public class RecipeController {
     public String saveRecipeFood(@PathVariable(required = false, value = "type") String type,
                                  @PathVariable("recipeId")long recipeId,
                                  @PathVariable("id")long id,
-                                 RecipeFood recipeFood, Food food, PrivateFood privateFood) {
+                                 RecipeFood recipeFood, Food food, PrivateFood privateFood, RedirectAttributes redAt) {
         log.info("saveRecipeFood Postmapping is called with recipeId: "+recipeId+" and foodId: "+id+" recipeFood:::"+recipeFood.getAmount());
 
         if(usersService.getLoggedInUser().getId() == recipeService.findById(recipeId).getFkUser().getId()) {
@@ -214,21 +230,39 @@ public class RecipeController {
 
             recipeFoodService.save(recipeFood);
 
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "Food is successfully saved in recipe");
+
             return REDIRECT+ADD_FOOD_TO_RECIPE+"/"+recipeId;
         } else {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You can only edit your own recipe");
+
             return REDIRECT+RECIPES;
         }
 
     }
 
     @GetMapping("/archiveRecipe/{status}/{id}")
-    public String archiveRecipe(@PathVariable("id")long id, @PathVariable("status")boolean status) {
+    public String archiveRecipe(@PathVariable("id")long id, @PathVariable("status")boolean status, RedirectAttributes redAt) {
         log.info("Archive recipe getmapping called with id:"+id);
 
         Recipe recipe = recipeService.findById(id);
         if (recipe.getFkUser().getId() == usersService.getLoggedInUser().getId()) {
             recipe.setArchived(status);
             recipeService.save(recipe);
+
+            if(status == true){
+                redAt.addFlashAttribute("showMessage", true);
+                redAt.addFlashAttribute("messageType", "success");
+                redAt.addFlashAttribute("message", "Recipe is successfully archived");
+            } else {
+                redAt.addFlashAttribute("showMessage", true);
+                redAt.addFlashAttribute("messageType", "success");
+                redAt.addFlashAttribute("message", "Recipe is successfully restored");
+            }
         }
         return REDIRECT+RECIPES;
 

@@ -210,7 +210,8 @@ public class FoodController {
     @PostMapping({"/saveDailyLog/{type}", "/saveDailyLog/{type}/{date}"})
     public String saveDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,Food food,
                                @PathVariable(required = false, value = "date") String dateString,
-                               @PathVariable(required = false, value = "type") String type) {
+                               @PathVariable(required = false, value = "type") String type,
+                               RedirectAttributes redAt) {
         log.info("  PostMapping saveDailyLog is called ");
 
         if (type.equals("food")) {
@@ -231,6 +232,10 @@ public class FoodController {
         dailyLog.setDatetime(date);
         String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         dailyLogService.save(dailyLog);
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Food is successfully added to daily log");
         return  REDIRECT+DAILYLOG+"/"+sDatetime;
     }
 
@@ -250,7 +255,8 @@ public class FoodController {
 
     @PostMapping({"/updateDailyLog", "/updateDailyLog/{date}"})
     public String updateDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,
-                                 @PathVariable(required = false, value = "date") String dateString) {
+                                 @PathVariable(required = false, value = "date") String dateString,
+                                 RedirectAttributes redAt) {
         log.info("  PostMapping updateDailyLog is called ");
 
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
@@ -260,17 +266,23 @@ public class FoodController {
 
         dailyLogService.save(dailyLog);
 
-
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Food is successfully updated in daily log");
         return  REDIRECT + DAILYLOG+"/"+dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     @GetMapping({"/deleteDailyLog/{id}", "/deleteDailyLog/{id}/{date}"})
     public String deleteDailyLog(@PathVariable(value = "id") Long id,
-                                 @PathVariable(required = false, value = "date") String dateString) {
+                                 @PathVariable(required = false, value = "date") String dateString,
+                                 RedirectAttributes redAt) {
         log.info("  GetMapping deleteDailyLog is called ");
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
         this.dailyLogService.deleteById(id);
 
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Food is successfully deleted from daily log");
         return REDIRECT + DAILYLOG+"/"+date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 

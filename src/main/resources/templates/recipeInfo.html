@@ -10,7 +10,14 @@
 
     <div class="contentBox">
 
-    <h2>Recipe Info</h2>
+        <h2>Recipe Info</h2>
+
+        <div class="actionBar">
+
+            <a th:href="${'/archiveRecipe/true/' + recipe.id}" class="btn btn-danger mr-2 btn-sm">Archive <i class="fas fa-archive"></i></a>
+            <a th:href="${'/editRecipe/' + recipe.id}" class="btn btn-dark mr-2 btn-sm">Edit <i class="fas fa-pen"></i></a>
+
+        </div>
 
         <table class="table table-sm">
         <thead>

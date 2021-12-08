@@ -225,11 +225,11 @@
           <div class="actionBar">
               <a th:href="${'/createCurrentWeight/'+sSelectedDate}" class="btn btn-success mr-2 btn-sm">Add Weight <i class="fas fa-plus-circle"></i></a>
           </div>
-          <table border="1" cellpadding="10">
+          <table class="table table-sm">
               <thead>
                   <tr>
 
-                      <th>Current weight</th>
+                      <th class="name">Current weight</th>
                       <th>Actions</th>
                   </tr>
               </thead>
@@ -238,9 +238,9 @@
               <tr>
                   <th:block th:if="${weight?.amount != 0.0 and weight?.id != 0 and weight?.amount != null}">
                       <td th:text="${weight?.amount}">Weight</td>
-                      <td>
-                          <a th:href="@{/updateCurrentWeight/{id}/{date} (id=${weight?.id}, date=${sSelectedDate})}">Edit</a>
-                          <a th:href="@{/deleteCurrentWeight/{id}/{date} (id=${weight?.id}, date=${sSelectedDate})}"th:attr="onclick=|return confirm_delete('${'weight for ' + sSelectedDate}')|">Delete</a>
+                      <td class="actionButtons">
+                          <a th:href="@{/updateCurrentWeight/{id}/{date} (id=${weight?.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                          <a th:href="@{/deleteCurrentWeight/{id}/{date} (id=${weight?.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${'weight for ' + sSelectedDate}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                       </td>
                   </th:block>
 

@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.text.ParseException;
@@ -87,6 +87,10 @@ public class DailyLogController {
         model.addAttribute("dailyLog", dailyLog);
         model.addAttribute("keyword", keyword);
 
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("pageTitle", "Add current weight");
+        model.addAttribute("selectedPage", "dailyLog");
+
         return ADD_WEIGHT;
     }
 
@@ -102,12 +106,16 @@ public class DailyLogController {
 
         model.addAttribute("dailyLog", dailyLog);
 
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("pageTitle", "Create current weight");
+        model.addAttribute("selectedPage", "dailyLog");
+
         return CREATE_WEIGHT;
     }
 
     @PostMapping({"/saveCurrentWeight", "/saveCurrentWeight/{date}"})
     public String saveCurrentWeight(@ModelAttribute("dailyLog") DailyLog dailyLog,
-                                    @PathVariable(required = false, value = "date") String dateString) {
+                                    @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
         log.info("  Post Mapping saveCurrentWeight is called ");
 
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
@@ -118,6 +126,10 @@ public class DailyLogController {
         dailyLog.setFkUser(usersService.getLoggedInUser());
 
         dailyLogService.save(dailyLog);
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Current weight is successfully saved in daily log");
 
         return  REDIRECT + DAILY_LOG+"/"+ sDatetime;
     }
@@ -132,15 +144,23 @@ public class DailyLogController {
         model.addAttribute("dailyLog", dailyLogService.findById(id));
         log.info("  GetMapping updateCurrentWeight is called ");
 
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("pageTitle", "Edit current weight");
+        model.addAttribute("selectedPage", "dailyLog");
+
         return UPDATE_WEIGHT;
     }
     @GetMapping({"/deleteCurrentWeight/{id}", "/deleteCurrentWeight/{id}/{date}"})
     public String deleteCurrentWeight(@PathVariable(value = "id") Long id,
-                                      @PathVariable(required = false, value = "date") String dateString) {
+                                      @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
 
         log.info("  GetMapping deleteCurrentWeight is called ");
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
         this.dailyLogService.deleteById(id);
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Current weight is successfully deleted from daily log");
 
         return  REDIRECT + DAILY_LOG+ "/"+date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
@@ -151,15 +171,22 @@ public class DailyLogController {
         log.info("Getmapping weightOptions called in DailylogController");
 
         model.addAttribute("user", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("pageTitle", "Weight options");
+
         return WEIGHT_OPTIONS;
     }
 
     @PostMapping("/saveWeightOption")
-    public String saveWeightOptions(@ModelAttribute("user") Users user){
+    public String saveWeightOptions(@ModelAttribute("user") Users user, RedirectAttributes redAt){
         log.info("Postmappting saveWeightOption called in DailylogController"+user.getKcal_modifier());
 
         usersService.getLoggedInUser().setKcal_modifier(user.getKcal_modifier());
         usersService.save(usersService.getLoggedInUser());
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Weight option is successfully saved");
 
         return REDIRECT + DAILY_LOG;
     }
