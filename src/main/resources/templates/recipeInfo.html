@@ -10,10 +10,10 @@
 
     <div class="contentBox">
 
-    <h1>Recipe Info</h1>
+    <h2>Recipe Info</h2>
 
-        <table class="table table-striped">
-        <thead class="thead-dark">
+        <table class="table table-sm">
+        <thead>
         <tr>
             <th>Name</th>
             <th>Weight (Gram)</th>
@@ -23,15 +23,15 @@
         </thead>
         <tbody>
             <tr th:each="recipe : ${recipe}">
-                <td th:text="${recipe.name}"></td>
-                <td th:text="${recipe.total_weight}"></td>
+                <td><i class="far fa-clipboard"></i> <span th:text="${recipe.name}"></span></td>
+                <td><i class="fas fa-balance-scale-left"></i> <span th:text="${recipe.total_weight}"></span></td>
                 <td th:text="${recipe.calculateCaloriesInRecipe}"></td>
             </tr>
         </tbody>
     </table>
 
-        <table class="table table-striped">
-            <thead class="thead-grey">
+        <table class="table table-sm">
+            <thead>
             <tr>
                 <th>Food Name in this recipe</th>
                 <th>Food Weight (Gram)</th>
@@ -40,8 +40,8 @@
             </thead>
             <tbody>
             <tr th:each="recipef : ${recipeFood}">
-                <td th:text="${recipef.food.name}"></td>
-                <td th:text="${recipef.amount}"></td>
+                <td><i class="fas fa-drumstick-bite"></i> <span th:text="${recipef.food.name}"></span></td>
+                <td><i class="fas fa-balance-scale-left"></i> <span th:text="${recipef.amount}"></span></td>
                 <td th:text="${recipef.food.energy_kcal}"></td>
             </tr>
             </tbody>

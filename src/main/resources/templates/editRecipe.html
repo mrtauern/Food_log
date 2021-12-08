@@ -10,7 +10,7 @@
 
     <div class="formBox">
 
-        <h1>Update recipe</h1>
+        <h2>Update recipe</h2>
         <form method="post" th:action="@{/editRecipe}" th:object="${recipe}" >
             <input type="hidden" th:field="*{id}" id="id" th:required="required">
             <label for="name">Recipe name</label>
@@ -18,18 +18,20 @@
             <label for="total_weight">Recipe total weight (Gram)</label>
             <input type="number" th:field="*{total_weight}" id="total_weight" th:required="required">
             <div>
+                <button type="button" class="btn btn-outline-dark mr-2 btn-sm" onclick="location.href='/recipes';"><i class="fas fa-times"></i> Cancel</button>
                 <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Save</button>
-                <button type="button" class="btn mr-2 btn-sm" onclick="location.href='/recipes';"><i class="fas fa-times"></i> Cancel</button>
             </div>
         </form>
 
         <br><br>
-        <h1>Foods in recipe</h1>
+        <h3>Foods in recipe</h3>
         <div th:object="${recipeFood}">
-            <a th:href="@{/addFoodToRecipe/{recipeId}(recipeId=${recipe.id})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add Food</a>
+            <div class="actionBar">
+                <a th:href="@{/addFoodToRecipe/{recipeId}(recipeId=${recipe.id})}" class="btn btn-success mr-2 btn-sm">Add Food <i class="fas fa-plus-circle"></i></a>
+            </div>
 
-            <table class="table table-striped">
-                <thead class="thead-grey">
+            <table class="table table-sm">
+                <thead>
                     <tr>
                         <th>Food Name in this recipe</th>
                         <th>Food Weight (Gram)</th>
@@ -53,9 +55,9 @@
                             <td>
                                 <input type="number" th:name="amount" th:value="${recipef.amount}" id="amount" placeholder="amount (Gram)" th:required="required"></td>
                             </td>
-                            <td>
-                                <button value="Confirm" form="editFoodAmount" type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Confirm</button>
-                                <a th:href="@{/removeFoodFromRecipe/{recipeId}/{id}(recipeId=${recipef.recipe.id}, id=${recipef.id} )}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <td class="actionButtons">
+                                <button value="Confirm" form="editFoodAmount" type="submit" class="btn btn-outline-primary mr-2 btn-sm"><i class="fas fa-check"></i></button>
+                                <a th:href="@{/removeFoodFromRecipe/{recipeId}/{id}(recipeId=${recipef.recipe.id}, id=${recipef.id} )}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i></a>
                             </td>
                         </form>
                     </tr>

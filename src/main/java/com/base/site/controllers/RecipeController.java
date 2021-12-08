@@ -71,6 +71,8 @@ public class RecipeController {
 
         model.addAttribute("recipes", recipes);
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("pageTitle", "Recipe list");
+        model.addAttribute("selectedPage", "recipe");
 
 
         return RECIPES;
@@ -85,6 +87,9 @@ public class RecipeController {
         //model.addAttribute("totalCalories", recipeService.calculateCaloriesInRecipe(recipeFoodService.findByRecipe(recipe), recipeService.findRecipeById(id)));
         model.addAttribute("totalCalories", recipeService.findRecipeById(id).getCalculateCaloriesInRecipe());
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("pageTitle", "Recipe info");
+        model.addAttribute("selectedPage", "recipe");
+
 
         return RECIPEINFO;
     }
@@ -95,6 +100,9 @@ public class RecipeController {
         model.addAttribute("recipe", recipeService.findRecipeById(id));
         model.addAttribute("recipeFood", recipeFoodService.findByRecipe(recipe));
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("pageTitle", "Edit recipe");
+        model.addAttribute("selectedPage", "recipe");
+
 
         return EDITRECIPE;
     }
@@ -123,6 +131,9 @@ public class RecipeController {
         log.info("editFoodInRecipe Getmapping is called with recipeId: "+recipeId);
 
         model.addAttribute("recipeId", recipeId);
+        model.addAttribute("pageTitle", "Edit food in recipe");
+        model.addAttribute("selectedPage", "recipe");
+
 
         return EDIT_FOOD_IN_RECIPE;
     }
@@ -145,6 +156,9 @@ public class RecipeController {
         log.info("  createRecipe getmapping is called...");
 
         model.addAttribute("recipe", new Recipe());
+        model.addAttribute("pageTitle", "Create recipe");
+        model.addAttribute("selectedPage", "recipe");
+
 
         return CREATE_RECIPE;
     }
@@ -172,6 +186,9 @@ public class RecipeController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
         model.addAttribute("recipeFood", new RecipeFood());
+        model.addAttribute("pageTitle", "Add food to recipe");
+        model.addAttribute("selectedPage", "recipe");
+
 
         return ADD_FOOD_TO_RECIPE;
     }
@@ -232,6 +249,9 @@ public class RecipeController {
 
         model.addAttribute("recipes", recipes);
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("pageTitle", "Archived recipe list");
+        model.addAttribute("selectedPage", "recipe");
+
 
         return ARCHIVED_RECIPES;
     }

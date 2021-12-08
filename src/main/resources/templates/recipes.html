@@ -9,7 +9,7 @@
     <div id="content">
         <div class="contentBox">
 
-        <h1>Recipe list</h1>
+        <h2>Recipe list</h2>
 
             <div class="actionBar">
 
@@ -17,13 +17,13 @@
                     <input type="text" placeholder="Search...">
                 </form>
 
-                <a href="/createRecipe" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Create recipe</a>
-                <a href="/showRecipeArchive" class="btn btn-success mr-2 btn-sm"> Show archive</a>
+                <a href="/createRecipe" class="btn btn-success mr-2 btn-sm">Create recipe <i class="fas fa-plus-circle"></i></a>
+                <a href="/showRecipeArchive" class="btn btn-primary mr-2 btn-sm">Show archive <i class="fas fa-archive"></i></a>
 
             </div>
 
-            <table class="table table-striped">
-            <thead class="thead-dark">
+            <table class="table table-sm">
+            <thead>
             <tr>
                 <th>Name</th>
                 <th>Weight (Gram)</th>
@@ -34,14 +34,14 @@
             <tbody>
                 <tr th:each="recipe : ${recipes}">
                     <th:block th:if="${recipe.archived==false}">
-                        <td th:text="${recipe.name}"></td>
-                        <td th:text="${recipe.total_weight}"></td>
+                        <td><i class="far fa-clipboard"></i> <span th:text="${recipe.name}"></span></td>
+                        <td><i class="fas fa-balance-scale-left"></i> <span th:text="${recipe.total_weight}"></span></td>
                         <!--<td></td>-->
                         <td th:text="${recipe.calculateCaloriesInRecipe}"></td>
-                        <td>
-                            <a th:href="${'/recipeInfo/' + recipe.id}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fab fa-readme"> Read More</i></a>
-                            <a th:href="${'/editRecipe/' + recipe.id}" class="btn btn-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                            <a th:href="@{'/archiveRecipe/true/'+${recipe.id}}" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Archive</a>
+                        <td class="actionButtons">
+                            <a th:href="${'/recipeInfo/' + recipe.id}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-eye"></i> View</a>
+                            <a th:href="${'/editRecipe/' + recipe.id}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                            <a th:href="@{'/archiveRecipe/true/'+${recipe.id}}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-archive"></i> Archive</a>
                         </td>
                     </th:block>
                 </tr>
