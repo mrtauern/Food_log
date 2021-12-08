@@ -82,7 +82,8 @@ public class RecipeController {
 
         model.addAttribute("recipe", recipeService.findRecipeById(id));
         model.addAttribute("recipeFood", recipeFoodService.findByRecipe(recipe));
-        model.addAttribute("totalCalories", recipeService.calculateCaloriesInRecipe(recipeFoodService.findByRecipe(recipe), recipeService.findRecipeById(id)));
+        //model.addAttribute("totalCalories", recipeService.calculateCaloriesInRecipe(recipeFoodService.findByRecipe(recipe), recipeService.findRecipeById(id)));
+        model.addAttribute("totalCalories", recipeService.findRecipeById(id).getCalculateCaloriesInRecipe());
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return RECIPEINFO;
@@ -169,18 +170,31 @@ public class RecipeController {
         model.addAttribute("foodlist", foodService.findAllByKeyword(keyword));
         model.addAttribute("pfoodlist", privateFoodService.findAllByKeyword(keyword));
         model.addAttribute("keyword", keyword);
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
         model.addAttribute("recipeFood", new RecipeFood());
 
         return ADD_FOOD_TO_RECIPE;
     }
 
-    @PostMapping("/saveRecipeFood/{foodId}/{recipeId}")
-    public String saveRecipeFood(@PathVariable("foodId")long foodId, @PathVariable("recipeId")long recipeId, RecipeFood recipeFood) {
-        log.info("saveRecipeFood Postmapping is called with recipeId: "+recipeId+" and foodId: "+foodId+" recipeFood:::"+recipeFood.getAmount());
+    @PostMapping("/saveRecipeFood/{type}/{id}/{recipeId}")
+    public String saveRecipeFood(@PathVariable(required = false, value = "type") String type,
+                                 @PathVariable("recipeId")long recipeId,
+                                 @PathVariable("id")long id,
+                                 RecipeFood recipeFood, Food food, PrivateFood privateFood) {
+        log.info("saveRecipeFood Postmapping is called with recipeId: "+recipeId+" and foodId: "+id+" recipeFood:::"+recipeFood.getAmount());
 
         if(usersService.getLoggedInUser().getId() == recipeService.findById(recipeId).getFkUser().getId()) {
             recipeFood.setRecipe(recipeService.findById(recipeId));
-            recipeFood.setFood(foodService.findById(foodId));
+
+            if (type.equals("foods")) {
+                Food foodIds = foodService.findById(food.getId());
+                recipeFood.setFood(foodIds);
+            }
+            if (type.equals("foodp")) {
+                PrivateFood foodIdp = privateFoodService.findById(privateFood.getId());
+                recipeFood.setPrivateFood(foodIdp);
+            }
+
             recipeFoodService.save(recipeFood);
 
             return REDIRECT+ADD_FOOD_TO_RECIPE+"/"+recipeId;

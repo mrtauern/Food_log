@@ -1,6 +1,5 @@
 package com.base.site.services;
 
-import com.base.site.controllers.EmailController;
 import com.base.site.models.Mail;
 import com.base.site.models.UserPassResetCode;
 import org.springframework.beans.factory.annotation.Value;

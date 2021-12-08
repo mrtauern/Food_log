@@ -61,8 +61,8 @@
                     <td th:text="${pfood.fat}">Fat</td>
                     <td th:text="${pfood.energy_kilojoule}">Kilojoule</td>
                     <td th:text="${pfood.energy_kcal}">Kcal</td>
-                    <td class="actionButtons">
-                        <a th:href="@{/createDailyLog/food/{id}/{date}(id=${pfood.id},date=${date})}" class="btn btn-outline-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add To Daily Log</a>
+                    <td>
+                        <a th:href="@{/createDailyLog/pfood/{id}/{date}(id=${pfood.id},date=${date})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add To Daily Log</a>
                     </td>
                 </tr>
             </tbody>
