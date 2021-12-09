@@ -6,16 +6,16 @@
     <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
 </div>
 
-<thead th:fragment="addFoodTableHeader" class="container">
+<thead th:fragment="addFoodTableHeader">
     <tr>
         <th>  Food ID </th>
         <th> Name  </th>
         <th> Protein </th>
         <th> Carbohydrates </th>
         <th> Fat </th>
-        <td> Kilojoule </td>
+        <th> Kilojoule </th>
         <th> Kcal </th>
-        <td> Action </td>
+        <th> Action </th>
 
     </tr>
 </thead>
@@ -44,10 +44,10 @@
         <td th:text="${foods.fat}">Fat</td>
         <td th:text="${foods.energy_kilojoule}">Kilojoule</td>
         <td th:text="${foods.energy_kcal}">Kcal</td>
-        <td>
+        <td class="actionButtons">
             <form method="post" th:action="@{/saveRecipeFood/foods/{foodId}/{recipeId}(recipeId=${recipeId}, foodId=${foods.id})}" th:object="${recipeFood}">
                 <input type="number" th:name="amount" id="amount" placeholder="amount (Gram)" th:required="required">
-                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Add Food</button>
+                <button type="submit" class="btn btn-outline-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add</button>
             </form>
         </td>
     </tr>
@@ -59,10 +59,10 @@
         <td th:text="${foodp.fat}">Fat</td>
         <td th:text="${foodp.energy_kilojoule}">Kilojoule</td>
         <td th:text="${foodp.energy_kcal}">Kcal</td>
-        <td>
+        <td class="actionButtons">
             <form method="post" th:action="@{/saveRecipeFood/foodp/{foodId}/{recipeId}(recipeId=${recipeId}, foodId=${foodp.id})}" th:object="${recipeFood}">
                 <input type="number" th:name="amount" id="amount" placeholder="amount (Gram)" th:required="required">
-                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Add Food</button>
+                <button type="submit" class="btn btn-outline-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add</button>
             </form>
         </td>
     </tr>

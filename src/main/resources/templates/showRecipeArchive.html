@@ -10,7 +10,7 @@
 
         <div class="contentBox">
 
-        <h1>Archived recipe list</h1>
+        <h2>Archived recipe list</h2>
 
             <div class="actionBar">
 
@@ -18,13 +18,13 @@
                     <input type="text" placeholder="Search...">
                 </form>
 
-                <a href="/recipes" class="btn btn-success mr-2 btn-sm"> Show recipes</a>
+                <a href="/recipes" class="btn btn-primary mr-2 btn-sm">Show recipes <i class="far fa-clipboard"></i></a>
 
             </div>
 
 
-            <table class="table table-striped">
-            <thead class="thead-dark">
+            <table class="table table-sm">
+            <thead>
             <tr>
                 <th>Name</th>
                 <th>Weight (Gram)</th>
@@ -34,10 +34,10 @@
             <tbody>
                 <tr th:each="recipe : ${recipes}">
                     <th:block th:if="${recipe.archived==true}">
-                        <td th:text="${recipe.name}"></td>
-                        <td th:text="${recipe.total_weight}"></td>
-                        <td>
-                            <a th:href="@{'/archiveRecipe/false/'+${recipe.id}}" class="btn btn-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Activate</a>
+                        <td><i class="far fa-clipboard"></i> <span th:text="${recipe.name}"></span></td>
+                        <td><i class="fas fa-balance-scale-left"></i> <span th:text="${recipe.total_weight}"></span></td>
+                        <td class="actionButtons">
+                            <a th:href="@{'/archiveRecipe/false/'+${recipe.id}}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-undo-alt"></i> Restore</a>
                         </td>
                     </th:block>
                 </tr>

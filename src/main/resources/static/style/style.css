@@ -11,7 +11,10 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: 'Roboto Condensed', 'Roboto', sans-serif;
+    /*font-family: 'Roboto Condensed', 'Roboto', sans-serif;*/
+    font-family: 'Montserrat', 'Arial', sans-serif;
+    font-size: 14px;
+    line-height: 18px;
     /* box-sizing: border-box; */
 }
 body {
@@ -26,6 +29,29 @@ a {
 }
 li {
     list-style: none;
+}
+
+h1{
+
+}
+
+h2{
+    font-size: 25px;
+    font-weight: 900;
+}
+
+h2 i{
+    font-size: 28px;
+    line-height: 34px;
+}
+
+.warning{
+    color: #dc3545;
+}
+
+h3{
+    font-size: 18px;
+    font-weight: 100;
 }
 
 /* --------------------- OLD NAVBAR STYLING --------------------- */
@@ -130,8 +156,10 @@ header.navbar nav ul{
 header.navbar .nav-links a {
     color: #000000;
     text-decoration: none;
+    text-align: right;
 
     height: 53px;
+    min-width: 200px;
 
     padding: 6px 14px;
 
@@ -154,9 +182,15 @@ header.navbar .nav-links a img{
                         /* LOGO */
 header.navbar #logo {
     font-size: 32px;
+    /*font-size: 28px;*/
+    line-height: initial;
     font-family: Lobster;
+    /*font-family: Comfortaa;*/
     text-align: center;
     color: #FFFFFF;
+    /*text-decoration: underline;*/
+
+    padding-top: 5px;
 
     background-color: #41C685;
 
@@ -166,7 +200,7 @@ header.navbar #logo {
 
 header.navbar #logo img{
     height: 30px;
-    margin: 0 5px 4px 0;
+    margin: 0 10px 4px 0;
 }
                         /* NAVBAR MENU */
 header.navbar .menu {
@@ -191,6 +225,8 @@ header.navbar .menu li:hover a{
 
 header.navbar .menu li:hover ul li a{
     color: #000000;
+
+
     text-decoration: none;
 }
 
@@ -239,11 +275,19 @@ header.navbar .dropdown li:hover {
 
 header.navbar .dropdown li a{
     color: #000000;
-    padding-top: 14px;
+    text-align: left;
+
+    padding-top: 18px;
 }
 
 header.navbar .dropdown li a:hover{
     color: #FFFFFF;
+}
+
+header.navbar .dropdown li a i{
+    width: 16px;
+
+    margin-right: 6px;
 }
 
 header.navbar .dropdown li form button.logout{
@@ -387,16 +431,20 @@ div.innerCalorie div.collumn{
 
 div.innerCalorie div.collumn span.value{
     font-size: 32px;
+    font-weight: 100;
 }
 
 div.innerCalorie div.collumn span.type{
-    font-size: 16px;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 div.innerCalorie div.collumn.left{
     width: 100%;
 
     padding-bottom: 20px;
+
+    margin: 20px 0;
 }
 
 div.innerCalorie div.collumn.left span.value{
@@ -463,14 +511,22 @@ div#leftBar ul li{
 div#leftBar ul li a{
     color: #FFFFFF;
     text-decoration: none;
+    font-size: 16px;
+    line-height: initial;
 
     width: 100%;
     height: 100%;
 
     padding-left: 20px;
-    padding-top: 12px;
+    padding-top: 15px;
 
     display: block;
+}
+
+div#leftBar ul li a i{
+    width: 16px;
+
+    margin-right: 6px;
 }
 
 div#leftBar ul li:hover{
@@ -506,6 +562,8 @@ div#content{
     margin-top: 53px;
     margin-left: 260px;
 
+    padding-top: 40px;
+
     float: left;
 }
 
@@ -515,10 +573,14 @@ div.contentBox{
     background-color: white;
     box-shadow: 5px 10px 8px #999999;
 
-    margin: 80px;
+    margin: 40px 40px 0 40px;
     padding: 40px;
 
     overflow: auto;
+}
+
+div.contentBox:last-of-type{
+    margin-bottom: 40px;
 }
 
 div.actionBar{
@@ -532,16 +594,26 @@ div.actionBar form{
 div.actionBar input{
     border: none;
     background-color: #DDDDDD;
-    padding: 4px 4px;
+    padding: 5px 7px;
     width: 200px;
+    border-radius: 2px;
 }
 
 div.actionBar a{
     float: right;
+    font-weight: bold;
+}
+
+div.actionBar a i{
+    margin-left: 40px;
 }
 
 .table thead th{
     border: none;
+}
+
+.table tbody tr{
+    min-height: 36px;
 }
 
 .table tbody tr:hover{
@@ -551,14 +623,16 @@ div.actionBar a{
 .table td{
     border: none;
     vertical-align: middle;
+
+    height: 36px;
 }
 
 .table td.actionButtons{
     text-align: right;
 }
 
-.table td.name{
-    width: 70%;
+.table th.name{
+    width: 55%;
 }
 
 /* --------------------- CALORIE_COUNT STYLING --------------------- */
@@ -589,19 +663,25 @@ div.formBox form{
 }
 
 div.formBox form label{
+    font-size: 12px;
+    font-weight: bold;
+
     display: block;
 }
 
 div.formBox form input{
+    font-size: 12px;
+
     display: block;
 
     width: 100%;
 
-    border: none;
+    border: #000000 solid 1px;
+    border-radius: 4px;
 
-    background-color: #DDDDDD;
+    background-color: #FFFFFF;
 
-    padding: 4px 4px;
+    padding: 8px 8px;
     margin-bottom: 20px;
 }
 
@@ -610,23 +690,53 @@ div.formBox form input[type="checkbox"]{
 }
 
 div.formBox form select{
+    font-size: 12px;
+
     display: block;
 
     width: 100%;
 
-    border: none;
+    border: #000000 solid 1px;
+    border-radius: 4px;
 
-    background-color: #DDDDDD;
+    background-color: #FFFFFF;
 
-    padding: 4px 4px;
+    padding: 8px 8px;
     margin-bottom: 20px;
 }
 
+div.formBox form div{
+    margin-top: 30px;
+    padding-top: 30px;
+
+    border-top: #DDDDDD solid 1px;
+}
+
 div.formBox form div button{
-    float: right;
+    text-align: left;
+    font-weight: bold;
+    font-size: 16px;
+
+    padding: 10px 15px;
+
+    /*float: right;*/
+
+    width: calc( 50% - 6px );
 
     margin: 0 !IMPORTANT;
+    /*margin-left: 8px !IMPORTANT;*/
+}
+
+div.formBox form div button:last-of-type{
     margin-left: 8px !IMPORTANT;
+}
+
+div.formBox form div button i{
+    float: right;
+
+    padding-top: 4px;
+
+    font-size: 16px;
 }
 
 /* --------------------- LOGIN PAGE --------------------- */
@@ -665,6 +775,24 @@ div.formBox.login div.signUp{
     color: #FFFFFF;
 
     background-color: #41C685;
+}
+
+div.formBox.login div button{
+    width: 100%;
+
+    text-align: left;
+    font-weight: bold;
+    font-size: 16px;
+
+    padding: 10px 15px;
+}
+
+div.formBox.login div button i{
+    float: right;
+
+    padding-top: 4px;
+
+    font-size: 16px;
 }
 
 /* --------------------- FRONT PAGE --------------------- */
@@ -715,7 +843,8 @@ div#message div#innerMessage{
     position: relative;
     /*margin: auto 0;*/
     width: 100%;
-    display: inline-block;
+    height: 50px;
+    display: block;
     border-radius: 3px;
 }
 
@@ -748,22 +877,44 @@ div#message div#innerMessage.unknown{
     color: #FFFFFF;
 }
 
-div#message div#innerMessage i{
-    margin-right: 10px;
-    font-size: 20px;
-
-    padding-top: 4px;
+div#message div#innerMessage.death{
+    background-color: #000000;
+    color: #dc3545;
 }
 
-div#message div#innerMessage a{
+div#message div#innerMessage div{
+    display: inline-block;
+
+    height: 25px;
+
+    float: left;
+}
+
+div#message div#innerMessage div:last-of-type{
+    float: right;
+}
+
+div#message div#innerMessage div span{
+    float: left;
+
+    padding-top: 6px;
+}
+
+div#message div#innerMessage div i{
+    margin-right: 10px;
+
+    font-size: 20px;
+
+    padding-top: 6px;
+
+    float: left;
+}
+
+div#message div#innerMessage div a{
     margin-left: 10px;
 
     color: #FFFFFF;
     text-decoration: underline;
 
     float: right;
-}
-
-div#message div#innerMessage span{
-
 }

@@ -11,7 +11,7 @@
 
     <div class="formBox">
 
-        <h1>Edit user</h1>
+        <h2>Edit user</h2>
 
         <form method="post" th:action="@{/editUser}" th:object="${users}">
             <input type="hidden" th:field="*{id}" id="id" th:required="required">
@@ -55,8 +55,8 @@
             </select>
 
             <div>
+                <button type="button" class="btn btn-outline-dark mr-2 btn-sm" onclick="location.href='/userList';"><i class="fas fa-times"></i> Cancel</button>
                 <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Save</button>
-                <button type="button" class="btn mr-2 btn-sm" onclick="location.href='/userList';"><i class="fas fa-times"></i> Cancel</button>
             </div>
         </form>
 

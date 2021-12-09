@@ -47,7 +47,7 @@
 
 <header th:fragment="header">
         <!-- LOGO -->
-        <div id="logo"><img src="../static/image/logo.png" th:src="@{/image/logo.png}"> Food Log</div>
+        <div id="logo"><img src="../static/image/logo.png" th:src="@{/image/logo.png}">Food Log</div>
 <!--    <a th:href="${'/dailyLog'}"  id="logo"><img src="../static/image/logo.png" th:src="@{/image/logo.png}"> Food Log</a>-->
     <!-- NAVIGATION MENU -->
         <nav>
@@ -81,9 +81,8 @@
 
                         <!-- DROPDOWN MENU -->
                         <ul class="dropdown">
-                            <li><a href="/privateFood"><i class="fas fa-pizza-slice"></i> Private Food</a></li>
                             <li><a href="/weightOptions"><i class="fas fa-weight"></i> Weight Options</a></li>
-                            <li><a href="/recipes"><i class="fas fa-cloud-meatball"></i> Recipes</a></li>
+                            <!--<li><a href="/recipes"><i class="fas fa-cloud-meatball"></i> Recipes</a></li>-->
                             <li>
                                      <a href="/userInfo" ><i class="fas fa-user"></i> Profile</a>
 <!--                                <a th:href="${'/editUser/' + user.id}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>-->
@@ -109,19 +108,22 @@
 
     <div id="message" th:classappend="${showMessage} ? 'show' : ''" th:switch="${messageType}">
         <div id="innerMessage" class="success" th:case="success">
-            <i class="fas fa-check-circle"></i> <span th:text="${message}"></span> <a href="#" id="closeMessage"><i class="fas fa-times"></i></a>
+            <div><i class="fas fa-check-circle"></i></div> <div><span th:text="${message}"></span></div> <div><a href="#" id="closeMessage"><i class="fas fa-times"></i></a></div>
         </div>
         <div id="innerMessage" class="warning" th:case="warning">
-            <i class="fas fa-exclamation-circle"></i> <span th:text="${message}"></span> <a href="#" id="closeMessage"><i class="fas fa-times"></i></a>
+            <div><i class="fas fa-exclamation-circle"></i></div> <div><span th:text="${message}"></span></div> <div><a href="#" id="closeMessage"><i class="fas fa-times"></i></a></div>
         </div>
         <div id="innerMessage" class="error" th:case="error">
-            <i class="fas fa-times-circle"></i> <span th:text="${message}"></span> <a href="#" id="closeMessage"><i class="fas fa-times"></i></a>
+            <div><i class="fas fa-times-circle"></i></div> <div><span th:text="${message}"></span></div> <div><a href="#" id="closeMessage"><i class="fas fa-times"></i></a></div>
         </div>
         <div id="innerMessage" class="info" th:case="info">
-            <i class="fas fa-info-circle"></i> <span th:text="${message}"></span> <a href="#" id="closeMessage"><i class="fas fa-times"></i></a>
+            <div><i class="fas fa-info-circle"></i></div> <div><span th:text="${message}"></span></div> <div><a href="#" id="closeMessage"><i class="fas fa-times"></i></a></div>
         </div>
         <div id="innerMessage" class="unknown" th:case="unknown">
-            <i class="fas fa-question-circle"></i> <span th:text="${message}"></span> <a href="#" id="closeMessage"><i class="fas fa-times"></i></a>
+            <div><i class="fas fa-question-circle"></i></div> <div><span th:text="${message}"></span></div> <div><a href="#" id="closeMessage"><i class="fas fa-times"></i></a></div>
+        </div>
+        <div id="innerMessage" class="death" th:case="death">
+            <div><i class="fas fa-skull-crossbones"></i></div> <div><span th:text="${message}"></span></div> <div><a href="#" id="closeMessage"><i class="fas fa-times"></i></a></div>
         </div>
         <div id="innerMessage" th:case="*"></div>
     </div>
@@ -240,7 +242,8 @@
         <li th:classappend="${selectedPage == 'user'} ? selected : null"><a href="/userList"><i class="fas fa-user"></i> User</a></li>
         <li  th:classappend="${selectedPage == 'exercise'} ? selected : null"><a href="/exercise"><i class="fas fa-running"></i> Exercise</a></li>
         <li th:classappend="${selectedPage == 'food'} ? selected : null"><a href="/food"><i class="fas fa-hamburger"></i> Food</a></li>
-        <li th:classappend="${selectedPage == 'Recipe'} ? selected : null"><a href="/recipes"><i class="far fa-clipboard"></i> Recipe</a></li>
+        <li th:classappend="${selectedPage == 'privateFood'} ? selected : null"><a href="/privateFood"><i class="fas fa-pizza-slice"></i> Private Food</a></li>
+        <li th:classappend="${selectedPage == 'recipe'} ? selected : null"><a href="/recipes"><i class="far fa-clipboard"></i> Recipe</a></li>
         <li th:classappend="${selectedPage == 'price'} ? selected : null"><a href="#"><i class="fas fa-dollar-sign"></i> Price</a></li>
         <li  th:classappend="${selectedPage == 'other'} ? selected : null"><a href="#"><i class="fas fa-ellipsis-h"></i> Other</a></li>
     </ul>

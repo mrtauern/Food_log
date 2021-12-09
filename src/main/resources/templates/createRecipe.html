@@ -7,7 +7,7 @@
 
     <div class="formBox">
 
-        <h1>Create recipe</h1>
+        <h2>Create recipe</h2>
         <form th:action="@{createRecipe}" th:object="${recipe}" method="POST">
 
             <label for="name">Recipe name</label>
@@ -17,8 +17,8 @@
             <input type="number" th:name="total_weight" id="total_weight" th:required="required">
 
             <div>
-                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Next</button>
-                <button type="button" class="btn mr-2 btn-sm"><i class="fas fa-times"></i> Cancel</button>
+                <button type="button" class="btn btn-outline-dark mr-2 btn-sm" onclick="location.href='/recipes';"><i class="fas fa-times"></i> Cancel</button>
+                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-arrow-right"></i> Next</button>
             </div>
 
         </form>

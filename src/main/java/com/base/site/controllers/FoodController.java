@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -89,43 +90,62 @@ public class FoodController {
     public String createFood(Model model) {
         log.info("  createFood is called ");
 
-            Food food = new Food();
-            model.addAttribute("food", food);
+        Food food = new Food();
+        model.addAttribute("food", food);
 
-            return CREATE_FOOD;
+        return CREATE_FOOD;
     }
 
     @PostMapping("/saveFood")
-    public String saveFood(@ModelAttribute("food") Food food, Model model) {
+    public String saveFood(@ModelAttribute("food") Food food, Model model, RedirectAttributes redAt) {
         log.info("  PostMapping saveFood is called ");
-            foodService.save(food);
 
-            return  REDIRECT+FOOD;
+        Long foodId = food.getId();
+
+        foodService.save(food);
+
+        if(foodId == null) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", food.getName() + " is successfully created");
+        } else {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", food.getName() + " is successfully updated");
+        }
+
+        return  REDIRECT+FOOD;
     }
 
     @GetMapping("/updateFood/{id}")
     public String updateFood(@PathVariable(value = "id") Long id, Model model) {
         log.info("  GetMapping updateFood is called ");
-            Food food = foodService.findById(id);
-            model.addAttribute("food", food);
+        Food food = foodService.findById(id);
+        model.addAttribute("food", food);
 
-            return UPDATE_FOOD;
+        return UPDATE_FOOD;
     }
 
     @GetMapping("/deleteFood/{id}")
-    public String deleteFood(@PathVariable(value = "id") Long id, Model model) {
+    public String deleteFood(@PathVariable(value = "id") Long id, Model model, RedirectAttributes redAt) {
         log.info("  GetMapping deleteFoodbyId is called ");
-            this.foodService.deleteById(id);
 
-            return REDIRECT+FOOD;
+        String name = foodService.findById(id).getName();
+        this.foodService.deleteById(id);
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", name + " is successfully deleted");
+
+        return REDIRECT+FOOD;
     }
 
     @GetMapping({"/addFoodToDailyLog", "/addFoodToDailyLog/{date}"})
     public String addFoodToDailyLog(Model model, @Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString) {
         log.info("  get mapping addFoodToDailyLog is called");
         model.addAttribute("keyword", keyword);
-        model.addAttribute("pageTitle", "User list");
-        model.addAttribute("selectedPage", "food");
+        model.addAttribute("pageTitle", "Add food to daily log");
+        model.addAttribute("selectedPage", "dailyLog");
 
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
@@ -188,6 +208,10 @@ public class FoodController {
         model.addAttribute("type", type);
         model.addAttribute("date", date.toString());
         model.addAttribute("logType", logTypeService.findAll());
+        model.addAttribute("pageTitle", "Add food to daily log");
+        model.addAttribute("selectedPage", "dailyLog");
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return CREATE_DAILYLOG;
     }
@@ -195,7 +219,8 @@ public class FoodController {
     @PostMapping({"/saveDailyLog/{type}", "/saveDailyLog/{type}/{date}"})
     public String saveDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,Food food,
                                @PathVariable(required = false, value = "date") String dateString,
-                               @PathVariable(required = false, value = "type") String type) {
+                               @PathVariable(required = false, value = "type") String type,
+                               RedirectAttributes redAt) {
         log.info("  PostMapping saveDailyLog is called ");
 
         if (type.equals("food")) {
@@ -216,6 +241,10 @@ public class FoodController {
         dailyLog.setDatetime(date);
         String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         dailyLogService.save(dailyLog);
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Food is successfully added to daily log");
         return  REDIRECT+DAILYLOG+"/"+sDatetime;
     }
 
@@ -235,7 +264,8 @@ public class FoodController {
 
     @PostMapping({"/updateDailyLog", "/updateDailyLog/{date}"})
     public String updateDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,
-                                 @PathVariable(required = false, value = "date") String dateString) {
+                                 @PathVariable(required = false, value = "date") String dateString,
+                                 RedirectAttributes redAt) {
         log.info("  PostMapping updateDailyLog is called ");
 
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
@@ -245,17 +275,23 @@ public class FoodController {
 
         dailyLogService.save(dailyLog);
 
-
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Food is successfully updated in daily log");
         return  REDIRECT + DAILYLOG+"/"+dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     @GetMapping({"/deleteDailyLog/{id}", "/deleteDailyLog/{id}/{date}"})
     public String deleteDailyLog(@PathVariable(value = "id") Long id,
-                                 @PathVariable(required = false, value = "date") String dateString) {
+                                 @PathVariable(required = false, value = "date") String dateString,
+                                 RedirectAttributes redAt) {
         log.info("  GetMapping deleteDailyLog is called ");
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
         this.dailyLogService.deleteById(id);
 
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Food is successfully deleted from daily log");
         return REDIRECT + DAILYLOG+"/"+date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
