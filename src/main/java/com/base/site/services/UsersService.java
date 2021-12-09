@@ -5,6 +5,7 @@ import com.base.site.models.UserPassResetCode;
 import com.base.site.models.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
@@ -44,4 +45,6 @@ public interface UsersService {
     void saveEditUserData(Users user);
 
     RedirectAttributes generateUserAndSave(Users user, String userType, RedirectAttributes redAt) throws MessagingException, IOException;
+
+    Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword);
 }

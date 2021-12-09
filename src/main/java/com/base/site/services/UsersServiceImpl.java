@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
@@ -286,4 +287,25 @@ public class UsersServiceImpl implements UsersService {
 
         return redAt;
     }
+
+    @Override
+    public Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword) {
+        int pageSize = 5;
+        Page<Users> page = findPaginated(pageNo,pageSize, sortField, sortDir, keyword);
+        List<Users> listUser = page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalUser", page.getTotalElements());
+
+        model.addAttribute("listUser", listUser);
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("loggedInUser", getLoggedInUser());
+
+        return model;
+    }
+
 }

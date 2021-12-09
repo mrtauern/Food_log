@@ -7,21 +7,26 @@ import com.base.site.repositories.UsersRepo;
 import com.base.site.repositories.UsersRepoImpl;
 import com.base.site.security.UserDetailsServiceImpl;
 import com.base.site.services.*;
+import org.hibernate.mapping.Any;
+import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +35,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -45,21 +51,26 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mockStatic;
 import static org.springframework.data.domain.PageRequest.of;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //@SpringBootTest
-//@RunWith(SpringRunner.class)
+@RunWith(SpringRunner.class)
+//@ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 @WebMvcTest(AccountController.class)
-@AutoConfigureMockMvc
+//@AutoConfigureMockMvc
 class AccountControllerTest {
     Logger log = Logger.getLogger(AccountControllerTest.class.getName());
 
     @Autowired
     private MockMvc mockMvc;
+    //@Autowired
+    //private userMock userMock;
 
     @Spy
     private AccountController accountControllerSpy;
@@ -76,19 +87,29 @@ class AccountControllerTest {
     private EmailServiceImpl emailService;
     @MockBean
     private UserDetailsService userDetailsService;
+    @MockBean
+    private UPRCService uprcService;
+    @MockBean
+    private LoginController loginController;
+    @MockBean
+    private DailyLogService dailyLogService;
 
     private Users adminUser = new Users();
     private Users user = new Users();
     private List<Users> usersList = new ArrayList<>();
 
     private Pageable pageable = of(1, 1);
-    @MockBean
+    @Mock
     private Page<Users> pageMock;
 
 
-    @BeforeEach
+    @Before
     void setUp() {
         //usersservice
+
+        MockitoAnnotations.initMocks(this);
+        Mockito.mock(Users.class);
+        pageMock = Mockito.mock(Page.class);
 
         LocalDate date = LocalDate.parse("1992-01-22");
         user.setBirthday(date);
@@ -134,40 +155,19 @@ class AccountControllerTest {
     @Test
     @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
     void userList() throws Exception {
-        //Page<Users> page = usersService.findPaginated(1,5,"firstname","asc","");
-
-        //Users user = usersService.findUsersByUsername("user@user.dk");
-        for (Users test: usersList) {
-            log.info(test.getFullName());
-        }
-        //page = new PageImpl<>(usersList, pageable,usersList.size());
-        //usersList = page.getContent();
-
-        Users loggedInUser = Mockito.spy(user);
-
-        Authentication auth = Mockito.mock(Authentication.class);
-        SecurityContext secCont = Mockito.mock(SecurityContext.class);
-        Page<Users> page = Mockito.mock(Page.class);
-        //List<Users> usersTest = Mockito.mock(List.class);
-        //AccountController accountController = Mockito.mock(AccountController.class);
-        //Model model = Mockito.mock(Model.class);
-        //spyPage = Mockito.spy(page);
-        //Page<Users> pageTestSpy = Mockito.spy(pageTest);
-        //List<Users> usersTestSpy = Mockito.spy(usersTest);
-
-        //ReflectionTestUtils.setField(usersList,spyPage);
-
-        Mockito.when(secCont.getAuthentication()).thenReturn(auth);
-        Mockito.when(auth.getName()).thenReturn("user@user.dk");
-        Mockito.when(usersService.findPaginated(1,5,"firstname","asc","")).thenReturn(pageMock);
-        //Mockito.when(accountController.findPaginated(model, 1,"firstname","asc","")).thenReturn("userList");
-        Mockito.when(pageMock.getContent()).thenReturn(usersList);
-        //Mockito.doReturn(usersList).when(page.getContent());
-        //Mockito.when(usersService.findPaginated(1,5,"firstname","asc","").getContent()).thenReturn(page.getContent());
-        Mockito.when(usersService.findUsersByUsername(auth.getName())).thenReturn(loggedInUser);
 
         ResultActions resultActions = mockMvc.perform(get("/userList").with(user("user@user.dk")))
                 .andExpect(status().isOk());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
+    }
+
+    @Test
+    void userListErrorTest() throws Exception {
+
+        ResultActions resultActions = mockMvc.perform(get("/userList"))
+                .andExpect(status().is3xxRedirection());
 
         MvcResult mvcResult = resultActions.andReturn();
         ModelAndView mv = mvcResult.getModelAndView();
@@ -178,7 +178,20 @@ class AccountControllerTest {
     }
 
     @Test
-    void accountLockUnlock() {
+    @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
+    void accountLockUnlock() throws Exception {
+
+        Users loggedInUser = Mockito.spy(user);
+        loggedInUser.setId(1L);
+
+        Mockito.when(usersService.getLoggedInUser()).thenReturn(loggedInUser);
+
+        ResultActions resultActions = mockMvc.perform(get("/adminActionAccountNonLocked/?id=1").with(user("user@user.dk")))
+                .andExpect(status().is3xxRedirection());
+
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
     }
 
     @Test
@@ -225,3 +238,5 @@ class AccountControllerTest {
     void testEditUserProfile() {
     }
 }
+
+
