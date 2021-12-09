@@ -77,6 +77,8 @@ public class UPRCServiceImpl implements UPRCService{
             } else {
                 log.info("user not found or code already sent");
             }
+        } else {
+            log.info("user requesting password reset is not admin");
         }
     }
 }

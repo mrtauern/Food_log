@@ -149,19 +149,8 @@ public class AccountController {
     @GetMapping("/pageUser/{pageNo}")
     public String findPaginated(Model model, @PathVariable(value = "pageNo")int pageNo, @RequestParam("sortField")String sortField,
                                              @RequestParam("sortDir")String sortDir, @Param("keyword") String keyword ){
-        int pageSize = 5;
-        Page<Users> page = usersService.findPaginated(pageNo,pageSize, sortField, sortDir, keyword);
-        List<Users> listUser = page.getContent();
 
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalUser", page.getTotalElements());
-
-        model.addAttribute("listUser", listUser);
-
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model = usersService.getPaginatedModelAttributes(model, pageNo, sortField, sortDir, keyword);
 
         return USER_LIST;
     }
