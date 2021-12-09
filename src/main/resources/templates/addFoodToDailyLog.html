@@ -14,15 +14,17 @@
 
 <div id="content">
     <div class="contentBox">
-        <h1>Food List</h1>
+        <h2>Add food to daily log</h2>
         <div class="actionBar">
             <form th:action="@{/addFoodToDailyLog}">
                 <input type="text" name="keyword" placeholder="Search For a Food Name" th:value="${keyword}" >
                 <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-arrow-right"></i></button>
                 <button type="button" d="btnClear" onclick="clearSearch()" class="btn btn-secondary mr-2 btn-sm"><i class="fas fa-sync-alt"></i></button>
             </form>
+
+            <a href="/dailyLog" class="btn btn-outline-secondary mr-2 btn-sm">Cancel <i class="fas fa-times"></i></a>
         </div>
-        <table  class="table table-sm">
+        <table class="table table-sm">
             <thead>
                 <tr>
                     <th>
@@ -50,8 +52,8 @@
                     <td th:text="${food.fat}">Fat</td>
                     <td th:text="${food.energy_kilojoule}">Kilojoule</td>
                     <td th:text="${food.energy_kcal}">Kcal</td>
-                    <td>
-                        <a th:href="@{/createDailyLog/food/{id}/{date}(id=${food.id},date=${date})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add To Daily Log</a>
+                    <td class="actionButtons">
+                        <a th:href="@{/createDailyLog/food/{id}/{date}(id=${food.id},date=${date})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add</a>
                     </td>
                 </tr>
                 <tr th:each="pfood : ${listPrivateFood}">
@@ -61,12 +63,14 @@
                     <td th:text="${pfood.fat}">Fat</td>
                     <td th:text="${pfood.energy_kilojoule}">Kilojoule</td>
                     <td th:text="${pfood.energy_kcal}">Kcal</td>
-                    <td>
-                        <a th:href="@{/createDailyLog/pfood/{id}/{date}(id=${pfood.id},date=${date})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add To Daily Log</a>
+                    <td class="actionButtons">
+                        <a th:href="@{/createDailyLog/pfood/{id}/{date}(id=${pfood.id},date=${date})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add</a>
                     </td>
                 </tr>
             </tbody>
         </table>
+
+
        <div id="pgination" th:if = "${totalPages > 1}" th:with="pageUrlPostfix = '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} ">
            <nav aria-label="Page navigation example">
                <ul class="pagination" th:with="pageUrlPrefix = '/pageAddFood/'">

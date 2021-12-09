@@ -10,35 +10,45 @@
     }
 </script>
 <body>
-<header th:include="fragments/navbar_top :: navbar"></header>
+<header th:include="fragments/navbar_top :: header" class="navbar"></header>
+<div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
 
-<form id="searchForm" th:action="@{/addExerciseToDailyLog}">
+<!--<form id="searchForm" th:action="@{/addExerciseToDailyLog}">
     Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required />
     &nbsp;
     <input type="submit" value="Search" />
     &nbsp;
     <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
-</form>
-<div class="container">
-    <div id="inner_container">
-        <br> <br>
-        <h1>Choose Exercise to add to dailyLog</h1>
-        <br/><br/>
-        <table id="foodTable" border="1" cellpadding="10">
+</form>-->
+
+<div id="content">
+    <div class="contentBox">
+
+        <h2>Add exercise to daily log</h2>
+
+        <div class="actionBar">
+            <form th:action="@{/addExerciseToDailyLog}">
+                <input type="text" name="keyword" placeholder="Search For a Food Name" th:value="${keyword}" >
+                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-arrow-right"></i></button>
+                <button type="button" d="btnClear" onclick="clearSearch()" class="btn btn-secondary mr-2 btn-sm"><i class="fas fa-sync-alt"></i></button>
+            </form>
+
+            <a href="/dailyLog" class="btn btn-outline-secondary mr-2 btn-sm">Cancel <i class="fas fa-times"></i></a>
+        </div>
+
+        <table class="table table-sm">
             <thead>
             <tr>
-                <th> ID </th>
-                <th> Burned pr min  </th>
-                <th> Exercise name </th>
+                <th>Exercise</th>
+                <th>Burned pr min</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="ex : ${exerciseList}">
-                <td th:text="${ex.id}"> ID</td>
-                <td th:text="${ex.kcalBurnedPerMin}">burned pr. min</td>
-                <td th:text="${ex.name}">name</td>
-                <td>
-                    <a th:href="@{/createExerciseInDailyLog/{id}/{date}(id=${ex.id},date=${date})}">Add To Daily Log</a>
+                <td><i class="fas fa-running"></i> <span th:text="${ex.name}"></span></td>
+                <td><i class="fas fa-burn"></i> <span th:text="${ex.kcalBurnedPerMin}"></span></td>
+                <td class="actionButtons">
+                    <a th:href="@{/createExerciseInDailyLog/{id}/{date}(id=${ex.id},date=${date})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add</a>
 
                 </td>
             </tr>
@@ -46,6 +56,6 @@
         </table>
     </div>
 </div>
-<div th:include="fragments/navbar_top :: bottom_bar"></div>
+<footer th:include="fragments/navbar_top :: footer"></footer>
 </body>
 </html>

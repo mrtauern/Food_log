@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -53,6 +54,9 @@ public class ExerciseController {
         model.addAttribute("exerciseList", exerciseList);
         model.addAttribute("edList", edList);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("pageTitle", "Exercise list");
+        model.addAttribute("selectedPage", "exercise");
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return EXERCISE;
     }
@@ -61,35 +65,58 @@ public class ExerciseController {
 
     @GetMapping("/createExercise")
     public String createExercise(Model model) {
+        log.info("  createExercise is called ");
 
         Exercise exercise = new Exercise();
         model.addAttribute("exercise", exercise);
-        log.info("  createExercise is called ");
+        model.addAttribute("pageTitle", "Create exercise");
+        model.addAttribute("selectedPage", "exercise");
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return CREATE_EXERCISE;
     }
 
     @PostMapping("/saveExercise")
-    public String saveExercise(@ModelAttribute("food") Exercise exercise, Model model) {
-        exerciseService.save(exercise);
+    public String saveExercise(@ModelAttribute("food") Exercise exercise, Model model, RedirectAttributes redAt) {
         log.info("  PostMapping saveExercise is called ");
+
+        Long exerciseId = exercise.getId();
+
+        exerciseService.save(exercise);
+
+        if(exerciseId == null) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "Exercise successfully created");
+        } else {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "Exercise successfully updated");
+        }
 
         return  REDIRECT + EXERCISE;
     }
 
     @GetMapping("/updateExercise/{id}")
     public String updateExercise(@PathVariable(value = "id") Long id, Model model) {
+        log.info("  GetMapping updateExercise is called ");
         Exercise exercise = exerciseService.findById(id);
         model.addAttribute("exercise", exercise);
-        log.info("  GetMapping updateExercise is called ");
+        model.addAttribute("pageTitle", "Edit exercise");
+        model.addAttribute("selectedPage", "exercise");
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return UPDATE_EXERCISE;
     }
 
     @GetMapping("/deleteExercise/{id}")
-    public String deleteExercise(@PathVariable(value = "id") Long id, Model model) {
-        this.exerciseService.deleteById(id);
+    public String deleteExercise(@PathVariable(value = "id") Long id, Model model, RedirectAttributes redAt) {
         log.info("  GetMapping deleteExercise is called ");
+        this.exerciseService.deleteById(id);
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Exercise successfully deleted");
 
         return REDIRECT + EXERCISE;
     }
@@ -105,6 +132,9 @@ public class ExerciseController {
 
         model.addAttribute("date", date.toString());
 
+        model.addAttribute("pageTitle", "Add exercise to daily log");
+        model.addAttribute("selectedPage", "dailyLog");
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         model.addAttribute("exerciseList", exerciseList);
         model.addAttribute("keyword", keyword);
@@ -125,12 +155,15 @@ public class ExerciseController {
         model.addAttribute("logType", logTypeService.findAll());
         model.addAttribute("dailyLog", dailyLog);
         model.addAttribute("exercise", exercise);
+        model.addAttribute("pageTitle", "Add exercise to daily log");
+        model.addAttribute("selectedPage", "dailyLog");
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return CREATE_EXERCISE_IN_DAILYLOG;
     }
     @PostMapping({"/saveExerciseInDailyLog", "/saveExerciseInDailyLog/{date}"})
     public String saveExerciseInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Exercise exercise, Model model,
-                                         @PathVariable(required = false, value = "date") String dateString) {
+                                         @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
         log.info("  Post Mapping saveExerciseInDailyLog is called ");
 
         Exercise exerciseId = exerciseService.findById(exercise.getId());
@@ -144,6 +177,10 @@ public class ExerciseController {
 
         dailyLogService.save(dailyLog);
 
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Exercise successfully added to daily log");
+
         return  REDIRECT + DAILYLOG +"/"+sDatetime;
 
     }
@@ -155,13 +192,16 @@ public class ExerciseController {
         model.addAttribute("date", dateString);
 
         model.addAttribute("dailyLog", dailyLog);
+        model.addAttribute("pageTitle", "Edit exercise in daily log");
+        model.addAttribute("selectedPage", "dailyLog");
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return UPDATE_EXERCISE_IN_DAILYLOG;
     }
 
     @PostMapping({"/updateExerciseInDailyLog", "/updateExerciseInDailyLog/{date}"})
     public String updateExerciseInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,
-                                           @PathVariable(required = false, value = "date") String dateString) {
+                                           @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
         log.info("  Post Mapping updateExerciseInDailyLog is called ");
 
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
@@ -173,17 +213,25 @@ public class ExerciseController {
 
         dailyLogService.save(dailyLog);
 
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Exercise successfully updated in daily log");
+
         return  REDIRECT + DAILYLOG+"/"+dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
     }
 
     @GetMapping({"/deleteExerciseFromDailyLog/{id}", "/deleteExerciseFromDailyLog/{id}/{date}"})
     public String deleteExerciseFromDailyLog(@PathVariable(value = "id") Long id,
-                                             @PathVariable(required = false, value = "date") String dateString) {
+                                             @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
         log.info("  GetMapping deleteEExerciseFromDailyLog is called ");
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
 
         this.dailyLogService.deleteById(id);
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Exercise successfully deleted from daily log");
 
         return REDIRECT + DAILYLOG +"/"+date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }

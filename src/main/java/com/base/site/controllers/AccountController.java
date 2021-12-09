@@ -271,7 +271,6 @@ public class AccountController {
         log.info("delete_own_user called userId: ");
 
             model.addAttribute("pageTitle", "Delete user");
-            model.addAttribute("selectedPage", "user");
             model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
             return DELETE_OWN_USER;
@@ -327,7 +326,6 @@ public class AccountController {
         model.addAttribute("users", usersService.findAll());
         model.addAttribute("pageTitle", "User Personal Info");
         model.addAttribute("loggedIn", usersService.getLoggedInUser());
-        model.addAttribute("selectedPage", "user");
 
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
@@ -340,7 +338,6 @@ public class AccountController {
 
         model.addAttribute("user", usersService.findUserByIdAndSetBdayString(id));
         model.addAttribute("pageTitle", "Edit user Profile");
-        model.addAttribute("selectedPage", "user");
 
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 

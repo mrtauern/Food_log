@@ -3,28 +3,34 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:include="fragments/head :: styles"></head>
 <body>
-<header th:include="fragments/navbar_top :: navbar"></header>
+<header th:include="fragments/navbar_top :: header" class="navbar"></header>
 
-<div class="container">
+<div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
 
-  <div id="inner_container">
-    <h1>Update Exercise</h1>
+<div id="content">
+
+  <div class="formBox">
+    <h2>Update Exercise</h2>
 
     <form action="#" th:action="@{/saveExercise}" th:object ="${exercise}" method="POST">
 
-      <input type="hidden" th:field="*{id}" />
+      <input type="hidden" th:field="*{id}" th:required="required"/>
 
       <label  class="col-form-label">Name </label>
-      <input type="text" th:field = "*{name}"  class="form-control mb-4 col-4">
+      <input type="text" th:field = "*{name}" th:required="required">
 
       <label  class="col-form-label">Kalorie burned pr. minute</label>
-      <input type="number" th:field = "*{kcalBurnedPerMin}"  class="form-control mb-4 col-4">
-      <button type="submit" class="form-control mb-4 col-4" >Update Exercise</button>
+      <input type="number" th:field = "*{kcalBurnedPerMin}" th:required="required">
+
+      <div>
+        <button type="button" class="btn btn-outline-dark mr-2 btn-sm" onclick="location.href='/exercise';"><i class="fas fa-times"></i> Cancel</button>
+        <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-check"></i> Save</button>
+      </div>
     </form>
   </div>
 </div>
 
-<div th:include="fragments/navbar_top :: bottom_bar"></div>
+<footer th:include="fragments/navbar_top :: footer"></footer>
 
 </body>
 </html>

@@ -7,50 +7,66 @@
     function clearSearch() {
         window.location = "[[@{/privateFood}]]";
     }
+
+    function confirm_delete(name) {
+        return confirm('Are you sure you want to delete "' + name + '" from private food list?');
+    }
 </script>
 <body>
-<header th:include="fragments/navbar_top :: navbar"></header>
+<header th:include="fragments/navbar_top :: header" class="navbar"></header>
 
-<form id="searchForm" th:action="@{/privateFood}">
+<div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
+
+<!--<form id="searchForm" th:action="@{/privateFood}">
     Filter: <input type="text" name="keyword" id="keyword" placeholder="Search for name" size="50" th:value="${keyword}" required />
     &nbsp;
     <input type="submit" value="Search" />
     &nbsp;
     <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
-</form>
-<div class="container">
-    <div id="inner_container">
-        <br> <br>
-        <h1>Private Food List</h1>
-        <a th:href="@{/createPrivateFood}" >Create New Food</a>
-        <br/><br/>
-        <table id="foodTable" border="1" cellpadding="10">
+</form>-->
+
+<div id="content">
+    <div class="contentBox">
+        <h2>Private Food List</h2>
+
+        <div class="actionBar">
+
+            <form th:action="@{/privateFood}">
+                <input type="text" name="keyword" placeholder="Search For a Food Name" th:value="${keyword}" >
+                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-arrow-right"></i></button>
+                <button type="button" d="btnClear" onclick="clearSearch()" class="btn btn-secondary mr-2 btn-sm"><i class="fas fa-sync-alt"></i></button>
+
+            </form>
+
+            <a href="/createPrivateFood" class="btn btn-success mr-2 btn-sm">Create private food <i class="fas fa-plus-circle"></i></a>
+
+        </div>
+
+        <table class="table table-sm">
             <thead>
             <tr>
-                <th>Food ID</th>
                 <th>Name</th>
                 <th>Protein</th>
                 <th>Carbohydrates</th>
                 <th>Fat</th>
-                <td>Kilojoule</td>
+                <th>Kilojoule</th>
                 <th>Kcal</th>
-                <td>Action</td>
+                <th>Action</th>
 
             </tr>
             </thead>
             <tbody>
             <tr th:each="pfood : ${pfood}">
-                <td th:text="${pfood.id}">Food ID</td>
-                <td th:text="${pfood.name}">Name</td>
+                <td><i class="fas fa-drumstick-bite"></i> <span th:text="${pfood.name}"></span></td>
                 <td th:text="${pfood.protein}">Protein</td>
                 <td th:text="${pfood.carbohydrates}">Carbohydrates</td>
                 <td th:text="${pfood.fat}">Fat</td>
                 <td th:text="${pfood.energy_kilojoule}">Kilojoule</td>
                 <td th:text="${pfood.energy_kcal}">Kcal</td>
                 <td th:text="${pfood.fkUser.firstname}">User</td>
-                <td>
-                    <a th:href="@{/updatePrivateFood/{id}(id=${pfood.id})}">Edit</a>
-                    <a th:href="@{/deletePrivateFood/{id}(id=${pfood.id})}">Delete</a>
+                <td class="actionButtons">
+                    <a th:href="@{/updatePrivateFood/{id}(id=${pfood.id})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                    <a th:href="@{/deletePrivateFood/{id}(id=${pfood.id})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${pfood.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                     <!-- <a th:href="@{/addFoodToDailyLog/{id}(id=${food.id})}">add to DailyLog</a> -->
                 </td>
             </tr>
@@ -60,6 +76,6 @@
         </div>
 </div>
 
-<div th:include="fragments/navbar_top :: bottom_bar"></div>
+<footer th:include="fragments/navbar_top :: footer"></footer>
 </body>
 </html>
