@@ -79,11 +79,20 @@ public class ExerciseController {
     @PostMapping("/saveExercise")
     public String saveExercise(@ModelAttribute("food") Exercise exercise, Model model, RedirectAttributes redAt) {
         log.info("  PostMapping saveExercise is called ");
+
+        Long exerciseId = exercise.getId();
+
         exerciseService.save(exercise);
 
-        redAt.addFlashAttribute("showMessage", true);
-        redAt.addFlashAttribute("messageType", "success");
-        redAt.addFlashAttribute("message", "Exercise successfully saved");
+        if(exerciseId == null) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "Exercise successfully created");
+        } else {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "Exercise successfully updated");
+        }
 
         return  REDIRECT + EXERCISE;
     }

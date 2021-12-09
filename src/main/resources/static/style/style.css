@@ -156,8 +156,10 @@ header.navbar nav ul{
 header.navbar .nav-links a {
     color: #000000;
     text-decoration: none;
+    text-align: right;
 
     height: 53px;
+    min-width: 200px;
 
     padding: 6px 14px;
 
@@ -223,6 +225,8 @@ header.navbar .menu li:hover a{
 
 header.navbar .menu li:hover ul li a{
     color: #000000;
+
+
     text-decoration: none;
 }
 
@@ -271,11 +275,19 @@ header.navbar .dropdown li:hover {
 
 header.navbar .dropdown li a{
     color: #000000;
-    padding-top: 14px;
+    text-align: left;
+
+    padding-top: 18px;
 }
 
 header.navbar .dropdown li a:hover{
     color: #FFFFFF;
+}
+
+header.navbar .dropdown li a i{
+    width: 16px;
+
+    margin-right: 6px;
 }
 
 header.navbar .dropdown li form button.logout{

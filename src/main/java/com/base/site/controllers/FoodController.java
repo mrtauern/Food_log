@@ -99,11 +99,20 @@ public class FoodController {
     @PostMapping("/saveFood")
     public String saveFood(@ModelAttribute("food") Food food, Model model, RedirectAttributes redAt) {
         log.info("  PostMapping saveFood is called ");
+
+        Long foodId = food.getId();
+
         foodService.save(food);
 
-        redAt.addFlashAttribute("showMessage", true);
-        redAt.addFlashAttribute("messageType", "success");
-        redAt.addFlashAttribute("message", food.getName() + " is successfully saved");
+        if(foodId == null) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", food.getName() + " is successfully created");
+        } else {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", food.getName() + " is successfully updated");
+        }
 
         return  REDIRECT+FOOD;
     }

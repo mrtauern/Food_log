@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -40,6 +41,9 @@ public class PrivateFoodController {
 
         model.addAttribute("pfood", privateFoodService.findAllByKeyword(keyword));
         model.addAttribute("keyword", keyword);
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("pageTitle", "Private food list");
+        model.addAttribute("selectedPage", "privateFood");
 
         return PRIVATEFOOD;
     }
@@ -49,16 +53,31 @@ public class PrivateFoodController {
         log.info("  createPrivateFood is called ");
 
         model.addAttribute("privateFood", new PrivateFood());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("pageTitle", "Create private food");
+        model.addAttribute("selectedPage", "privateFood");
 
         return CREATE_PRIVATEFOOD;
     }
 
     @PostMapping("/savePrivateFood")
-    public String savePrivateFood(@ModelAttribute("privateFood") PrivateFood privateFood) {
+    public String savePrivateFood(@ModelAttribute("privateFood") PrivateFood privateFood, RedirectAttributes redAt) {
         log.info("  PostMapping savePrivateFood is called ");
+
+        Long privateFoodId = privateFood.getId();
 
         privateFood.setFkUser(usersService.getLoggedInUser());
         privateFoodService.save(privateFood);
+
+        if(privateFoodId == null) {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "Private food is successfully created");
+        } else {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "Private food is successfully updated");
+        }
 
         return REDIRECT + PRIVATEFOOD;
     }
@@ -68,15 +87,22 @@ public class PrivateFoodController {
         log.info("  GetMapping updatePrivateFood is called ");
 
         model.addAttribute("privateFood", privateFoodService.findById(id));
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("pageTitle", "Edit private food");
+        model.addAttribute("selectedPage", "privateFood");
 
         return UPDATE_PRIVATEFOOD;
     }
 
     @GetMapping("/deletePrivateFood/{id}")
-    public String deletePrivateFood(@PathVariable(value = "id") Long id, Model model) {
+    public String deletePrivateFood(@PathVariable(value = "id") Long id, Model model, RedirectAttributes redAt) {
         log.info("  GetMapping deletePrivateFood by id is called ");
 
         this.privateFoodService.deleteById(id);
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Private food is successfully deleted");
 
         return REDIRECT + PRIVATEFOOD;
     }
