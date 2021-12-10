@@ -53,9 +53,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PrivateFoodController.class)
-@RunWith(SpringJUnit4ClassRunner.class)
+/*@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
-@WebAppConfiguration
+@WebAppConfiguration*/
 public class PrivateFoodControllerTest {
 
     Logger log = Logger.getLogger(PrivateFoodControllerTest.class.getName());
@@ -89,13 +89,13 @@ public class PrivateFoodControllerTest {
 
     //Set<DailyLog> dailyLogs;
 
-    @Before
+    /*@Before
     public void setup() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .addFilters(springSecurityFilterChain)
                 .build();
-    }
+    }*/
 
     @AfterEach
     void Teardown(){
@@ -108,8 +108,9 @@ public class PrivateFoodControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
     void PrivateFood() throws Exception {
-        ResultActions resultActions = mockMvc.perform(get("/privateFood").with(user("tove@mail.com")))
+        ResultActions resultActions = mockMvc.perform(get("/privateFood"))
                 .andExpect(status().isOk());
 
         MvcResult mvcResult = resultActions.andReturn();
@@ -117,8 +118,9 @@ public class PrivateFoodControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
     void createPrivateFood() throws Exception{
-        ResultActions resultActions = mockMvc.perform(get("/createPrivateFood").with(user("tove@mail.com")))
+        ResultActions resultActions = mockMvc.perform(get("/createPrivateFood"))
                 .andExpect(status().isOk());
 
         MvcResult mvcResult = resultActions.andReturn();
@@ -133,6 +135,7 @@ public class PrivateFoodControllerTest {
     }*/
 
     @Test
+    @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
     public void updatePrivateFood() throws Exception{
         Long id = Long.valueOf(1);
         Users user = new Users();
@@ -141,7 +144,7 @@ public class PrivateFoodControllerTest {
 
         Mockito.when(privateFoodService.findById(anyLong())).thenReturn(spyPrivateFood);
 
-        ResultActions resultActions = mockMvc.perform(get("/updatePrivateFood/{id}", id).with(user("tove@mail.com")))
+        ResultActions resultActions = mockMvc.perform(get("/updatePrivateFood/{id}", id))
                 .andExpect(status().isOk());
 
         MvcResult mvcResult = resultActions.andReturn();
@@ -165,13 +168,7 @@ public class PrivateFoodControllerTest {
         log.info("CSRF: "+csrfToken2);*/
 
         ResultActions resultActions = mockMvc.perform(post("/savePrivateFood")
-                .param("name", privateFood.getName())
-                .param("protein", ""+privateFood.getProtein())
-                .param("carbohydrates", ""+privateFood.getCarbohydrates())
-                .param("fat", ""+privateFood.getFat())
-                .param("energy_kilojoule", ""+privateFood.getEnergy_kilojoule())
-                .param("energy_kcal", ""+privateFood.getEnergy_kcal())
-                .param("fkUser.id", ""+privateFood.getFkUser().getId())
+                .flashAttr("privateFood", privateFood)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection());
 

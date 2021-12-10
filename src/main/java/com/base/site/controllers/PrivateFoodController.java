@@ -66,14 +66,20 @@ public class PrivateFoodController {
 
         Long privateFoodId = privateFood.getId();
 
+        log.info(""+privateFood.getId());
+        log.info(privateFood.getName());
+        log.info(""+privateFood.getEnergy_kilojoule());
+
         privateFood.setFkUser(usersService.getLoggedInUser());
         privateFoodService.save(privateFood);
 
         if(privateFoodId == null) {
+            log.info("Create private food");
             redAt.addFlashAttribute("showMessage", true);
             redAt.addFlashAttribute("messageType", "success");
             redAt.addFlashAttribute("message", "Private food is successfully created");
         } else {
+            log.info("Update private food");
             redAt.addFlashAttribute("showMessage", true);
             redAt.addFlashAttribute("messageType", "success");
             redAt.addFlashAttribute("message", "Private food is successfully updated");
