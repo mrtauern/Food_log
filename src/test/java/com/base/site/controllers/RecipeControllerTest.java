@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -130,11 +131,19 @@ class RecipeControllerTest  {
     }
 
     @Test
-    void recipeInfo() {
+    void recipeInfo() throws Exception {
+
+        Mockito.when(recipeService.findRecipeById(anyLong())).thenReturn(Mockito.mock(Recipe.class));
+        mockMvc.perform(get("/recipeInfo/1").with(user("user@user.dk")))
+            .andExpect(status().isOk());
     }
 
     @Test
-    void editRecipe() {
+    void editRecipe() throws Exception {
+
+        Mockito.when(recipeService.findRecipeById(anyLong())).thenReturn(Mockito.mock(Recipe.class));
+        mockMvc.perform(get("/editRecipe/1").with(user("user@user.dk")))
+            .andExpect(status().isOk());
     }
 
     @Test
@@ -142,11 +151,9 @@ class RecipeControllerTest  {
     }
 
     @Test
-    void removeStudentFromClass() {
-    }
-
-    @Test
-    void editFoodInRecipe() {
+    void removeFoodFromRecipe() throws Exception {
+        mockMvc.perform(get("/removeFoodFromRecipe/1/1").with(user("user@user.dk")))
+            .andExpect(status().is3xxRedirection());
     }
 
     @Test
@@ -154,7 +161,9 @@ class RecipeControllerTest  {
     }
 
     @Test
-    void createRecipe() {
+    void createRecipe() throws Exception {
+        mockMvc.perform(get("/createRecipe").with(user("user@user.dk")))
+            .andExpect(status().isOk());
     }
 
     @Test
@@ -162,7 +171,9 @@ class RecipeControllerTest  {
     }
 
     @Test
-    void addFoodToRecipe() {
+    void addFoodToRecipe() throws Exception {
+        mockMvc.perform(get("/addFoodToRecipe/1").with(user("user@user.dk")))
+            .andExpect(status().isOk());
     }
 
     @Test
@@ -170,10 +181,18 @@ class RecipeControllerTest  {
     }
 
     @Test
-    void archiveRecipe() {
+    void archiveRecipe() throws Exception {
+
+        Mockito.when(usersService.getLoggedInUser()).thenReturn(Mockito.mock(Users.class));
+
+        mockMvc.perform(get("/archiveRecipe/true/1").with(user("user@user.dk")))
+            .andExpect(status().is3xxRedirection());
     }
 
     @Test
-    void showRecipeArchive() {
+    void showRecipeArchive() throws Exception {
+
+        mockMvc.perform(get("/showRecipeArchive").with(user("user@user.dk")))
+            .andExpect(status().isOk());
     }
 }

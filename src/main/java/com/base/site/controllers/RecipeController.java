@@ -105,7 +105,7 @@ public class RecipeController {
     }
 
     @GetMapping("removeFoodFromRecipe/{recipeId}/{id}")
-    public String removeStudentFromClass(@PathVariable("id")long id,@PathVariable("recipeId")long recipeId, RedirectAttributes redAt) {
+    public String removeFoodFromRecipe(@PathVariable("id")long id, @PathVariable("recipeId")long recipeId, RedirectAttributes redAt) {
         log.info("removeFoodFromRecipe getmapping called with RecipeFoodID = :: " + id);
         recipeFoodService.deleteById(id);
 
@@ -115,7 +115,7 @@ public class RecipeController {
 
         return REDIRECT + EDITRECIPE+"/"+ recipeId;
     }
-
+/*
     @GetMapping("/editFoodInRecipe/{recipeId}/{recipeFoodId}")
     public String editFoodInRecipe(@PathVariable("recipeId")long recipeId,@PathVariable("recipeFoodId")long recipeFoodId, Recipe recipe, Model model) {
         log.info("editFoodInRecipe Getmapping is called with recipeId: "+recipeId);
@@ -126,7 +126,7 @@ public class RecipeController {
 
 
         return EDIT_FOOD_IN_RECIPE;
-    }
+    }*/
 
     @PostMapping("/saveFoodInRecipe/{foodId}/{recipeId}")
     public String saveFoodInRecipe(@PathVariable("foodId")long foodId, @PathVariable("recipeId")long recipeId, RecipeFood recipeFood, RedirectAttributes redAt) {
@@ -231,21 +231,8 @@ public class RecipeController {
     public String archiveRecipe(@PathVariable("id")long id, @PathVariable("status")boolean status, RedirectAttributes redAt) {
         log.info("Archive recipe getmapping called with id:"+id);
 
-        Recipe recipe = recipeService.findById(id);
-        if (recipe.getFkUser().getId() == usersService.getLoggedInUser().getId()) {
-            recipe.setArchived(status);
-            recipeService.save(recipe);
+        redAt = recipeService.setArchivedAndGetAttributes(redAt, usersService.getLoggedInUser().getId(), id, status);
 
-            if(status == true){
-                redAt.addFlashAttribute("showMessage", true);
-                redAt.addFlashAttribute("messageType", "success");
-                redAt.addFlashAttribute("message", "Recipe is successfully archived");
-            } else {
-                redAt.addFlashAttribute("showMessage", true);
-                redAt.addFlashAttribute("messageType", "success");
-                redAt.addFlashAttribute("message", "Recipe is successfully restored");
-            }
-        }
         return REDIRECT+RECIPES;
 
     }
