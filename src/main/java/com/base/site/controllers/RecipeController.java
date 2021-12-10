@@ -52,29 +52,11 @@ public class RecipeController {
     public String recipes(Model model) {
 
         log.info("Recipes getmapping called...");
-        List<Recipe> recipes = recipeService.findAllFkUser(usersService.getLoggedInUser());
 
-        if(recipes.size() > 0) {
-            /*
-            for (Recipe recipe: recipes) {
-                log.info("Recipe name: "+recipe.getName()+" Total weight: "+recipe.getTotal_weight());
-                for (RecipeFood recipeFood: recipe.getAmounts()) {
-                    log.info("Amount: "+recipeFood.getAmount()+" foodname: "+recipeFood.getFood().getName());
-                }
-            }*/
-        }else {
-            log.info("no recipes found for user ");
-            Recipe noRecipe = new Recipe();
-            noRecipe.setName("You have no recipe's, you can create one by clicking the create recipe button.");
-            noRecipe.setTotal_weight(0);
-            recipes.add(noRecipe);
-        }
-
-        model.addAttribute("recipes", recipes);
+        model.addAttribute("recipes", recipeService.getRecipesForUser(usersService.getLoggedInUser()));
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
         model.addAttribute("pageTitle", "Recipe list");
         model.addAttribute("selectedPage", "recipe");
-
 
         return RECIPES;
     }

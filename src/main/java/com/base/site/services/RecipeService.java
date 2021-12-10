@@ -24,5 +24,6 @@ public interface RecipeService {
 
     Recipe findRecipeById(long id);
 
+    List<Recipe> getRecipesForUser(Users loggedInUser);
 }
 

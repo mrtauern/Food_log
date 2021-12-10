@@ -14,33 +14,33 @@
         <h2>Edit user</h2>
 
         <form method="post" th:action="@{/editUser}" th:object="${users}">
-            <input type="hidden" th:field="${users?.id}" id="id" th:required="required">
+            <input type="hidden" th:field="*{id}" id="id" th:required="required">
 
-            <input type="hidden" th:field="${users?.accountNonLocked}" id="accountNonLocked" th:required="required">
+            <input type="hidden" th:field="*{accountNonLocked}" id="accountNonLocked" th:required="required">
 
             <label for="firstname">Firstname</label>
-            <input type="text" th:field="${users?.firstname}" id="firstname" th:required="required">
+            <input type="text" th:field="*{firstname}" id="firstname" th:required="required">
 
             <label for="lastname">Lastname</label>
-            <input type="text" th:field="${users?.lastname}" id="lastname" th:required="required">
+            <input type="text" th:field="*{lastname}" id="lastname" th:required="required">
 
             <label for="username">Email</label>
-            <input type="email" th:field="${users?.username}" id="username" th:required="required">
+            <input type="email" th:field="*{username}" id="username" th:required="required">
 
             <!--<label for="password">Password</label>
             <input type="password" th:field="password" id="password" th:required="required">-->
 
             <label for="birthday">Birthday</label>
-            <input type="date" th:field="${users?.sBirthday}" id="birthday" th:required="required">
+            <input type="date" th:field="*{sBirthday}" id="birthday" th:required="required">
 
             <label for="startWeight">Start weight</label>
-            <input type="number" th:field="${users?.startWeight}" id="startWeight" th:required="required">
+            <input type="number" th:field="*{startWeight}" id="startWeight" th:required="required">
 
             <label for="goalWeight">Goal weight</label>
-            <input type="number" th:field="${users?.goalWeight}" id="goalWeight" th:required="required">
+            <input type="number" th:field="*{goalWeight}" id="goalWeight" th:required="required">
 
             <label for="height">Height (cm)</label>
-            <input type="number" th:field="${users?.height}" id="height" th:required="required">
+            <input type="number" th:field="*{.height}" id="height" th:required="required">
 
             <label for="roles">Role</label>
             <select th:name="roles" id="roles">
