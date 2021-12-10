@@ -62,26 +62,9 @@ public class FoodController {
     public String findPaginatedFood(Model model, @PathVariable(value = "pageNo")int pageNo,
                                 @RequestParam("sortField")String sortField,
                                 @RequestParam("sortDir")String sortDir,
-                                @Param("keyword") String keyword
-                                ){
-        int pageSize = 15;
+                                @Param("keyword") String keyword){
 
-        Page<Food> page = foodService.findPaginatedFood(pageNo,pageSize, sortField, sortDir, keyword);
-        List<Food> listFood = page.getContent();
-        List<Food> foodlistSearched = foodService.findAllByKeyword(keyword);
-
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalFood", page.getTotalElements());
-
-        model.addAttribute("listFood", listFood);
-
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-
-        model.addAttribute("foodlistSearched", foodlistSearched);
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model = foodService.getPaginatedModelAttributes(model, pageNo, sortField, sortDir, keyword);
 
         return FOOD;
     }
@@ -120,8 +103,8 @@ public class FoodController {
     @GetMapping("/updateFood/{id}")
     public String updateFood(@PathVariable(value = "id") Long id, Model model) {
         log.info("  GetMapping updateFood is called ");
-        Food food = foodService.findById(id);
-        model.addAttribute("food", food);
+
+        model.addAttribute("food", foodService.findById(id));
 
         return UPDATE_FOOD;
     }
@@ -156,31 +139,8 @@ public class FoodController {
     public String findPaginatedAddFood(Model model, @PathVariable(value = "pageNo")int pageNo,
                                     @RequestParam("sortField")String sortField,
                                     @RequestParam("sortDir")String sortDir,
-                                    @Param("keyword") String keyword
-    ){
-        int pageSize = 10;
-
-        Page<Food> page = foodService.findPaginatedFood(pageNo,pageSize, sortField, sortDir, keyword);
-        Page<PrivateFood> privateFoodPage = privateFoodService.findPaginatedAddFood(pageNo,pageSize, sortField, sortDir, keyword);
-        List<Food> listFood = page.getContent();
-        List<PrivateFood> listPrivateFood = privateFoodPage.getContent();
-        List<Food> foodlistSearched = foodService.findAllByKeyword(keyword);
-        List<PrivateFood> privateFoodlistSearched = privateFoodService.findAllByKeyword(keyword);
-
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalFood", page.getTotalElements());
-
-        model.addAttribute("listFood", listFood);
-        model.addAttribute("listPrivateFood", listPrivateFood);
-
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-
-        model.addAttribute("foodlistSearched", foodlistSearched);
-        model.addAttribute("privateFoodlistSearched", privateFoodlistSearched);
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+                                    @Param("keyword") String keyword){
+        model = foodService.getPaginatedAddFoodModelAttributes(model, pageNo, sortField, sortDir, keyword);
 
         return ADD_FOOD_TO_DAILYLOG;
     }

@@ -2,6 +2,7 @@ package com.base.site.services;
 
 import com.base.site.models.DailyLog;
 import com.base.site.models.Food;
+import com.base.site.models.PrivateFood;
 import com.base.site.repositories.FoodRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,10 @@ public class FoodServiceImpl implements FoodService {
 
     @Autowired
     FoodRepo foodRepo;
+    @Autowired
+    UsersService usersService;
+    @Autowired
+    PrivateFoodService privateFoodService;
 
     @Override
     public List<Food> findAll() {
@@ -82,6 +89,62 @@ public class FoodServiceImpl implements FoodService {
         }
         return this.foodRepo.findAll(pageable);
     }
+
+
+    @Override
+    public Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword) {
+        int pageSize = 15;
+
+        Page<Food> page = findPaginatedFood(pageNo,pageSize, sortField, sortDir, keyword);
+        List<Food> listFood = page.getContent();
+        List<Food> foodlistSearched =findAllByKeyword(keyword);
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalFood", page.getTotalElements());
+
+        model.addAttribute("listFood", listFood);
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+        model.addAttribute("foodlistSearched", foodlistSearched);
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+
+        return model;
+    }
+
+    @Override
+    public Model getPaginatedAddFoodModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword) {
+
+        int pageSize = 10;
+
+        Page<Food> page = findPaginatedFood(pageNo,pageSize, sortField, sortDir, keyword);
+        Page<PrivateFood> privateFoodPage = privateFoodService.findPaginatedAddFood(pageNo,pageSize, sortField, sortDir, keyword);
+        List<Food> listFood = page.getContent();
+        List<PrivateFood> listPrivateFood = privateFoodPage.getContent();
+        List<Food> foodlistSearched = findAllByKeyword(keyword);
+        List<PrivateFood> privateFoodlistSearched = privateFoodService.findAllByKeyword(keyword);
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalFood", page.getTotalElements());
+
+        model.addAttribute("listFood", listFood);
+        model.addAttribute("listPrivateFood", listPrivateFood);
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+        model.addAttribute("foodlistSearched", foodlistSearched);
+        model.addAttribute("privateFoodlistSearched", privateFoodlistSearched);
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+
+        return model;
+    }
+
 
 }
 
