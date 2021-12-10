@@ -47,4 +47,6 @@ public interface UsersService {
     RedirectAttributes generateUserAndSave(Users user, String userType, RedirectAttributes redAt) throws MessagingException, IOException;
 
     Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword);
+
+    Model getEditModels(Model model);
 }

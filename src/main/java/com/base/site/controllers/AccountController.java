@@ -202,7 +202,6 @@ public class AccountController {
     }
 
     @PostMapping("/createUser")
-
     public String createUser(@ModelAttribute("users") Users user, @RequestParam(value = "user_type") String userType, RedirectAttributes redAt){
         log.info("createUser post called");
 
@@ -223,11 +222,9 @@ public class AccountController {
         log.info("editUser get called");
 
         if(usersService.getLoggedInUser().getId() != id) {
+            model.addAttribute("users",usersService.findUserByIdAndSetBdayString(id));
+            model = usersService.getEditModels(model);
 
-            model.addAttribute("users", usersService.findUserByIdAndSetBdayString(id));
-            model.addAttribute("pageTitle", "Edit user");
-            model.addAttribute("selectedPage", "user");
-            model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
             return EDIT_USER;
 
