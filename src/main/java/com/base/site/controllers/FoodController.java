@@ -103,8 +103,8 @@ public class FoodController {
     @GetMapping("/updateFood/{id}")
     public String updateFood(@PathVariable(value = "id") Long id, Model model) {
         log.info("  GetMapping updateFood is called ");
-        Food food = foodService.findById(id);
-        model.addAttribute("food", food);
+
+        model.addAttribute("food", foodService.findById(id));
 
         return UPDATE_FOOD;
     }
