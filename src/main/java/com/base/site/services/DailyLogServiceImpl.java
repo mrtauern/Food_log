@@ -229,7 +229,36 @@ public class DailyLogServiceImpl implements DailyLogService {
         return model;
     }
 
+    @Override
+    public Model getWeightGraphModels(Model model) {
+        Users loggedInUser = usersService.getLoggedInUser();
 
+        List<DailyLog> dailyLogs = findAll();
+
+        List<Double> weights = new ArrayList<>();
+        List<String> dates = new ArrayList<>();
+
+        for (DailyLog dailyLog: dailyLogs) {
+            if(dailyLog.getFkUser().getId() == loggedInUser.getId() && dailyLog.getFkLogType().getType().equals("Weight")){
+                //X-axe
+                dates.add(dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+                //Y-axe
+                weights.add(dailyLog.getAmount());
+            }
+        }
+
+        for(String date: dates){
+            log.info(date);
+        }
+
+        model.addAttribute("pageTitle", "Weight graph");
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("weights", weights);
+        model.addAttribute("dates", dates);
+        model.addAttribute("goal", usersService.getLoggedInUser().getGoalWeight());
+        return model;
+    }
 
 
 }

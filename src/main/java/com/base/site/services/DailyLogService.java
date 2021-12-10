@@ -22,4 +22,6 @@ public interface DailyLogService {
 
     DailyLogWrapper getLogs(Users loggedInUser, LocalDate date);
     Model getDailyLogModels(Users loggedInUser, String dateString, Model model, String keyword);
+
+    Model getWeightGraphModels(Model model);
 }
