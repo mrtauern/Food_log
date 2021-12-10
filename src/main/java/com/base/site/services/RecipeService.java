@@ -1,11 +1,10 @@
 package com.base.site.services;
 
 import com.base.site.models.Recipe;
-import com.base.site.models.RecipeFood;
 import com.base.site.models.Users;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service("RecipeService")
@@ -25,5 +24,7 @@ public interface RecipeService {
     Recipe findRecipeById(long id);
 
     List<Recipe> getRecipesForUser(Users loggedInUser);
+
+    RedirectAttributes setArchivedAndGetAttributes(RedirectAttributes redAt, Long userId, Long id, boolean status);
 }
 

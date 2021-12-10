@@ -1,14 +1,12 @@
 package com.base.site.services;
 
 import com.base.site.models.Recipe;
-import com.base.site.models.RecipeFood;
 import com.base.site.models.Users;
 import com.base.site.repositories.RecipeRepository;
-import com.base.site.repositories.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -73,6 +71,27 @@ public class RecipeServiceImpl implements RecipeService{
             recipes.add(noRecipe);
         }
         return recipes;
+    }
+
+    @Override
+    public RedirectAttributes setArchivedAndGetAttributes(RedirectAttributes redAt, Long userId, Long id, boolean status) {
+        log.info("ID:: "+id);
+        Recipe recipe = findById(id);
+        if (recipe.getFkUser().getId() == userId) {
+            recipe.setArchived(status);
+            save(recipe);
+
+            if(status == true){
+                redAt.addFlashAttribute("showMessage", true);
+                redAt.addFlashAttribute("messageType", "success");
+                redAt.addFlashAttribute("message", "Recipe is successfully archived");
+            } else {
+                redAt.addFlashAttribute("showMessage", true);
+                redAt.addFlashAttribute("messageType", "success");
+                redAt.addFlashAttribute("message", "Recipe is successfully restored");
+            }
+        }
+        return redAt;
     }
 
 }
