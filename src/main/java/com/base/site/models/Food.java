@@ -51,4 +51,9 @@ public class Food {
 
     public Food(String nutrition, double protein, double carbohydrates, double fat, double energy_kilojoule, double energy_kcal) {
     }
+
+    public Food(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
