@@ -118,9 +118,6 @@ class AccountControllerTest {
         usersList.add(user);
         usersList.add(adminUser);
 
-
-
-
     }
 
     @AfterEach
