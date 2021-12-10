@@ -13,15 +13,15 @@
 
         <label for="WeightOption">Set weight loss/gain (weekly)</label>
         <select th:name="kcal_modifier" id="WeightOption">
-            <option value="-1000" th:selected="${user.kcal_modifier==-1000}">Loss 1kg</option>
-            <option value="-750" th:selected="${user.kcal_modifier==-750}">Loss 0.75kg</option>
-            <option value="-500" th:selected="${user.kcal_modifier==-500}">Loss 0.5kg</option>
-            <option value="-250" th:selected="${user.kcal_modifier==-250}">Loss 0.25kg</option>
-            <option value="0" th:selected="${user.kcal_modifier==0}">No loss/gain</option>
-            <option value="250" th:selected="${user.kcal_modifier==250}">Gain 0.25kg</option>
-            <option value="500" th:selected="${user.kcal_modifier==500}">Gain 0.5kg</option>
-            <option value="750" th:selected="${user.kcal_modifier==750}">Gain 0.75kg</option>
-            <option value="1000" th:selected="${user.kcal_modifier==1000}">Gain 1kg</option>
+            <option value="-1000" th:selected="${user?.kcal_modifier==-1000}">Loss 1kg</option>
+            <option value="-750" th:selected="${user?.kcal_modifier==-750}">Loss 0.75kg</option>
+            <option value="-500" th:selected="${user?.kcal_modifier==-500}">Loss 0.5kg</option>
+            <option value="-250" th:selected="${user?.kcal_modifier==-250}">Loss 0.25kg</option>
+            <option value="0" th:selected="${user?.kcal_modifier==0}">No loss/gain</option>
+            <option value="250" th:selected="${user?.kcal_modifier==250}">Gain 0.25kg</option>
+            <option value="500" th:selected="${user?.kcal_modifier==500}">Gain 0.5kg</option>
+            <option value="750" th:selected="${user?.kcal_modifier==750}">Gain 0.75kg</option>
+            <option value="1000" th:selected="${user?.kcal_modifier==1000}">Gain 1kg</option>
         </select>
 
         <div>
