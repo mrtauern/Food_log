@@ -59,4 +59,20 @@ public class RecipeServiceImpl implements RecipeService{
         return recipe;
     }
 
+    @Override
+    public List<Recipe> getRecipesForUser(Users loggedInUser) {
+        List<Recipe> recipes = findAllFkUser(loggedInUser);
+
+        if(recipes.size() > 0) {
+
+        }else {
+            log.info("no recipes found for user ");
+            Recipe noRecipe = new Recipe();
+            noRecipe.setName("You have no recipe's, you can create one by clicking the create recipe button.");
+            noRecipe.setTotal_weight(0);
+            recipes.add(noRecipe);
+        }
+        return recipes;
+    }
+
 }

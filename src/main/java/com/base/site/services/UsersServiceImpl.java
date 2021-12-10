@@ -308,4 +308,13 @@ public class UsersServiceImpl implements UsersService {
         return model;
     }
 
+    @Override
+    public Model getEditModels(Model model) {
+
+        model.addAttribute("pageTitle", "Edit user");
+        model.addAttribute("selectedPage", "user");
+        model.addAttribute("loggedInUser", getLoggedInUser());
+        return model;
+    }
+
 }

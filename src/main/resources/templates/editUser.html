@@ -44,11 +44,11 @@
 
             <label for="roles">Role</label>
             <select th:name="roles" id="roles">
-                <th:block th:if="${users.roles == 'USER'}">
+                <th:block th:if="${users?.roles == 'USER'}">
                     <option value="USER" selected>USER</option>
                     <option value="ADMIN">ADMIN</option>
                 </th:block>
-                <th:block th:if="${users.roles == 'ADMIN'}">
+                <th:block th:if="${users?.roles == 'ADMIN'}">
                     <option value="USER">USER</option>
                     <option value="ADMIN" selected>ADMIN</option>
                 </th:block>
