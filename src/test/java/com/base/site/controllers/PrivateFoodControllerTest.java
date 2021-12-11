@@ -5,6 +5,7 @@ import com.base.site.models.Users;
 import com.base.site.repositories.PrivateFoodRepo;
 import com.base.site.repositories.UsersRepo;
 import com.base.site.services.*;
+import org.hamcrest.BaseMatcher;
 import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -40,16 +41,16 @@ import javax.servlet.Filter;
 import java.util.logging.Logger;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PrivateFoodController.class)
@@ -81,7 +82,7 @@ public class PrivateFoodControllerTest {
     private UsersRepo usersRepo;
 
     @MockBean
-    PrivateFoodServiceImpl privateFoodService;
+    PrivateFoodService privateFoodService;
 
     @Mock
     PrivateFoodRepo mockedPrivateFoodRepo;
@@ -167,10 +168,24 @@ public class PrivateFoodControllerTest {
 
         log.info("CSRF: "+csrfToken2);*/
 
+        //You can also specify it with params instead of flashAttr...
+        /*.param("id", ""+privateFood.getId())
+        .param("name", privateFood.getName())
+        .param("protein", ""+privateFood.getProtein())
+        .param("carbohydrates", ""+privateFood.getCarbohydrates())
+        .param("fat", ""+privateFood.getFat())
+        .param("energy_kilojoule", ""+privateFood.getEnergy_kilojoule())
+        .param("energy_kcal", ""+privateFood.getEnergy_kcal())
+        .param("fkUser.id", ""+privateFood.getFkUser().getId())*/
+
         ResultActions resultActions = mockMvc.perform(post("/savePrivateFood")
                 .flashAttr("privateFood", privateFood)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection());
+
+        //assertEquals(privateFoodService.findAll().size(), 1);
+        //assertEquals(privateFoodService.findById(1L).getName(), "Bacon");
+
 
         MvcResult mvcResult = resultActions.andReturn();
         ModelAndView mv = mvcResult.getModelAndView();
