@@ -73,6 +73,11 @@ public class DailyLogServiceImpl implements DailyLogService {
                     kcalUsed += (int) ((dailyLog.getAmount() / 100) * dailyLog.getFood().getEnergy_kcal());
                 }
             }
+            for (DailyLog dailyLog : logList) {
+                if (dailyLog.getDatetime().equals(date) && user.getId() == dailyLog.getFkUser().getId() && dailyLog.getRecipe() != null) {
+                    kcalUsed += (int) ((dailyLog.getRecipe().getCalculateCaloriesInRecipe()));
+                }
+            }
         }
 
         return kcalUsed;
@@ -150,8 +155,9 @@ public class DailyLogServiceImpl implements DailyLogService {
                     dailyLogWrapper.addToDailyLogsExercises(dailyLog);
                 }else if(dailyLog.getFkLogType().getType().equals("Weight")) {
                     dailyLogWrapper.setWeight(dailyLog);
-                }
-            }
+                }else if(dailyLog.getFkLogType().getType().equals("Recipe")) {
+                    dailyLogWrapper.addToDailyLogsRecipes(dailyLog);
+            }}
         }
         dailyLogWrapper.setNutrition(nutrition);
         if(dailyLogWrapper.getWeight() == null) {
@@ -197,6 +203,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         model.addAttribute("miscellaneous", dailyLogWrapper.getDailyLogsMiscellaneous());
         //model.addAttribute("pfoods", dailyLogsPrivateFoods);
         model.addAttribute("exercises", dailyLogWrapper.getDailyLogsExercises());
+        model.addAttribute("recipes", dailyLogWrapper.getDailyLogsRecipes());
         model.addAttribute("keyword", keyword);
 
         // +/- Day

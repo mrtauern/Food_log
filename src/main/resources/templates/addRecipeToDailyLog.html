@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: styles">
+</head>
+<script type="text/javascript">
+    function clearSearch() {
+        window.location = "[[@{/addExerciseToDailyLog}]]";
+    }
+</script>
+<body>
+<header th:include="fragments/navbar_top :: header" class="navbar"></header>
+<div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
+
+<!--<form id="searchForm" th:action="@{/addExerciseToDailyLog}">
+    Filter: <input type="text" name="keyword" id="keyword" size="50" th:value="${keyword}" required />
+    &nbsp;
+    <input type="submit" value="Search" />
+    &nbsp;
+    <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+</form>-->
+
+<div id="content">
+    <div class="contentBox">
+
+        <h2>Add Recipe to daily log</h2>
+
+        <div class="actionBar">
+            <form th:action="@{/addRecipeToDailyLog}">
+                <input type="text" name="keyword" placeholder="Search For a Food Name" th:value="${keyword}" >
+                <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-arrow-right"></i></button>
+                <button type="button" d="btnClear" onclick="clearSearch()" class="btn btn-secondary mr-2 btn-sm"><i class="fas fa-sync-alt"></i></button>
+            </form>
+
+            <a href="/dailyLog" class="btn btn-outline-secondary mr-2 btn-sm">Cancel <i class="fas fa-times"></i></a>
+        </div>
+
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th>Recipe Name</th>
+                <th>Total weight</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="r : ${recipeList}">
+                <td><i class="fas fa-running"></i> <span th:text="${r.name}"></span></td>
+                <td><i class="fas fa-burn"></i> <span th:text="${r.total_weight}"></span></td>
+                <td class="actionButtons">
+<!--                    <a th:href="@{/createRecipeInDailyLog/{id}/{date}(id=${r.id},date=${date})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add</a>-->
+                    <form method="post" th:action="@{/saveRecipeInDailyLog/{recipeId}/{date}(date=${date}, recipeId=${r.id})}" th:object="${dailyLog}">
+<!--                        <input type="number" th:name="amount" id="amount" placeholder="amount (Gram)" th:required="required">-->
+                        <button type="submit" class="btn btn-outline-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<footer th:include="fragments/navbar_top :: footer"></footer>
+</body>
+</html>

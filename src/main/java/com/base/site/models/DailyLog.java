@@ -58,6 +58,10 @@ public class DailyLog {
     @Column(name = "current_weight")
     private Double currentWeight;
 
+    @ManyToOne
+    @JoinColumn(name = "fk_recipe_id")
+    private Recipe recipe;
+
     public DailyLog() {
         LocalDate ldt = LocalDate.now();
         datetime = ldt;
