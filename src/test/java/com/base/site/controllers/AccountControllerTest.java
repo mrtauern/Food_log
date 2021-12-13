@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.data.domain.PageRequest.of;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -279,6 +280,7 @@ class AccountControllerTest {
 
         Mockito.when(usersService.getLoggedInUser(session)).thenReturn(loggedInUser);
         Mockito.when(usersService.findUserByIdAndSetBdayString(1)).thenReturn(loggedInUser);
+        Mockito.when(usersService.findById(anyLong())).thenReturn(loggedInUser);
 
         ResultActions resultActions = mockMvc.perform(get("/editUserProfile/1").with(user("admin@admin.dk").roles("ADMIN")))
                 .andExpect(status().isOk());
