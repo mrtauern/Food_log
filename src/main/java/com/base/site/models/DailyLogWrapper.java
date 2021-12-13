@@ -21,8 +21,6 @@ public class DailyLogWrapper {
     List<DailyLog> dailyLogsRecipes = new ArrayList<>();
 
     DailyLog weight;
-    //DailyLog recipe;
-
     Food nutrition;
 
     public DailyLogWrapper(List<DailyLog> dailyLogs) {

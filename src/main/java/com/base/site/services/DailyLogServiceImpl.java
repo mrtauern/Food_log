@@ -155,9 +155,11 @@ public class DailyLogServiceImpl implements DailyLogService {
                     dailyLogWrapper.addToDailyLogsExercises(dailyLog);
                 }else if(dailyLog.getFkLogType().getType().equals("Weight")) {
                     dailyLogWrapper.setWeight(dailyLog);
-                }else if(dailyLog.getFkLogType().getType().equals("Recipe")) {
+                }else if(dailyLog.getRecipe() != null) {
                     dailyLogWrapper.addToDailyLogsRecipes(dailyLog);
-            }}
+                }
+            }
+
         }
         dailyLogWrapper.setNutrition(nutrition);
         if(dailyLogWrapper.getWeight() == null) {

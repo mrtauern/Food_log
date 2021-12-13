@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragments/head :: styles"></head>
+<body>
+<header th:include="fragments/navbar_top :: header" class="navbar"></header>
+
+<div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
+
+
+<div id="content">
+  <div class="formBox">
+    <h2>Add Recipe to daily log</h2>
+
+      <form method="post" th:action="@{/saveRecipeInDailyLog/{date}(date=${date})}" th:object="${dailyLog}">
+
+      <input type="hidden" th:field="*{id}" />
+      <input type="hidden" name="userId" th:field="*{fkUser.id}" th:required="required"/>
+
+      <label  class="col-form-label">Grams:</label>
+      <input type="text" th:field = "*{amount}" placeholder=" Amount " th:required="required">
+
+      <label  class="col-form-label">Type:</label>
+      <select  id="logType" name="logType" th:field="*{fkLogType}" th:required="required">
+        <option th:value="${''}" th:disabled="disabled" th:selected="selected" th:utext="${'-Select type-'}"/>
+        <option th:each="logType : ${logType}" th:value="${logType.id}" th:utext="${logType.type}"/>
+      </select>
+
+      <div>
+        <button type="button" class="btn btn-outline-dark mr-2 btn-sm" onclick="location.href='/dailyLog';">Cancel <i class="fas fa-times"></i></button>
+        <button type="submit" class="btn btn-success mr-2 btn-sm">Add Recipe <i class="fas fa-plus-circle"></i></button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<footer th:include="fragments/navbar_top :: footer"></footer>
+</body>
+</html>

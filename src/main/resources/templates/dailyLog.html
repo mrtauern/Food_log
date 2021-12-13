@@ -83,7 +83,16 @@
                             <a th:href="@{/deleteDailyLog/{id}/{date} (id=${breakfast.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${breakfast?.privateFood?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                         </td>
                     </th:block>
-
+                </tr>
+                <tr th:each="recipe : ${recipes}">
+                    <th:block th:if="${recipe?.recipe?.name !=null}">
+                        <td><i class="fas fa-drumstick-bite"></i> <span th:text="${recipe?.recipe?.name}"></span></td>
+                        <td><i class="fas fa-balance-scale-left"></i> <span th:text="${recipe?.amount}"></span></td>
+                        <td class="actionButtons">
+                            <a th:href="@{/updateDailyLog/{id}/{date} (id=${recipe.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                            <a th:href="@{/deleteDailyLog/{id}/{date} (id=${recipe.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${breakfast?.privateFood?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
+                        </td>
+                    </th:block>
                 </tr>
                 </tbody>
             </table>
@@ -172,15 +181,15 @@
                         <td><i class="fas fa-balance-scale-left"></i> <span th:text="${miscellanea?.amount}"></span></td>
                         <td class="actionButtons">
                             <a th:href="@{/updateDailyLog/food/{id}/{date}(id=${miscellanea.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                            <a th:href="@{/deleteDailyLog/food/{id}/{date}(id=${miscellanea.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${miscellanea?.food?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <a th:href="@{/deleteDailyLog/{id}/{date}(id=${miscellanea.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${miscellanea?.food?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                         </td>
                     </th:block>
                     <th:block th:if="${miscellanea?.privateFood?.name!=null}">
                         <td><i class="fas fa-drumstick-bite"></i> <span th:text="${miscellanea?.privateFood?.name}"></span></td>
-                        <td><i class="fas fa-balance-scale-left"></i> <span th:text="${lunch?.amount}"></span></td>
+                        <td><i class="fas fa-balance-scale-left"></i> <span th:text="${miscellanea?.amount}"></span></td>
                         <td class="actionButtons">
                             <a th:href="@{/updateDailyLog/pfood/{id}/{date}(id=${miscellanea.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                            <a th:href="@{/deleteDailyLog/pfood/{id}/{date}(id=${miscellanea.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${miscellanea?.privateFood?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <a th:href="@{/deleteDailyLog/{id}/{date}(id=${miscellanea.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${miscellanea?.privateFood?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                         </td>
                     </th:block>
                 </tr>
