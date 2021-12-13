@@ -48,5 +48,5 @@ public interface UsersService {
 
     Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword);
 
-    Model getEditModels(Model model);
+    //Model getEditModels(Model model);
 }
