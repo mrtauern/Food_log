@@ -56,6 +56,11 @@ class RecipeControllerTest  {
     private AccountController accountController;
     @MockBean
     private UsersRepo usersRepo;
+    @MockBean
+    LogTypeServiceImpl logTypeService;
+    @MockBean
+    DailyLogServiceImpl dailyLogService;
+
 
 
     @BeforeEach
@@ -113,15 +118,22 @@ class RecipeControllerTest  {
 
     }
 
+
+
     @Test
     @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"USER"})
     void recipes() throws Exception {
+
         List<Recipe> recipes = recipesList(userSetup(new Users()));
         List<Recipe> mockRecipes = Mockito.spy(recipes);
         mockRecipes = recipesList(new Users());
 
+
+
         Mockito.when(recipeService.findAllFkUser(usersService.getLoggedInUser())).thenReturn(mockRecipes);
         Mockito.when(recipeService.getRecipesForUser(usersService.getLoggedInUser())).thenReturn(mockRecipes);
+
+
 
         ResultActions resultActions = mockMvc.perform(get("/recipes").with(user("user@user.dk")))
                 .andExpect(status().isOk());
@@ -195,4 +207,6 @@ class RecipeControllerTest  {
         mockMvc.perform(get("/showRecipeArchive").with(user("user@user.dk")))
             .andExpect(status().isOk());
     }
+
+
 }
