@@ -181,7 +181,7 @@ public class UsersServiceImpl implements UsersService {
     public void setAndSaveUserData(Users user) {
         user.setBirthday(getBirthdayFromString(user.getSBirthday()));
         Users userData = findById(user.getId());
-        user.setUserType(userData.getUserType());
+        //user.setUserType(userData.getUserType());
         user.setPassword(userData.getPassword());
         user.setRegisterDate(userData.getRegisterDate());
         user.setKcal_modifier(userData.getKcal_modifier());
@@ -241,10 +241,11 @@ public class UsersServiceImpl implements UsersService {
 
         return "redirect:/password-reset";
     }
-    
-   public void saveEditUserData(Users user) {
+
+    @Override
+    public void saveEditUserData(Users user) {
         Users userData = findById(user.getId());
-        user.setUserType(userData.getUserType());
+        //user.setUserType(userData.getUserType());
         user.setPassword(userData.getPassword());
         user.setRegisterDate(userData.getRegisterDate());
         user.setKcal_modifier(userData.getKcal_modifier());
@@ -308,13 +309,13 @@ public class UsersServiceImpl implements UsersService {
         return model;
     }
 
-    @Override
+    /*@Override
     public Model getEditModels(Model model) {
 
         model.addAttribute("pageTitle", "Edit user");
         model.addAttribute("selectedPage", "user");
         model.addAttribute("loggedInUser", getLoggedInUser());
         return model;
-    }
+    }*/
 
 }

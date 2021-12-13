@@ -42,15 +42,22 @@
             <label for="height">Height (cm)</label>
             <input type="number" th:field="*{height}" id="height" th:required="required">
 
+            <label for="user_type">Gender</label>
+            <select th:name="user_type" id="user_type" th:required="required">
+                <!--<option value="" selected disabled>-Select gender-</option>-->
+                <option th:value="User_male" th:selected="${userType} == 'User_male'">Male</option>
+                <option th:value="User_female" th:selected="${userType} == 'User_female'">Female</option>
+            </select>
+
             <label for="roles">Role</label>
-            <select th:name="roles" id="roles">
+            <select th:name="roles" id="roles" th:required="required">
                 <th:block th:if="${users?.roles == 'USER'}">
-                    <option value="USER" selected>USER</option>
-                    <option value="ADMIN">ADMIN</option>
+                    <option th:value="USER" selected>USER</option>
+                    <option th:value="ADMIN">ADMIN</option>
                 </th:block>
                 <th:block th:if="${users?.roles == 'ADMIN'}">
-                    <option value="USER">USER</option>
-                    <option value="ADMIN" selected>ADMIN</option>
+                    <option th:value="USER">USER</option>
+                    <option th:value="ADMIN" selected>ADMIN</option>
                 </th:block>
             </select>
 
