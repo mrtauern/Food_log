@@ -21,6 +21,8 @@ import java.util.List;
 @Entity
 @Table(name = "daily_log")
 public class DailyLog {
+    public DailyLog(long id, long fkUser, long recipe){
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

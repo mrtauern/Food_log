@@ -1,8 +1,6 @@
 package com.base.site.controllers;
 
-import com.base.site.models.Recipe;
-import com.base.site.models.UserType;
-import com.base.site.models.Users;
+import com.base.site.models.*;
 import com.base.site.repositories.UsersRepo;
 import com.base.site.services.*;
 import org.junit.jupiter.api.AfterEach;
@@ -31,8 +29,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -208,5 +208,32 @@ class RecipeControllerTest  {
             .andExpect(status().isOk());
     }
 
+    @Test
+    void addRecipeToDailyLog() throws Exception {
+
+        mockMvc.perform(get("/addRecipeToDailyLog").with(user("user@user.dk")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
+    public void saveRecipeInDailyLog() throws Exception{
+        Users user = new Users();
+        user.setId(1L);
+
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        DailyLog dailyLog = new DailyLog(1, 1, 1);
+        DailyLog spyDailyLog = Mockito.spy(dailyLog);
+
+        ResultActions resultActions = mockMvc.perform(post("/saveRecipeInDailyLog/1")
+                        .flashAttr("dailyLog", dailyLog)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
+    }
 
 }
