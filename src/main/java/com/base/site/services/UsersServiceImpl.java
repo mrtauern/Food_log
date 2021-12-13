@@ -155,10 +155,28 @@ public class UsersServiceImpl implements UsersService {
     public Users getLoggedInUser(HttpSession session) {
 
         Users loggedInUser = new Users();
+        Users user = new Users();
         if(session.getAttribute("loggedInUser") == null) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            loggedInUser = usersRepo.findUsersByUsername(auth.getName());
-            //loggedInUser.setPassword("");
+            user = usersRepo.findUsersByUsername(auth.getName());
+
+            loggedInUser.setUserType(user.getUserType());
+            loggedInUser.setId(user.getId());
+            loggedInUser.setRoles(user.getRoles());
+            loggedInUser.setBirthday(user.getBirthday());
+            loggedInUser.setAccountNonLocked(user.getAccountNonLocked());
+            loggedInUser.setKcal_modifier(user.getKcal_modifier());
+            loggedInUser.setFirstname(user.getFirstname());
+            loggedInUser.setLastname(user.getLastname());
+            loggedInUser.setGoalWeight(user.getGoalWeight());
+            loggedInUser.setHeight(user.getHeight());
+            loggedInUser.setStartWeight(user.getStartWeight());
+            loggedInUser.setRegisterDate(user.getRegisterDate());
+            loggedInUser.setDailyLogs(user.getDailyLogs());
+            loggedInUser.setPrivateFoods(user.getPrivateFoods());
+            loggedInUser.setRecipies(user.getRecipies());
+            loggedInUser.setBmi(user.getBmi());
+
             session.setAttribute("loggedInUser", loggedInUser);
         }
         if (session.getAttribute("loggedInUser") != null) {

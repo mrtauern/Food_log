@@ -180,7 +180,7 @@ public class DailyLogController {
         log.info("Postmappting saveWeightOption called in DailylogController"+user.getKcal_modifier());
 
         usersService.getLoggedInUser(session).setKcal_modifier(user.getKcal_modifier());
-        usersService.save(usersService.getLoggedInUser(session));
+        usersService.save(usersService.findById(usersService.getLoggedInUser(session).getId()));
 
         redAt.addFlashAttribute("showMessage", true);
         redAt.addFlashAttribute("messageType", "success");

@@ -112,8 +112,11 @@ public class AccountController {
         }
 
         if(usersService.getLoggedInUser(session).getRoles().equals("USER")) {
+            log.info("hello");
             return REDIRECT+DAILYLOG;
         } else if(usersService.getLoggedInUser(session).getRoles().equals("ADMIN")) {
+            log.info("hello2");
+
             return REDIRECT+DASHBOARD;
         }
 

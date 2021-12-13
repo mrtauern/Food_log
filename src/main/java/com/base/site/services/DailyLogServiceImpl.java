@@ -179,7 +179,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         List<String> dates = new ArrayList<>();
 
         for (DailyLog dailyLog: dailyLogs) {
-            if(dailyLog.getFkUser().getId() == loggedInUser.getId() && dailyLog.getFkLogType().getType().equals("Weight")){
+            if(dailyLog.getFkUser().getId().equals(loggedInUser.getId()) && dailyLog.getFkLogType().getType().equals("Weight")){
                 //X-axe
                 dates.add(dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
