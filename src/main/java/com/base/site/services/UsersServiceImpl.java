@@ -179,7 +179,7 @@ public class UsersServiceImpl implements UsersService {
 
             session.setAttribute("loggedInUser", loggedInUser);
         }
-        if (session.getAttribute("loggedInUser") != null) {
+        else if (session.getAttribute("loggedInUser") != null) {
             loggedInUser = (Users)session.getAttribute("loggedInUser");
         }
 
