@@ -89,8 +89,8 @@
                         <td><i class="fas fa-drumstick-bite"></i> <span th:text="${recipe?.recipe?.name}"></span></td>
                         <td><i class="fas fa-balance-scale-left"></i> <span th:text="${recipe?.amount}"></span></td>
                         <td class="actionButtons">
-                            <a th:href="@{/updateDailyLog/{id}/{date} (id=${recipe.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                            <a th:href="@{/deleteDailyLog/{id}/{date} (id=${recipe.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${breakfast?.privateFood?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
+                            <a th:href="@{/updateRecipeInDailyLog/{id}/{date} (id=${recipe.id}, date=${sSelectedDate})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+                            <a th:href="@{/deleteRecipeFromDailyLog/{id}/{date} (id=${recipe.id}, date=${sSelectedDate})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${breakfast?.privateFood?.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
                         </td>
                     </th:block>
                 </tr>

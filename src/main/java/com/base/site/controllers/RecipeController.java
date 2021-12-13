@@ -37,6 +37,8 @@ public class RecipeController {
 
     private final String ADD_RECIPE_TO_DAILYLOG = "addRecipeToDailyLog";
     private final String CREATE_RECIPE_IN_DAILYLOG = "createRecipeInDailyLog";
+    private final String UPDATE_RECIPE_IN_DAILYLOG = "updateRecipeInDailyLog";
+    //private final String CREATE_RECIPE_IN_DAILYLOG = "createRecipeInDailyLog";
     private final String DAILYLOG = "dailyLog";
 
     @Autowired
@@ -336,33 +338,35 @@ public class RecipeController {
 
     }
 
-    /*
-    @GetMapping({"/updateExerciseInDailyLog/{id}", "/updateExerciseInDailyLog/{id}/{date}"})
-    public String updateExerciseInDailyLog(@PathVariable(value = "id") Long id, Model model,
+
+    @GetMapping({"/updateRecipeInDailyLog/{id}", "/updateRecipeInDailyLog/{id}/{date}"})
+    public String updateRecipeInDailyLog(@PathVariable(value = "id") Long id, Model model,
                                            @PathVariable(required = false, value = "date") String dateString) {
-        log.info("  GetMapping updateExerciseInDailyLog is called ");
+        log.info("  GetMapping updateRecipeInDailyLog is called ");
         DailyLog dailyLog= dailyLogService.findById(id);
         model.addAttribute("date", dateString);
+
+        model.addAttribute("logType", logTypeService.findAll());
 
         model.addAttribute("dailyLog", dailyLog);
         model.addAttribute("pageTitle", "Edit exercise in daily log");
         model.addAttribute("selectedPage", "dailyLog");
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
-        return UPDATE_EXERCISE_IN_DAILYLOG;
+        return UPDATE_RECIPE_IN_DAILYLOG;
     }
 
-    @PostMapping({"/updateExerciseInDailyLog", "/updateExerciseInDailyLog/{date}"})
-    public String updateExerciseInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,
+    @PostMapping({"/updateRecipeInDailyLog", "/updateRecipeInDailyLog/{date}"})
+    public String updateRecipeInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,
                                            @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
-        log.info("  Post Mapping updateExerciseInDailyLog is called ");
+        log.info("  Post Mapping updateRecipeInDailyLog is called ");
 
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
 
         dailyLog.setDatetime(date);
 
         dailyLog.setFkUser(usersService.getLoggedInUser());
-        dailyLog.setFkLogType(logTypeService.findByType("Exercise"));
+        //dailyLog.setFkLogType(logTypeService.findByType("Exercise"));
 
         dailyLogService.save(dailyLog);
 
@@ -374,21 +378,19 @@ public class RecipeController {
 
     }
 
-    @GetMapping({"/deleteExerciseFromDailyLog/{id}", "/deleteExerciseFromDailyLog/{id}/{date}"})
-    public String deleteExerciseFromDailyLog(@PathVariable(value = "id") Long id,
+    @GetMapping({"/deleteRecipeFromDailyLog/{id}", "/deleteRecipeFromDailyLog/{id}/{date}"})
+    public String deleteRecipeFromDailyLog(@PathVariable(value = "id") Long id,
                                              @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
-        log.info("  GetMapping deleteEExerciseFromDailyLog is called ");
+        log.info("  GetMapping deleteRecipeFromDailyLog is called ");
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
 
         this.dailyLogService.deleteById(id);
 
         redAt.addFlashAttribute("showMessage", true);
         redAt.addFlashAttribute("messageType", "success");
-        redAt.addFlashAttribute("message", "Exercise successfully deleted from daily log");
+        redAt.addFlashAttribute("message", "Recipe successfully deleted from daily log");
 
         return REDIRECT + DAILYLOG +"/"+date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
-
-     */
 
 }
