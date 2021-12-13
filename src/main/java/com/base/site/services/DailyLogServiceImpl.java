@@ -91,7 +91,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         DailyLogWrapper dailyLogWrapper = new DailyLogWrapper(findAll());
         Food nutrition = new Food("nutrition",0.0,0.0,0.0,0.0,0.0);
         for (DailyLog dailyLog: dailyLogWrapper.getDailyLogs()) {
-            if(dailyLog.getDatetime().equals(date) && loggedInUser.getId() == dailyLog.getFkUser().getId()) {
+            if(dailyLog.getDatetime().equals(date) && loggedInUser.getId().equals(dailyLog.getFkUser().getId())) {
 
                 String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                 dailyLog.setSDatetime(sDatetime);
@@ -100,9 +100,11 @@ public class DailyLogServiceImpl implements DailyLogService {
                     dailyLogWrapper.addToDailyLogsFoods(dailyLog);
                     String logType = dailyLog.getFkLogType().getType();
 
+
                     switch (logType){
                         case "Breakfast":
                             dailyLogWrapper.addToDailyLogsBreakfast(dailyLog);
+                            log.info("should add food");
                             if(dailyLog.getFood()!=null) {
                                 nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "food");
                             }
@@ -185,6 +187,7 @@ public class DailyLogServiceImpl implements DailyLogService {
                 weights.add(dailyLog.getAmount());
             }
         }
+        log.info("LoggedinUserID----------------"+loggedInUser.getId());
 
         model.addAttribute("today", today.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         model.addAttribute("sSelectedDate", date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
