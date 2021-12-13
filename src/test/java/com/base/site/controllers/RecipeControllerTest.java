@@ -65,6 +65,7 @@ class RecipeControllerTest  {
 
     @BeforeEach
     void setUp() {
+
         Users user = new Users();
         LocalDate date = LocalDate.parse("1992-01-22");
         user.setBirthday(date);
@@ -128,12 +129,8 @@ class RecipeControllerTest  {
         List<Recipe> mockRecipes = Mockito.spy(recipes);
         mockRecipes = recipesList(new Users());
 
-
-
         Mockito.when(recipeService.findAllFkUser(usersService.getLoggedInUser())).thenReturn(mockRecipes);
         Mockito.when(recipeService.getRecipesForUser(usersService.getLoggedInUser())).thenReturn(mockRecipes);
-
-
 
         ResultActions resultActions = mockMvc.perform(get("/recipes").with(user("user@user.dk")))
                 .andExpect(status().isOk());
@@ -178,9 +175,6 @@ class RecipeControllerTest  {
             .andExpect(status().isOk());
     }
 
-    @Test
-    void testCreateRecipe() {
-    }
 
     @Test
     void addFoodToRecipe() throws Exception {
@@ -227,7 +221,7 @@ class RecipeControllerTest  {
         DailyLog dailyLog = new DailyLog(1, 1, 1);
         DailyLog spyDailyLog = Mockito.spy(dailyLog);
 
-        ResultActions resultActions = mockMvc.perform(post("/saveRecipeInDailyLog/1")
+        ResultActions resultActions = mockMvc.perform(post("/saveRecipeInDailyLog/")
                         .flashAttr("dailyLog", dailyLog)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection());
@@ -236,4 +230,34 @@ class RecipeControllerTest  {
         ModelAndView mv = mvcResult.getModelAndView();
     }
 
+    @Test
+    void updateRecipeInDailyLog() throws Exception {
+
+        DailyLog dailyLog = new DailyLog();
+        dailyLog.setId(1L);
+        dailyLog.setAmount(27.0);
+
+        DailyLog spyDailyLog = Mockito.spy(dailyLog);
+
+        Mockito.when(dailyLogService.findById(anyLong())).thenReturn(spyDailyLog);
+
+        mockMvc.perform(get("/updateRecipeInDailyLog/1").with(user("user@user.dk").roles("ADMIN")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
+    public void deleteRecipeFromDailyLog() throws Exception{
+        DailyLog dailyLog = new DailyLog();
+        dailyLog.setId(1L);
+        dailyLog.setAmount(27.0);
+
+        DailyLog spyDailyLog = Mockito.spy(dailyLog);
+
+        ResultActions resultActions = mockMvc.perform(get("/deleteRecipeFromDailyLog/1"))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
+    }
 }

@@ -326,7 +326,6 @@ public class RecipeController {
 
         dailyLog.setRecipe(recipeId);
         dailyLog.setFkUser(usersService.getLoggedInUser());
-        //dailyLog.setFkLogType(logTypeService.findByType("Recipe"));
         dailyLogService.save(dailyLog);
 
 

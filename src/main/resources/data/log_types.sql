@@ -5,4 +5,3 @@ INSERT INTO log_type VALUES
     (NULL,'Miscellaneous'),
     (NULL,'Weight'),
     (NULL,'Exercise');
-    (NULL,'Recipe');
