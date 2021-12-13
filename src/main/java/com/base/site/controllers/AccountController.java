@@ -223,8 +223,11 @@ public class AccountController {
 
         if(usersService.getLoggedInUser().getId() != id) {
             model.addAttribute("users",usersService.findUserByIdAndSetBdayString(id));
-            model = usersService.getEditModels(model);
-
+            //model = usersService.getEditModels(model);
+            model.addAttribute("pageTitle", "Edit user");
+            model.addAttribute("selectedPage", "user");
+            model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+            model.addAttribute("userType", usersService.findById(id).getUserType().getType());
 
             return EDIT_USER;
 
@@ -234,11 +237,14 @@ public class AccountController {
     }
 
     @PostMapping("/editUser")
-    public String editUser(@ModelAttribute("users") Users user, RedirectAttributes redAt){
+    public String editUser(@ModelAttribute("users") Users user, @RequestParam(value = "user_type") String userType, RedirectAttributes redAt){
         log.info("editUser post called");
-
+        log.info("User type: " + userType);
 
         user.setBirthday(usersService.getBirthdayFromString(user.getSBirthday()));
+        user.setUserType(userTypeService.findByType(userType));
+
+        log.info("User type set: " + user.getUserType().getType());
 
         try {
             //move to servicelayer?
@@ -335,21 +341,29 @@ public class AccountController {
 
         model.addAttribute("user", usersService.findUserByIdAndSetBdayString(id));
         model.addAttribute("pageTitle", "Edit user Profile");
-
+        model.addAttribute("userType", usersService.findById(id).getUserType().getType());
         model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return EDIT_USER_PROFILE;
     }
     @PostMapping("/editUserProfile")
-    public String editUserProfile(@ModelAttribute("users") Users user){
+    public String editUserProfile(@ModelAttribute("users") Users user, @RequestParam(value = "user_type") String userType, RedirectAttributes redAt){
         log.info("editUserProfile post called");
 
+        user.setBirthday(usersService.getBirthdayFromString(user.getSBirthday()));
+        user.setUserType(userTypeService.findByType(userType));
+        user.setPassword(usersService.findById(user.getId()).getPassword());
+
         try {
-            usersService.setAndSaveUserData(user);
+            usersService.saveEditUserData(user);
         } catch (Exception e){
             log.info("Something went wrong with crating an user");
             log.info(e.toString());
         }
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Your profile is successfully updated");
 
         return REDIRECT + USER_INFO;
     }
