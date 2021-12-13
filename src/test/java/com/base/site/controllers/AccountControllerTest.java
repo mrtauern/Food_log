@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -154,11 +155,11 @@ class AccountControllerTest {
     @Test
     @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
     void accountLockUnlock() throws Exception {
-
+        HttpSession session = Mockito.mock(HttpSession.class);
         Users loggedInUser = Mockito.spy(user);
         loggedInUser.setId(1L);
 
-        Mockito.when(usersService.getLoggedInUser()).thenReturn(loggedInUser);
+        Mockito.when(usersService.getLoggedInUser(session)).thenReturn(loggedInUser);
 
         ResultActions resultActions = mockMvc.perform(get("/adminActionAccountNonLocked/?id=1").with(user("user@user.dk")))
                 .andExpect(status().is3xxRedirection());
@@ -185,11 +186,12 @@ class AccountControllerTest {
     @Test
     @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
     void editUser() throws Exception {
+        HttpSession session = Mockito.mock(HttpSession.class);
         Users loggedInUser = Mockito.spy(user);
         loggedInUser.setId(1L);
 
-        Mockito.when(usersService.getLoggedInUser()).thenReturn(loggedInUser);
-        Mockito.when(usersService.getLoggedInUser().getId()).thenReturn(1L);
+        Mockito.when(usersService.getLoggedInUser(session)).thenReturn(loggedInUser);
+        Mockito.when(usersService.getLoggedInUser(session).getId()).thenReturn(1L);
 
         //Test redirecting if user logged in is the user being edited
         ResultActions resultActions = mockMvc.perform(get("/editUser/1").with(user("user@user.dk")))
@@ -214,11 +216,12 @@ class AccountControllerTest {
 
     @Test
     void deleteUser() throws Exception {
+        HttpSession session = Mockito.mock(HttpSession.class);
         Users loggedInUser = Mockito.spy(user);
         loggedInUser.setId(1L);
 
-        Mockito.when(usersService.getLoggedInUser()).thenReturn(loggedInUser);
-        Mockito.when(usersService.getLoggedInUser().getId()).thenReturn(1L);
+        Mockito.when(usersService.getLoggedInUser(session)).thenReturn(loggedInUser);
+        Mockito.when(usersService.getLoggedInUser(session).getId()).thenReturn(1L);
 
         ResultActions resultActions = mockMvc.perform(get("/delete_user_confirm/1").with(user("user@user.dk")))
                 .andExpect(status().is3xxRedirection());
@@ -234,6 +237,7 @@ class AccountControllerTest {
     @Test
     @WithMockUser(username = "admin@admin.dk", password = "pa$$", roles = {"ADMIN"})
     void admin_dashboard() throws Exception {
+        HttpSession session = Mockito.mock(HttpSession.class);
         Users loggedInUser = Mockito.spy(adminUser);
         loggedInUser.setId(1L);
         loggedInUser.setRoles("ADMIN");
@@ -242,7 +246,7 @@ class AccountControllerTest {
         loggedInUser.setUserType(userType);
 
 
-        Mockito.when(usersService.getLoggedInUser()).thenReturn(loggedInUser);
+        Mockito.when(usersService.getLoggedInUser(session)).thenReturn(loggedInUser);
 
         ResultActions resultActions = mockMvc.perform(get("/dashboard").with(user("admin@admin.dk").roles("ADMIN")))
                 .andExpect(status().isOk());
@@ -262,6 +266,7 @@ class AccountControllerTest {
 
     @Test
     void editUserProfile() throws Exception {
+        HttpSession session = Mockito.mock(HttpSession.class);
         Users loggedInUser = Mockito.spy(adminUser);
         loggedInUser.setId(1L);
         loggedInUser.setRoles("ADMIN");
@@ -269,7 +274,7 @@ class AccountControllerTest {
         userType.setType("User_male");
         loggedInUser.setUserType(userType);
 
-        Mockito.when(usersService.getLoggedInUser()).thenReturn(loggedInUser);
+        Mockito.when(usersService.getLoggedInUser(session)).thenReturn(loggedInUser);
         Mockito.when(usersService.findUserByIdAndSetBdayString(1)).thenReturn(loggedInUser);
 
         ResultActions resultActions = mockMvc.perform(get("/editUserProfile/1").with(user("admin@admin.dk").roles("ADMIN")))

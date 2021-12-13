@@ -15,8 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -25,11 +23,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -116,12 +114,13 @@ class RecipeControllerTest  {
     @Test
     @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"USER"})
     void recipes() throws Exception {
+        HttpSession session = Mockito.mock(HttpSession.class);
         List<Recipe> recipes = recipesList(userSetup(new Users()));
         List<Recipe> mockRecipes = Mockito.spy(recipes);
         mockRecipes = recipesList(new Users());
 
-        Mockito.when(recipeService.findAllFkUser(usersService.getLoggedInUser())).thenReturn(mockRecipes);
-        Mockito.when(recipeService.getRecipesForUser(usersService.getLoggedInUser())).thenReturn(mockRecipes);
+        Mockito.when(recipeService.findAllFkUser(usersService.getLoggedInUser(session))).thenReturn(mockRecipes);
+        Mockito.when(recipeService.getRecipesForUser(usersService.getLoggedInUser(session))).thenReturn(mockRecipes);
 
         ResultActions resultActions = mockMvc.perform(get("/recipes").with(user("user@user.dk")))
                 .andExpect(status().isOk());
@@ -182,8 +181,8 @@ class RecipeControllerTest  {
 
     @Test
     void archiveRecipe() throws Exception {
-
-        Mockito.when(usersService.getLoggedInUser()).thenReturn(Mockito.mock(Users.class));
+        HttpSession session = Mockito.mock(HttpSession.class);
+        Mockito.when(usersService.getLoggedInUser(session)).thenReturn(Mockito.mock(Users.class));
 
         mockMvc.perform(get("/archiveRecipe/true/1").with(user("user@user.dk")))
             .andExpect(status().is3xxRedirection());

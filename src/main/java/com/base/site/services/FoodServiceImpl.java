@@ -6,16 +6,13 @@ import com.base.site.models.PrivateFood;
 import com.base.site.repositories.FoodRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.data.domain.PageRequest.of;
 
@@ -92,7 +89,7 @@ public class FoodServiceImpl implements FoodService {
 
 
     @Override
-    public Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword) {
+    public Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword, HttpSession session) {
         int pageSize = 15;
 
         Page<Food> page = findPaginatedFood(pageNo,pageSize, sortField, sortDir, keyword);
@@ -110,13 +107,13 @@ public class FoodServiceImpl implements FoodService {
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
         model.addAttribute("foodlistSearched", foodlistSearched);
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return model;
     }
 
     @Override
-    public Model getPaginatedAddFoodModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword) {
+    public Model getPaginatedAddFoodModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword, HttpSession session) {
 
         int pageSize = 10;
 
@@ -140,7 +137,7 @@ public class FoodServiceImpl implements FoodService {
 
         model.addAttribute("foodlistSearched", foodlistSearched);
         model.addAttribute("privateFoodlistSearched", privateFoodlistSearched);
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return model;
     }

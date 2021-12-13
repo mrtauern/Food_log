@@ -1,23 +1,17 @@
 package com.base.site.controllers;
 
 import com.base.site.models.*;
-import com.base.site.repositories.FoodRepo;
 import com.base.site.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.logging.Logger;
 
 @Controller
@@ -46,25 +40,26 @@ public class FoodController {
 
 
     @GetMapping("/food")
-    public String food(Model model , @Param("keyword") String keyword) {
+    public String food(Model model , @Param("keyword") String keyword, HttpSession session) {
         log.info("  get mapping food is called");
 
         model.addAttribute("keyword", keyword);
         model.addAttribute("pageTitle", "User list");
         model.addAttribute("selectedPage", "food");
 
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
-        return findPaginatedFood(model,1 ,"name", "asc", keyword );
+        return findPaginatedFood(model,1 ,"name", "asc", keyword, session );
     }
 
     @GetMapping("/pageFood/{pageNo}")
     public String findPaginatedFood(Model model, @PathVariable(value = "pageNo")int pageNo,
                                 @RequestParam("sortField")String sortField,
                                 @RequestParam("sortDir")String sortDir,
-                                @Param("keyword") String keyword){
+                                @Param("keyword") String keyword,
+                                HttpSession session){
 
-        model = foodService.getPaginatedModelAttributes(model, pageNo, sortField, sortDir, keyword);
+        model = foodService.getPaginatedModelAttributes(model, pageNo, sortField, sortDir, keyword, session);
 
         return FOOD;
     }
@@ -124,23 +119,25 @@ public class FoodController {
     }
 
     @GetMapping({"/addFoodToDailyLog", "/addFoodToDailyLog/{date}"})
-    public String addFoodToDailyLog(Model model, @Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString) {
+    public String addFoodToDailyLog(Model model, @Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString, HttpSession session) {
         log.info("  get mapping addFoodToDailyLog is called");
         model.addAttribute("keyword", keyword);
         model.addAttribute("pageTitle", "Add food to daily log");
         model.addAttribute("selectedPage", "dailyLog");
 
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
-        return findPaginatedAddFood(model,1 ,"name", "asc", keyword );
+        return findPaginatedAddFood(model,1 ,"name", "asc", keyword, session);
         //return ADD_FOOD_TO_DAILYLOG;
     }
     @GetMapping("/pageAddFood/{pageNo}")
     public String findPaginatedAddFood(Model model, @PathVariable(value = "pageNo")int pageNo,
                                     @RequestParam("sortField")String sortField,
                                     @RequestParam("sortDir")String sortDir,
-                                    @Param("keyword") String keyword){
-        model = foodService.getPaginatedAddFoodModelAttributes(model, pageNo, sortField, sortDir, keyword);
+                                    @Param("keyword") String keyword,
+                                    HttpSession session){
+
+        model = foodService.getPaginatedAddFoodModelAttributes(model, pageNo, sortField, sortDir, keyword, session);
 
         return ADD_FOOD_TO_DAILYLOG;
     }
@@ -149,7 +146,9 @@ public class FoodController {
     public String createDailyLog(@PathVariable(value = "id") Long id,
                                  @PathVariable(required = false, value = "date") String dateString,
                                  @PathVariable(required = false, value = "type") String type,
-                                 Model model,DailyLog dailyLog) {
+                                 Model model,
+                                 DailyLog dailyLog,
+                                 HttpSession session) {
         log.info("  createDailyLog is called ");
 
         if (type.equals("food")) {
@@ -171,7 +170,7 @@ public class FoodController {
         model.addAttribute("pageTitle", "Add food to daily log");
         model.addAttribute("selectedPage", "dailyLog");
 
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return CREATE_DAILYLOG;
     }
@@ -180,7 +179,8 @@ public class FoodController {
     public String saveDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,Food food,
                                @PathVariable(required = false, value = "date") String dateString,
                                @PathVariable(required = false, value = "type") String type,
-                               RedirectAttributes redAt) {
+                               RedirectAttributes redAt,
+                               HttpSession session) {
         log.info("  PostMapping saveDailyLog is called ");
 
         if (type.equals("food")) {
@@ -195,7 +195,7 @@ public class FoodController {
         }
 
 
-        dailyLog.setFkUser(usersService.getLoggedInUser());
+        dailyLog.setFkUser(usersService.getLoggedInUser(session));
 
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
         dailyLog.setDatetime(date);
@@ -225,12 +225,13 @@ public class FoodController {
     @PostMapping({"/updateDailyLog", "/updateDailyLog/{date}"})
     public String updateDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,
                                  @PathVariable(required = false, value = "date") String dateString,
-                                 RedirectAttributes redAt) {
+                                 RedirectAttributes redAt,
+                                 HttpSession session) {
         log.info("  PostMapping updateDailyLog is called ");
 
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
 
-        dailyLog.setFkUser(usersService.getLoggedInUser());
+        dailyLog.setFkUser(usersService.getLoggedInUser(session));
         dailyLog.setDatetime(date);
 
         dailyLogService.save(dailyLog);

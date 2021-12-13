@@ -1,19 +1,18 @@
 package com.base.site.services;
 
-import com.base.site.controllers.DailyLogController;
 import com.base.site.models.*;
 import com.base.site.repositories.DailyLogRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 @Service("DailyLogService")
@@ -163,7 +162,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         return dailyLogWrapper;
     }
 
-    public Model getDailyLogModels(Users loggedInUser, String dateString, Model model, String keyword) {
+    public Model getDailyLogModels(Users loggedInUser, String dateString, Model model, String keyword, HttpSession session) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString, formatter);
 
@@ -211,27 +210,27 @@ public class DailyLogServiceImpl implements DailyLogService {
         model.addAttribute("nextMonth", date.plusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         model.addAttribute("previousMonth", date.minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
-        model.addAttribute("bmr", usersService.getLoggedInUser().getBMR(usersService.getLatestWeight(date).getAmount()));
-        model.addAttribute("kcalUsed", getKcalUsed(date, usersService.getLoggedInUser()));
-        model.addAttribute("kcalLeft", getKcalLeft(date, usersService.getLoggedInUser()));
+        model.addAttribute("bmr", usersService.getLoggedInUser(session).getBMR(usersService.getLatestWeight(date).getAmount()));
+        model.addAttribute("kcalUsed", getKcalUsed(date, usersService.getLoggedInUser(session)));
+        model.addAttribute("kcalLeft", getKcalLeft(date, usersService.getLoggedInUser(session)));
         model.addAttribute("nutrition", dailyLogWrapper.getNutrition());
 
         model.addAttribute("weight", dailyLogWrapper.getWeight());
 
         model.addAttribute("selectedPage", "dailyLog");
 
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         model.addAttribute("weights", weights);
         model.addAttribute("dates", dates);
-        model.addAttribute("goal", usersService.getLoggedInUser().getGoalWeight());
+        model.addAttribute("goal", usersService.getLoggedInUser(session).getGoalWeight());
 
         return model;
     }
 
     @Override
-    public Model getWeightGraphModels(Model model) {
-        Users loggedInUser = usersService.getLoggedInUser();
+    public Model getWeightGraphModels(Model model, HttpSession session) {
+        Users loggedInUser = usersService.getLoggedInUser(session);
 
         List<DailyLog> dailyLogs = findAll();
 
@@ -253,10 +252,10 @@ public class DailyLogServiceImpl implements DailyLogService {
         }
 
         model.addAttribute("pageTitle", "Weight graph");
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("weights", weights);
         model.addAttribute("dates", dates);
-        model.addAttribute("goal", usersService.getLoggedInUser().getGoalWeight());
+        model.addAttribute("goal", usersService.getLoggedInUser(session).getGoalWeight());
         return model;
     }
 

@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -31,7 +32,7 @@ public interface UsersService {
     Users findUsersByUsername(String username);
     DailyLog getLatestWeight(LocalDate date);
     Page<Users> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection, String keyword);
-    Users getLoggedInUser();
+    Users getLoggedInUser(HttpSession session);
 
     LocalDate getBirthdayFromString(String birthdayString);
 
@@ -46,7 +47,7 @@ public interface UsersService {
 
     RedirectAttributes generateUserAndSave(Users user, String userType, RedirectAttributes redAt) throws MessagingException, IOException;
 
-    Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword);
+    Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword, HttpSession session);
 
-    Model getEditModels(Model model);
+    Model getEditModels(Model model, HttpSession session);
 }
