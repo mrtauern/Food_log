@@ -5,6 +5,7 @@ import com.base.site.models.Users;
 import com.base.site.repositories.UPRCRepository;
 import com.base.site.repositories.UsersRepoImpl;
 import com.base.site.services.*;
+import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -78,7 +81,6 @@ class AccountControllerTest {
     private Pageable pageable = of(1, 1);
     @Mock
     private Page<Users> pageMock;
-
 
     @Before
     void setUp() {
@@ -155,13 +157,13 @@ class AccountControllerTest {
     @Test
     @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
     void accountLockUnlock() throws Exception {
-        HttpSession session = Mockito.mock(HttpSession.class);
+        MockHttpSession session = new MockHttpSession();
         Users loggedInUser = Mockito.spy(user);
         loggedInUser.setId(1L);
 
         Mockito.when(usersService.getLoggedInUser(session)).thenReturn(loggedInUser);
 
-        ResultActions resultActions = mockMvc.perform(get("/adminActionAccountNonLocked/?id=1").with(user("user@user.dk")))
+        ResultActions resultActions = mockMvc.perform(get("/adminActionAccountNonLocked/?id=1").with(user("user@user.dk")).session(session))
                 .andExpect(status().is3xxRedirection());
 
 
@@ -186,15 +188,16 @@ class AccountControllerTest {
     @Test
     @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
     void editUser() throws Exception {
-        HttpSession session = Mockito.mock(HttpSession.class);
         Users loggedInUser = Mockito.spy(user);
         loggedInUser.setId(1L);
+        MockHttpSession session = new MockHttpSession();
+        //session.setAttribute("loggedInUser", user);
 
         Mockito.when(usersService.getLoggedInUser(session)).thenReturn(loggedInUser);
         Mockito.when(usersService.getLoggedInUser(session).getId()).thenReturn(1L);
 
         //Test redirecting if user logged in is the user being edited
-        ResultActions resultActions = mockMvc.perform(get("/editUser/1").with(user("user@user.dk")))
+        ResultActions resultActions = mockMvc.perform(get("/editUser/1").with(user("user@user.dk")).session(session))
                 .andExpect(status().is3xxRedirection());
 
         MvcResult mvcResult = resultActions.andReturn();
@@ -216,14 +219,14 @@ class AccountControllerTest {
 
     @Test
     void deleteUser() throws Exception {
-        HttpSession session = Mockito.mock(HttpSession.class);
+        MockHttpSession session = new MockHttpSession();
         Users loggedInUser = Mockito.spy(user);
         loggedInUser.setId(1L);
 
         Mockito.when(usersService.getLoggedInUser(session)).thenReturn(loggedInUser);
         Mockito.when(usersService.getLoggedInUser(session).getId()).thenReturn(1L);
 
-        ResultActions resultActions = mockMvc.perform(get("/delete_user_confirm/1").with(user("user@user.dk")))
+        ResultActions resultActions = mockMvc.perform(get("/delete_user_confirm/1").with(user("user@user.dk")).session(session))
                 .andExpect(status().is3xxRedirection());
 
         MvcResult mvcResult = resultActions.andReturn();

@@ -5,16 +5,20 @@ import com.base.site.models.UserType;
 import com.base.site.models.Users;
 import com.base.site.repositories.UsersRepo;
 import com.base.site.services.*;
+import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -54,13 +58,18 @@ class RecipeControllerTest  {
     private AccountController accountController;
     @MockBean
     private UsersRepo usersRepo;
+    private Users user = new Users();
 
-
-    @BeforeEach
+    @Before
     void setUp() {
-        Users user = new Users();
+        //usersservice
+
+        MockitoAnnotations.initMocks(this);
+        Mockito.mock(Users.class);
+
         LocalDate date = LocalDate.parse("1992-01-22");
         user.setBirthday(date);
+        user.setId(2L);
         user.setUsername("user@user.dk");
         user.setFirstname("user");
         user.setLastname("user");
@@ -73,7 +82,6 @@ class RecipeControllerTest  {
         user.setUserType(userType);
         user.setRoles("USER");
         user.setKcal_modifier(-1000);
-        usersService.save(user);
     }
 
     Users userSetup(Users user) {
@@ -180,11 +188,16 @@ class RecipeControllerTest  {
     }
 
     @Test
+    @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"USER"})
     void archiveRecipe() throws Exception {
-        HttpSession session = Mockito.mock(HttpSession.class);
-        Mockito.when(usersService.getLoggedInUser(session)).thenReturn(Mockito.mock(Users.class));
+        MockHttpSession session = new MockHttpSession();
+        Users loggedInUser = Mockito.spy(user);
+        loggedInUser.setId(1L);
 
-        mockMvc.perform(get("/archiveRecipe/true/1").with(user("user@user.dk")))
+        Mockito.when(usersService.getLoggedInUser(session)).thenReturn(loggedInUser);
+        Mockito.when(usersService.getLoggedInUser(session).getId()).thenReturn(1L);
+
+        mockMvc.perform(get("/archiveRecipe/true/1").with(user("user@user.dk")).session(session))
             .andExpect(status().is3xxRedirection());
     }
 
