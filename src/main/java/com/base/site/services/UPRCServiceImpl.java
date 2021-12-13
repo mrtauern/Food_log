@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -57,8 +58,8 @@ public class UPRCServiceImpl implements UPRCService{
     }
 
     @Override
-    public void adminResetUserPassword(long id) throws MessagingException, IOException {
-        if(usersService.getLoggedInUser().getId() != id && usersService.getLoggedInUser().getRoles().equals("ADMIN")) {
+    public void adminResetUserPassword(long id, HttpSession session) throws MessagingException, IOException {
+        if(usersService.getLoggedInUser(session).getId() != id && usersService.getLoggedInUser(session).getRoles().equals("ADMIN")) {
             UserPassResetCode resetCode = new UserPassResetCode();
 
             if (usersService.findById(id) != null) {

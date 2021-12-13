@@ -1,19 +1,18 @@
 package com.base.site.services;
 
-import com.base.site.controllers.DailyLogController;
 import com.base.site.models.*;
 import com.base.site.repositories.DailyLogRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 @Service("DailyLogService")
@@ -69,7 +68,7 @@ public class DailyLogServiceImpl implements DailyLogService {
 
         if (!logList.isEmpty()) {
             for (DailyLog dailyLog : logList) {
-                if (dailyLog.getDatetime().equals(date) && user.getId() == dailyLog.getFkUser().getId() && dailyLog.getFood() != null) {
+                if (dailyLog.getDatetime().equals(date) && user.getId().equals(dailyLog.getFkUser().getId()) && dailyLog.getFood() != null) {
                     kcalUsed += (int) ((dailyLog.getAmount() / 100) * dailyLog.getFood().getEnergy_kcal());
                 }else if (dailyLog.getDatetime().equals(date) && user.getId() == dailyLog.getFkUser().getId() && dailyLog.getPrivateFood() != null) {
                     kcalUsed += (int) ((dailyLog.getAmount() / 100) * dailyLog.getPrivateFood().getEnergy_kcal());
@@ -94,7 +93,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         DailyLogWrapper dailyLogWrapper = new DailyLogWrapper(findAll());
         Food nutrition = new Food("nutrition",0.0,0.0,0.0,0.0,0.0);
         for (DailyLog dailyLog: dailyLogWrapper.getDailyLogs()) {
-            if(dailyLog.getDatetime().equals(date) && loggedInUser.getId() == dailyLog.getFkUser().getId()) {
+            if(dailyLog.getDatetime().equals(date) && loggedInUser.getId().equals(dailyLog.getFkUser().getId())) {
 
                 String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                 dailyLog.setSDatetime(sDatetime);
@@ -103,9 +102,11 @@ public class DailyLogServiceImpl implements DailyLogService {
                     dailyLogWrapper.addToDailyLogsFoods(dailyLog);
                     String logType = dailyLog.getFkLogType().getType();
 
+
                     switch (logType){
                         case "Breakfast":
                             dailyLogWrapper.addToDailyLogsBreakfast(dailyLog);
+                            log.info("should add food");
                             if(dailyLog.getFood()!=null) {
                                 nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "food");
                             }
@@ -165,7 +166,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         return dailyLogWrapper;
     }
 
-    public Model getDailyLogModels(Users loggedInUser, String dateString, Model model, String keyword) {
+    public Model getDailyLogModels(Users loggedInUser, String dateString, Model model, String keyword, HttpSession session) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString, formatter);
 
@@ -180,7 +181,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         List<String> dates = new ArrayList<>();
 
         for (DailyLog dailyLog: dailyLogs) {
-            if(dailyLog.getFkUser().getId() == loggedInUser.getId() && dailyLog.getFkLogType().getType().equals("Weight")){
+            if(dailyLog.getFkUser().getId().equals(loggedInUser.getId()) && dailyLog.getFkLogType().getType().equals("Weight")){
                 //X-axe
                 dates.add(dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
@@ -188,6 +189,7 @@ public class DailyLogServiceImpl implements DailyLogService {
                 weights.add(dailyLog.getAmount());
             }
         }
+        log.info("LoggedinUserID----------------"+loggedInUser.getId());
 
         model.addAttribute("today", today.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         model.addAttribute("sSelectedDate", date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
@@ -213,27 +215,27 @@ public class DailyLogServiceImpl implements DailyLogService {
         model.addAttribute("nextMonth", date.plusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         model.addAttribute("previousMonth", date.minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
-        model.addAttribute("bmr", usersService.getLoggedInUser().getBMR(usersService.getLatestWeight(date).getAmount()));
-        model.addAttribute("kcalUsed", getKcalUsed(date, usersService.getLoggedInUser()));
-        model.addAttribute("kcalLeft", getKcalLeft(date, usersService.getLoggedInUser()));
+        model.addAttribute("bmr", usersService.getLoggedInUser(session).getBMR(usersService.getLatestWeight(date).getAmount()));
+        model.addAttribute("kcalUsed", getKcalUsed(date, usersService.getLoggedInUser(session)));
+        model.addAttribute("kcalLeft", getKcalLeft(date, usersService.getLoggedInUser(session)));
         model.addAttribute("nutrition", dailyLogWrapper.getNutrition());
 
         model.addAttribute("weight", dailyLogWrapper.getWeight());
 
         model.addAttribute("selectedPage", "dailyLog");
 
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         model.addAttribute("weights", weights);
         model.addAttribute("dates", dates);
-        model.addAttribute("goal", usersService.getLoggedInUser().getGoalWeight());
+        model.addAttribute("goal", usersService.getLoggedInUser(session).getGoalWeight());
 
         return model;
     }
 
     @Override
-    public Model getWeightGraphModels(Model model) {
-        Users loggedInUser = usersService.getLoggedInUser();
+    public Model getWeightGraphModels(Model model, HttpSession session) {
+        Users loggedInUser = usersService.getLoggedInUser(session);
 
         List<DailyLog> dailyLogs = findAll();
 
@@ -241,7 +243,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         List<String> dates = new ArrayList<>();
 
         for (DailyLog dailyLog: dailyLogs) {
-            if(dailyLog.getFkUser().getId() == loggedInUser.getId() && dailyLog.getFkLogType().getType().equals("Weight")){
+            if(dailyLog.getFkUser().getId().equals(loggedInUser.getId()) && dailyLog.getFkLogType().getType().equals("Weight")){
                 //X-axe
                 dates.add(dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
@@ -255,10 +257,10 @@ public class DailyLogServiceImpl implements DailyLogService {
         }
 
         model.addAttribute("pageTitle", "Weight graph");
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("weights", weights);
         model.addAttribute("dates", dates);
-        model.addAttribute("goal", usersService.getLoggedInUser().getGoalWeight());
+        model.addAttribute("goal", usersService.getLoggedInUser(session).getGoalWeight());
         return model;
     }
 

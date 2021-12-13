@@ -1,15 +1,9 @@
 package com.base.site.controllers;
 
 import com.base.site.models.*;
-import com.base.site.repositories.UPRCRepository;
-import com.base.site.repositories.UsersRepo;
-import com.base.site.security.SecurityConfig;
 import com.base.site.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -73,24 +66,24 @@ public class AccountController {
     DailyLogService dailyLogService;
 
     @GetMapping("/")
-    public String index() {
+    public String index(HttpSession session) {
         log.info("Usercontroller / getmapping called...");
 
-        if(usersService.getLoggedInUser().getRoles().equals("USER")) {
+        if(usersService.getLoggedInUser(session).getRoles().equals("USER")) {
             return REDIRECT+DAILYLOG;
-        } else if(usersService.getLoggedInUser().getRoles().equals("ADMIN")) {
+        } else if(usersService.getLoggedInUser(session).getRoles().equals("ADMIN")) {
             return REDIRECT+DASHBOARD;
         }
         return FRONTPAGE;
     }
 
     @GetMapping("/index")
-    public String showUserList(Model model, RedirectAttributes redAt) {
+    public String showUserList(Model model, RedirectAttributes redAt, HttpSession session) {
         log.info(" AccountController /index getmapping called...");
 
         LocalDate date = LocalDate.now();
 
-        Users user = usersService.getLoggedInUser();
+        Users user = usersService.getLoggedInUser(session);
 
         List<DailyLog> dailyLogs = dailyLogService.findAll();
 
@@ -104,7 +97,7 @@ public class AccountController {
             }
         }
 
-        if(!(usersService.getLoggedInUser().getStartWeight() > 0) || !(usersService.getLoggedInUser().getGoalWeight() > 0)){
+        if(!(usersService.getLoggedInUser(session).getStartWeight() > 0) || !(usersService.getLoggedInUser(session).getGoalWeight() > 0)){
             redAt.addFlashAttribute("showMessage", true);
             redAt.addFlashAttribute("messageType", "warning");
             redAt.addFlashAttribute("message", "Log in success! - Please set a Start weight and Goal weight!");
@@ -118,9 +111,12 @@ public class AccountController {
             redAt.addFlashAttribute("message", "Log in success!");
         }
 
-        if(usersService.getLoggedInUser().getRoles().equals("USER")) {
+        if(usersService.getLoggedInUser(session).getRoles().equals("USER")) {
+            log.info("hello");
             return REDIRECT+DAILYLOG;
-        } else if(usersService.getLoggedInUser().getRoles().equals("ADMIN")) {
+        } else if(usersService.getLoggedInUser(session).getRoles().equals("ADMIN")) {
+            log.info("hello2");
+
             return REDIRECT+DASHBOARD;
         }
 
@@ -128,7 +124,7 @@ public class AccountController {
     }
 
     @GetMapping("/userList")
-    public String userList(Model model , @Param("keyword") String keyword) {
+    public String userList(Model model , @Param("keyword") String keyword, HttpSession session) {
         if (keyword != null) {
             log.info("userList is called with Search String :: " + keyword);
         }else {
@@ -141,25 +137,28 @@ public class AccountController {
         model.addAttribute("selectedPage", "user");
         model.addAttribute("user", new Users());
 
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
-        return findPaginated(model ,1 ,"firstname", "asc", keyword );
+        return findPaginated(model ,1 ,"firstname", "asc", keyword, session);
     }
 
     @GetMapping("/pageUser/{pageNo}")
     public String findPaginated(Model model, @PathVariable(value = "pageNo")int pageNo, @RequestParam("sortField")String sortField,
-                                             @RequestParam("sortDir")String sortDir, @Param("keyword") String keyword ){
+                                             @RequestParam("sortDir")String sortDir, @Param("keyword") String keyword, HttpSession session ){
 
-        model = usersService.getPaginatedModelAttributes(model, pageNo, sortField, sortDir, keyword);
+        model = usersService.getPaginatedModelAttributes(model, pageNo, sortField, sortDir, keyword, session);
 
         return USER_LIST;
     }
 
     @GetMapping("/adminActionAccountNonLocked")
-    public String accountLockUnlock(@RequestParam("id") long id, @RequestParam(required = false, value = "locked") boolean locked, RedirectAttributes redAt) {
+    public String accountLockUnlock(@RequestParam("id") long id,
+                                    @RequestParam(required = false, value = "locked") boolean locked,
+                                    RedirectAttributes redAt,
+                                    HttpSession session) {
         log.info("Getmapping adminActionAccountNonLocked called with id: "+id+" and status locked: "+locked);
 
-        if(usersService.getLoggedInUser().getId() != id) {
+        if(usersService.getLoggedInUser(session).getId() != id) {
 
             Users user = usersService.findById(id);
 
@@ -188,7 +187,7 @@ public class AccountController {
 
 
     @GetMapping({"/createUser","createUser/{userExists}"})
-    public String createUser(Model model, @PathVariable(required = false, value = "userExists") String userExists){
+    public String createUser(Model model, @PathVariable(required = false, value = "userExists") String userExists, HttpSession session){
         log.info("createUser get called");
 
         model.addAttribute("users", new Users());
@@ -196,7 +195,7 @@ public class AccountController {
         model.addAttribute("pageTitle", "Create user");
         model.addAttribute("selectedPage", "user");
 
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return CREATE_USER;
     }
@@ -218,15 +217,15 @@ public class AccountController {
 
 
     @GetMapping("/editUser/{id}")
-    public String editUser(@PathVariable(value = "id") Long id, Model model){
+    public String editUser(@PathVariable(value = "id") Long id, Model model, HttpSession session){
         log.info("editUser get called");
 
-        if(usersService.getLoggedInUser().getId() != id) {
+        if(usersService.getLoggedInUser(session).getId() != id) {
             model.addAttribute("users",usersService.findUserByIdAndSetBdayString(id));
-            //model = usersService.getEditModels(model);
+
             model.addAttribute("pageTitle", "Edit user");
             model.addAttribute("selectedPage", "user");
-            model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+            model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
             model.addAttribute("userType", usersService.findById(id).getUserType().getType());
 
             return EDIT_USER;
@@ -263,18 +262,18 @@ public class AccountController {
     }
   
     @GetMapping("/password_reset_user/{id}")
-    public String passwordResetUser(@PathVariable(value = "id") long id, Model model) throws MessagingException, IOException {
-        uprcService.adminResetUserPassword(id);
+    public String passwordResetUser(@PathVariable(value = "id") long id, Model model, HttpSession session) throws MessagingException, IOException {
+        uprcService.adminResetUserPassword(id, session);
 
         return REDIRECT + USER_LIST;
     }
 
     @GetMapping("/delete_own_user")
-    public String deleteOwnUser( Model model) {
+    public String deleteOwnUser( Model model, HttpSession session) {
         log.info("delete_own_user called userId: ");
 
             model.addAttribute("pageTitle", "Delete user");
-            model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+            model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
             return DELETE_OWN_USER;
     }
@@ -282,15 +281,15 @@ public class AccountController {
 
 
     @GetMapping("/delete_user_confirm/{id}")
-    public String deleteUser(@PathVariable("id") long id, Model model) {
+    public String deleteUser(@PathVariable("id") long id, Model model, HttpSession session) {
         log.info("delete_user_confirm called userId: "+id);
 
-        if(usersService.getLoggedInUser().getId() != id) {
+        if(usersService.getLoggedInUser(session).getId() != id) {
 
             model.addAttribute("user", usersService.findById(id));
             model.addAttribute("pageTitle", "Delete user");
             model.addAttribute("selectedPage", "user");
-            model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+            model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
             return DELETE_USER_CONFIRM;
         } else {
@@ -311,38 +310,39 @@ public class AccountController {
     }
 
     @GetMapping("/dashboard")
-    public String admin_dashboard(Model model) {
+    public String admin_dashboard(Model model, HttpSession session) {
         log.info("dashboard getmapping called...");
 
         model.addAttribute("pageTitle", "User list");
         model.addAttribute("selectedPage", "dashboard");
 
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return DASHBOARD;
     }
 
     @GetMapping("/userInfo")
-    public String userInfo(Model model){
+    public String userInfo(Model model, HttpSession session){
         log.info("userInfo called");
 
         model.addAttribute("users", usersService.findAll());
         model.addAttribute("pageTitle", "User Personal Info");
-        model.addAttribute("loggedIn", usersService.getLoggedInUser());
+        model.addAttribute("loggedIn", usersService.getLoggedInUser(session));
 
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return USER_INFO;
     }
 
     @GetMapping("/editUserProfile/{id}")
-    public String editUserProfile(@PathVariable( value ="id") Long id, Model model) {
+    public String editUserProfile(@PathVariable( value ="id") Long id, Model model, HttpSession session) {
         log.info("editUserProfile get called");
 
         model.addAttribute("user", usersService.findUserByIdAndSetBdayString(id));
         model.addAttribute("pageTitle", "Edit user Profile");
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("userType", usersService.findById(id).getUserType().getType());
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
 
         return EDIT_USER_PROFILE;
     }

@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.sql.Timestamp;
@@ -37,8 +38,6 @@ public class UsersServiceImpl implements UsersService {
     static SecureRandom rnd = new SecureRandom();
 
     Logger log = Logger.getLogger(UsersServiceImpl.class.getName());
-
-    private Users loggedInUser;
 
     @Autowired
     UsersRepo usersRepo;
@@ -153,9 +152,37 @@ public class UsersServiceImpl implements UsersService {
         return this.usersRepo.findAll(pageable);
     }
 
-    public Users getLoggedInUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        loggedInUser = usersRepo.findUsersByUsername(auth.getName());
+    public Users getLoggedInUser(HttpSession session) {
+
+        Users loggedInUser = new Users();
+        Users user = new Users();
+        if(session.getAttribute("loggedInUser") == null) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            user = usersRepo.findUsersByUsername(auth.getName());
+
+            loggedInUser.setUserType(user.getUserType());
+            loggedInUser.setId(user.getId());
+            loggedInUser.setRoles(user.getRoles());
+            loggedInUser.setBirthday(user.getBirthday());
+            loggedInUser.setAccountNonLocked(user.getAccountNonLocked());
+            loggedInUser.setKcal_modifier(user.getKcal_modifier());
+            loggedInUser.setFirstname(user.getFirstname());
+            loggedInUser.setLastname(user.getLastname());
+            loggedInUser.setGoalWeight(user.getGoalWeight());
+            loggedInUser.setHeight(user.getHeight());
+            loggedInUser.setStartWeight(user.getStartWeight());
+            loggedInUser.setRegisterDate(user.getRegisterDate());
+            loggedInUser.setDailyLogs(user.getDailyLogs());
+            loggedInUser.setPrivateFoods(user.getPrivateFoods());
+            loggedInUser.setRecipies(user.getRecipies());
+            loggedInUser.setBmi(user.getBmi());
+
+            session.setAttribute("loggedInUser", loggedInUser);
+        }
+        else if (session.getAttribute("loggedInUser") != null) {
+            loggedInUser = (Users)session.getAttribute("loggedInUser");
+        }
+
 
         return loggedInUser;
     }
@@ -290,7 +317,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword) {
+    public Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword, HttpSession session) {
         int pageSize = 5;
         Page<Users> page = findPaginated(pageNo,pageSize, sortField, sortDir, keyword);
         List<Users> listUser = page.getContent();
@@ -304,17 +331,18 @@ public class UsersServiceImpl implements UsersService {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-        model.addAttribute("loggedInUser", getLoggedInUser());
+        model.addAttribute("loggedInUser", getLoggedInUser(session));
 
         return model;
     }
+
 
     /*@Override
     public Model getEditModels(Model model) {
 
         model.addAttribute("pageTitle", "Edit user");
         model.addAttribute("selectedPage", "user");
-        model.addAttribute("loggedInUser", getLoggedInUser());
+        model.addAttribute("loggedInUser", getLoggedInUser(session));
         return model;
     }*/
 
