@@ -181,7 +181,7 @@ public class UsersServiceImpl implements UsersService {
     public void setAndSaveUserData(Users user) {
         user.setBirthday(getBirthdayFromString(user.getSBirthday()));
         Users userData = findById(user.getId());
-        user.setUserType(userData.getUserType());
+        //user.setUserType(userData.getUserType());
         user.setPassword(userData.getPassword());
         user.setRegisterDate(userData.getRegisterDate());
         user.setKcal_modifier(userData.getKcal_modifier());

@@ -350,12 +350,10 @@ public class AccountController {
     public String editUserProfile(@ModelAttribute("users") Users user, @RequestParam(value = "user_type") String userType, RedirectAttributes redAt){
         log.info("editUserProfile post called");
 
-        user.setBirthday(usersService.getBirthdayFromString(user.getSBirthday()));
         user.setUserType(userTypeService.findByType(userType));
-        user.setPassword(usersService.findById(user.getId()).getPassword());
 
         try {
-            usersService.saveEditUserData(user);
+            usersService.setAndSaveUserData(user);
         } catch (Exception e){
             log.info("Something went wrong with crating an user");
             log.info(e.toString());
