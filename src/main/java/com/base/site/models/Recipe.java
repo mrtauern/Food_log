@@ -91,25 +91,4 @@ public class Recipe implements Serializable {
         }
         return nutrition;
     }
-
-    //Only for not having error -- should be deleted amd fixed
-
-    public Food setAddFoodNutritionFromRecipe(Food nutrition, RecipeFood recipeFood, String type) {
-        double fat = type.equals("food") ? (recipeFood.getFood().getFat() * recipeFood.getAmount()) / 100 : (recipeFood.getPrivateFood().getFat() * recipeFood.getAmount()) / 100;
-        double carbs = type.equals("food") ? (recipeFood.getFood().getCarbohydrates() * recipeFood.getAmount()) / 100 : (recipeFood.getPrivateFood().getCarbohydrates() * recipeFood.getAmount()) / 100;
-        double protein = type.equals("food") ? (recipeFood.getFood().getProtein() * recipeFood.getAmount()) / 100 : (recipeFood.getPrivateFood().getProtein() * recipeFood.getAmount()) / 100;
-        double kj = type.equals("food") ? (recipeFood.getFood().getEnergy_kilojoule() * recipeFood.getAmount()) / 100 : (recipeFood.getPrivateFood().getEnergy_kilojoule() * recipeFood.getAmount()) / 100;
-        double kcal = type.equals("food") ? (recipeFood.getFood().getEnergy_kcal() * recipeFood.getAmount()) / 100 : (recipeFood.getPrivateFood().getEnergy_kcal() * recipeFood.getAmount()) / 100;
-
-        nutrition.setFat(nutrition.getFat() + fat);
-        nutrition.setCarbohydrates(nutrition.getCarbohydrates() + carbs);
-        nutrition.setProtein(nutrition.getProtein() + protein);
-        nutrition.setEnergy_kilojoule(nutrition.getEnergy_kilojoule() + kj);
-        nutrition.setEnergy_kcal(nutrition.getEnergy_kcal() + kcal);
-
-        return nutrition;
-    }
-
-
-
 }

@@ -186,8 +186,6 @@ public class DailyLogServiceImpl implements DailyLogService {
 
         DailyLogWrapper dailyLogWrapper = getLogs(loggedInUser, date);
 
-        log.info("Dailylog service impl --- ::"+ dailyLogWrapper.toString().toString());
-
         List<DailyLog> dailyLogs = findAll();
 
         List<Double> weights = new ArrayList<>();
@@ -213,7 +211,6 @@ public class DailyLogServiceImpl implements DailyLogService {
         model.addAttribute("miscellaneous", dailyLogWrapper.getDailyLogsMiscellaneous());
         //model.addAttribute("pfoods", dailyLogsPrivateFoods);
         model.addAttribute("exercises", dailyLogWrapper.getDailyLogsExercises());
-        //model.addAttribute("recipes", dailyLogWrapper.getDailyLogsRecipes());
         model.addAttribute("keyword", keyword);
 
         // +/- Day
