@@ -25,4 +25,7 @@ public interface DailyLogService {
     Model getDailyLogModels(Users loggedInUser, String dateString, Model model, String keyword, HttpSession session);
 
     Model getWeightGraphModels(Model model, HttpSession session);
+
+    List<DailyLog> getWeightGraph(Long user_id, String selected_date);
+    List<DailyLog> getWeightGraph(Long user_id);
 }
