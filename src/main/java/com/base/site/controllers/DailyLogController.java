@@ -34,8 +34,6 @@ public class DailyLogController {
     LogTypeService logTypeService;
     @Autowired
     FoodService foodService;
-    @Autowired
-    AllFoodsService allFoodsService;
 
     private final String DAILY_LOG = "dailyLog";
     private final String WEIGHT_OPTIONS = "editWeightOptions";
@@ -68,10 +66,7 @@ public class DailyLogController {
     @GetMapping({"/dailyLog", "/dailyLog/{date}"})
     public String dailyLog(Model model, @Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString, HttpSession session) throws ParseException {
         log.info("Getmapping called for dailylog for specific date: "+dateString);
-        List<AllFoods> test = allFoodsService.findAll();
-        for (AllFoods allFood: test) {
-            log.info("hello: "+allFood.getName());
-        }
+
         model = dailyLogService.getDailyLogModels(usersService.getLoggedInUser(session), dateString, model, keyword, session);
 
         return DAILY_LOG;

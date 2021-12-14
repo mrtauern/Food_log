@@ -45,9 +45,9 @@ public class AllFoodsServiceImpl implements AllFoodsService{
     public void deleteById(Long id) {
         this.allFoodsRepository.deleteById(id);
     }
-/*
+
     @Override
-    public Page<AllFoods> findPaginatedFood(int pageNo, int pageSize, String sortField, String sortDirection, String keyword) {
+    public Page<AllFoods> findPaginatedFoods(int pageNo, int pageSize, String sortField, String sortDirection, String keyword) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending():
                 Sort.by(sortField).descending();
 
@@ -57,5 +57,5 @@ public class AllFoodsServiceImpl implements AllFoodsService{
             return allFoodsRepository.findAll(keyword, pageable);
         }
         return this.allFoodsRepository.findAll(pageable);
-    }*/
+    }
 }

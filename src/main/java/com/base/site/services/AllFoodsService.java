@@ -14,5 +14,5 @@ public interface AllFoodsService {
     AllFoods save(AllFoods food);
     AllFoods findById(Long id);
     void deleteById(Long id);
-    //Page<AllFoods> findPaginatedFood(int pageNo, int pageSize, String sortField, String sortDirection, String keyword);
+    Page<AllFoods> findPaginatedFoods(int pageNo, int pageSize, String sortField, String sortDirection, String keyword);
 }
