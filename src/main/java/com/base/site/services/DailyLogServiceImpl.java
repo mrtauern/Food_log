@@ -164,11 +164,6 @@ public class DailyLogServiceImpl implements DailyLogService {
                 }else if(dailyLog.getFkLogType().getType().equals("Weight")) {
                     dailyLogWrapper.setWeight(dailyLog);
                 }
-                /*else if(dailyLog.getRecipe() != null) {
-                    dailyLogWrapper.addToDailyLogsRecipes(dailyLog);
-                }
-
-                 */
             }
 
         }
@@ -190,6 +185,8 @@ public class DailyLogServiceImpl implements DailyLogService {
         LocalDate today = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
         DailyLogWrapper dailyLogWrapper = getLogs(loggedInUser, date);
+
+        log.info("Dailylog service impl --- ::"+ dailyLogWrapper.toString().toString());
 
         List<DailyLog> dailyLogs = findAll();
 
