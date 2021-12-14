@@ -102,7 +102,7 @@ public class DailyLogServiceImpl implements DailyLogService {
                 String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                 dailyLog.setSDatetime(sDatetime);
 
-                if(dailyLog.getFood() != null || dailyLog.getPrivateFood() != null) {
+                if(dailyLog.getFood() != null || dailyLog.getPrivateFood() != null || dailyLog.getRecipe() != null) {
                     dailyLogWrapper.addToDailyLogsFoods(dailyLog);
                     String logType = dailyLog.getFkLogType().getType();
 
@@ -114,8 +114,16 @@ public class DailyLogServiceImpl implements DailyLogService {
                             }
                             if(dailyLog.getPrivateFood()!=null) {
                                 nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "pfood");
+                            }/*
+                            if (dailyLog.getRecipe() != null){
+                                Food recipeNutrition = dailyLog.getRecipe().getNutritionFromRecipe();
+                                nutrition.setFat(nutrition.getFat()+recipeNutrition.getFat());
+                                nutrition.setCarbohydrates(nutrition.getCarbohydrates()+recipeNutrition.getCarbohydrates());
+                                nutrition.setProtein(nutrition.getProtein()+recipeNutrition.getProtein());
+                                nutrition.setEnergy_kilojoule(nutrition.getEnergy_kilojoule()+recipeNutrition.getEnergy_kilojoule());
+                                nutrition.setEnergy_kcal(nutrition.getEnergy_kcal()+ recipeNutrition.getEnergy_kcal());
                             }
-
+                            */
                             break;
                         case "Lunch":
                             dailyLogWrapper.addToDailyLogsLunch(dailyLog);
@@ -155,9 +163,12 @@ public class DailyLogServiceImpl implements DailyLogService {
                     dailyLogWrapper.addToDailyLogsExercises(dailyLog);
                 }else if(dailyLog.getFkLogType().getType().equals("Weight")) {
                     dailyLogWrapper.setWeight(dailyLog);
-                }else if(dailyLog.getRecipe() != null) {
+                }
+                /*else if(dailyLog.getRecipe() != null) {
                     dailyLogWrapper.addToDailyLogsRecipes(dailyLog);
                 }
+
+                 */
             }
 
         }
@@ -205,7 +216,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         model.addAttribute("miscellaneous", dailyLogWrapper.getDailyLogsMiscellaneous());
         //model.addAttribute("pfoods", dailyLogsPrivateFoods);
         model.addAttribute("exercises", dailyLogWrapper.getDailyLogsExercises());
-        model.addAttribute("recipes", dailyLogWrapper.getDailyLogsRecipes());
+        //model.addAttribute("recipes", dailyLogWrapper.getDailyLogsRecipes());
         model.addAttribute("keyword", keyword);
 
         // +/- Day

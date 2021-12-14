@@ -1,10 +1,7 @@
 package com.base.site.services;
 
 import com.base.site.controllers.FoodController;
-import com.base.site.models.DailyLog;
-import com.base.site.models.Food;
-import com.base.site.models.PrivateFood;
-import com.base.site.models.Recipe;
+import com.base.site.models.*;
 import com.base.site.repositories.FoodRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -75,6 +72,24 @@ public class FoodServiceImpl implements FoodService {
         double protein = type.equals("food") ? (dailyLog.getFood().getProtein()*dailyLog.getAmount())/100 : (dailyLog.getPrivateFood().getProtein()*dailyLog.getAmount())/100;
         double kj = type.equals("food") ? (dailyLog.getFood().getEnergy_kilojoule()*dailyLog.getAmount())/100 : (dailyLog.getPrivateFood().getEnergy_kilojoule()*dailyLog.getAmount())/100;
         double kcal = type.equals("food") ? (dailyLog.getFood().getEnergy_kcal()*dailyLog.getAmount())/100 : (dailyLog.getPrivateFood().getEnergy_kcal()*dailyLog.getAmount())/100;
+
+        nutrition.setFat(nutrition.getFat()+fat);
+        nutrition.setCarbohydrates(nutrition.getCarbohydrates()+carbs);
+        nutrition.setProtein(nutrition.getProtein()+protein);
+        nutrition.setEnergy_kilojoule(nutrition.getEnergy_kilojoule()+kj);
+        nutrition.setEnergy_kcal(nutrition.getEnergy_kcal()+kcal);
+
+        return nutrition;
+
+    }
+
+    @Override
+    public Food setAddFoodNutritionFromRecipe(Food nutrition, RecipeFood recipeFood, String type) {
+        double fat = type.equals("food") ? (recipeFood.getFood().getFat()*recipeFood.getAmount())/100 : (recipeFood.getPrivateFood().getFat()*recipeFood.getAmount())/100;
+        double carbs = type.equals("food") ? (recipeFood.getFood().getCarbohydrates()*recipeFood.getAmount())/100 : (recipeFood.getPrivateFood().getCarbohydrates()*recipeFood.getAmount())/100;
+        double protein = type.equals("food") ? (recipeFood.getFood().getProtein()*recipeFood.getAmount())/100 : (recipeFood.getPrivateFood().getProtein()*recipeFood.getAmount())/100;
+        double kj = type.equals("food") ? (recipeFood.getFood().getEnergy_kilojoule()*recipeFood.getAmount())/100 : (recipeFood.getPrivateFood().getEnergy_kilojoule()*recipeFood.getAmount())/100;
+        double kcal = type.equals("food") ? (recipeFood.getFood().getEnergy_kcal()*recipeFood.getAmount())/100 : (recipeFood.getPrivateFood().getEnergy_kcal()*recipeFood.getAmount())/100;
 
         nutrition.setFat(nutrition.getFat()+fat);
         nutrition.setCarbohydrates(nutrition.getCarbohydrates()+carbs);

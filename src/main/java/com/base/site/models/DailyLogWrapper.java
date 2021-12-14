@@ -18,7 +18,15 @@ public class DailyLogWrapper {
     List<DailyLog> dailyLogsMiscellaneous = new ArrayList<>();
     List<DailyLog> dailyLogsPrivateFoods = new ArrayList<>();
     List<DailyLog> dailyLogsExercises = new ArrayList<>();
+
+    /*
     List<DailyLog> dailyLogsRecipes = new ArrayList<>();
+    List<DailyLog> dailyLogsRecipeBreakfast = new ArrayList<>();
+    List<DailyLog> dailyLogsRecipeLunch = new ArrayList<>();
+    List<DailyLog> dailyLogsRecipeDinner = new ArrayList<>();
+    List<DailyLog> dailyLogsRecipeMiscellaneous = new ArrayList<>();
+
+     */
 
     DailyLog weight;
     Food nutrition;
@@ -145,17 +153,32 @@ public class DailyLogWrapper {
     }
 
 
-
+/*
     public List<DailyLog> getDailyLogsRecipes() {
         return dailyLogsRecipes;
     }
 
     public void setDailyLogsRecipes(List<DailyLog> dailyLogsRecipes) {
-        this.dailyLogsExercises = dailyLogsExercises;
+        this.dailyLogsRecipes = dailyLogsRecipes;
     }
     public void addToDailyLogsRecipes(DailyLog dailyLog) {
         dailyLogsRecipes.add(dailyLog);
     }
+
+    public List<DailyLog> getDailyLogsRecipeBreakfast() {
+        return dailyLogsRecipeBreakfast;
+    }
+
+    public void setDailyLogsRecipeBreakfast(List<DailyLog> dailyLogsRecipeBreakfast) {
+        this.dailyLogsExercises = dailyLogsExercises;
+    }
+    public void addToDailyLogsRecipeBreakfast(DailyLog dailyLog) {
+        dailyLogsRecipeBreakfast.add(dailyLog);
+    }
+
+ */
+
+
 
 
 }

@@ -1,9 +1,12 @@
 package com.base.site.models;
 
+import com.base.site.services.FoodService;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,6 +19,11 @@ import java.util.Set;
 @ToString
 @Table(name = "recipe")
 public class Recipe implements Serializable {
+
+    @Transient
+    @Autowired
+    FoodService foodService;
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -70,4 +78,20 @@ public class Recipe implements Serializable {
         total = (total/getTotal_weight())*100;
         return total;
     }
+
+    public Food getNutritionFromRecipe() {
+        Food nutrition = new Food("nutrition",0.0,0.0,0.0,0.0,0.0);
+        for (RecipeFood recipeFood : amounts){
+            if (recipeFood.getFood() != null){
+                nutrition = foodService.setAddFoodNutritionFromRecipe(nutrition, recipeFood, "food");
+            }
+            else if (recipeFood.getPrivateFood() != null){
+                nutrition = foodService.setAddFoodNutritionFromRecipe(nutrition, recipeFood, "pfood");
+            }
+        }
+        return nutrition;
+    }
+
+
+
 }
