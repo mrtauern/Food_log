@@ -98,8 +98,6 @@ public class Recipe implements Serializable {
                 protein += (recipeFood.getFood().getProtein()*recipeFood.getAmount())/100;
                 kj += (recipeFood.getFood().getEnergy_kilojoule()*recipeFood.getAmount())/100;
                 kcal += (recipeFood.getFood().getEnergy_kcal()*recipeFood.getAmount())/100;
-
-                //nutrition = foodService.setAddFoodNutritionFromRecipe(nutrition, recipeFood, "food");
             }
             else if (recipeFood.getPrivateFood() != null){
                 fat += (recipeFood.getPrivateFood().getFat()*recipeFood.getAmount())/100;
@@ -107,8 +105,6 @@ public class Recipe implements Serializable {
                 protein += (recipeFood.getPrivateFood().getProtein()*recipeFood.getAmount())/100;
                 kj += (recipeFood.getPrivateFood().getEnergy_kilojoule()*recipeFood.getAmount())/100;
                 kcal += (recipeFood.getPrivateFood().getEnergy_kcal()*recipeFood.getAmount())/100;
-
-                //nutrition = foodService.setAddFoodNutritionFromRecipe(nutrition, recipeFood, "pfood");
             }
         }
         //calculates recipy per 1 gram
