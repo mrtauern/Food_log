@@ -84,21 +84,21 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public Food setAddFoodNutritionFromRecipe(Food nutrition, RecipeFood recipeFood, String type) {
-        double fat = type.equals("food") ? (recipeFood.getFood().getFat()*recipeFood.getAmount())/100 : (recipeFood.getPrivateFood().getFat()*recipeFood.getAmount())/100;
-        double carbs = type.equals("food") ? (recipeFood.getFood().getCarbohydrates()*recipeFood.getAmount())/100 : (recipeFood.getPrivateFood().getCarbohydrates()*recipeFood.getAmount())/100;
-        double protein = type.equals("food") ? (recipeFood.getFood().getProtein()*recipeFood.getAmount())/100 : (recipeFood.getPrivateFood().getProtein()*recipeFood.getAmount())/100;
-        double kj = type.equals("food") ? (recipeFood.getFood().getEnergy_kilojoule()*recipeFood.getAmount())/100 : (recipeFood.getPrivateFood().getEnergy_kilojoule()*recipeFood.getAmount())/100;
-        double kcal = type.equals("food") ? (recipeFood.getFood().getEnergy_kcal()*recipeFood.getAmount())/100 : (recipeFood.getPrivateFood().getEnergy_kcal()*recipeFood.getAmount())/100;
+    public Food setAddFoodNutritionFromRecipe(Food nutrition, DailyLog dailyLog) {
+        Food tempNutrition = dailyLog.getRecipe().getNutritionFromRecipe();
+        double fat = tempNutrition.getFat()*dailyLog.getAmount();
+        double carbs = tempNutrition.getCarbohydrates()*dailyLog.getAmount();
+        double protein = tempNutrition.getProtein()*dailyLog.getAmount();
+        double kj = tempNutrition.getEnergy_kilojoule()*dailyLog.getAmount();
+        double kcal = tempNutrition.getEnergy_kcal()*dailyLog.getAmount();
 
-        nutrition.setFat(nutrition.getFat()+fat);
-        nutrition.setCarbohydrates(nutrition.getCarbohydrates()+carbs);
-        nutrition.setProtein(nutrition.getProtein()+protein);
-        nutrition.setEnergy_kilojoule(nutrition.getEnergy_kilojoule()+kj);
-        nutrition.setEnergy_kcal(nutrition.getEnergy_kcal()+kcal);
+        nutrition.setFat(fat+nutrition.getFat());
+        nutrition.setCarbohydrates(carbs+nutrition.getCarbohydrates());
+        nutrition.setProtein(protein+nutrition.getProtein());
+        nutrition.setEnergy_kilojoule(kj+nutrition.getEnergy_kilojoule());
+        nutrition.setEnergy_kcal(kcal+nutrition.getEnergy_kcal());
 
         return nutrition;
-
     }
 
     @Override
