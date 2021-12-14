@@ -75,7 +75,7 @@ public class DailyLogServiceImpl implements DailyLogService {
             }
             for (DailyLog dailyLog : logList) {
                 if (dailyLog.getDatetime().equals(date) && user.getId() == dailyLog.getFkUser().getId() && dailyLog.getRecipe() != null) {
-                    kcalUsed += (int) ((dailyLog.getRecipe().getCalculateCaloriesInRecipe()));
+                    kcalUsed += (int) ((dailyLog.getAmount() / 100) * dailyLog.getRecipe().getCalculateCaloriesInRecipe());
                 }
             }
         }
