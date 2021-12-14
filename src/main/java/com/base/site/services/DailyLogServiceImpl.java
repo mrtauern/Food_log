@@ -172,7 +172,7 @@ public class DailyLogServiceImpl implements DailyLogService {
 
         DailyLogWrapper dailyLogWrapper = getLogs(loggedInUser, date);
 
-        List<DailyLog> dailyLogs = findAll();
+        List<DailyLog> dailyLogs = getWeightGraph(loggedInUser.getId(), String.valueOf(date));
 
         List<Double> weights = new ArrayList<>();
         List<String> dates = new ArrayList<>();
@@ -258,6 +258,17 @@ public class DailyLogServiceImpl implements DailyLogService {
         model.addAttribute("dates", dates);
         model.addAttribute("goal", usersService.getLoggedInUser().getGoalWeight());
         return model;
+    }
+
+    @Override
+    public List<DailyLog> getWeightGraph(Long user_id, String selected_date) {
+        return dailyLogRepo.getWeightGraph(user_id, selected_date);
+    }
+
+    @Override
+    public List<DailyLog> getWeightGraph(Long user_id) {
+        String selected_date = String.valueOf(' ');
+        return dailyLogRepo.getWeightGraph(user_id, selected_date);
     }
 
 
