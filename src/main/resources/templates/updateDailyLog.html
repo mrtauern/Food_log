@@ -23,7 +23,11 @@
 
       <label  class="col-form-label">Type:</label>
       <select  id="logType" name="logType" th:field="*{fkLogType}" th:required="required">
-        <option th:each="logType : ${logType}" th:value="${logType.id}" th:utext="${logType.type}"/>
+        <!--<option th:each="logType : ${logType}" th:value="${logType.id}" th:utext="${logType.type}"/>-->
+        <option value="1">Breakfast</option>
+        <option value="2">Lunch</option>
+        <option value="3">Dinner</option>
+        <option value="4">Miscellaneous</option>
       </select>
 
       <div>
