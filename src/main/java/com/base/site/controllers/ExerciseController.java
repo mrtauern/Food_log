@@ -1,20 +1,18 @@
 package com.base.site.controllers;
 
 import com.base.site.models.*;
-import com.base.site.repositories.ExerciseRepository;
 import com.base.site.services.DailyLogService;
 import com.base.site.services.ExerciseService;
 import com.base.site.services.LogTypeService;
 import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -46,7 +44,7 @@ public class ExerciseController {
     public ExerciseController() {}
 
     @GetMapping("/exercise")
-    public String exercise(Model model, Exercise exercise, @Param("keyword") String keyword) {
+    public String exercise(Model model, Exercise exercise, @Param("keyword") String keyword, HttpSession session) {
         log.info("  get mapping exercise is called");
         List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
         List<DailyLog> edList = dailyLogService.findAllByKeyword(keyword);
@@ -56,7 +54,7 @@ public class ExerciseController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("pageTitle", "Exercise list");
         model.addAttribute("selectedPage", "exercise");
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return EXERCISE;
     }
@@ -64,14 +62,14 @@ public class ExerciseController {
 
 
     @GetMapping("/createExercise")
-    public String createExercise(Model model) {
+    public String createExercise(Model model, HttpSession session) {
         log.info("  createExercise is called ");
 
         Exercise exercise = new Exercise();
         model.addAttribute("exercise", exercise);
         model.addAttribute("pageTitle", "Create exercise");
         model.addAttribute("selectedPage", "exercise");
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return CREATE_EXERCISE;
     }
@@ -98,13 +96,13 @@ public class ExerciseController {
     }
 
     @GetMapping("/updateExercise/{id}")
-    public String updateExercise(@PathVariable(value = "id") Long id, Model model) {
+    public String updateExercise(@PathVariable(value = "id") Long id, Model model, HttpSession session) {
         log.info("  GetMapping updateExercise is called ");
         Exercise exercise = exerciseService.findById(id);
         model.addAttribute("exercise", exercise);
         model.addAttribute("pageTitle", "Edit exercise");
         model.addAttribute("selectedPage", "exercise");
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return UPDATE_EXERCISE;
     }
@@ -124,7 +122,8 @@ public class ExerciseController {
 
     @GetMapping({"/addExerciseToDailyLog", "/addExerciseToDailyLog/{date}"})
     public String addExerciseToDailyLog(Model model, @Param("keyword") String keyword,
-                                        @PathVariable(required = false, value = "date") String dateString) {
+                                        @PathVariable(required = false, value = "date") String dateString,
+                                        HttpSession session) {
         log.info("  get mapping addExerciseToDailyLog is called");
         List<Exercise> exerciseList = exerciseService.findAllByKeyword(keyword);
 
@@ -134,7 +133,7 @@ public class ExerciseController {
 
         model.addAttribute("pageTitle", "Add exercise to daily log");
         model.addAttribute("selectedPage", "dailyLog");
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         model.addAttribute("exerciseList", exerciseList);
         model.addAttribute("keyword", keyword);
@@ -143,7 +142,8 @@ public class ExerciseController {
     }
     @GetMapping({"/createExerciseInDailyLog/{id}", "/createExerciseInDailyLog/{id}/{date}"})
     public String createExerciseInDailyLog(@PathVariable(value = "id") Long id, Model model, DailyLog dailyLog,
-                                            @PathVariable(required = false, value = "date") String dateString) {
+                                            @PathVariable(required = false, value = "date") String dateString,
+                                            HttpSession session) {
         log.info("  Get mapping createExerciseInDailyLog is called ");
 
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
@@ -157,13 +157,14 @@ public class ExerciseController {
         model.addAttribute("exercise", exercise);
         model.addAttribute("pageTitle", "Add exercise to daily log");
         model.addAttribute("selectedPage", "dailyLog");
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return CREATE_EXERCISE_IN_DAILYLOG;
     }
     @PostMapping({"/saveExerciseInDailyLog", "/saveExerciseInDailyLog/{date}"})
     public String saveExerciseInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Exercise exercise, Model model,
-                                         @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
+                                         @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt,
+                                         HttpSession session) {
         log.info("  Post Mapping saveExerciseInDailyLog is called ");
 
         Exercise exerciseId = exerciseService.findById(exercise.getId());
@@ -172,7 +173,7 @@ public class ExerciseController {
         String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
         dailyLog.setFkExercise(exerciseId);
-        dailyLog.setFkUser(usersService.getLoggedInUser());
+        dailyLog.setFkUser(usersService.getLoggedInUser(session));
         dailyLog.setFkLogType(logTypeService.findByType("Exercise"));
 
         dailyLogService.save(dailyLog);
@@ -186,7 +187,8 @@ public class ExerciseController {
     }
     @GetMapping({"/updateExerciseInDailyLog/{id}", "/updateExerciseInDailyLog/{id}/{date}"})
     public String updateExerciseInDailyLog(@PathVariable(value = "id") Long id, Model model,
-                                           @PathVariable(required = false, value = "date") String dateString) {
+                                           @PathVariable(required = false, value = "date") String dateString,
+                                           HttpSession session) {
         log.info("  GetMapping updateExerciseInDailyLog is called ");
         DailyLog dailyLog= dailyLogService.findById(id);
         model.addAttribute("date", dateString);
@@ -194,21 +196,22 @@ public class ExerciseController {
         model.addAttribute("dailyLog", dailyLog);
         model.addAttribute("pageTitle", "Edit exercise in daily log");
         model.addAttribute("selectedPage", "dailyLog");
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return UPDATE_EXERCISE_IN_DAILYLOG;
     }
 
     @PostMapping({"/updateExerciseInDailyLog", "/updateExerciseInDailyLog/{date}"})
     public String updateExerciseInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,
-                                           @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
+                                           @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt,
+                                           HttpSession session) {
         log.info("  Post Mapping updateExerciseInDailyLog is called ");
 
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
 
         dailyLog.setDatetime(date);
 
-        dailyLog.setFkUser(usersService.getLoggedInUser());
+        dailyLog.setFkUser(usersService.getLoggedInUser(session));
         dailyLog.setFkLogType(logTypeService.findByType("Exercise"));
 
         dailyLogService.save(dailyLog);
@@ -223,7 +226,8 @@ public class ExerciseController {
 
     @GetMapping({"/deleteExerciseFromDailyLog/{id}", "/deleteExerciseFromDailyLog/{id}/{date}"})
     public String deleteExerciseFromDailyLog(@PathVariable(value = "id") Long id,
-                                             @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
+                                             @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt,
+                                             HttpSession session) {
         log.info("  GetMapping deleteEExerciseFromDailyLog is called ");
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
 
