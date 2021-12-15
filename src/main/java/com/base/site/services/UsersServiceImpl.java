@@ -176,6 +176,7 @@ public class UsersServiceImpl implements UsersService {
             loggedInUser.setPrivateFoods(user.getPrivateFoods());
             loggedInUser.setRecipies(user.getRecipies());
             loggedInUser.setBmi(user.getBmi());
+            loggedInUser.setUsername(user.getUsername());
 
             session.setAttribute("loggedInUser", loggedInUser);
         }
