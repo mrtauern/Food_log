@@ -239,6 +239,7 @@ class RecipeControllerTest  {
         //dailyLog.setFkLogType(logType);
 
         ResultActions resultActions = mockMvc.perform(post("/saveRecipeInDailyLog/")
+
                         .flashAttr("dailyLog", dailyLog)
                         .param("log_type", logType.getType())
                         .with(csrf()))
