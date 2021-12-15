@@ -68,15 +68,13 @@ public class DailyLogServiceImpl implements DailyLogService {
 
         if (!logList.isEmpty()) {
             for (DailyLog dailyLog : logList) {
+
                 if (dailyLog.getDatetime().equals(date) && user.getId().equals(dailyLog.getFkUser().getId()) && dailyLog.getFood() != null) {
                     kcalUsed += (int) ((dailyLog.getAmount() / 100) * dailyLog.getFood().getEnergy_kcal());
-                }else if (dailyLog.getDatetime().equals(date) && user.getId() == dailyLog.getFkUser().getId() && dailyLog.getPrivateFood() != null) {
+                }else if (dailyLog.getDatetime().equals(date) && user.getId().equals(dailyLog.getFkUser().getId()) && dailyLog.getPrivateFood() != null) {
                     kcalUsed += (int) ((dailyLog.getAmount() / 100) * dailyLog.getPrivateFood().getEnergy_kcal());
-                }
-            }
-            for (DailyLog dailyLog : logList) {
-                if (dailyLog.getDatetime().equals(date) && user.getId() == dailyLog.getFkUser().getId() && dailyLog.getRecipe() != null) {
-                    kcalUsed += (int) ((dailyLog.getAmount() / 100) * dailyLog.getRecipe().getCalculateCaloriesInRecipe());
+                }else if (dailyLog.getDatetime().equals(date) && user.getId().equals(dailyLog.getFkUser().getId()) && dailyLog.getRecipe() != null) {
+                    kcalUsed += (int) ((dailyLog.getAmount() / 100)* dailyLog.getRecipe().getCalculateCaloriesInRecipe());
                 }
             }
         }
