@@ -71,8 +71,8 @@ public class UPRCServiceImpl implements UPRCService{
                 log.info("mail with link and code being sent to user with email: " + resetCode.getUsername());
                 Mail mail = new Mail();
                 mail.setRecipient(resetCode.getUsername());
-                mail.setTopic("Your password on Food Log have been requested to be reset");
-                mail.setContent("To complete the password reset click the link Http://localhost:8080/password_reset_code and type in the username and code: " + resetCode.getCode());
+                mail.setTopic("Your password on FoodLog.dk has been requested to be reset");
+                mail.setContent("To complete the password reset click on the link Http://localhost:8080/password_reset_code and type in the username and code: " + resetCode.getCode());
 
                 emailService.sendmail(mail);
             } else {
