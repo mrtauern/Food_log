@@ -180,6 +180,7 @@ public class FoodController {
                                @RequestParam(value = "log_type") String logType,
                                @PathVariable(required = false, value = "date") String dateString,
                                @PathVariable(required = false, value = "type") String type,
+                               @RequestParam("logtype") String logtype,
                                RedirectAttributes redAt,
                                HttpSession session) {
         log.info("  PostMapping saveDailyLog is called ");
@@ -187,13 +188,15 @@ public class FoodController {
         dailyLog.setFkLogType(logTypeService.findByType(logType));
 
         if (type.equals("food")) {
-            log.info("food time day: "+dailyLog.getFkLogType().getType());
+            //log.info("food time day: "+dailyLog.getFkLogType().getType());
             Food foodId = foodService.findById(food.getId());
+            dailyLog.setFkLogType(logTypeService.findByType(logtype));
             dailyLog.setFood(foodId);
         }
         if (type.equals("pfood")) {
-            log.info("pfood ");
+            //log.info("pfood time day: "+dailyLog.getFkLogType().getType());
             PrivateFood foodId = privateFoodService.findById(food.getId());
+            dailyLog.setFkLogType(logTypeService.findByType(logtype));
             dailyLog.setPrivateFood(foodId);
         }
 

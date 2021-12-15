@@ -50,6 +50,8 @@ class FoodControllerTest {
     private UsersRepo usersRepo;
     @MockBean
     private LogTypeServiceImpl logTypeService;
+    @MockBean
+    private RecipeServiceImpl recipeService;
 
     @InjectMocks
     private FoodController foodController;
@@ -65,14 +67,14 @@ class FoodControllerTest {
     @Test
     void food() throws Exception {
         mockMvc.perform(
-                        get("/food").with(user("user@user.dk")))
+                        get("/food").with(user("user@user.dk").roles("ADMIN")))
                 .andExpect(status().isOk());
     }
 
     @Test
     void createFood() throws Exception {
         mockMvc.perform(
-                        get("/createFood").with(user("user@user.dk")))
+                        get("/createFood").with(user("user@user.dk").roles("ADMIN")))
                 .andExpect(status().isOk());
     }
 
@@ -113,7 +115,7 @@ class FoodControllerTest {
     @Test
     void createDailyLog() throws Exception {
         mockMvc.perform(
-                        get("/createDailyLog/food/1").with(user("user@user.dk")))
+                        get("/createDailyLog/food/1").with(user("user@user.dk").roles("ADMIN")))
                 .andExpect(status().isOk());
     }
 

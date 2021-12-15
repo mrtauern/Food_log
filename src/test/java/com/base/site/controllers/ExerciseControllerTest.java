@@ -68,7 +68,7 @@ class ExerciseControllerTest {
 
     @Test
     void exercise() throws Exception {
-        ResultActions resultActions = mockMvc.perform(get("/exercise").with(user("user")))
+        ResultActions resultActions = mockMvc.perform(get("/exercise").with(user("user").roles("ADMIN")))
                 .andExpect(status().isOk());
 
         MvcResult mvcResult = resultActions.andReturn();
