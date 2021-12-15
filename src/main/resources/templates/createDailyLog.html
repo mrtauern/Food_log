@@ -20,12 +20,12 @@
       <input type="text" th:field = "*{Amount}" placeholder=" Amount " th:required="required">
 
       <label  class="col-form-label">Type:</label>
-      <select  id="logType" th:name="fkLogType" th:required="required">
+      <select  id="logType" name="logtype" th:required="required">
         <option value="" disabled selected>-Select type-</option>
-        <option value="1">Breakfast</option>
-        <option value="2">Lunch</option>
-        <option value="3">Dinner</option>
-        <option value="4">Miscellaneous</option>
+        <option value="Breakfast">Breakfast</option>
+        <option value="Lunch">Lunch</option>
+        <option value="Dinner">Dinner</option>
+        <option value="Miscellaneous">Miscellaneous</option>
         <!--<option th:each="logType : ${logType}" th:value="${logType.id}" th:utext="${logType.type}"/>-->
       </select>
 

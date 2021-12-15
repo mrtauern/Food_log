@@ -1,5 +1,6 @@
 package com.base.site.services;
 
+import com.base.site.models.AllFoods;
 import com.base.site.models.DailyLog;
 import com.base.site.models.Food;
 import com.base.site.models.Recipe;
@@ -21,7 +22,7 @@ public interface FoodService {
     Food save(Food food);
     Food findById(Long id);
     void deleteById(Long id);
-    Page<Food> findPaginatedFood(int pageNo, int pageSize, String sortField, String sortDirection, String keyword);
+    Page<AllFoods> findPaginatedFood(int pageNo, int pageSize, String sortField, String sortDirection, String keyword);
 
     Food setAddFoodNutritionFromDailylog(Food nutrition, DailyLog dailyLog, String type);
 
