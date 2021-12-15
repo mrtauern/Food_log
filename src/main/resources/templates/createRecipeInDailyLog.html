@@ -17,14 +17,23 @@
       <input type="hidden" th:field="*{id}" />
       <input type="hidden" name="userId" th:field="*{fkUser.id}" th:required="required"/>
 
-      <label  class="col-form-label">Grams:</label>
+      <label>Grams:</label>
       <input type="text" th:field = "*{amount}" placeholder=" Amount " th:required="required">
 
-      <label  class="col-form-label">Type:</label>
+      <!--<label>Type:</label>
       <select  id="logType" name="logType" th:field="*{fkLogType}" th:required="required">
         <option th:value="${''}" th:disabled="disabled" th:selected="selected" th:utext="${'-Select type-'}"/>
         <option th:each="logType : ${logType}" th:value="${logType.id}" th:utext="${logType.type}"/>
-      </select>
+      </select>-->
+
+        <label for="log_type">Type:</label>
+        <select th:name="log_type" id="log_type" th:required="required">
+          <option value="" disabled selected>-Select type-</option>
+          <option value="Breakfast">Breakfast</option>
+          <option value="Lunch">Lunch</option>
+          <option value="Dinner">Dinner</option>
+          <option value="Miscellaneous">Miscellaneous</option>
+        </select>
 
       <div>
         <button type="button" class="btn btn-outline-dark mr-2 btn-sm" onclick="location.href='/dailyLog';">Cancel <i class="fas fa-times"></i></button>

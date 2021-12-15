@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -320,8 +317,11 @@ public class RecipeController {
     @PostMapping({"/saveRecipeInDailyLog/", "/saveRecipeInDailyLog/{date}"})
     public String saveRecipeInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Recipe recipe,HttpSession session,
                                        @PathVariable(required = false, value = "date") String dateString,
+                                       @RequestParam("log_type") String logType,
                                        RedirectAttributes redAt) {
         log.info("  Post Mapping saveRecipeInDailyLog is called ");
+
+        dailyLog.setFkLogType(logTypeService.findByType(logType));
 
         Recipe recipeId = recipeService.findById(recipe.getId());
 
@@ -349,20 +349,24 @@ public class RecipeController {
         DailyLog dailyLog= dailyLogService.findById(id);
         model.addAttribute("date", dateString);
 
-        model.addAttribute("logType", logTypeService.findAll());
+        //model.addAttribute("logType", logTypeService.findAll());
 
         model.addAttribute("dailyLog", dailyLog);
         model.addAttribute("pageTitle", "Edit exercise in daily log");
         model.addAttribute("selectedPage", "dailyLog");
         model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
+        model.addAttribute("logType", dailyLog.getFkLogType().getType());
 
         return UPDATE_RECIPE_IN_DAILYLOG;
     }
 
     @PostMapping({"/updateRecipeInDailyLog", "/updateRecipeInDailyLog/{date}"})
     public String updateRecipeInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,HttpSession session,
+                                         @RequestParam(value = "log_type") String logType,
                                            @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
         log.info("  Post Mapping updateRecipeInDailyLog is called ");
+
+        dailyLog.setFkLogType(logTypeService.findByType(logType));
 
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
 
