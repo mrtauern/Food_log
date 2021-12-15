@@ -16,17 +16,26 @@
       <input type="hidden" th:field="*{id}" />
       <input type="hidden" name="userId" th:field="*{fkUser.id}" th:required="required"/>
 
-      <label  class="col-form-label">Grams:</label>
+      <label >Grams:</label>
       <input type="text" th:field = "*{Amount}" placeholder=" Amount " th:required="required">
 
-      <label  class="col-form-label">Type:</label>
-      <select  id="logType" th:name="fkLogType" th:required="required">
+      <!--<label  class="col-form-label">Type:</label>
+      <select id="logType" th:name="fkLogType" th:required="required">
         <option value="" disabled selected>-Select type-</option>
         <option value="1">Breakfast</option>
         <option value="2">Lunch</option>
         <option value="3">Dinner</option>
         <option value="4">Miscellaneous</option>
-        <!--<option th:each="logType : ${logType}" th:value="${logType.id}" th:utext="${logType.type}"/>-->
+        <!-<option th:each="logType : ${logType}" th:value="${logType.id}" th:utext="${logType.type}"/>->
+      </select>-->
+
+      <label for="log_type">Type:</label>
+      <select th:name="log_type" id="log_type" th:required="required">
+        <option value="" disabled selected>-Select type-</option>
+        <option value="Breakfast">Breakfast</option>
+        <option value="Lunch">Lunch</option>
+        <option value="Dinner">Dinner</option>
+        <option value="Miscellaneous">Miscellaneous</option>
       </select>
 
       <div>
