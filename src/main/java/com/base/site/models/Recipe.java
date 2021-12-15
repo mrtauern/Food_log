@@ -71,11 +71,13 @@ public class Recipe implements Serializable {
 
     public double getCalculateCaloriesInRecipe() {
         double total = 0;
-        for (RecipeFood recipeFood : amounts) {
-            if(recipeFood.getFood() != null) {
-                total += (recipeFood.getFood().getEnergy_kcal()*recipeFood.getAmount() ) / 100;
-            } else if (recipeFood.getPrivateFood() != null) {
-                total +=( recipeFood.getPrivateFood().getEnergy_kcal()*recipeFood.getAmount()) / 100;
+        if(amounts != null) {
+            for (RecipeFood recipeFood : amounts) {
+                if (recipeFood.getFood() != null) {
+                    total += (recipeFood.getFood().getEnergy_kcal() * recipeFood.getAmount()) / 100;
+                } else if (recipeFood.getPrivateFood() != null) {
+                    total += (recipeFood.getPrivateFood().getEnergy_kcal() * recipeFood.getAmount()) / 100;
+                }
             }
         }
         total = (total/getTotal_weight())*100;
