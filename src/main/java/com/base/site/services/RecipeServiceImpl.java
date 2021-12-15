@@ -59,6 +59,15 @@ public class RecipeServiceImpl implements RecipeService{
         return recipeRepository.findAllByFkUser(loggedInUser);
     }
 
+
+    @Override
+    public List<Recipe> findAllFkUserAndSearch(Users loggedInUser, String keyword) {
+        if (keyword != null) {
+            return recipeRepository.findAllByFkUserAndSearch(keyword, loggedInUser );
+        }
+        return recipeRepository.findAllByFkUser(loggedInUser);
+    }
+
     @Override
     public Recipe findRecipeById(long id) {
         Recipe recipe = findById(id);
@@ -69,17 +78,30 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public List<Recipe> getRecipesForUser(Users loggedInUser) {
         List<Recipe> recipes = findAllFkUser(loggedInUser);
-
+/*
         if(recipes.size() > 0) {
 
         }else {
             log.info("no recipes found for user ");
-            Recipe noRecipe = new Recipe();
-            noRecipe.setName("You have no recipe's, you can create one by clicking the create recipe button.");
-            noRecipe.setTotal_weight(0);
-            recipes.add(noRecipe);
         }
+
+ */
         return recipes;
+    }
+
+
+    @Override
+    public List<Recipe> getRecipesForUserAndSearch(Users loggedInUser, String keyword) {
+        List<Recipe> recipesAndSearch = findAllFkUserAndSearch(loggedInUser, keyword);
+/*
+        if(recipesAndSearch.size() > 0) {
+
+        }else {
+            log.info("no recipes found for user ");
+        }
+
+ */
+        return recipesAndSearch;
     }
 
     @Override

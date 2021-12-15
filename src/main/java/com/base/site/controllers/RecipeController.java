@@ -62,11 +62,13 @@ public class RecipeController {
     DailyLogService dailyLogService;
 
     @GetMapping("/recipes")
-    public String recipes(Model model, HttpSession session) {
+    public String recipes(Model model, HttpSession session,
+                          @Param("keyword") String keyword) {
 
         log.info("Recipes getmapping called...");
 
-        model.addAttribute("recipes", recipeService.getRecipesForUser(usersService.getLoggedInUser(session)));
+        model.addAttribute("recipes", recipeService.getRecipesForUserAndSearch(usersService.getLoggedInUser(session), keyword ));
+        model.addAttribute("keyword", keyword);
         model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("pageTitle", "Recipe list");
         model.addAttribute("selectedPage", "recipe");
@@ -253,9 +255,9 @@ public class RecipeController {
     }
 
     @GetMapping("/showRecipeArchive")
-    public String showRecipeArchive(Model model, HttpSession session) {
+    public String showRecipeArchive(Model model, HttpSession session, String keyword) {
         log.info("showRecipeArchive getmapping called...");
-        List<Recipe> recipes = recipeService.findAllFkUser(usersService.getLoggedInUser(session));
+        List<Recipe> recipes = recipeService.findAllFkUserAndSearch(usersService.getLoggedInUser(session), keyword);
 
         if(recipes.size() <= 0) {
             log.info("no archived recipes found for user ");
@@ -279,7 +281,9 @@ public class RecipeController {
     public String addRecipeToDailyLog(Model model, @Param("keyword") String keyword,HttpSession session,
                                         @PathVariable(required = false, value = "date") String dateString) {
         log.info("  get mapping addRecipeToDailyLog is called");
-        List<Recipe> recipeList = recipeService.findAllByKeyword(keyword);
+        //List<Recipe> recipeList = recipeService.findAllByKeyword(keyword);
+        //model.addAttribute("recipeLista", recipeService.getRecipesForUserAndSearch(usersService.getLoggedInUser(session), keyword ));
+
 
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
 
@@ -289,7 +293,7 @@ public class RecipeController {
         model.addAttribute("selectedPage", "dailyLog");
         model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
-        model.addAttribute("recipeList", recipeList);
+        //model.addAttribute("recipeList", recipeList);
         model.addAttribute("keyword", keyword);
 
         return ADD_RECIPE_TO_DAILYLOG;
