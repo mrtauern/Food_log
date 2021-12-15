@@ -254,8 +254,8 @@ public class UsersServiceImpl implements UsersService {
             Mail mail = new Mail();
 
             mail.setRecipient(resetCode.getUsername());
-            mail.setTopic("Your password on Food Log have been changed!");
-            mail.setContent("If you didnt request this change please contact up emidially on email: foodlog.dk@gmail.com");
+            mail.setTopic("Your password on Food Log has been changed!");
+            mail.setContent("If you didnt request this change please contact up immediately on email: foodlog.dk@gmail.com");
             try {
                 emailService.sendmail(mail);
                 return "redirect:/login";
