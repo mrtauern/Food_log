@@ -145,6 +145,9 @@ public class DailyLogWrapper {
     }
 
     public Food getNutrition() {
+        nutrition.setProtein((double)Math.round(nutrition.getProtein()*100)/100);
+        nutrition.setFat((double)Math.round(nutrition.getFat()*100)/100);
+        nutrition.setCarbohydrates((double)Math.round(nutrition.getCarbohydrates()*100)/100);
         return nutrition;
     }
 
