@@ -1,8 +1,7 @@
 package com.base.site.services;
 
-import com.base.site.models.DailyLog;
-import com.base.site.models.Food;
-import com.base.site.models.PrivateFood;
+import com.base.site.controllers.PrivateFoodController;
+import com.base.site.models.*;
 import com.base.site.repositories.PrivateFoodRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,11 +11,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import static org.springframework.data.domain.PageRequest.of;
 
 @Service("PrivateFoodService")
 public class PrivateFoodServiceImpl implements PrivateFoodService{
+    Logger log = Logger.getLogger(PrivateFoodServiceImpl.class.getName());
 
     @Autowired
     PrivateFoodRepo privateFoodRepo;
@@ -50,6 +51,11 @@ public class PrivateFoodServiceImpl implements PrivateFoodService{
         this.privateFoodRepo.deleteById(id);
     }
 
+    @Override
+    public List<PrivateFood> findAllByFkUser(Users loggedInUser) {
+        return privateFoodRepo.findAllByFkUser(loggedInUser);
+    }
+
 
     @Override
     public Page<PrivateFood> findPaginatedAddFood(int pageNo, int pageSize, String sortField, String sortDirection, String keyword) {
@@ -64,4 +70,10 @@ public class PrivateFoodServiceImpl implements PrivateFoodService{
         return this.privateFoodRepo.findAll(pageable);
     }
 
+    @Override
+    public List<PrivateFood> getPrivateFoodForUser(Users loggedInUser) {
+        List<PrivateFood> privateFoods = findAllByFkUser(loggedInUser);
+
+        return privateFoods;
+    }
 }
