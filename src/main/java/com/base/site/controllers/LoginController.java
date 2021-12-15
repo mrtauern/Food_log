@@ -78,7 +78,7 @@ public class LoginController {
     }
 
     @PostMapping("/signup")
-    public String addUser(@Valid Users user, BindingResult result, @RequestParam String userTypeString) {
+    public String addUser(@Valid Users user, BindingResult result, @RequestParam String userTypeString) throws MessagingException, IOException {
         log.info("signup postmapping called in logincontroller...");
         if (result.hasErrors()) {
             log.info("creating user failed....");
@@ -93,7 +93,11 @@ public class LoginController {
 
         if(usersService.findUsersByUsername(user.getUsername()) == null){
             user = usersService.setAndSaveNewUser(user, userTypeString);
-
+            Mail mail = new Mail();
+            mail.setRecipient(user.getUsername());
+            mail.setContent("Welcome to foodlog "+user.getFullName());
+            mail.setTopic("Welcome to foodlog");
+            emailService.sendmail(mail);
             return "redirect:/index";
         }
 

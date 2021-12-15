@@ -235,6 +235,7 @@ class RecipeControllerTest  {
         DailyLog spyDailyLog = Mockito.spy(dailyLog);
 
         ResultActions resultActions = mockMvc.perform(post("/saveRecipeInDailyLog/")
+
                         .flashAttr("dailyLog", dailyLog)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection());
