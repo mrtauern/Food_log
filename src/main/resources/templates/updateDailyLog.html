@@ -18,12 +18,25 @@
       <input th:if="${type}=='food'" type="hidden" name="userId" th:field="*{food.id}" th:required="required"/>
       <input th:if="${type}=='pfood'" type="hidden" name="userId" th:field="*{privateFood.id}" th:required="required"/>
 
-      <label  class="col-form-label">Grams:</label>
+      <label>Grams:</label>
       <input type="text" th:field = "*{amount}" placeholder=" Amount " th:required="required">
 
-      <label  class="col-form-label">Type:</label>
-      <select  id="logType" name="logType" th:field="*{fkLogType}" th:required="required">
-        <option th:each="logType : ${logType}" th:value="${logType.id}" th:utext="${logType.type}"/>
+      <!--<label>Type:</label>
+      <select  id="logType" th:name="*{fkLogType.type}" th:required="required">
+        <!-<option th:each="logType : ${logType}" th:value="${logType.id}" th:utext="${logType.type}"/>->
+        <option value="breakfast">Breakfast</option>
+        <option value="lunch">Lunch</option>
+        <option value="dinner">Dinner</option>
+        <option value="miscellaneous">Miscellaneous</option>
+      </select>-->
+
+      <label for="log_type">Type:</label>
+      <select th:name="log_type" id="log_type" th:required="required">
+        <!--<option value="" selected disabled>-Select type-</option>-->
+        <option value="Breakfast" th:selected="${logType} == 'Breakfast'">Breakfast</option>
+        <option value="Lunch" th:selected="${logType} == 'Lunch'">Lunch</option>
+        <option value="Dinner" th:selected="${logType} == 'Dinner'">Dinner</option>
+        <option value="Miscellaneous" th:selected="${logType} == 'Miscellaneous'">Miscellaneous</option>
       </select>
 
       <div>
