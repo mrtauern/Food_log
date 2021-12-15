@@ -134,7 +134,7 @@ class AccountControllerTest {
     @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
     void userList() throws Exception {
 
-        ResultActions resultActions = mockMvc.perform(get("/userList").with(user("user@user.dk")))
+        ResultActions resultActions = mockMvc.perform(get("/userList").with(user("user@user.dk").roles("ADMIN")))
                 .andExpect(status().isOk());
 
         MvcResult mvcResult = resultActions.andReturn();
@@ -198,7 +198,7 @@ class AccountControllerTest {
         Mockito.when(usersService.getLoggedInUser(session).getId()).thenReturn(1L);
 
         //Test redirecting if user logged in is the user being edited
-        ResultActions resultActions = mockMvc.perform(get("/editUser/1").with(user("user@user.dk")).session(session))
+        ResultActions resultActions = mockMvc.perform(get("/editUser/1").with(user("user@user.dk").roles("ADMIN")).session(session))
                 .andExpect(status().is3xxRedirection());
 
         MvcResult mvcResult = resultActions.andReturn();
@@ -211,7 +211,7 @@ class AccountControllerTest {
 
     @Test
     void passwordResetUser() throws Exception {
-        ResultActions resultActions = mockMvc.perform(get("/password_reset_user/1").with(user("user@user.dk")))
+        ResultActions resultActions = mockMvc.perform(get("/password_reset_user/1").with(user("user@user.dk").roles("ADMIN")))
                 .andExpect(status().is3xxRedirection());
 
         MvcResult mvcResult = resultActions.andReturn();
@@ -227,7 +227,7 @@ class AccountControllerTest {
         Mockito.when(usersService.getLoggedInUser(session)).thenReturn(loggedInUser);
         Mockito.when(usersService.getLoggedInUser(session).getId()).thenReturn(1L);
 
-        ResultActions resultActions = mockMvc.perform(get("/delete_user_confirm/1").with(user("user@user.dk")).session(session))
+        ResultActions resultActions = mockMvc.perform(get("/delete_user_confirm/1").with(user("user@user.dk").roles("ADMIN")).session(session))
                 .andExpect(status().is3xxRedirection());
 
         MvcResult mvcResult = resultActions.andReturn();
