@@ -86,7 +86,7 @@ public class RecipeServiceImpl implements RecipeService{
     public RedirectAttributes setArchivedAndGetAttributes(RedirectAttributes redAt, Long userId, Long id, boolean status) {
         log.info("ID:: "+id);
         Recipe recipe = findById(id);
-        if (recipe.getFkUser().getId() == userId) {
+        if (recipe.getFkUser().getId().equals(userId)) {
             recipe.setArchived(status);
             save(recipe);
 

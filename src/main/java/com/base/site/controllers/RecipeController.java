@@ -213,7 +213,7 @@ public class RecipeController {
                                  HttpSession session) {
         log.info("saveRecipeFood Postmapping is called with recipeId: "+recipeId+" and foodId: "+id+" recipeFood:::"+recipeFood.getAmount());
 
-        if(usersService.getLoggedInUser(session).getId() == recipeService.findById(recipeId).getFkUser().getId()) {
+        if(usersService.getLoggedInUser(session).getId().equals(recipeService.findById(recipeId).getFkUser().getId())) {
             recipeFood.setRecipe(recipeService.findById(recipeId));
 
             if (type.equals("foods")) {
