@@ -74,6 +74,11 @@ public class DailyLogServiceImpl implements DailyLogService {
                     kcalUsed += (int) ((dailyLog.getAmount() / 100) * dailyLog.getPrivateFood().getEnergy_kcal());
                 }
             }
+            for (DailyLog dailyLog : logList) {
+                if (dailyLog.getDatetime().equals(date) && user.getId() == dailyLog.getFkUser().getId() && dailyLog.getRecipe() != null) {
+                    kcalUsed += (int) ((dailyLog.getAmount() / 100) * dailyLog.getRecipe().getCalculateCaloriesInRecipe());
+                }
+            }
         }
 
         return kcalUsed;
@@ -98,7 +103,7 @@ public class DailyLogServiceImpl implements DailyLogService {
                 String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                 dailyLog.setSDatetime(sDatetime);
 
-                if(dailyLog.getFood() != null || dailyLog.getPrivateFood() != null) {
+                if(dailyLog.getFood() != null || dailyLog.getPrivateFood() != null || dailyLog.getRecipe() != null) {
                     dailyLogWrapper.addToDailyLogsFoods(dailyLog);
                     String logType = dailyLog.getFkLogType().getType();
 
@@ -113,7 +118,9 @@ public class DailyLogServiceImpl implements DailyLogService {
                             if(dailyLog.getPrivateFood()!=null) {
                                 nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "pfood");
                             }
-
+                            if (dailyLog.getRecipe() != null){
+                                nutrition = foodService.setAddFoodNutritionFromRecipe(nutrition, dailyLog);
+                            }
                             break;
                         case "Lunch":
                             dailyLogWrapper.addToDailyLogsLunch(dailyLog);
@@ -122,6 +129,9 @@ public class DailyLogServiceImpl implements DailyLogService {
                             }
                             if(dailyLog.getPrivateFood()!=null) {
                                 nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "pfood");
+                            }
+                            if (dailyLog.getRecipe() != null){
+                                nutrition = foodService.setAddFoodNutritionFromRecipe(nutrition, dailyLog);
                             }
                             break;
                         case "Dinner":
@@ -132,6 +142,9 @@ public class DailyLogServiceImpl implements DailyLogService {
                             if(dailyLog.getPrivateFood()!=null) {
                                 nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "pfood");
                             }
+                            if (dailyLog.getRecipe() != null){
+                                nutrition = foodService.setAddFoodNutritionFromRecipe(nutrition, dailyLog);
+                            }
                             break;
                         case "Miscellaneous":
                             dailyLogWrapper.addToDailyLogsMiscellaneous(dailyLog);
@@ -140,6 +153,9 @@ public class DailyLogServiceImpl implements DailyLogService {
                             }
                             if(dailyLog.getPrivateFood()!=null) {
                                 nutrition = foodService.setAddFoodNutritionFromDailylog(nutrition, dailyLog, "pfood");
+                            }
+                            if (dailyLog.getRecipe() != null){
+                                nutrition = foodService.setAddFoodNutritionFromRecipe(nutrition, dailyLog);
                             }
                             break;
                         case "Weight":

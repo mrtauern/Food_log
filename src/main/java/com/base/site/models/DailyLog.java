@@ -21,6 +21,8 @@ import java.util.List;
 @Entity
 @Table(name = "daily_log")
 public class DailyLog {
+    public DailyLog(long id, long fkUser, long recipe){
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -57,6 +59,10 @@ public class DailyLog {
 
     @Column(name = "current_weight")
     private Double currentWeight;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_recipe_id")
+    private Recipe recipe;
 
     public DailyLog() {
         LocalDate ldt = LocalDate.now();

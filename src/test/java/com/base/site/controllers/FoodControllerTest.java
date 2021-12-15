@@ -50,6 +50,8 @@ class FoodControllerTest {
     private UsersRepo usersRepo;
     @MockBean
     private LogTypeServiceImpl logTypeService;
+    @MockBean
+    private RecipeServiceImpl recipeService;
 
     @InjectMocks
     private FoodController foodController;
