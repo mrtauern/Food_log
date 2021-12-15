@@ -29,10 +29,11 @@ public class PrivateFoodController {
     private final String CREATE_PRIVATEFOOD = "createPrivateFood";
 
     @GetMapping("/privateFood")
-    public String privateFood(Model model, PrivateFood privateFood, @Param("keyword") String keyword, HttpSession session) {
+    public String privateFood(Model model, @Param("keyword") String keyword, HttpSession session) {
         log.info("  get mapping private food is called");
 
-        model.addAttribute("pfood", privateFoodService.findAllByKeyword(keyword));
+        model.addAttribute("pfood", privateFoodService.getPrivateFoodForUser(usersService.getLoggedInUser(session)));
+
         model.addAttribute("keyword", keyword);
         model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("pageTitle", "Private food list");

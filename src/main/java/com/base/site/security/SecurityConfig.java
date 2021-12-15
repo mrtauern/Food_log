@@ -63,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/delete_user_confirm/?**","/password_reset_user/?**","/editUser","/editUser/?**","/exercise","/exercise/?**","/updateExercise","/updateExercise/?**","/saveExercise","/food","/food/?**","/createFood","/saveFood","/updateFood/?**","/userList","/userList/?**","/createUser/?**", "/dashboard").hasRole("ADMIN")
+                .antMatchers("/delete_user_confirm/?**","/editUser","/editUser/?**","/exercise","/exercise/?**","/updateExercise","/updateExercise/?**","/saveExercise","/food","/food/?**","/createFood","/saveFood","/updateFood/?**","/userList","/userList/?**","/createUser/?**", "/dashboard").hasRole("ADMIN")
                 .antMatchers("/signup","/login/?**","/adduser","/password_reset","/password_reset_code","/style/?**","/image/?**")
                 .permitAll()
                 .anyRequest().authenticated()
