@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -63,12 +65,12 @@ public class RecipeController {
     DailyLogService dailyLogService;
 
     @GetMapping("/recipes")
-    public String recipes(Model model) {
+    public String recipes(Model model, HttpSession session) {
 
         log.info("Recipes getmapping called...");
 
-        model.addAttribute("recipes", recipeService.getRecipesForUser(usersService.getLoggedInUser()));
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("recipes", recipeService.getRecipesForUser(usersService.getLoggedInUser(session)));
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("pageTitle", "Recipe list");
         model.addAttribute("selectedPage", "recipe");
 
@@ -76,14 +78,14 @@ public class RecipeController {
     }
 
     @GetMapping("/recipeInfo/{id}")
-    public String recipeInfo(Model model,Recipe recipe,@PathVariable( value ="id") Long id) {
+    public String recipeInfo(Model model,Recipe recipe,@PathVariable( value ="id") Long id, HttpSession session) {
         log.info("  RecipeInfo getmapping is called... with id :: " + id);
 
         model.addAttribute("recipe", recipeService.findRecipeById(id));
         model.addAttribute("recipeFood", recipeFoodService.findByRecipe(recipe));
         //model.addAttribute("totalCalories", recipeService.calculateCaloriesInRecipe(recipeFoodService.findByRecipe(recipe), recipeService.findRecipeById(id)));
         model.addAttribute("totalCalories", recipeService.findRecipeById(id).getCalculateCaloriesInRecipe());
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("pageTitle", "Recipe info");
         model.addAttribute("selectedPage", "recipe");
 
@@ -91,12 +93,12 @@ public class RecipeController {
         return RECIPEINFO;
     }
     @GetMapping("/editRecipe/{id}")
-    public String editRecipe(@PathVariable(value = "id") long id, Model model, Recipe recipe) {
+    public String editRecipe(@PathVariable(value = "id") long id, Model model, Recipe recipe, HttpSession session) {
         log.info("editRecipe /edit/id getmapping called... id: "+id);
 
         model.addAttribute("recipe", recipeService.findRecipeById(id));
         model.addAttribute("recipeFood", recipeFoodService.findByRecipe(recipe));
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("pageTitle", "Edit recipe");
         model.addAttribute("selectedPage", "recipe");
 
@@ -105,12 +107,12 @@ public class RecipeController {
     }
 
     @PostMapping("/editRecipe")
-    public String saveRecipe(@ModelAttribute("recipe") Recipe recipe, Model model, RedirectAttributes redAt) {
+    public String saveRecipe(@ModelAttribute("recipe") Recipe recipe, Model model, RedirectAttributes redAt, HttpSession session) {
         log.info("  PostMapping editRecipe is called...");
 
-        recipe.setFkUser(usersService.getLoggedInUser());
+        recipe.setFkUser(usersService.getLoggedInUser(session));
         recipeService.save(recipe);
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         redAt.addFlashAttribute("showMessage", true);
         redAt.addFlashAttribute("messageType", "success");
         redAt.addFlashAttribute("message", "Recipe is successfully updated");
@@ -143,10 +145,10 @@ public class RecipeController {
     }*/
 
     @PostMapping("/saveFoodInRecipe/{foodId}/{recipeId}")
-    public String saveFoodInRecipe(@PathVariable("foodId")long foodId, @PathVariable("recipeId")long recipeId, RecipeFood recipeFood, RedirectAttributes redAt) {
+    public String saveFoodInRecipe(@PathVariable("foodId")long foodId, @PathVariable("recipeId")long recipeId, RecipeFood recipeFood, RedirectAttributes redAt, HttpSession session) {
         log.info("saveFoodInRecipe Postmapping is called with recipeId: "+recipeId+" and foodId: "+foodId+" recipeFood:::"+recipeFood.getAmount());
 
-        if(usersService.getLoggedInUser().getId() == recipeService.findById(recipeId).getFkUser().getId()) {
+        if(usersService.getLoggedInUser(session).getId() == recipeService.findById(recipeId).getFkUser().getId()) {
             recipeFoodService.saveRecipeFoodData(recipeFood, foodId, recipeId);
 
             redAt.addFlashAttribute("showMessage", true);
@@ -176,10 +178,10 @@ public class RecipeController {
     }
 
     @PostMapping("/createRecipe")
-    public String createRecipe(@ModelAttribute("recipe") Recipe recipe, RedirectAttributes redAt) {
+    public String createRecipe(@ModelAttribute("recipe") Recipe recipe, RedirectAttributes redAt, HttpSession session) {
         log.info("  PostMapping createRecipe is called...");
 
-        recipe.setFkUser(usersService.getLoggedInUser());
+        recipe.setFkUser(usersService.getLoggedInUser(session));
         recipe = recipeService.save(recipe);
 
         log.info("Recipe id: "+recipe.getId());
@@ -189,14 +191,14 @@ public class RecipeController {
 
     //Might need to be moved to food controller
     @GetMapping("/addFoodToRecipe/{recipeId}")
-    public String addFoodToRecipe(@PathVariable("recipeId")long recipeId, @Param("keyword") String keyword, Model model) {
+    public String addFoodToRecipe(@PathVariable("recipeId")long recipeId, @Param("keyword") String keyword, Model model, HttpSession session) {
         log.info("addFoodToRecipe Getmapping is called with recipeId: "+recipeId);
 
         model.addAttribute("recipeId", recipeId);
         model.addAttribute("foodlist", foodService.findAllByKeyword(keyword));
         model.addAttribute("pfoodlist", privateFoodService.findAllByKeyword(keyword));
         model.addAttribute("keyword", keyword);
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("recipeFood", new RecipeFood());
         model.addAttribute("pageTitle", "Add food to recipe");
         model.addAttribute("selectedPage", "recipe");
@@ -209,10 +211,12 @@ public class RecipeController {
     public String saveRecipeFood(@PathVariable(required = false, value = "type") String type,
                                  @PathVariable("recipeId")long recipeId,
                                  @PathVariable("id")long id,
-                                 RecipeFood recipeFood, Food food, PrivateFood privateFood, RedirectAttributes redAt) {
+                                 RecipeFood recipeFood, Food food, PrivateFood privateFood,
+                                 RedirectAttributes redAt,
+                                 HttpSession session) {
         log.info("saveRecipeFood Postmapping is called with recipeId: "+recipeId+" and foodId: "+id+" recipeFood:::"+recipeFood.getAmount());
 
-        if(usersService.getLoggedInUser().getId() == recipeService.findById(recipeId).getFkUser().getId()) {
+        if(usersService.getLoggedInUser(session).getId() == recipeService.findById(recipeId).getFkUser().getId()) {
             recipeFood.setRecipe(recipeService.findById(recipeId));
 
             if (type.equals("foods")) {
@@ -242,19 +246,19 @@ public class RecipeController {
     }
 
     @GetMapping("/archiveRecipe/{status}/{id}")
-    public String archiveRecipe(@PathVariable("id")long id, @PathVariable("status")boolean status, RedirectAttributes redAt) {
+    public String archiveRecipe(@PathVariable("id")long id, @PathVariable("status")boolean status, RedirectAttributes redAt, HttpSession session) {
         log.info("Archive recipe getmapping called with id:"+id);
 
-        redAt = recipeService.setArchivedAndGetAttributes(redAt, usersService.getLoggedInUser().getId(), id, status);
+        redAt = recipeService.setArchivedAndGetAttributes(redAt, usersService.getLoggedInUser(session).getId(), id, status);
 
         return REDIRECT+RECIPES;
 
     }
 
     @GetMapping("/showRecipeArchive")
-    public String showRecipeArchive(Model model) {
+    public String showRecipeArchive(Model model, HttpSession session) {
         log.info("showRecipeArchive getmapping called...");
-        List<Recipe> recipes = recipeService.findAllFkUser(usersService.getLoggedInUser());
+        List<Recipe> recipes = recipeService.findAllFkUser(usersService.getLoggedInUser(session));
 
         if(recipes.size() <= 0) {
             log.info("no archived recipes found for user ");
@@ -265,7 +269,7 @@ public class RecipeController {
         }
 
         model.addAttribute("recipes", recipes);
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("pageTitle", "Archived recipe list");
         model.addAttribute("selectedPage", "recipe");
 
@@ -275,7 +279,7 @@ public class RecipeController {
 
 
     @GetMapping({"/addRecipeToDailyLog", "/addRecipeToDailyLog/{date}"})
-    public String addRecipeToDailyLog(Model model, @Param("keyword") String keyword,
+    public String addRecipeToDailyLog(Model model, @Param("keyword") String keyword,HttpSession session,
                                         @PathVariable(required = false, value = "date") String dateString) {
         log.info("  get mapping addRecipeToDailyLog is called");
         List<Recipe> recipeList = recipeService.findAllByKeyword(keyword);
@@ -286,7 +290,7 @@ public class RecipeController {
 
         model.addAttribute("pageTitle", "Add recipe to daily log");
         model.addAttribute("selectedPage", "dailyLog");
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         model.addAttribute("recipeList", recipeList);
         model.addAttribute("keyword", keyword);
@@ -294,7 +298,7 @@ public class RecipeController {
         return ADD_RECIPE_TO_DAILYLOG;
     }
     @GetMapping({"/createRecipeInDailyLog/{id}", "/createRecipeInDailyLog/{id}/{date}"})
-    public String createRecipeInDailyLog(@PathVariable(value = "id") Long id, Model model, DailyLog dailyLog,
+    public String createRecipeInDailyLog(@PathVariable(value = "id") Long id, Model model, DailyLog dailyLog,HttpSession session,
                                          @PathVariable(required = false, value = "date") String dateString
                                         ) {
         log.info("  Get mapping createRecipeInDailyLog is called ");
@@ -309,12 +313,12 @@ public class RecipeController {
         model.addAttribute("recipe", recipe);
         model.addAttribute("pageTitle", "Add Recipe to daily log");
         model.addAttribute("selectedPage", "dailyLog");
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return CREATE_RECIPE_IN_DAILYLOG;
     }
     @PostMapping({"/saveRecipeInDailyLog/", "/saveRecipeInDailyLog/{date}"})
-    public String saveRecipeInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Recipe recipe,
+    public String saveRecipeInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Recipe recipe,HttpSession session,
                                        @PathVariable(required = false, value = "date") String dateString,
                                        RedirectAttributes redAt) {
         log.info("  Post Mapping saveRecipeInDailyLog is called ");
@@ -325,7 +329,7 @@ public class RecipeController {
         String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
         dailyLog.setRecipe(recipeId);
-        dailyLog.setFkUser(usersService.getLoggedInUser());
+        dailyLog.setFkUser(usersService.getLoggedInUser(session));
         dailyLogService.save(dailyLog);
 
 
@@ -339,7 +343,7 @@ public class RecipeController {
 
 
     @GetMapping({"/updateRecipeInDailyLog/{id}", "/updateRecipeInDailyLog/{id}/{date}"})
-    public String updateRecipeInDailyLog(@PathVariable(value = "id") Long id, Model model,
+    public String updateRecipeInDailyLog(@PathVariable(value = "id") Long id, Model model,HttpSession session,
                                            @PathVariable(required = false, value = "date") String dateString) {
         log.info("  GetMapping updateRecipeInDailyLog is called ");
         DailyLog dailyLog= dailyLogService.findById(id);
@@ -350,13 +354,13 @@ public class RecipeController {
         model.addAttribute("dailyLog", dailyLog);
         model.addAttribute("pageTitle", "Edit exercise in daily log");
         model.addAttribute("selectedPage", "dailyLog");
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return UPDATE_RECIPE_IN_DAILYLOG;
     }
 
     @PostMapping({"/updateRecipeInDailyLog", "/updateRecipeInDailyLog/{date}"})
-    public String updateRecipeInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,
+    public String updateRecipeInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,HttpSession session,
                                            @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
         log.info("  Post Mapping updateRecipeInDailyLog is called ");
 
@@ -364,7 +368,7 @@ public class RecipeController {
 
         dailyLog.setDatetime(date);
 
-        dailyLog.setFkUser(usersService.getLoggedInUser());
+        dailyLog.setFkUser(usersService.getLoggedInUser(session));
         //dailyLog.setFkLogType(logTypeService.findByType("Exercise"));
 
         dailyLogService.save(dailyLog);

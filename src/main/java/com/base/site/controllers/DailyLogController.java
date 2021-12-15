@@ -5,22 +5,17 @@ import com.base.site.services.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -69,16 +64,16 @@ public class DailyLogController {
     }
 
     @GetMapping({"/dailyLog", "/dailyLog/{date}"})
-    public String dailyLog(Model model,@Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString) throws ParseException {
+    public String dailyLog(Model model, @Param("keyword") String keyword, @PathVariable(required = false, value = "date") String dateString, HttpSession session) throws ParseException {
         log.info("Getmapping called for dailylog for specific date: "+dateString);
 
-        model = dailyLogService.getDailyLogModels(usersService.getLoggedInUser(), dateString, model, keyword);
+        model = dailyLogService.getDailyLogModels(usersService.getLoggedInUser(session), dateString, model, keyword, session);
 
         return DAILY_LOG;
     }
 
     @GetMapping("/addCurrentWeight")
-    public String addCurrentWeight(Model model, @Param("keyword") String keyword) {
+    public String addCurrentWeight(Model model, @Param("keyword") String keyword, HttpSession session) {
         log.info("  get mapping addCurrentWeight is called");
 
         List<DailyLog> dailyLog = dailyLogService.findAllByKeyword(keyword);
@@ -86,7 +81,7 @@ public class DailyLogController {
         model.addAttribute("dailyLog", dailyLog);
         model.addAttribute("keyword", keyword);
 
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("pageTitle", "Add current weight");
         model.addAttribute("selectedPage", "dailyLog");
 
@@ -95,7 +90,8 @@ public class DailyLogController {
 
     @GetMapping({"/createCurrentWeight", "/createCurrentWeight/{date}"})
     public String createCurrentWeight( Model model, DailyLog dailyLog,
-                                       @PathVariable(required = false, value = "date") String dateString) {
+                                       @PathVariable(required = false, value = "date") String dateString,
+                                       HttpSession session) {
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
 
         model.addAttribute("date", date.toString());
@@ -105,7 +101,7 @@ public class DailyLogController {
 
         model.addAttribute("dailyLog", dailyLog);
 
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("pageTitle", "Create current weight");
         model.addAttribute("selectedPage", "dailyLog");
 
@@ -114,7 +110,9 @@ public class DailyLogController {
 
     @PostMapping({"/saveCurrentWeight", "/saveCurrentWeight/{date}"})
     public String saveCurrentWeight(@ModelAttribute("dailyLog") DailyLog dailyLog,
-                                    @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
+                                    @PathVariable(required = false, value = "date") String dateString,
+                                    RedirectAttributes redAt,
+                                    HttpSession session) {
         log.info("  Post Mapping saveCurrentWeight is called ");
 
         LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
@@ -122,7 +120,7 @@ public class DailyLogController {
         String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
         dailyLog.setFkLogType(logTypeService.findByType("Weight"));
-        dailyLog.setFkUser(usersService.getLoggedInUser());
+        dailyLog.setFkUser(usersService.getLoggedInUser(session));
 
         dailyLogService.save(dailyLog);
 
@@ -135,7 +133,8 @@ public class DailyLogController {
 
     @GetMapping({"/updateCurrentWeight/{id}", "/updateCurrentWeight/{id}/{date}"})
     public String updateCurrentWeight(@PathVariable(value = "id") Long id, Model model,
-                                      @PathVariable(required = false, value = "date") String dateString) {
+                                      @PathVariable(required = false, value = "date") String dateString,
+                                      HttpSession session) {
 
         log.info("  GetMapping updateCurrentWeight is called with id: "+id);
 
@@ -143,7 +142,7 @@ public class DailyLogController {
         model.addAttribute("dailyLog", dailyLogService.findById(id));
         log.info("  GetMapping updateCurrentWeight is called ");
 
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("pageTitle", "Edit current weight");
         model.addAttribute("selectedPage", "dailyLog");
 
@@ -166,22 +165,22 @@ public class DailyLogController {
     }
 
     @GetMapping("/weightOptions")
-    public String weightOptions(Model model) {
+    public String weightOptions(Model model, HttpSession session) {
         log.info("Getmapping weightOptions called in DailylogController");
 
-        model.addAttribute("user", usersService.getLoggedInUser());
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("user", usersService.getLoggedInUser(session));
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("pageTitle", "Weight options");
 
         return WEIGHT_OPTIONS;
     }
 
     @PostMapping("/saveWeightOption")
-    public String saveWeightOptions(@ModelAttribute("user") Users user, RedirectAttributes redAt){
+    public String saveWeightOptions(@ModelAttribute("user") Users user, RedirectAttributes redAt, HttpSession session){
         log.info("Postmappting saveWeightOption called in DailylogController"+user.getKcal_modifier());
 
-        usersService.getLoggedInUser().setKcal_modifier(user.getKcal_modifier());
-        usersService.save(usersService.getLoggedInUser());
+        usersService.getLoggedInUser(session).setKcal_modifier(user.getKcal_modifier());
+        usersService.save(usersService.findById(usersService.getLoggedInUser(session).getId()));
 
         redAt.addFlashAttribute("showMessage", true);
         redAt.addFlashAttribute("messageType", "success");
@@ -191,10 +190,10 @@ public class DailyLogController {
     }
 
     @GetMapping("/weightGraph")
-    public String weightGraph(Model model){
+    public String weightGraph(Model model, HttpSession session){
         log.info("Weight graph get called");
 
-        model = dailyLogService.getWeightGraphModels( model);
+        model = dailyLogService.getWeightGraphModels(model, session);
 
         return WEIGHT_GRAPH;
     }

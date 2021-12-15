@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service("FoodService")
@@ -26,8 +27,8 @@ public interface FoodService {
 
     Food setAddFoodNutritionFromRecipe(Food nutrition, DailyLog dailyLog);
 
-    Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword);
+    Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword, HttpSession session);
 
-    Model getPaginatedAddFoodModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword);
+    Model getPaginatedAddFoodModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword, HttpSession session);
 
 }

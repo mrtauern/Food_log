@@ -1,26 +1,16 @@
 package com.base.site.controllers;
 
-import com.base.site.models.Food;
 import com.base.site.models.PrivateFood;
-import com.base.site.models.Users;
 import com.base.site.services.PrivateFoodService;
 import com.base.site.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.List;
+import javax.servlet.http.HttpSession;
 import java.util.logging.Logger;
 
 @Controller
@@ -39,12 +29,12 @@ public class PrivateFoodController {
     private final String CREATE_PRIVATEFOOD = "createPrivateFood";
 
     @GetMapping("/privateFood")
-    public String privateFood(Model model, PrivateFood privateFood, @Param("keyword") String keyword) {
+    public String privateFood(Model model, PrivateFood privateFood, @Param("keyword") String keyword, HttpSession session) {
         log.info("  get mapping private food is called");
 
         model.addAttribute("pfood", privateFoodService.findAllByKeyword(keyword));
         model.addAttribute("keyword", keyword);
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("pageTitle", "Private food list");
         model.addAttribute("selectedPage", "privateFood");
 
@@ -52,11 +42,11 @@ public class PrivateFoodController {
     }
 
     @GetMapping("/createPrivateFood")
-    public String createPrivateFood(Model model) {
+    public String createPrivateFood(Model model, HttpSession session) {
         log.info("  createPrivateFood is called ");
 
         model.addAttribute("privateFood", new PrivateFood());
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("pageTitle", "Create private food");
         model.addAttribute("selectedPage", "privateFood");
 
@@ -64,7 +54,7 @@ public class PrivateFoodController {
     }
 
     @PostMapping("/savePrivateFood")
-    public String savePrivateFood(@ModelAttribute("privateFood") PrivateFood privateFood, RedirectAttributes redAt) {
+    public String savePrivateFood(@ModelAttribute("privateFood") PrivateFood privateFood, RedirectAttributes redAt, HttpSession session) {
         log.info("  PostMapping savePrivateFood is called ");
 
         Long privateFoodId = privateFood.getId();
@@ -74,7 +64,7 @@ public class PrivateFoodController {
         log.info("Name: "+privateFood.getName());
         log.info("Kilojoule: "+privateFood.getEnergy_kilojoule());
 
-        privateFood.setFkUser(usersService.getLoggedInUser());
+        privateFood.setFkUser(usersService.getLoggedInUser(session));
         privateFoodService.save(privateFood);
 
         log.info("Size: "+privateFoodService.findAll().size());
@@ -95,11 +85,11 @@ public class PrivateFoodController {
     }
 
     @GetMapping("/updatePrivateFood/{id}")
-    public String updatePrivateFood(@PathVariable(value = "id") Long id, Model model) {
+    public String updatePrivateFood(@PathVariable(value = "id") Long id, Model model, HttpSession session) {
         log.info("  GetMapping updatePrivateFood is called ");
 
         model.addAttribute("privateFood", privateFoodService.findById(id));
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser());
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("pageTitle", "Edit private food");
         model.addAttribute("selectedPage", "privateFood");
 

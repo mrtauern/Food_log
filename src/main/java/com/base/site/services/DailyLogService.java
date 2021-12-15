@@ -6,6 +6,7 @@ import com.base.site.models.Users;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,7 +22,10 @@ public interface DailyLogService {
     int getKcalLeft(LocalDate date, Users user);
 
     DailyLogWrapper getLogs(Users loggedInUser, LocalDate date);
-    Model getDailyLogModels(Users loggedInUser, String dateString, Model model, String keyword);
+    Model getDailyLogModels(Users loggedInUser, String dateString, Model model, String keyword, HttpSession session);
 
-    Model getWeightGraphModels(Model model);
+    Model getWeightGraphModels(Model model, HttpSession session);
+
+    List<DailyLog> getWeightGraph(Long user_id, String selected_date);
+    List<DailyLog> getWeightGraph(Long user_id);
 }

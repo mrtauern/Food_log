@@ -237,15 +237,24 @@
 
 <div th:fragment="leftMenu">
     <ul>
-        <li th:classappend="${selectedPage == 'dashboard'} ? selected : null"><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        <li th:classappend="${selectedPage == 'dailyLog'} ? selected : null"><a href="/dailyLog"><i class="fas fa-clipboard-list"></i> Daily log</a></li>
-        <li th:classappend="${selectedPage == 'user'} ? selected : null"><a href="/userList"><i class="fas fa-user"></i> User</a></li>
-        <li  th:classappend="${selectedPage == 'exercise'} ? selected : null"><a href="/exercise"><i class="fas fa-running"></i> Exercise</a></li>
-        <li th:classappend="${selectedPage == 'food'} ? selected : null"><a href="/food"><i class="fas fa-hamburger"></i> Food</a></li>
-        <li th:classappend="${selectedPage == 'privateFood'} ? selected : null"><a href="/privateFood"><i class="fas fa-pizza-slice"></i> Private Food</a></li>
-        <li th:classappend="${selectedPage == 'recipe'} ? selected : null"><a href="/recipes"><i class="far fa-clipboard"></i> Recipe</a></li>
-        <li th:classappend="${selectedPage == 'price'} ? selected : null"><a href="#"><i class="fas fa-dollar-sign"></i> Price</a></li>
-        <li  th:classappend="${selectedPage == 'other'} ? selected : null"><a href="#"><i class="fas fa-ellipsis-h"></i> Other</a></li>
+        <th:block th:if="${loggedInUser?.roles == 'ADMIN'}">
+            <li th:classappend="${selectedPage == 'dashboard'} ? selected : null"><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li th:classappend="${selectedPage == 'dailyLog'} ? selected : null"><a href="/dailyLog"><i class="fas fa-clipboard-list"></i> Daily log</a></li>
+            <li th:classappend="${selectedPage == 'user'} ? selected : null"><a href="/userList"><i class="fas fa-user"></i> User</a></li>
+            <li  th:classappend="${selectedPage == 'exercise'} ? selected : null"><a href="/exercise"><i class="fas fa-running"></i> Exercise</a></li>
+            <li th:classappend="${selectedPage == 'food'} ? selected : null"><a href="/food"><i class="fas fa-hamburger"></i> Food</a></li>
+            <li th:classappend="${selectedPage == 'privateFood'} ? selected : null"><a href="/privateFood"><i class="fas fa-pizza-slice"></i> Private Food</a></li>
+            <li th:classappend="${selectedPage == 'recipe'} ? selected : null"><a href="/recipes"><i class="far fa-clipboard"></i> Recipe</a></li>
+            <li th:classappend="${selectedPage == 'price'} ? selected : null"><a href="#"><i class="fas fa-dollar-sign"></i> Price</a></li>
+            <li th:classappend="${selectedPage == 'other'} ? selected : null"><a href="#"><i class="fas fa-ellipsis-h"></i> Other</a></li>
+        </th:block>
+        <th:block th:if="${loggedInUser?.roles == 'USER'}">
+            <li th:classappend="${selectedPage == 'dailyLog'} ? selected : null"><a href="/dailyLog"><i class="fas fa-clipboard-list"></i> Daily log</a></li>
+            <li th:classappend="${selectedPage == 'privateFood'} ? selected : null"><a href="/privateFood"><i class="fas fa-pizza-slice"></i> Private Food</a></li>
+            <li th:classappend="${selectedPage == 'recipe'} ? selected : null"><a href="/recipes"><i class="far fa-clipboard"></i> Recipe</a></li>
+            <li th:classappend="${selectedPage == 'price'} ? selected : null"><a href="#"><i class="fas fa-dollar-sign"></i> Price</a></li>
+            <li th:classappend="${selectedPage == 'other'} ? selected : null"><a href="#"><i class="fas fa-ellipsis-h"></i> Other</a></li>
+        </th:block>
     </ul>
 
 </div>
