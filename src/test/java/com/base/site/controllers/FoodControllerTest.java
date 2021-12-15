@@ -1,6 +1,7 @@
 package com.base.site.controllers;
 
 import com.base.site.models.DailyLog;
+import com.base.site.models.LogType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -129,6 +130,9 @@ class FoodControllerTest {
         DailyLog dailyLog = new DailyLog();
         dailyLog.setId(1L);
         dailyLog.setAmount(222.0);
+        LogType logType = new LogType();
+        logType.setType("Dinner");
+        dailyLog.setFkLogType(logType);
 
         DailyLog spyDailyLog = Mockito.spy(dailyLog);
 

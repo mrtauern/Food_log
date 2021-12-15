@@ -234,8 +234,13 @@ class RecipeControllerTest  {
         DailyLog dailyLog = new DailyLog(1, 1, 1);
         DailyLog spyDailyLog = Mockito.spy(dailyLog);
 
+        LogType logType = new LogType();
+        logType.setType("Dinner");
+        //dailyLog.setFkLogType(logType);
+
         ResultActions resultActions = mockMvc.perform(post("/saveRecipeInDailyLog/")
                         .flashAttr("dailyLog", dailyLog)
+                        .param("log_type", logType.getType())
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection());
 
@@ -249,6 +254,9 @@ class RecipeControllerTest  {
         DailyLog dailyLog = new DailyLog();
         dailyLog.setId(1L);
         dailyLog.setAmount(27.0);
+        LogType logType = new LogType();
+        logType.setType("Dinner");
+        dailyLog.setFkLogType(logType);
 
         DailyLog spyDailyLog = Mockito.spy(dailyLog);
 
