@@ -1,5 +1,6 @@
 package com.base.site.services;
 
+import com.base.site.models.Exercise;
 import com.base.site.models.Recipe;
 import com.base.site.models.Users;
 import com.base.site.repositories.RecipeRepository;
@@ -23,6 +24,14 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public List<Recipe> findAll() {
         return recipeRepository.findAll();
+    }
+
+    @Override
+    public List<Recipe> findAllByKeyword(String keyword) {
+        if (keyword != null) {
+            return recipeRepository.search(keyword);
+        }
+        return (List<Recipe>) recipeRepository.findAll();
     }
 
     @Override

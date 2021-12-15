@@ -1,8 +1,6 @@
 package com.base.site.controllers;
 
-import com.base.site.models.Recipe;
-import com.base.site.models.UserType;
-import com.base.site.models.Users;
+import com.base.site.models.*;
 import com.base.site.repositories.UsersRepo;
 import com.base.site.services.*;
 import org.junit.Before;
@@ -33,8 +31,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -58,10 +58,17 @@ class RecipeControllerTest  {
     private AccountController accountController;
     @MockBean
     private UsersRepo usersRepo;
+    @MockBean
+    LogTypeServiceImpl logTypeService;
+    @MockBean
+    DailyLogServiceImpl dailyLogService;
+
     private Users user = new Users();
 
     @Before
     void setUp() {
+
+        Users user = new Users();
         //usersservice
 
         MockitoAnnotations.initMocks(this);
@@ -119,9 +126,12 @@ class RecipeControllerTest  {
 
     }
 
+
+
     @Test
     @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"USER"})
     void recipes() throws Exception {
+
         HttpSession session = Mockito.mock(HttpSession.class);
         List<Recipe> recipes = recipesList(userSetup(new Users()));
         List<Recipe> mockRecipes = Mockito.spy(recipes);
@@ -173,9 +183,6 @@ class RecipeControllerTest  {
             .andExpect(status().isOk());
     }
 
-    @Test
-    void testCreateRecipe() {
-    }
 
     @Test
     void addFoodToRecipe() throws Exception {
@@ -206,5 +213,64 @@ class RecipeControllerTest  {
 
         mockMvc.perform(get("/showRecipeArchive").with(user("user@user.dk")))
             .andExpect(status().isOk());
+    }
+
+    @Test
+    void addRecipeToDailyLog() throws Exception {
+
+        mockMvc.perform(get("/addRecipeToDailyLog").with(user("user@user.dk")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
+    public void saveRecipeInDailyLog() throws Exception{
+        Users user = new Users();
+        user.setId(1L);
+
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        DailyLog dailyLog = new DailyLog(1, 1, 1);
+        DailyLog spyDailyLog = Mockito.spy(dailyLog);
+
+        ResultActions resultActions = mockMvc.perform(post("/saveRecipeInDailyLog/")
+                        .flashAttr("dailyLog", dailyLog)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
+    }
+
+    @Test
+    void updateRecipeInDailyLog() throws Exception {
+
+        DailyLog dailyLog = new DailyLog();
+        dailyLog.setId(1L);
+        dailyLog.setAmount(27.0);
+
+        DailyLog spyDailyLog = Mockito.spy(dailyLog);
+
+        Mockito.when(dailyLogService.findById(anyLong())).thenReturn(spyDailyLog);
+
+        mockMvc.perform(get("/updateRecipeInDailyLog/1").with(user("user@user.dk").roles("ADMIN")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
+    public void deleteRecipeFromDailyLog() throws Exception{
+        DailyLog dailyLog = new DailyLog();
+        dailyLog.setId(1L);
+        dailyLog.setAmount(27.0);
+
+        DailyLog spyDailyLog = Mockito.spy(dailyLog);
+
+        ResultActions resultActions = mockMvc.perform(get("/deleteRecipeFromDailyLog/1"))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
     }
 }

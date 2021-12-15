@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.logging.Logger;
@@ -33,6 +36,13 @@ public class RecipeController {
     private final String REDIRECT = "redirect:/";
     private final String ARCHIVED_RECIPES = "showRecipeArchive";
 
+
+    private final String ADD_RECIPE_TO_DAILYLOG = "addRecipeToDailyLog";
+    private final String CREATE_RECIPE_IN_DAILYLOG = "createRecipeInDailyLog";
+    private final String UPDATE_RECIPE_IN_DAILYLOG = "updateRecipeInDailyLog";
+    //private final String CREATE_RECIPE_IN_DAILYLOG = "createRecipeInDailyLog";
+    private final String DAILYLOG = "dailyLog";
+
     @Autowired
     RecipeService recipeService;
 
@@ -48,6 +58,11 @@ public class RecipeController {
     @Autowired
     PrivateFoodService privateFoodService;
 
+    @Autowired
+    LogTypeService logTypeService;
+
+    @Autowired
+    DailyLogService dailyLogService;
 
     @GetMapping("/recipes")
     public String recipes(Model model, HttpSession session) {
@@ -261,4 +276,124 @@ public class RecipeController {
 
         return ARCHIVED_RECIPES;
     }
+
+
+    @GetMapping({"/addRecipeToDailyLog", "/addRecipeToDailyLog/{date}"})
+    public String addRecipeToDailyLog(Model model, @Param("keyword") String keyword,HttpSession session,
+                                        @PathVariable(required = false, value = "date") String dateString) {
+        log.info("  get mapping addRecipeToDailyLog is called");
+        List<Recipe> recipeList = recipeService.findAllByKeyword(keyword);
+
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+
+        model.addAttribute("date", date.toString());
+
+        model.addAttribute("pageTitle", "Add recipe to daily log");
+        model.addAttribute("selectedPage", "dailyLog");
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
+
+        model.addAttribute("recipeList", recipeList);
+        model.addAttribute("keyword", keyword);
+
+        return ADD_RECIPE_TO_DAILYLOG;
+    }
+    @GetMapping({"/createRecipeInDailyLog/{id}", "/createRecipeInDailyLog/{id}/{date}"})
+    public String createRecipeInDailyLog(@PathVariable(value = "id") Long id, Model model, DailyLog dailyLog,HttpSession session,
+                                         @PathVariable(required = false, value = "date") String dateString
+                                        ) {
+        log.info("  Get mapping createRecipeInDailyLog is called ");
+
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+        dailyLog.setDatetime(date);
+        Recipe recipe = recipeService.findById(id);
+
+        model.addAttribute("date", date.toString());
+        model.addAttribute("logType", logTypeService.findAll());
+        model.addAttribute("dailyLog", dailyLog);
+        model.addAttribute("recipe", recipe);
+        model.addAttribute("pageTitle", "Add Recipe to daily log");
+        model.addAttribute("selectedPage", "dailyLog");
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
+
+        return CREATE_RECIPE_IN_DAILYLOG;
+    }
+    @PostMapping({"/saveRecipeInDailyLog/", "/saveRecipeInDailyLog/{date}"})
+    public String saveRecipeInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog, Recipe recipe,HttpSession session,
+                                       @PathVariable(required = false, value = "date") String dateString,
+                                       RedirectAttributes redAt) {
+        log.info("  Post Mapping saveRecipeInDailyLog is called ");
+
+        Recipe recipeId = recipeService.findById(recipe.getId());
+
+        dailyLog.setDatetime(dateString == null ? LocalDate.now() : LocalDate.parse(dateString));
+        String sDatetime = dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+        dailyLog.setRecipe(recipeId);
+        dailyLog.setFkUser(usersService.getLoggedInUser(session));
+        dailyLogService.save(dailyLog);
+
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Recipe successfully added to daily log");
+
+        return  REDIRECT + DAILYLOG +"/"+sDatetime;
+
+    }
+
+
+    @GetMapping({"/updateRecipeInDailyLog/{id}", "/updateRecipeInDailyLog/{id}/{date}"})
+    public String updateRecipeInDailyLog(@PathVariable(value = "id") Long id, Model model,HttpSession session,
+                                           @PathVariable(required = false, value = "date") String dateString) {
+        log.info("  GetMapping updateRecipeInDailyLog is called ");
+        DailyLog dailyLog= dailyLogService.findById(id);
+        model.addAttribute("date", dateString);
+
+        model.addAttribute("logType", logTypeService.findAll());
+
+        model.addAttribute("dailyLog", dailyLog);
+        model.addAttribute("pageTitle", "Edit exercise in daily log");
+        model.addAttribute("selectedPage", "dailyLog");
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
+
+        return UPDATE_RECIPE_IN_DAILYLOG;
+    }
+
+    @PostMapping({"/updateRecipeInDailyLog", "/updateRecipeInDailyLog/{date}"})
+    public String updateRecipeInDailyLog(@ModelAttribute("dailyLog") DailyLog dailyLog,HttpSession session,
+                                           @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
+        log.info("  Post Mapping updateRecipeInDailyLog is called ");
+
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+
+        dailyLog.setDatetime(date);
+
+        dailyLog.setFkUser(usersService.getLoggedInUser(session));
+        //dailyLog.setFkLogType(logTypeService.findByType("Exercise"));
+
+        dailyLogService.save(dailyLog);
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Exercise successfully updated in daily log");
+
+        return  REDIRECT + DAILYLOG+"/"+dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+    }
+
+    @GetMapping({"/deleteRecipeFromDailyLog/{id}", "/deleteRecipeFromDailyLog/{id}/{date}"})
+    public String deleteRecipeFromDailyLog(@PathVariable(value = "id") Long id,
+                                             @PathVariable(required = false, value = "date") String dateString, RedirectAttributes redAt) {
+        log.info("  GetMapping deleteRecipeFromDailyLog is called ");
+        LocalDate date = dateString == null ? LocalDate.now() : LocalDate.parse(dateString);
+
+        this.dailyLogService.deleteById(id);
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", "Recipe successfully deleted from daily log");
+
+        return REDIRECT + DAILYLOG +"/"+date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+    }
+
 }
