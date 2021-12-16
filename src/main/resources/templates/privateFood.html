@@ -38,6 +38,8 @@
             </form>
 
             <a href="/createPrivateFood" class="btn btn-success mr-2 btn-sm">Create private food <i class="fas fa-plus-circle"></i></a>
+            <a href="/showPrivateFoodArchive" class="btn btn-primary mr-2 btn-sm">Show archive <i class="fas fa-archive"></i></a>
+
         </div>
 
         <table class="table table-sm">
@@ -54,17 +56,20 @@
             </thead>
             <tbody>
             <tr th:each="pfood : ${pfood}">
-                <td><i class="fas fa-drumstick-bite"></i> <span th:text="${pfood.name}"></span></td>
-                <td th:text="${pfood.protein}">Protein</td>
-                <td th:text="${pfood.carbohydrates}">Carbohydrates</td>
-                <td th:text="${pfood.fat}">Fat</td>
-                <td th:text="${pfood.energy_kilojoule}">Kilojoule</td>
-                <td th:text="${pfood.energy_kcal}">Kcal</td>
-                <td th:text="${pfood.fkUser.firstname}">User</td>
-                <td class="actionButtons">
-                    <a th:href="@{/updatePrivateFood/{id}(id=${pfood.id})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
-                    <a th:href="@{/deletePrivateFood/{id}(id=${pfood.id})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${pfood.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>
-                </td>
+                <th:block th:if="${pfood.archived==false}">
+                    <td><i class="fas fa-drumstick-bite"></i> <span th:text="${pfood.name}"></span></td>
+                    <td th:text="${pfood.protein}">Protein</td>
+                    <td th:text="${pfood.carbohydrates}">Carbohydrates</td>
+                    <td th:text="${pfood.fat}">Fat</td>
+                    <td th:text="${pfood.energy_kilojoule}">Kilojoule</td>
+                    <td th:text="${pfood.energy_kcal}">Kcal</td>
+                    <td th:text="${pfood.fkUser.firstname}">User</td>
+                    <td class="actionButtons">
+                        <a th:href="@{/updatePrivateFood/{id}(id=${pfood.id})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
+<!--                        <a th:href="@{/deletePrivateFood/{id}(id=${pfood.id})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${pfood.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>-->
+                        <a th:href="@{'/archivePrivateFood/true/'+${pfood.id}}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-archive"></i> Archive</a>
+                    </td>
+                </th:block>
             </tr>
             </tbody>
         </table>

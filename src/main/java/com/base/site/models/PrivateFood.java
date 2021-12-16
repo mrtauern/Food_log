@@ -26,6 +26,10 @@ public class PrivateFood {
     private Double energy_kilojoule;
     private Double energy_kcal;
 
+    @Basic
+    @Column(name = "archived")
+    private boolean archived;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "fk_user_id", nullable = false)
     private Users fkUser;
