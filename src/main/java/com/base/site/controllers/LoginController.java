@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
@@ -53,11 +54,19 @@ public class LoginController {
 
     Logger log = Logger.getLogger(LoginController.class.getName());
 
-    @GetMapping({"/login","/login/{userExists}"})
-    public String login(Model model, @PathVariable(required = false, value = "userExists") String userExists) {
-        log.info("login getmapping called... userExists? "+userExists);
+    @GetMapping({"/login","/login/{message}"})
+    public String login(Model model, @PathVariable(required = false, value = "message") String message) {
+        log.info("login getmapping called... userExists? "+message);
         model.addAttribute("user", new Users());
-        model.addAttribute("userExists", userExists);
+        if(message != null) {
+            if(message.equals("user_created")) {
+                model.addAttribute("message", "User have been created...");
+            } else if(message.equals("user_exists")) {
+                model.addAttribute("message", "User already exists, please try again..");
+            }
+        }
+
+
         return "login";
     }
 
@@ -98,7 +107,7 @@ public class LoginController {
             mail.setContent("Welcome to foodlog "+user.getFullName());
             mail.setTopic("Welcome to foodlog");
             emailService.sendmail(mail);
-            return "redirect:/index";
+            return "redirect:/login/user_created";
         }
 
         return "redirect:/login/user_exists";
