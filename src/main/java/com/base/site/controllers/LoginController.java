@@ -58,11 +58,14 @@ public class LoginController {
     public String login(Model model, @PathVariable(required = false, value = "userExists") String userExists) {
         log.info("login getmapping called... userExists? "+userExists);
         model.addAttribute("user", new Users());
-        if(userExists.equals("user_created")) {
-            model.addAttribute("userExists", "User have been created...");
-        } else if(userExists.equals("user_exists")) {
-            model.addAttribute("userExists", "User already exists, please try again..");
+        if(userExists != null) {
+            if(userExists.equals("user_created")) {
+                model.addAttribute("userExists", "User have been created...");
+            } else if(userExists.equals("user_exists")) {
+                model.addAttribute("userExists", "User already exists, please try again..");
+            }
         }
+
 
         return "login";
     }
