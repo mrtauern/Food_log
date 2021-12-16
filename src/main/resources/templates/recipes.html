@@ -17,13 +17,11 @@
         <h2>Recipe list</h2>
 
             <div class="actionBar">
-                <form>
                     <form th:action="@{/recipes}">
                         <input type="text" name="keyword" placeholder="Search For a Recipe Name" th:value="${keyword}" >
                         <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-arrow-right"></i></button>
                         <button type="button" d="btnClear" onclick="clearSearch()" class="btn btn-secondary mr-2 btn-sm"><i class="fas fa-sync-alt"></i></button>
                     </form>
-                </form>
 
                 <a href="/createRecipe" class="btn btn-success mr-2 btn-sm">Create recipe <i class="fas fa-plus-circle"></i></a>
                 <a href="/showRecipeArchive" class="btn btn-primary mr-2 btn-sm">Show archive <i class="fas fa-archive"></i></a>
