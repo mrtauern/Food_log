@@ -1,11 +1,9 @@
 package com.base.site.repositories;
 
-import com.base.site.models.Exercise;
-import com.base.site.models.Recipe;
-import com.base.site.models.RecipeFood;
-import com.base.site.models.Users;
+import com.base.site.models.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,6 +15,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query("SELECT r FROM Recipe r WHERE CONCAT(r.name) LIKE %?1%")
     List<Recipe> search(String keyword);
 
-    @Query("SELECT r FROM Recipe r WHERE CONCAT(r.name) LIKE %?1%")
-    List<Recipe> findAllByFkUserAndSearch(String keyword, Users loggedInUser);
+
+    @Query("SELECT pf FROM Recipe pf WHERE CONCAT(pf.name) LIKE %:keyword% AND pf.fkUser.id LIKE :userId" )
+    List<Recipe> findAllByFkUserAndSearch(@Param("userId") Long userId, @Param("keyword") String keyword);
 }
