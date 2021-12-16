@@ -60,9 +60,9 @@ public class LoginController {
         model.addAttribute("user", new Users());
         if(userExists != null) {
             if(userExists.equals("user_created")) {
-                model.addAttribute("userExists", "User have been created...");
+                model.addAttribute("message", "User have been created...");
             } else if(userExists.equals("user_exists")) {
-                model.addAttribute("userExists", "User already exists, please try again..");
+                model.addAttribute("message", "User already exists, please try again..");
             }
         }
 
