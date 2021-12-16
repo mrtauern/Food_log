@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,6 +18,10 @@ import java.time.LocalDate;
 //@Table(name = "user_type", schema = "food_log")
 public class WeightGraph implements Serializable {
     @Id
+    @Column(name = "id")
+    private Long id;
+
+    @Basic
     @Column(name = "user_id")
     private Long userId;
 
