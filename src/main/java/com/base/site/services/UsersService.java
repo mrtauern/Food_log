@@ -50,4 +50,6 @@ public interface UsersService {
     Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword, HttpSession session);
 
     Users returnCreatedUser(Users user);
+
+    void saveWeightOption(Users kcal_options, HttpSession session);
 }
