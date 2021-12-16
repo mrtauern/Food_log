@@ -1,5 +1,6 @@
 package com.base.site.controllers;
 
+import com.base.site.models.PrivateFood;
 import com.base.site.models.UserType;
 import com.base.site.models.Users;
 import com.base.site.repositories.UPRCRepository;
@@ -37,8 +38,10 @@ import java.util.logging.Logger;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.data.domain.PageRequest.of;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -152,10 +155,6 @@ class AccountControllerTest {
     }
 
     @Test
-    void findPaginated() {
-    }
-
-    @Test
     @WithMockUser(username = "user@user.dk", password = "pa$$", roles = {"ADMIN"})
     void accountLockUnlock() throws Exception {
         MockHttpSession session = new MockHttpSession();
@@ -184,6 +183,16 @@ class AccountControllerTest {
 
     @Test
     void testCreateUser() throws Exception {
+        Users user = new Users();
+        user.setId(1L);
+
+        ResultActions resultActions = mockMvc.perform(post("/createUser")
+                        .flashAttr("user", user)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
     }
 
     @Test
@@ -206,7 +215,17 @@ class AccountControllerTest {
     }
 
     @Test
-    void testEditUser() {
+    void testEditUser() throws Exception {
+        Users user = new Users();
+        user.setId(1L);
+
+        ResultActions resultActions = mockMvc.perform(post("/editUser")
+                        .flashAttr("user", user)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
     }
 
     @Test
@@ -235,7 +254,17 @@ class AccountControllerTest {
     }
 
     @Test
-    void testDeleteUser() {
+    void testDeleteUser() throws Exception {
+        Users user = new Users();
+        user.setId(1L);
+
+        ResultActions resultActions = mockMvc.perform(post("/delete_user_confirm/1")
+                        .flashAttr("user", user)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
     }
 
     @Test
@@ -290,7 +319,17 @@ class AccountControllerTest {
     }
 
     @Test
-    void testEditUserProfile() {
+    void testEditUserProfile() throws Exception {
+        Users user = new Users();
+        user.setId(1L);
+
+        ResultActions resultActions = mockMvc.perform(post("/editUserProfile")
+                        .flashAttr("user", user)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
     }
 }
 
