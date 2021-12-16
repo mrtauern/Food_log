@@ -164,7 +164,13 @@ class RecipeControllerTest  {
     }
 
     @Test
-    void saveRecipe() {
+    void saveRecipe() throws Exception {
+        ResultActions resultActions = mockMvc.perform(post("/editRecipe")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
     }
 
     @Test
@@ -174,7 +180,13 @@ class RecipeControllerTest  {
     }
 
     @Test
-    void saveFoodInRecipe() {
+    void saveFoodInRecipe() throws Exception {
+        ResultActions resultActions = mockMvc.perform(post("/saveFoodInRecipe/1/1")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
     }
 
     @Test
@@ -191,7 +203,13 @@ class RecipeControllerTest  {
     }
 
     @Test
-    void saveRecipeFood() {
+    void saveRecipeFood() throws Exception {
+        ResultActions resultActions = mockMvc.perform(post("/saveRecipeFood/food/1/1")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
     }
 
     @Test

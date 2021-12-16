@@ -337,6 +337,11 @@ public class UsersServiceImpl implements UsersService {
         return model;
     }
 
+    @Override
+    public Users returnCreatedUser(Users user) {
+        return user;
+    }
+
 
     /*@Override
     public Model getEditModels(Model model) {

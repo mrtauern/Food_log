@@ -24,15 +24,21 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.data.domain.PageRequest.of;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -133,9 +139,31 @@ class LoginControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /*
     @Test
     void addUser() throws Exception   {
-    }
+        Users user = Mockito.mock(Users.class);
+        user.setUsername("test@test.dk");
+
+        Mockito.when(usersService.returnCreatedUser(any(Users.class))).thenReturn(user);
+        Mockito.when(user.getUsername()).thenReturn("test@test.dk");
+        String userTypeString = "User_male";
+        String password = "pass";
+        String username = "test@test.dk";
+        String lastname = "test";
+        String firstname = "test";
+        ResultActions resultActions = mockMvc.perform(post("/signup")
+                        .param("userTypeString", userTypeString)
+                        .param("password", password)
+                        .param("username", username)
+                        .param("lastname", lastname)
+                        .param("firstname", firstname)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
+    }*/
 
     @Test
     void passwordReset() throws Exception   {
@@ -146,6 +174,12 @@ class LoginControllerTest {
 
     @Test
     void confirmReset() throws Exception   {
+        ResultActions resultActions = mockMvc.perform(post("/signup/User_male")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
     }
 
     @Test
@@ -153,9 +187,5 @@ class LoginControllerTest {
         mockMvc.perform(
                         get("/password_reset_code").with(user("user@user.dk")))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    void passwordResetCodeCheck()  throws Exception  {
     }
 }
