@@ -166,7 +166,7 @@ public class DailyLogController {
 
     @GetMapping("/weightOptions")
     public String weightOptions(Model model, HttpSession session) {
-        log.info("Getmapping weightOptions called in DailylogController");
+        log.info("Getmapping weightOptions called in DailylogController"+ usersService.getLoggedInUser(session).getKcal_modifier());
 
         model.addAttribute("user", usersService.getLoggedInUser(session));
         model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
@@ -179,8 +179,10 @@ public class DailyLogController {
     public String saveWeightOptions(@ModelAttribute("user") Users user, RedirectAttributes redAt, HttpSession session){
         log.info("Postmappting saveWeightOption called in DailylogController"+user.getKcal_modifier());
 
-        usersService.getLoggedInUser(session).setKcal_modifier(user.getKcal_modifier());
-        usersService.save(usersService.findById(usersService.getLoggedInUser(session).getId()));
+        //usersService.getLoggedInUser(session).setKcal_modifier(user.getKcal_modifier());
+        //usersService.save(usersService.findById(usersService.getLoggedInUser(session).getId()));
+
+        usersService.saveWeightOption(user, session);
 
         redAt.addFlashAttribute("showMessage", true);
         redAt.addFlashAttribute("messageType", "success");

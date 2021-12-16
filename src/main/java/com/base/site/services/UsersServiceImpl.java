@@ -343,8 +343,17 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    public void saveWeightOption(Users kcal_options, HttpSession session) {
+        Users loggedInUser = findById(getLoggedInUser(session).getId());
+        loggedInUser.setKcal_modifier(kcal_options.getKcal_modifier());
+        setSessionResetFlag(session);
+        save(loggedInUser);
+    }
+
+    @Override
     public void setSessionResetFlag(HttpSession session) {
         session.setAttribute("reset", true);
+
     }
 
 

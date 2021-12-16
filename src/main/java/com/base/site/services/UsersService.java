@@ -51,5 +51,9 @@ public interface UsersService {
 
     Users returnCreatedUser(Users user);
 
+
+    void saveWeightOption(Users kcal_options, HttpSession session);
+
     void setSessionResetFlag(HttpSession session);
+
 }
