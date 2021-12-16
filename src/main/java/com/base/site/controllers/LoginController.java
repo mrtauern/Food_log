@@ -54,14 +54,14 @@ public class LoginController {
 
     Logger log = Logger.getLogger(LoginController.class.getName());
 
-    @GetMapping({"/login","/login/{userExists}"})
-    public String login(Model model, @PathVariable(required = false, value = "userExists") String userExists) {
-        log.info("login getmapping called... userExists? "+userExists);
+    @GetMapping({"/login","/login/{message}"})
+    public String login(Model model, @PathVariable(required = false, value = "message") String message) {
+        log.info("login getmapping called... userExists? "+message);
         model.addAttribute("user", new Users());
-        if(userExists != null) {
-            if(userExists.equals("user_created")) {
+        if(message != null) {
+            if(message.equals("user_created")) {
                 model.addAttribute("message", "User have been created...");
-            } else if(userExists.equals("user_exists")) {
+            } else if(message.equals("user_exists")) {
                 model.addAttribute("message", "User already exists, please try again..");
             }
         }
