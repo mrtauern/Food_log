@@ -160,7 +160,7 @@ public class FoodServiceImpl implements FoodService {
         List<AllFoods> foodlistSearched = allFoodsService.findAllByKeyword(keyword);
         //List<PrivateFood> privateFoodlistSearched = privateFoodService.findAllByKeyword(keyword);
 
-        List<Recipe> recipelist = recipeService.findAllByKeyword(keyword);
+        List<Recipe> recipelist =  recipeService.getRecipesForUserAndSearch(usersService.getLoggedInUser(session), keyword );
         model.addAttribute("recipelist", recipelist);
         model.addAttribute("logType", logTypeService.findAll());
 
