@@ -9,12 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository("WeightGraphRepo")
+public interface WeightGraphRepo extends JpaRepository<WeightGraph, Long> {
 
-@Repository("DailyLogRepo")
-public interface DailyLogRepo extends JpaRepository<DailyLog, Long> {
-
-    @Query("SELECT p FROM DailyLog p WHERE CONCAT(p.id) LIKE %?1%")
-    List<DailyLog> search(String keyword);
-
+    @Query(value = "{call get_weight_graph(:user_id, :selected_date)}", nativeQuery = true)
+    public List<WeightGraph> getWeightGraph(@Param("user_id") Long user_id, @Param("selected_date") String selected_date);
 }
-

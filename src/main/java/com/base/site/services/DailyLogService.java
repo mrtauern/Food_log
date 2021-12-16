@@ -3,6 +3,7 @@ package com.base.site.services;
 import com.base.site.models.DailyLog;
 import com.base.site.models.DailyLogWrapper;
 import com.base.site.models.Users;
+import com.base.site.models.WeightGraph;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -25,7 +26,4 @@ public interface DailyLogService {
     Model getDailyLogModels(Users loggedInUser, String dateString, Model model, String keyword, HttpSession session);
 
     Model getWeightGraphModels(Model model, HttpSession session);
-
-    List<DailyLog> getWeightGraph(Long user_id, String selected_date);
-    List<DailyLog> getWeightGraph(Long user_id);
 }

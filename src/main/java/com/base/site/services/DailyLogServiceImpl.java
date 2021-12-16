@@ -32,6 +32,9 @@ public class DailyLogServiceImpl implements DailyLogService {
     @Autowired
     UsersService usersService;
 
+    @Autowired
+    WeightGraphService weightGraphService;
+
     @Override
     public List<DailyLog> findAll() {
         return dailyLogRepo.findAll();
@@ -189,20 +192,25 @@ public class DailyLogServiceImpl implements DailyLogService {
 
         DailyLogWrapper dailyLogWrapper = getLogs(loggedInUser, date);
 
-        List<DailyLog> dailyLogs = getWeightGraph(loggedInUser.getId(), String.valueOf(date));
+        List<WeightGraph> weightGraphs = weightGraphService.getWeightGraph(loggedInUser.getId(), String.valueOf(date));
 
         List<Double> weights = new ArrayList<>();
         List<String> dates = new ArrayList<>();
 
-        for (DailyLog dailyLog: dailyLogs) {
-            if(dailyLog.getFkUser().getId().equals(loggedInUser.getId()) && dailyLog.getFkLogType().getType().equals("Weight")){
+        for (WeightGraph weightGraph: weightGraphs) {
+            if(weightGraph.getUserId().equals(loggedInUser.getId())){
                 //X-axe
-                dates.add(dailyLog.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+                dates.add(weightGraph.getDatetime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
                 //Y-axe
-                weights.add(dailyLog.getAmount());
+                weights.add(weightGraph.getWeight());
             }
         }
+
+        for (Double weight: weights){
+            log.info("Weights: "+weight);
+        }
+
         log.info("LoggedinUserID----------------"+loggedInUser.getId());
 
         model.addAttribute("today", today.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
@@ -276,17 +284,6 @@ public class DailyLogServiceImpl implements DailyLogService {
         model.addAttribute("dates", dates);
         model.addAttribute("goal", usersService.getLoggedInUser(session).getGoalWeight());
         return model;
-    }
-
-    @Override
-    public List<DailyLog> getWeightGraph(Long user_id, String selected_date) {
-        return dailyLogRepo.getWeightGraph(user_id, selected_date);
-    }
-
-    @Override
-    public List<DailyLog> getWeightGraph(Long user_id) {
-        String selected_date = String.valueOf(' ');
-        return dailyLogRepo.getWeightGraph(user_id, selected_date);
     }
 
 
