@@ -22,9 +22,15 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.servlet.ModelAndView;
+
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -81,7 +87,12 @@ class FoodControllerTest {
 
     @Test
     void saveFood() throws Exception {
+        ResultActions resultActions = mockMvc.perform(post("/saveFood")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
 
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
     }
 
     @Test
@@ -122,7 +133,22 @@ class FoodControllerTest {
 
     @Test
     void saveDailyLog() throws Exception {
+        ResultActions resultActions = mockMvc.perform(post("/saveDailyLog/food")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
 
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
+    }
+
+    @Test
+    void testUpdateDailyLog() throws Exception {
+        ResultActions resultActions = mockMvc.perform(post("/updateDailyLog")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
     }
 
     @Test

@@ -24,8 +24,10 @@ import java.util.logging.Logger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -79,6 +81,16 @@ class ExerciseControllerTest {
     void createExercise() throws Exception{
         ResultActions resultActions = mockMvc.perform(get("/createExercise").with(user("user")))
                 .andExpect(status().isOk());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
+    }
+
+    @Test
+    public void updateExerciseInDailyLogTest() throws Exception {
+        ResultActions resultActions = mockMvc.perform(post("/updateExerciseInDailyLog")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
 
         MvcResult mvcResult = resultActions.andReturn();
         ModelAndView mv = mvcResult.getModelAndView();

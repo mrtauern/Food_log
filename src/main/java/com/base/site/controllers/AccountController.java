@@ -208,7 +208,7 @@ public class AccountController {
             redAt = usersService.generateUserAndSave(user, userType, redAt);
 
         } catch (Exception e){
-            log.info("Something went wrong with crating an user");
+            log.info("Something went wrong with creating an user");
             log.info(e.toString());
         }
 

@@ -81,17 +81,17 @@ public class LoginController {
     public String addUser(@Valid Users user, BindingResult result, @RequestParam String userTypeString) throws MessagingException, IOException {
         log.info("signup postmapping called in logincontroller...");
         if (result.hasErrors()) {
-            log.info("creating user failed....");
-            log.info("username: "+user.getUsername());
-            log.info("firstname: "+user.getFirstname());
-            log.info("lastname: "+user.getLastname());
-            log.info("usertype: "+userTypeString);
-            log.info(result.toString());
+            //log.info("creating user failed....");
+            //log.info("username: "+user.getUsername());
+            //log.info("firstname: "+user.getFirstname());
+            //log.info("lastname: "+user.getLastname());
+            //log.info("usertype: "+userTypeString);
+            //log.info(result.toString());
 
             return "add-user";
         }
 
-        if(usersService.findUsersByUsername(user.getUsername()) == null){
+        if(usersService.findUsersByUsername(usersService.returnCreatedUser(user).getUsername()) == null){
             user = usersService.setAndSaveNewUser(user, userTypeString);
             Mail mail = new Mail();
             mail.setRecipient(user.getUsername());

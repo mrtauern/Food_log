@@ -20,8 +20,10 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.logging.Logger;
 
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -81,7 +83,14 @@ class DailyLogControllerTest {
     }
 
     @Test
-    void saveCurrentWeight() {
+    void saveCurrentWeight() throws Exception {
+
+        ResultActions resultActions = mockMvc.perform(post("/saveCurrentWeight")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
     }
 
     @Test
@@ -110,7 +119,13 @@ class DailyLogControllerTest {
     }
 
     @Test
-    void saveWeightOptions() {
+    void saveWeightOptions() throws Exception {
+        ResultActions resultActions = mockMvc.perform(post("/saveWeightOption")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
+
+        MvcResult mvcResult = resultActions.andReturn();
+        ModelAndView mv = mvcResult.getModelAndView();
     }
 
     @Test
