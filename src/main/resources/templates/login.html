@@ -9,11 +9,11 @@
   <header th:include="fragments/navbar_top :: loginHeader" class="navbar"></header>
     <!-- <header th:include="fragments/navbar_top :: navbar"></header> -->
   <div id="content" class="login">
-    <th:block th:if="${message != null}">
+    <!--<th:block th:if="${message != null}">
       <div class="alert alert-warning" role="alert">
         <p th:text="${message}"></p>
       </div>
-    </th:block>
+    </th:block>-->
     <!--<div tiles:fragment="content">-->
     <div class="formBox login">
       <div class="signIn">
@@ -33,6 +33,7 @@
             <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Sign in</button>
           </fieldset>
         </form>
+        <br>
         <a href="/password_reset">Forgot my password</a>
         <!--<a href="/signup">create user</a>-->
       </div>

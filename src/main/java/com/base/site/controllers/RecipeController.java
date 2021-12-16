@@ -165,13 +165,13 @@ public class RecipeController {
     }
 
     @GetMapping("/createRecipe")
-    public String createRecipe(Model model) {
+    public String createRecipe(Model model, HttpSession session) {
         log.info("  createRecipe getmapping is called...");
 
         model.addAttribute("recipe", new Recipe());
         model.addAttribute("pageTitle", "Create recipe");
         model.addAttribute("selectedPage", "recipe");
-
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return CREATE_RECIPE;
     }

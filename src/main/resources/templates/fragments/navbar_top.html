@@ -179,6 +179,28 @@
             </div>
         </ul>
     </nav>
+
+    <div id="message" th:classappend="${showMessage} ? 'show' : ''" th:switch="${messageType}">
+        <div id="innerMessage" class="success" th:case="success">
+            <div><i class="fas fa-check-circle"></i></div> <div><span th:text="${message}"></span></div> <div><a href="#" id="closeMessage"><i class="fas fa-times"></i></a></div>
+        </div>
+        <div id="innerMessage" class="warning" th:case="warning">
+            <div><i class="fas fa-exclamation-circle"></i></div> <div><span th:text="${message}"></span></div> <div><a href="#" id="closeMessage"><i class="fas fa-times"></i></a></div>
+        </div>
+        <div id="innerMessage" class="error" th:case="error">
+            <div><i class="fas fa-times-circle"></i></div> <div><span th:text="${message}"></span></div> <div><a href="#" id="closeMessage"><i class="fas fa-times"></i></a></div>
+        </div>
+        <div id="innerMessage" class="info" th:case="info">
+            <div><i class="fas fa-info-circle"></i></div> <div><span th:text="${message}"></span></div> <div><a href="#" id="closeMessage"><i class="fas fa-times"></i></a></div>
+        </div>
+        <div id="innerMessage" class="unknown" th:case="unknown">
+            <div><i class="fas fa-question-circle"></i></div> <div><span th:text="${message}"></span></div> <div><a href="#" id="closeMessage"><i class="fas fa-times"></i></a></div>
+        </div>
+        <div id="innerMessage" class="death" th:case="death">
+            <div><i class="fas fa-skull-crossbones"></i></div> <div><span th:text="${message}"></span></div> <div><a href="#" id="closeMessage"><i class="fas fa-times"></i></a></div>
+        </div>
+        <div id="innerMessage" th:case="*"></div>
+    </div>
 </div>
 
 <div th:fragment="bottom_bar">
