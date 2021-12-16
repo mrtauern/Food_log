@@ -65,11 +65,13 @@ public class FoodController {
     }
 
     @GetMapping("/createFood")
-    public String createFood(Model model) {
+    public String createFood(Model model, HttpSession session) {
         log.info("  createFood is called ");
 
         Food food = new Food();
         model.addAttribute("food", food);
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return CREATE_FOOD;
     }
@@ -96,10 +98,12 @@ public class FoodController {
     }
 
     @GetMapping("/updateFood/{id}")
-    public String updateFood(@PathVariable(value = "id") Long id, Model model) {
+    public String updateFood(@PathVariable(value = "id") Long id, Model model, HttpSession session) {
         log.info("  GetMapping updateFood is called ");
 
         model.addAttribute("food", foodService.findById(id));
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return UPDATE_FOOD;
     }
@@ -214,7 +218,8 @@ public class FoodController {
     @GetMapping({"/updateDailyLog/{type}/{id}", "/updateDailyLog/{type}/{id}/{date}"})
     public String updateDailyLog(@PathVariable(value = "id") Long id, Model model,
                                  @PathVariable(required = false, value = "date") String dateString,
-                                 @PathVariable(required = false, value = "type") String type) {
+                                 @PathVariable(required = false, value = "type") String type,
+                                 HttpSession session) {
         log.info("  GetMapping updateDailyLog is called ");
 
         model.addAttribute("dailyLog", dailyLogService.findById(id));
@@ -223,6 +228,8 @@ public class FoodController {
         //model.addAttribute("logType", logTypeService.findAll());
         //log.info("log type: "+dailyLogService.findById(id).getFkLogType().getType());
         model.addAttribute("logType", dailyLogService.findById(id).getFkLogType().getType());
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return UPDATE_DAILYLOG;
     }
