@@ -346,6 +346,7 @@ public class UsersServiceImpl implements UsersService {
     public void saveWeightOption(Users kcal_options, HttpSession session) {
         Users loggedInUser = findById(getLoggedInUser(session).getId());
         loggedInUser.setKcal_modifier(kcal_options.getKcal_modifier());
+        setSessionResetFlag(session);
         save(loggedInUser);
     }
 
