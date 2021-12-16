@@ -115,7 +115,7 @@ public class FoodServiceImpl implements FoodService {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending():
                 Sort.by(sortField).descending();
 
-        Pageable pageable = of(pageNo - 1, pageSize, sort);
+        Pageable pageable = of(pageNo, pageSize, sort);
 
         if (keyword != null) {
             return allFoodsRepository.findAll(keyword, pageable);

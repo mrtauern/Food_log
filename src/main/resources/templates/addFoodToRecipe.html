@@ -12,11 +12,7 @@
 <header th:include="fragments/navbar_top :: header" class="navbar"></header>
 
 <div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
-<!--
-<form id="searchForm" th:action="@{/addFoodToRecipe/{recipeId}(recipeId=${recipeId})}">
-    <div th:include="fragments/food_list/food_list :: searchFilterHTML"></div>
-</form>
--->
+
 <div id="content">
     <div class="contentBox">
         <h2>Add food to recipe</h2>
@@ -33,6 +29,54 @@
             <thead th:include="fragments/food_list/food_list :: addFoodTableHeader"></thead>
             <tbody th:include="fragments/food_list/food_list :: addFoodTableBody_recipe"></tbody>
         </table>
+        <div id="pgination" th:if = "${totalPages > 1}" th:with="pageUrlPostfix = '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" th:with="pageUrlPrefix = '/addFoodToRecipe/'+${recipeId}+'/'">
+                    <li class="page-item" th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                        <a class="page-link"  th:href="@{${pageUrlPrefix} + '1' +  ${pageUrlPostfix}}">First</a>
+                    </li>
+                    <li class="page-item" th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                        <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage - 1} +  ${pageUrlPostfix}}">Previous</a>
+                    </li>
+                    <th:block th:if="${totalPages <= 10}">
+                        <li th:each="i: ${#numbers.sequence(1, totalPages)}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                            <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix}}">[[${i}]]</a>
+                        </li>
+                    </th:block>
+
+                    <th:block th:if="${totalPages > 10}">
+
+                        <th:block th:if="${currentPage <= 5 || currentPage > totalPages - 4}">
+                            <li th:each="i: ${#numbers.sequence(1, 5)}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                                <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix}}">[[${i}]]</a>
+                            </li>
+                            <a class="page-link"  th:href="@{${pageUrlPrefix} + '6' +  ${pageUrlPostfix}}">...</a>
+
+                            <li th:each="i: ${#numbers.sequence(totalPages - 4 , totalPages)}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                                <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix}}">[[${i}]]</a>
+                            </li>
+                        </th:block>
+
+                        <th:block th:if="${currentPage > 5 && currentPage < totalPages - 4}">
+                            <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage - 5 } +  ${pageUrlPostfix}}">...</a>
+                            <li th:each="i: ${#numbers.sequence(currentPage - 4 , currentPage + 4 )}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                                <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix}}">[[${i}]]</a>
+                            </li>
+                            <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage + 5 } +  ${pageUrlPostfix}}">...</a>
+                        </th:block>
+
+                    </th:block>
+
+                    <li class="page-item" th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                        <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage + 1} +  ${pageUrlPostfix}}">Next</a>
+                    </li>
+
+                    <li class="page-item" th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                        <a class="page-link"  th:href="@{${pageUrlPrefix} + ${totalPages} +  ${pageUrlPostfix}}">Last</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
 </div>
 

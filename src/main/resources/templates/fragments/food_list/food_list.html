@@ -36,7 +36,7 @@
 </tbody>
 
 <tbody th:fragment="addFoodTableBody_recipe">
-    <tr th:each="foods : ${foodlist}">
+    <tr th:each="foods : ${listFood}">
         <td th:text="${foods.id}">Food ID</td>
         <td th:text="${foods.name}">Name</td>
         <td th:text="${foods.protein}">Protein</td>
@@ -51,7 +51,7 @@
             </form>
         </td>
     </tr>
-    <tr th:each="foodp : ${pfoodlist}">
+    <!--<tr th:each="foodp : ${pfoodlist}">
         <td th:text="${foodp.id}">Food ID</td>
         <td th:text="${foodp.name}">Name</td>
         <td th:text="${foodp.protein}">Protein</td>
@@ -65,5 +65,6 @@
                 <button type="submit" class="btn btn-outline-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add</button>
             </form>
         </td>
-    </tr>
+    </tr>-->
 </tbody>
+

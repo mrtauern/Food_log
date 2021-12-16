@@ -194,8 +194,8 @@ public class RecipeController {
         log.info("addFoodToRecipe Getmapping is called with recipeId: "+recipeId);
 
         model.addAttribute("recipeId", recipeId);
-        model.addAttribute("foodlist", foodService.findAllByKeyword(keyword));
-        model.addAttribute("pfoodlist", privateFoodService.findAllByKeyword(keyword));
+        //model.addAttribute("foodlist", foodService.findAllByKeyword(keyword));
+        //model.addAttribute("pfoodlist", privateFoodService.findAllByKeyword(keyword));
         model.addAttribute("keyword", keyword);
         model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("recipeFood", new RecipeFood());
@@ -203,9 +203,28 @@ public class RecipeController {
         model.addAttribute("selectedPage", "recipe");
 
 
+        return findPaginatedAddFood(model,1 ,"name", "asc", recipeId ,keyword, session);
+        //return ADD_FOOD_TO_RECIPE;
+    }
+    @GetMapping("/addFoodToRecipe/{recipeId}/{pageNo}")
+    public String findPaginatedAddFood(Model model, @PathVariable(value = "pageNo")int pageNo,
+                                       @RequestParam(required = false, value="sortField")String sortField,
+                                       @RequestParam(required = false, value="sortDir")String sortDir,
+                                       @PathVariable("recipeId")long recipeId,
+                                       @RequestParam(required = false, value="keyword") String keyword,
+                                       HttpSession session){
+
+        model = recipeService.getPaginatedAddFoodModelAttributes(model, pageNo, sortField, sortDir, keyword, session);
+        model.addAttribute("recipeId", recipeId);
+        //model.addAttribute("foodlist", foodService.findAllByKeyword(keyword));
+        //model.addAttribute("pfoodlist", privateFoodService.findAllByKeyword(keyword));
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
+        model.addAttribute("recipeFood", new RecipeFood());
+        model.addAttribute("pageTitle", "Add food to recipe");
+        model.addAttribute("selectedPage", "recipe");
         return ADD_FOOD_TO_RECIPE;
     }
-
     @PostMapping("/saveRecipeFood/{type}/{id}/{recipeId}")
     public String saveRecipeFood(@PathVariable(required = false, value = "type") String type,
                                  @PathVariable("recipeId")long recipeId,
