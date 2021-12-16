@@ -9,7 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -21,6 +23,9 @@ public class PrivateFoodServiceImpl implements PrivateFoodService{
 
     @Autowired
     PrivateFoodRepo privateFoodRepo;
+
+    @Autowired
+    UsersService usersService;
 
     @Override
     public List<PrivateFood> findAll() {
@@ -71,9 +76,13 @@ public class PrivateFoodServiceImpl implements PrivateFoodService{
     }
 
     @Override
-    public List<PrivateFood> getPrivateFoodForUser(Users loggedInUser) {
-        List<PrivateFood> privateFoods = findAllByFkUser(loggedInUser);
-
+    public List<PrivateFood> getPrivateFoodForUser(Users loggedInUser, String keyword) {
+        List<PrivateFood> privateFoods;
+        if(keyword == null || keyword.equals("") || keyword.equals(" ")) {
+            privateFoods = findAllByFkUser(loggedInUser);
+        } else {
+            privateFoods = privateFoodRepo.findAllByFkUserAndKeyword(loggedInUser.getId(), keyword);
+        }
         return privateFoods;
     }
 }

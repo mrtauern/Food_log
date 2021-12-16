@@ -32,7 +32,7 @@ public class PrivateFoodController {
     public String privateFood(Model model, @Param("keyword") String keyword, HttpSession session) {
         log.info("  get mapping private food is called");
 
-        model.addAttribute("pfood", privateFoodService.getPrivateFoodForUser(usersService.getLoggedInUser(session)));
+        model.addAttribute("pfood", privateFoodService.getPrivateFoodForUser(usersService.getLoggedInUser(session), keyword));
 
         model.addAttribute("keyword", keyword);
         model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
