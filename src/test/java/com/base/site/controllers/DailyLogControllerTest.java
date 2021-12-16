@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -114,7 +115,15 @@ class DailyLogControllerTest {
 
     @Test
     void weightOptions() throws Exception{
-        mockMvc.perform(get("/weightOptions").with(user("user")))
+        MockHttpSession session = new MockHttpSession();
+        Users user = new Users();
+        user.setKcal_modifier(-500);
+        UserType ut = new UserType();
+        ut.setType("User_male");
+        user.setUserType(ut);
+
+        Mockito.when(usersService.getLoggedInUser(session)).thenReturn(user);
+        mockMvc.perform(get("/weightOptions").with(user("user")).session(session))
                 .andExpect(status().isOk());
     }
 
