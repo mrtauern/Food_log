@@ -16,4 +16,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     @Query("SELECT r FROM Recipe r WHERE CONCAT(r.name) LIKE %?1%")
     List<Recipe> search(String keyword);
+
+    @Query("SELECT r FROM Recipe r WHERE CONCAT(r.name) LIKE %?1%")
+    List<Recipe> findAllByFkUserAndSearch(String keyword, Users loggedInUser);
 }

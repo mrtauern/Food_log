@@ -24,9 +24,13 @@ public interface RecipeService {
 
     List<Recipe> findAllFkUser(Users loggedInUser);
 
+    List<Recipe> findAllFkUserAndSearch(Users loggedInUser, String keyword);
+
     Recipe findRecipeById(long id);
 
     List<Recipe> getRecipesForUser(Users loggedInUser);
+
+    List<Recipe> getRecipesForUserAndSearch(Users loggedInUser, String keyword);
 
     RedirectAttributes setArchivedAndGetAttributes(RedirectAttributes redAt, Long userId, Long id, boolean status);
 }
