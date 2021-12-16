@@ -278,7 +278,16 @@ public class AccountController {
             return DELETE_OWN_USER;
     }
 
+    @PostMapping("/delete_own_user")
+    public String deleteOwnUser(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        Long id = usersService.getLoggedInUser(session).getId();
+        log.info("delete_own_user confirmed... deleting user with  userId: "+id);
 
+        usersService.deleteById(id);
+        loginController.fetchSignoutSite(request, response);
+
+        return REDIRECT + LOGIN;
+    }
 
     @GetMapping("/delete_user_confirm/{id}")
     public String deleteUser(@PathVariable("id") long id, Model model, HttpSession session) {
@@ -302,11 +311,9 @@ public class AccountController {
         log.info("delete_user_confirm confirmed... deleting user with  userId: "+id);
 
         usersService.deleteById(id);
-        loginController.fetchSignoutSite(request, response);
+        //loginController.fetchSignoutSite(request, response);
 
-        log.info("delete_user_confirm confirmed...  Sessio and cookies is deletet: "+id);
-
-        return REDIRECT + LOGIN;
+        return REDIRECT + USER_LIST;
     }
 
     @GetMapping("/dashboard")
