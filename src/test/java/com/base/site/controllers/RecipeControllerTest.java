@@ -138,7 +138,7 @@ class RecipeControllerTest  {
         mockRecipes = recipesList(new Users());
 
         Mockito.when(recipeService.findAllFkUser(usersService.getLoggedInUser(session))).thenReturn(mockRecipes);
-        Mockito.when(recipeService.getRecipesForUser(usersService.getLoggedInUser(session))).thenReturn(mockRecipes);
+        //Mockito.when(recipeService.getRecipesForUserAndSearch(usersService.getLoggedInUser(session),String keyword)).thenReturn(mockRecipes);
 
         ResultActions resultActions = mockMvc.perform(get("/recipes").with(user("user@user.dk")))
                 .andExpect(status().isOk());

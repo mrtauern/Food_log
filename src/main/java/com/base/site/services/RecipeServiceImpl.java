@@ -1,6 +1,7 @@
 package com.base.site.services;
 
 import com.base.site.models.Exercise;
+import com.base.site.models.PrivateFood;
 import com.base.site.models.Recipe;
 import com.base.site.models.Users;
 import com.base.site.repositories.RecipeRepository;
@@ -59,15 +60,6 @@ public class RecipeServiceImpl implements RecipeService{
         return recipeRepository.findAllByFkUser(loggedInUser);
     }
 
-
-    @Override
-    public List<Recipe> findAllFkUserAndSearch(Users loggedInUser, String keyword) {
-        if (keyword != null) {
-            return recipeRepository.findAllByFkUserAndSearch(keyword, loggedInUser );
-        }
-        return recipeRepository.findAllByFkUser(loggedInUser);
-    }
-
     @Override
     public Recipe findRecipeById(long id) {
         Recipe recipe = findById(id);
@@ -76,31 +68,13 @@ public class RecipeServiceImpl implements RecipeService{
     }
 
     @Override
-    public List<Recipe> getRecipesForUser(Users loggedInUser) {
-        List<Recipe> recipes = findAllFkUser(loggedInUser);
-/*
-        if(recipes.size() > 0) {
-
-        }else {
-            log.info("no recipes found for user ");
-        }
-
- */
-        return recipes;
-    }
-
-
-    @Override
     public List<Recipe> getRecipesForUserAndSearch(Users loggedInUser, String keyword) {
-        List<Recipe> recipesAndSearch = findAllFkUserAndSearch(loggedInUser, keyword);
-/*
-        if(recipesAndSearch.size() > 0) {
-
-        }else {
-            log.info("no recipes found for user ");
+        List<Recipe> recipesAndSearch;
+        if(keyword == null || keyword.equals("") || keyword.equals(" ")) {
+            recipesAndSearch = findAllFkUser(loggedInUser);
+        } else {
+            recipesAndSearch = recipeRepository.findAllByFkUserAndSearch(loggedInUser.getId(), keyword);
         }
-
- */
         return recipesAndSearch;
     }
 
