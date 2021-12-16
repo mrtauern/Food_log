@@ -18,4 +18,7 @@ public interface PrivateFoodRepo extends JpaRepository <PrivateFood, Long> {
 
     @Query("SELECT pf FROM PrivateFood pf WHERE CONCAT(pf.name) LIKE %?1%")
     public Page<PrivateFood> findAll(String key, Pageable pageable);
+
+    @Query("SELECT pf FROM PrivateFood pf WHERE CONCAT(pf.name) LIKE %?1%")
+    List<PrivateFood> findAllBySearch(String keyword);
 }
