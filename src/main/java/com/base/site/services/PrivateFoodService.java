@@ -20,6 +20,6 @@ public interface PrivateFoodService {
     List<PrivateFood> findAllByFkUser(Users loggedInUser);
 
     Page<PrivateFood> findPaginatedAddFood(int pageNo, int pageSize, String sortField, String sortDirection, String keyword);
-    List<PrivateFood> getPrivateFoodForUser(Users loggedInUser);
+    List<PrivateFood> getPrivateFoodForUser(Users loggedInUser, String keyword);
 
 }
