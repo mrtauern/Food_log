@@ -20,7 +20,7 @@ public interface DailyLogService {
     DailyLog findById(long id);
     void deleteById(Long Id);
     int getKcalUsed(LocalDate date, Users user);
-    int getKcalLeft(LocalDate date, Users user);
+    int getKcalLeft(LocalDate date, Users user, int totalKcal);
 
     DailyLogWrapper getLogs(Users loggedInUser, LocalDate date);
     Model getDailyLogModels(Users loggedInUser, String dateString, Model model, String keyword, HttpSession session);
