@@ -156,7 +156,7 @@ public class UsersServiceImpl implements UsersService {
 
         Users loggedInUser = new Users();
         Users user = new Users();
-        if(session.getAttribute("loggedInUser") == null) {
+        if(session.getAttribute("loggedInUser") == null || (session.getAttribute("reset")!=null && session.getAttribute("reset").equals(true))) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             user = usersRepo.findUsersByUsername(auth.getName());
 
@@ -177,7 +177,7 @@ public class UsersServiceImpl implements UsersService {
             loggedInUser.setRecipies(user.getRecipies());
             loggedInUser.setBmi(user.getBmi());
             loggedInUser.setUsername(user.getUsername());
-
+            session.setAttribute("reset", false);
             session.setAttribute("loggedInUser", loggedInUser);
         }
         else if (session.getAttribute("loggedInUser") != null) {
@@ -340,6 +340,11 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public Users returnCreatedUser(Users user) {
         return user;
+    }
+
+    @Override
+    public void setSessionResetFlag(HttpSession session) {
+        session.setAttribute("reset", true);
     }
 
 

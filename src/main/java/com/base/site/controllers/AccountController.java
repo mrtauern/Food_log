@@ -347,13 +347,14 @@ public class AccountController {
         return EDIT_USER_PROFILE;
     }
     @PostMapping("/editUserProfile")
-    public String editUserProfile(@ModelAttribute("users") Users user, @RequestParam(value = "user_type") String userType, RedirectAttributes redAt){
+    public String editUserProfile(@ModelAttribute("users") Users user, @RequestParam(value = "user_type") String userType, RedirectAttributes redAt, HttpSession session){
         log.info("editUserProfile post called");
 
         user.setUserType(userTypeService.findByType(userType));
 
         try {
             usersService.setAndSaveUserData(user);
+            usersService.setSessionResetFlag(session);
         } catch (Exception e){
             log.info("Something went wrong with crating an user");
             log.info(e.toString());
