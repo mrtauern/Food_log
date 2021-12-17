@@ -224,24 +224,7 @@ public class RecipeController {
             sortDir = "asc";
         }
 
-        int pageSize = 15;
-
-        Page<AllFoods> page = allFoodsService.findPaginatedFoods(pageNo, pageSize, sortField, sortDir, keyword);
-        List<AllFoods> listFood = page.getContent();
-        List<AllFoods> foodlistSearched = allFoodsService.findAllByKeyword(keyword);
-
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("totalFood", page.getTotalElements());
-
-        model.addAttribute("foodlist", listFood);
-
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-
-        //model.addAttribute("foodlistSearched", foodlistSearched);
-        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
+        model.addAttribute(allFoodsService.getPaginatedModelAttributes(model, pageNo, sortField, sortDir, keyword, session));
 
         return ADD_FOOD_TO_RECIPE;
     }

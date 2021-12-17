@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,6 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -30,7 +32,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -54,6 +56,8 @@ class RecipeControllerTest  {
     private FoodServiceImpl foodService;
     @MockBean
     private PrivateFoodServiceImpl privateFoodService;
+    @MockBean
+    private AllFoodsServiceImpl allFoodsService;
     @MockBean
     private AccountController accountController;
     @MockBean
@@ -197,7 +201,15 @@ class RecipeControllerTest  {
 
 
     @Test
-    void addFoodToRecipe() throws Exception {
+    void addFoodToRecipe(@Mock Model model, @Mock HttpSession session) throws Exception {
+
+        /*AllFoods allFoods = new AllFoods();
+        allFoodsService.save(allFoods);*/
+
+        Model pageList = allFoodsService.getPaginatedModelAttributes(model, 1, eq("name"), eq("asc"), null, session);
+
+        Mockito.when(allFoodsService.getPaginatedModelAttributes(model, anyInt(), anyString(), anyString(), anyString(), session)).thenReturn(pageList);
+
         mockMvc.perform(get("/addFoodToRecipe/1").with(user("user@user.dk")))
             .andExpect(status().isOk());
     }

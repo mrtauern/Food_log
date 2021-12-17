@@ -129,7 +129,7 @@ public class FoodServiceImpl implements FoodService {
     public Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword, HttpSession session) {
         int pageSize = 15;
 
-        Page<AllFoods> page = findPaginatedFood(pageNo,pageSize, sortField, sortDir, keyword);
+        Page<AllFoods> page = findPaginatedFood(pageNo, pageSize, sortField, sortDir, keyword);
         List<AllFoods> listFood = page.getContent();
         List<AllFoods> foodlistSearched =allFoodsService.findAllByKeyword(keyword);
 
