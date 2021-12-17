@@ -86,9 +86,8 @@ public class DailyLogServiceImpl implements DailyLogService {
     }
 
     @Override
-    public int getKcalLeft(LocalDate date, Users user) {
+    public int getKcalLeft(LocalDate date, Users user, int totalKcal) {
         int kcalLeft = 0;
-        int totalKcal = user.getBMR(user.getCurrentWeight());
         int usedKcal = getKcalUsed(date, user);
         kcalLeft = totalKcal - usedKcal;
         return kcalLeft;
@@ -162,12 +161,15 @@ public class DailyLogServiceImpl implements DailyLogService {
                         case "Weight":
                             dailyLogWrapper.setWeight(dailyLog);
                             break;
+                        case "Exercise":
+                            //dailyLogWrapper.addToDailyLogsExercise(dailyLog);
+                            break;
                         default:
                             log.info("UPS... Something went wrong!");
                     }
 
                 }else if (dailyLog.getFkExercise() != null){
-                    dailyLogWrapper.addToDailyLogsExercises(dailyLog);
+                    dailyLogWrapper.addToDailyLogsExercise(dailyLog);
                 }else if(dailyLog.getFkLogType().getType().equals("Weight")) {
                     dailyLogWrapper.setWeight(dailyLog);
                 }
@@ -213,6 +215,13 @@ public class DailyLogServiceImpl implements DailyLogService {
 
         log.info("LoggedinUserID----------------"+loggedInUser.getId());
 
+        int totalKcal = usersService.getLoggedInUser(session).getBMR(usersService.getLatestWeight(date).getAmount());
+        if(dailyLogWrapper.getDailyLogsExercises().size()>0) {
+            for (DailyLog exercise: dailyLogWrapper.getDailyLogsExercises()) {
+                totalKcal += exercise.getFkExercise().getKcalBurnedPerMin()*exercise.getAmount();
+            }
+        }
+
         model.addAttribute("today", today.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         model.addAttribute("sSelectedDate", date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
@@ -237,9 +246,10 @@ public class DailyLogServiceImpl implements DailyLogService {
         model.addAttribute("nextMonth", date.plusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         model.addAttribute("previousMonth", date.minusMonths(1).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
-        model.addAttribute("bmr", usersService.getLoggedInUser(session).getBMR(usersService.getLatestWeight(date).getAmount()));
+        //model.addAttribute("bmr", usersService.getLoggedInUser(session).getBMR(usersService.getLatestWeight(date).getAmount()));
+        model.addAttribute("bmr", totalKcal);
         model.addAttribute("kcalUsed", getKcalUsed(date, usersService.getLoggedInUser(session)));
-        model.addAttribute("kcalLeft", getKcalLeft(date, usersService.getLoggedInUser(session)));
+        model.addAttribute("kcalLeft", getKcalLeft(date, usersService.getLoggedInUser(session), totalKcal));
         model.addAttribute("nutrition", dailyLogWrapper.getNutrition());
 
         model.addAttribute("weight", dailyLogWrapper.getWeight());

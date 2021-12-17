@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -161,7 +162,15 @@ public class FoodServiceImpl implements FoodService {
         //List<PrivateFood> privateFoodlistSearched = privateFoodService.findAllByKeyword(keyword);
 
         List<Recipe> recipelist =  recipeService.getRecipesForUserAndSearch(usersService.getLoggedInUser(session), keyword );
-        model.addAttribute("recipelist", recipelist);
+        List<Recipe> recipes = new ArrayList<>();
+
+        for(Recipe recipe: recipelist){
+            if(recipe.isArchived() == false){
+                recipes.add(recipe);
+            }
+        }
+
+        model.addAttribute("recipelist", recipes);
         model.addAttribute("logType", logTypeService.findAll());
 
         model.addAttribute("currentPage", pageNo);

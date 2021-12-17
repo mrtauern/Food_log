@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="fragments/head :: styles"></head>
+<body>
+    <header th:include="fragments/navbar_top :: header" class="navbar"></header>
+
+    <div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
+    <div id="content">
+
+        <div class="contentBox">
+
+        <h2>Archived private food list</h2>
+
+            <div class="actionBar">
+                <form>
+                    <input type="text" placeholder="Search...">
+                </form>
+                <a href="/privateFood" class="btn btn-primary mr-2 btn-sm">Show PrivateFood <i class="far fa-clipboard"></i></a>
+            </div>
+
+            <table class="table table-sm">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Protein</th>
+                <th>Carbohydrates</th>
+                <th>Fat</th>
+                <th>Kilojoule</th>
+                <th>Kcal</th>
+                <th>User</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="pfood : ${privateFoods}">
+                    <th:block th:if="${pfood.archived==true}">
+                        <td><i class="fas fa-drumstick-bite"></i> <span th:text="${pfood.name}"></span></td>
+                        <td th:text="${pfood.protein}">Protein</td>
+                        <td th:text="${pfood.carbohydrates}">Carbohydrates</td>
+                        <td th:text="${pfood.fat}">Fat</td>
+                        <td th:text="${pfood.energy_kilojoule}">Kilojoule</td>
+                        <td th:text="${pfood.energy_kcal}">Kcal</td>
+                        <td th:text="${pfood.fkUser.firstname}">User</td>
+                        <td class="actionButtons">
+                            <a th:href="@{'/archivePrivateFood/false/'+${pfood.id}}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-undo-alt"></i> Restore</a>
+                        </td>
+                    </th:block>
+                </tr>
+            </tbody>
+        </table>
+
+        </div>
+    </div>
+
+    <div th:include="fragments/navbar_top :: footer"></div>
+</body>
+</html>

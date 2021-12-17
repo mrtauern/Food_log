@@ -87,7 +87,7 @@ public class LoginController {
     }
 
     @PostMapping("/signup")
-    public String addUser(@Valid Users user, BindingResult result, @RequestParam String userTypeString) throws MessagingException, IOException {
+    public String addUser(@Valid Users user, BindingResult result, @RequestParam String userTypeString, RedirectAttributes redAt) throws MessagingException, IOException {
         log.info("signup postmapping called in logincontroller...");
         if (result.hasErrors()) {
             //log.info("creating user failed....");
@@ -107,10 +107,21 @@ public class LoginController {
             mail.setContent("Welcome to foodlog "+user.getFullName());
             mail.setTopic("Welcome to foodlog");
             emailService.sendmail(mail);
-            return "redirect:/login/user_created";
+
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "User is successfully created");
+
+            return "redirect:/login";
+            //return "redirect:/login/user_created";
         }
 
-        return "redirect:/login/user_exists";
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "error");
+        redAt.addFlashAttribute("message", "User already exist");
+
+        return "redirect:/login";
+        //return "redirect:/login/user_exists";
     }
 
     @GetMapping("/password_reset")

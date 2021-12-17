@@ -132,9 +132,7 @@ public class DailyLogWrapper {
         this.dailyLogsExercises = dailyLogsExercises;
     }
 
-    public void addToDailyLogsExercises(DailyLog dailyLog) {
-        dailyLogsExercises.add(dailyLog);
-    }
+    public void addToDailyLogsExercise(DailyLog dailyLog) {dailyLogsExercises.add(dailyLog);}
 
     public DailyLog getWeight() {
         return weight;

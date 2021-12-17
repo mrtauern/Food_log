@@ -319,7 +319,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public Model getPaginatedModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword, HttpSession session) {
-        int pageSize = 5;
+        int pageSize = 10;
         Page<Users> page = findPaginated(pageNo,pageSize, sortField, sortDir, keyword);
         List<Users> listUser = page.getContent();
 

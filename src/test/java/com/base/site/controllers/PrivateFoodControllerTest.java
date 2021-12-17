@@ -140,7 +140,7 @@ public class PrivateFoodControllerTest {
     public void updatePrivateFood() throws Exception{
         Long id = Long.valueOf(1);
         Users user = new Users();
-        PrivateFood privateFood = new PrivateFood(id, "Bacon", 30, 10, 20, 50.0, 40.0, user, null);
+        PrivateFood privateFood = new PrivateFood(id, "Bacon", 30, 10, 20, 50.0, 40.0,false, user, null);
         PrivateFood spyPrivateFood = Mockito.spy(privateFood);
 
         Mockito.when(privateFoodService.findById(anyLong())).thenReturn(spyPrivateFood);
@@ -158,7 +158,7 @@ public class PrivateFoodControllerTest {
         //Long id = Long.valueOf(1);
         Users user = new Users();
         user.setId(1L);
-        PrivateFood privateFood = new PrivateFood(null, "Bacon", 30, 10, 20, 50.0, 40.0, user, null);
+        PrivateFood privateFood = new PrivateFood(null, "Bacon", 30, 10, 20, 50.0, 40.0,false, user, null);
         PrivateFood spyPrivateFood = Mockito.spy(privateFood);
 
         //Mockito.when(privateFood).thenReturn(spyPrivateFood);
@@ -196,7 +196,7 @@ public class PrivateFoodControllerTest {
     public void deletePrivateFood() throws Exception{
         Long id = Long.valueOf(1);
         Users user = new Users();
-        PrivateFood privateFood = new PrivateFood(id, "Bacon", 30, 10, 20, 50.0, 40.0, user, null);
+        PrivateFood privateFood = new PrivateFood(id, "Bacon", 30, 10, 20, 50.0, 40.0,false, user, null);
         PrivateFood spyPrivateFood = Mockito.spy(privateFood);
 
         //Mockito.when(privateFoodService.deleteById(id));
