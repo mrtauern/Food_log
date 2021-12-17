@@ -22,7 +22,7 @@
         <h2>Add food to recipe</h2>
         <div class="actionBar">
             <form th:action="@{/addFoodToRecipe/{recipeId}(recipeId=${recipeId})}">
-                <input type="text" name="keyword" placeholder="Search For a Food Name" th:value="${keyword}" >
+                <input type="text" name="keyword" placeholder="Search For a Food Name" th:value="${param.keyword}" >
                 <button type="submit" class="btn btn-primary mr-2 btn-sm"><i class="fas fa-arrow-right"></i></button>
                 <button type="button" d="btnClear" onclick="clearSearch()" class="btn btn-secondary mr-2 btn-sm"><i class="fas fa-sync-alt"></i></button>
             </form>
@@ -32,6 +32,58 @@
             <thead th:include="fragments/food_list/food_list :: addFoodTableHeader"></thead>
             <tbody th:include="fragments/food_list/food_list :: addFoodTableBody_recipe"></tbody>
         </table>
+
+        <div id="pgination" th:if = "${totalPages > 1}" th:with="pageUrlPostfix = '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}, pageKeyword=(${param.keyword} ? '&keyword=' + ${keyword} : '')">
+            <!--<th:block th:with="pageKeyword=(${param.keyword} != null ? '&keyword=' + ${keyword} : '')"/>-->
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" th:with="pageUrlPrefix = '/addFoodToRecipe/' + ${recipeId} + '/'">
+                    <li class="page-item" th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                        <a class="page-link"  th:href="@{${pageUrlPrefix} + '1' +  ${pageUrlPostfix} + ${pageKeyword}}">First</a>
+                    </li>
+                    <li class="page-item" th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                        <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage - 1} +  ${pageUrlPostfix} + ${pageKeyword}}">Previous</a>
+                    </li>
+                    <th:block th:if="${totalPages <= 10}">
+                        <li th:each="i: ${#numbers.sequence(1, totalPages)}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                            <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix} + ${pageKeyword}}">[[${i}]]</a>
+                        </li>
+                    </th:block>
+
+                    <th:block th:if="${totalPages > 10}">
+
+                        <th:block th:if="${currentPage <= 5 || currentPage > totalPages - 4}">
+                            <li th:each="i: ${#numbers.sequence(1, 5)}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                                <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix} + ${pageKeyword}}">[[${i}]]</a>
+                            </li>
+                            <a class="page-link"  th:href="@{${pageUrlPrefix} + '6' +  ${pageUrlPostfix} + ${pageKeyword}}">...</a>
+
+                            <li th:each="i: ${#numbers.sequence(totalPages - 4 , totalPages)}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                                <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix} + ${pageKeyword}}">[[${i}]]</a>
+                            </li>
+                        </th:block>
+
+                        <th:block th:if="${currentPage > 5 && currentPage < totalPages - 4}">
+                            <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage - 5 } +  ${pageUrlPostfix} + ${pageKeyword}}">...</a>
+                            <li th:each="i: ${#numbers.sequence(currentPage - 4 , currentPage + 4 )}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                                <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix} + ${pageKeyword}}">[[${i}]]</a>
+                            </li>
+                            <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage + 5 } +  ${pageUrlPostfix} + ${pageKeyword}}">...</a>
+                        </th:block>
+
+                    </th:block>
+
+                    <li class="page-item" th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                        <a class="page-link"  th:href="${pageUrlPrefix} + ${currentPage + 1} +  ${pageUrlPostfix} + ${pageKeyword}">Next</a>
+                    </li>
+
+                    <li class="page-item" th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                        <a class="page-link"  th:href="@{${pageUrlPrefix} + ${totalPages} +  ${pageUrlPostfix} + ${pageKeyword}}">Last</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
     </div>
 </div>
 

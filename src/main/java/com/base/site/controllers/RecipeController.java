@@ -3,6 +3,7 @@ package com.base.site.controllers;
 import com.base.site.models.*;
 import com.base.site.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,6 +55,9 @@ public class RecipeController {
 
     @Autowired
     PrivateFoodService privateFoodService;
+
+    @Autowired
+    AllFoodsService allFoodsService;
 
     @Autowired
     LogTypeService logTypeService;
@@ -200,12 +204,12 @@ public class RecipeController {
 
         log.info("addFoodToRecipe Getmapping is called with recipeId: "+recipeId);
 
-        if(keyword != null) {
+        /*if(keyword == null) {
             keyword = "";
-        }
+        }*/
 
-        model.addAttribute("foodlist", foodService.findAllByKeyword(keyword));
-        model.addAttribute("pfoodlist", privateFoodService.findAllByKeyword(keyword));
+        //model.addAttribute("foodlist", allFoodsService.findAllByKeyword(keyword));
+        //model.addAttribute("pfoodlist", privateFoodService.findAllByKeyword(keyword));
         model.addAttribute("keyword", keyword);
 
         model.addAttribute("recipeId", recipeId);
@@ -213,6 +217,31 @@ public class RecipeController {
         model.addAttribute("recipeFood", new RecipeFood());
         model.addAttribute("pageTitle", "Add food to recipe");
         model.addAttribute("selectedPage", "recipe");
+
+        if (pageNo == null){
+            pageNo = 1;
+            sortField = "name";
+            sortDir = "asc";
+        }
+
+        int pageSize = 15;
+
+        Page<AllFoods> page = allFoodsService.findPaginatedFoods(pageNo, pageSize, sortField, sortDir, keyword);
+        List<AllFoods> listFood = page.getContent();
+        List<AllFoods> foodlistSearched = allFoodsService.findAllByKeyword(keyword);
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalFood", page.getTotalElements());
+
+        model.addAttribute("foodlist", listFood);
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+        //model.addAttribute("foodlistSearched", foodlistSearched);
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
         return ADD_FOOD_TO_RECIPE;
     }

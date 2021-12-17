@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository("AllFoodsRepository")
 public interface AllFoodsRepository extends JpaRepository<AllFoods, Long> {
-    @Query(value = "SELECT f.id, f.name, f.protein, f.carbohydrates, f.fat, f.energy_kilojoule, f.energy_kcal, f.fk_user_id FROM Foods f WHERE CONCAT(f.name) LIKE %:key%",
-            countQuery = "select count(f.id) FROM Foods f WHERE CONCAT(f.name) LIKE %:key%",
+    @Query(value = "SELECT f.id, f.name, f.protein, f.carbohydrates, f.fat, f.energy_kilojoule, f.energy_kcal, f.fk_user_id, f.archived FROM Foods f WHERE f.name LIKE %:key%",
+            countQuery = "select count(f.id) FROM Foods f WHERE f.name LIKE %:key%",
             nativeQuery = true)
     public Page<AllFoods> findAll(@Param("key") String key, Pageable pageable);
 }
