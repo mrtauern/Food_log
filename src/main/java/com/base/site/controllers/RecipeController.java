@@ -143,19 +143,28 @@ public class RecipeController {
         return EDIT_FOOD_IN_RECIPE;
     }*/
 
-    @PostMapping("/saveFoodInRecipe/{foodId}/{recipeId}")
-    public String saveFoodInRecipe(@PathVariable("foodId")long foodId, @PathVariable("recipeId")long recipeId, RecipeFood recipeFood, RedirectAttributes redAt, HttpSession session) {
+    @PostMapping("/saveFoodInRecipe/{type}/{foodId}/{recipeId}")
+    public String saveFoodInRecipe(@PathVariable(required = false, value = "foodId")long foodId,
+                                   @PathVariable(required = false, value = "type") String type,
+                                   @PathVariable("recipeId")long recipeId, RecipeFood recipeFood, RedirectAttributes redAt, HttpSession session) {
         log.info("saveFoodInRecipe Postmapping is called with recipeId: "+recipeId+" and foodId: "+foodId+" recipeFood:::"+recipeFood.getAmount());
 
-        if(usersService.getLoggedInUser(session).getId() == recipeService.findById(recipeId).getFkUser().getId()) {
-            recipeFoodService.saveRecipeFoodData(recipeFood, foodId, recipeId);
+        if(usersService.getLoggedInUser(session).getId().equals(recipeService.findById(recipeId).getFkUser().getId())) {
+            if (type.equals("foods")) {
+                log.info("hhhhhhhhhhhhhhhhh ...."+ type);
+                recipeFoodService.saveRecipeFoodData(recipeFood, foodId, recipeId);
+            }else if (type.equals("foodp")){
+                log.info("22222222222222222 ....."+ type);
 
+                recipeFoodService.saveRecipePrivateFoodData(recipeFood, foodId, recipeId);
+            }
             redAt.addFlashAttribute("showMessage", true);
             redAt.addFlashAttribute("messageType", "success");
             redAt.addFlashAttribute("message", "Food is successfully saved in recipe");
 
             return REDIRECT+EDITRECIPE+"/"+recipeId;
-        } else {
+        }
+        else {
             redAt.addFlashAttribute("showMessage", true);
             redAt.addFlashAttribute("messageType", "error");
             redAt.addFlashAttribute("message", "You can only edit your own recipe");
@@ -163,6 +172,57 @@ public class RecipeController {
             return REDIRECT+RECIPES;
         }
     }
+
+
+/*
+// -.-.-.-.-. Test
+    @PostMapping({"/saveFoodInRecipe/{type}/{recipeFoodId}/{recipeId}/{foodId}", "/saveFoodInRecipe/{type}/{recipeFoodId}/{recipeId}/{pfoodId}"})
+    public String saveFoodInRecipe(RecipeFood recipeFood, Food food, PrivateFood privateFood,
+                                   RedirectAttributes redAt, HttpSession session ,
+                                   @PathVariable(required = false, value = "type") String type,
+                                   @PathVariable(required = false, value= "foodId")long foodId,
+                                   @PathVariable(required = false, value= "pfoodId")long pfoodId,
+                                   @PathVariable("recipeFoodId")long recipeFoodId,
+                                   @PathVariable("recipeId")long recipeId) {
+        log.info("saveFoodInRecipe Postmapping is called with  recipeFoodId : "+recipeFoodId +  " and recipeId: "+recipeId+" and FoodId: "+foodId+" recipeFood Amount:::"+recipeFood.getAmount());
+        log.info("klijhgfghjklkjhgfdgh"+ type);
+        if(usersService.getLoggedInUser(session).getId().equals(recipeService.findById(recipeId).getFkUser().getId())) {
+            recipeFood.setRecipe(recipeService.findById(recipeId));
+
+            if (type.equals("foods")) {
+                log.info("klijhgfghjklkjhjhgfgfdfghgfdfggfdgh"+ type);
+
+                Food foodIds = foodService.findById(food.getId());
+                recipeFood.setFood(foodIds);
+                recipeFood.setAmount(recipeFood.getAmount());
+            }
+            if (type.equals("foodp")) {
+                PrivateFood foodIdp = privateFoodService.findById(foodId);
+                recipeFood.setPrivateFood(foodIdp);
+                recipeFood.setAmount(recipeFood.getAmount());
+
+            }
+            recipeFood.setRecipe(recipeService.findById(recipeId));
+            recipeFoodService.save(recipeFood);
+
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "success");
+            redAt.addFlashAttribute("message", "Food is successfully saved in recipe");
+        }
+            return REDIRECT+EDITRECIPE+"/"+recipeId;
+        }
+ */
+
+
+        /* else {
+            redAt.addFlashAttribute("showMessage", true);
+            redAt.addFlashAttribute("messageType", "error");
+            redAt.addFlashAttribute("message", "You can only edit your own recipe");
+
+            return REDIRECT+RECIPES;
+        }
+    }
+*/
 
     @GetMapping("/createRecipe")
     public String createRecipe(Model model, HttpSession session) {

@@ -22,6 +22,8 @@ public class RecipeFoodServiceImpl implements RecipeFoodService{
     RecipeService recipeService;
     @Autowired
     FoodService foodService;
+    @Autowired
+    PrivateFoodService privateFoodService;
 
     @Override
     public List<RecipeFood> findAll() {
@@ -61,6 +63,15 @@ public class RecipeFoodServiceImpl implements RecipeFoodService{
         recipeFood.setAmount(amount);
         recipeFood.setRecipe(recipeService.findById(recipeId));
         recipeFood.setFood(foodService.findById(foodId));
+        save(recipeFood);
+    }
+    @Override
+    public void saveRecipePrivateFoodData(RecipeFood recipeFood, long foodId, long recipeId) {
+        int amount = recipeFood.getAmount();
+        recipeFood = findById(recipeFood.getId());
+        recipeFood.setAmount(amount);
+        recipeFood.setRecipe(recipeService.findById(recipeId));
+        recipeFood.setPrivateFood(privateFoodService.findById(foodId));
         save(recipeFood);
     }
 }
