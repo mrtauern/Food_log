@@ -38,9 +38,6 @@
             <table class="table table-sm">
             <thead>
             <tr>
-<!--                <th>Name</th>-->
-<!--                <th>Email</th>-->
-
                 <th>
                     <a th:href="@{'/pageUser/'+ ${currentPage} + '?sortField=firstname&sortDir=' + ${reverseSortDir}}">Name </a>
                 </th>
@@ -82,37 +79,59 @@
             </tbody>
         </table>
 
+            <div id="pgination" th:if = "${totalPages > 1}" th:with="pageUrlPostfix = '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} ">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination" th:with="pageUrlPrefix = '/pageUser/'">
+                        <li class="page-item" th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                            <a class="page-link"  th:href="@{${pageUrlPrefix} + '1' +  ${pageUrlPostfix}}">First</a>
+                        </li>
+                        <li class="page-item" th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                            <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage - 1} +  ${pageUrlPostfix}}">Previous</a>
+                        </li>
+                        <th:block th:if="${totalPages <= 10}">
+                            <li th:each="i: ${#numbers.sequence(1, totalPages)}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                                <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix}}">[[${i}]]</a>
+                            </li>
+                        </th:block>
 
-            <div th:if = "${totalPages > 1}">
-                <div class = "row col-sm-10">
-                    <div class = "col-sm-2">
-                        Antal User:  [[${totalUser}]]
-                    </div>
-                    <div class = "col-sm-2">
-                 <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-                  <a th:if="${currentPage != i}" th:href="@{'/pageUser/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
-                  <span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
-                 </span>
-                    </div>
-                    <div class = "col-sm-1">
-                        <a th:if="${currentPage < totalPages}" th:href="@{'/pageUser/' + ${currentPage - 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>
-                        <span th:unless="${currentPage < totalPages}">Previous</span>
-                    </div>
-                    <div class = "col-sm-1">
-                        <a th:if="${currentPage < totalPages}" th:href="@{'/pageUser/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
-                        <span th:unless="${currentPage < totalPages}">Next</span>
-                    </div>
+                        <th:block th:if="${totalPages > 10}">
 
-                    <div class="col-sm-1">
-                        <a th:if="${currentPage < totalPages}" th:href="@{'/pageUser/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last Page</a>
-                        <span th:unless="${currentPage < totalPages}">Last Page</span>
-                    </div>
+                            <th:block th:if="${currentPage <= 5 || currentPage > totalPages - 4}">
+                                <li th:each="i: ${#numbers.sequence(1, 5)}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                                    <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix}}">[[${i}]]</a>
+                                </li>
+                                <a class="page-link"  th:href="@{${pageUrlPrefix} + '6' +  ${pageUrlPostfix}}">...</a>
+
+                                <li th:each="i: ${#numbers.sequence(totalPages - 4 , totalPages)}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                                    <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix}}">[[${i}]]</a>
+                                </li>
+                            </th:block>
+
+                            <th:block th:if="${currentPage > 5 && currentPage < totalPages - 4}">
+                                <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage - 5 } +  ${pageUrlPostfix}}">...</a>
+                                <li th:each="i: ${#numbers.sequence(currentPage - 4 , currentPage + 4 )}" th:class="${currentPage != i ? 'page-item' : 'page-item '}">
+                                    <a class="page-link"  th:href="@{${pageUrlPrefix} + ${i} +  ${pageUrlPostfix}}">[[${i}]]</a>
+                                </li>
+                                <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage + 5 } +  ${pageUrlPostfix}}">...</a>
+                            </th:block>
+
+                        </th:block>
+
+                        <li class="page-item" th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                            <a class="page-link"  th:href="@{${pageUrlPrefix} + ${currentPage + 1} +  ${pageUrlPostfix}}">Next</a>
+                        </li>
+
+                        <li class="page-item" th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                            <a class="page-link"  th:href="@{${pageUrlPrefix} + ${totalPages} +  ${pageUrlPostfix}}">Last</a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class = "col-sm-2">
+                    Count User:  [[${totalUser}]]
                 </div>
             </div>
-
         </div>
     </div>
-
-    <footer th:include="fragments/navbar_top :: footer"></footer>
+<footer th:include="fragments/navbar_top :: footer"></footer>
 </body>
 </html>
