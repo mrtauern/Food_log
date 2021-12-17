@@ -107,4 +107,10 @@ public class PrivateFoodServiceImpl implements PrivateFoodService{
         }
         return redAt;
     }
+
+    @Override
+    public void setPfoodArchived(boolean status, PrivateFood food) {
+        food.setArchived(status);
+        save(food);
+    }
 }

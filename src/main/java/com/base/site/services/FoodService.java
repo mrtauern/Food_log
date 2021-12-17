@@ -32,4 +32,6 @@ public interface FoodService {
 
     Model getPaginatedAddFoodModelAttributes(Model model, int pageNo, String sortField, String sortDir, String keyword, HttpSession session);
 
+    void setFoodArchived(boolean status, Food food);
+
 }

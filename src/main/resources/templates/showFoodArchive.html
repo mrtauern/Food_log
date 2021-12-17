@@ -18,7 +18,6 @@
 <div th:include="fragments/navbar_top :: leftMenu" id="leftBar"></div>
 
 <div id="content">
-
 <!--<form id="searchForm" th:action="@{/food}">
     Filter: <input type="text" name="keyword" id="keyword" placeholder="Search for name"  size="50" th:value="${keyword}" required />
     &nbsp;
@@ -39,8 +38,7 @@
 
             </form>
 
-            <a href="/createFood" class="btn btn-success mr-2 btn-sm">Create Food <i class="fas fa-plus-circle"></i></a>
-            <a href="/showFoodArchive" class="btn btn-primary mr-2 btn-sm">Show archive <i class="fas fa-archive"></i></a>
+            <a href="/food" class="btn btn-primary mr-2 btn-sm">Show food <i class="fas fa-drumstick-bite"></i></a>
 
 
         </div>
@@ -76,7 +74,7 @@
             <tbody>
             <tr th:each="food : ${listFood}">
                 <!--<td th:text="${food.id}">Food ID</td>-->
-                <th:block th:if="${food.archived == false}">
+                <th:block th:if="${food.archived == true}">
                     <td><i class="fas fa-drumstick-bite"></i> <span th:text="${food.name}"></span></td>
                     <td th:text="${food.protein}">Protein</td>
                     <td th:text="${food.carbohydrates}">Carbohydrates</td>
@@ -86,8 +84,9 @@
                     <td class="actionButtons">
                         <a th:href="@{/updateFood/{id}(id=${food.id})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
                         <!--<a th:href="@{/deleteFood/{id}(id=${food.id})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${food.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>-->
-                            <a th:if="${food.fk_user_id == 0}" th:href="@{/archiveFood/true/food/{id}(id=${food.id})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Archive</a>
-                            <a th:if="${food.fk_user_id != 0}" th:href="@{/archiveFood/true/pfood/{id}(id=${food.id})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i> Archive</a>
+                        <a th:if="${food.fk_user_id == 0}" th:href="@{/archiveFood/false/food/{id}(id=${food.id})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-undo-alt"></i> Restore</a>
+                        <a th:if="${food.fk_user_id != 0}" th:href="@{/archiveFood/false/pfood/{id}(id=${food.id})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-undo-alt"></i> Restore</a>
+
 
                     </td>
                 </th:block>
