@@ -3,6 +3,7 @@ package com.base.site.controllers;
 import com.base.site.models.*;
 import com.base.site.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,6 +55,9 @@ public class RecipeController {
 
     @Autowired
     PrivateFoodService privateFoodService;
+
+    @Autowired
+    AllFoodsService allFoodsService;
 
     @Autowired
     LogTypeService logTypeService;
@@ -189,19 +193,38 @@ public class RecipeController {
     }
 
     //Might need to be moved to food controller
-    @GetMapping("/addFoodToRecipe/{recipeId}")
-    public String addFoodToRecipe(@PathVariable("recipeId")long recipeId, @Param("keyword") String keyword, Model model, HttpSession session) {
+    @GetMapping({"/addFoodToRecipe/{recipeId}", "/addFoodToRecipe/{recipeId}/{pageNo}"})
+    public String addFoodToRecipe(@PathVariable("recipeId")long recipeId,
+                                  @PathVariable(value = "pageNo", required = false) Integer pageNo,
+                                  @RequestParam(value = "sortField", required = false) String sortField,
+                                  @RequestParam(value = "sortDir", required = false) String sortDir,
+                                  @RequestParam(value = "keyword", required = false) String keyword,
+                                  Model model,
+                                  HttpSession session) {
+
         log.info("addFoodToRecipe Getmapping is called with recipeId: "+recipeId);
 
-        model.addAttribute("recipeId", recipeId);
-        model.addAttribute("foodlist", foodService.findAllByKeyword(keyword));
-        model.addAttribute("pfoodlist", privateFoodService.findAllByKeyword(keyword));
+        /*if(keyword == null) {
+            keyword = "";
+        }*/
+
+        //model.addAttribute("foodlist", allFoodsService.findAllByKeyword(keyword));
+        //model.addAttribute("pfoodlist", privateFoodService.findAllByKeyword(keyword));
         model.addAttribute("keyword", keyword);
+
+        model.addAttribute("recipeId", recipeId);
         model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("recipeFood", new RecipeFood());
         model.addAttribute("pageTitle", "Add food to recipe");
         model.addAttribute("selectedPage", "recipe");
 
+        if (pageNo == null){
+            pageNo = 1;
+            sortField = "name";
+            sortDir = "asc";
+        }
+
+        model.addAttribute(allFoodsService.getPaginatedModelAttributes(model, pageNo, sortField, sortDir, keyword, session));
 
         return ADD_FOOD_TO_RECIPE;
     }
