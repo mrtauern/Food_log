@@ -268,6 +268,12 @@ public class AccountController {
         return REDIRECT + USER_LIST;
     }
 
+    @GetMapping("/password_reset_own_user")
+    public String passwordResetOwnUser(Model model, HttpSession session) throws MessagingException, IOException {
+        uprcService.resetOwnUserPassword(session);
+
+        return REDIRECT + USER_INFO;
+    }
     @GetMapping("/delete_own_user")
     public String deleteOwnUser( Model model, HttpSession session) {
         log.info("delete_own_user called userId: ");

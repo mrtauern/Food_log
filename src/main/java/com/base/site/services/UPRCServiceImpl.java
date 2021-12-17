@@ -61,7 +61,9 @@ public class UPRCServiceImpl implements UPRCService{
     public void adminResetUserPassword(long id, HttpSession session) throws MessagingException, IOException {
         if(usersService.getLoggedInUser(session).getId() != id && usersService.getLoggedInUser(session).getRoles().equals("ADMIN")) {
             UserPassResetCode resetCode = new UserPassResetCode();
-
+            if(findByUsername(usersService.findById(id).getUsername())!= null) {
+                resetCode = findByUsername(findByUsername(usersService.findById(id).getUsername()).getUsername());
+            }
             if (usersService.findById(id) != null) {
                 resetCode.setUsername(usersService.findById(id).getUsername());
                 resetCode.setCode(resetCode.generateCode());
@@ -81,5 +83,31 @@ public class UPRCServiceImpl implements UPRCService{
         } else {
             log.info("user requesting password reset is not admin");
         }
+    }
+
+    @Override
+    public void resetOwnUserPassword(HttpSession session) throws MessagingException, IOException {
+        UserPassResetCode resetCode = new UserPassResetCode();
+        if(findByUsername(usersService.getLoggedInUser(session).getUsername())!= null) {
+            resetCode = findByUsername(usersService.getLoggedInUser(session).getUsername());
+        }
+
+        if (usersService.findById(usersService.getLoggedInUser(session).getId()) != null) {
+            resetCode.setUsername(usersService.findById(usersService.getLoggedInUser(session).getId()).getUsername());
+            resetCode.setCode(resetCode.generateCode());
+            resetCode.setUsed(false);
+            save(resetCode);
+
+            log.info("mail with link and code being sent to user with email: " + resetCode.getUsername());
+            Mail mail = new Mail();
+            mail.setRecipient(resetCode.getUsername());
+            mail.setTopic("Your password on FoodLog.dk has been requested to be reset");
+            mail.setContent("To complete the password reset click on the link Http://localhost:8080/password_reset_code and type in the username and code: " + resetCode.getCode());
+
+            emailService.sendmail(mail);
+        } else {
+            log.info("user not found or code already sent");
+        }
+
     }
 }
