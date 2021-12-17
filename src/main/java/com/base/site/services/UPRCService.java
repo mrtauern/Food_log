@@ -16,4 +16,5 @@ public interface UPRCService {
     UserPassResetCode generateAndSaveCode(UserPassResetCode resetCode);
 
     void adminResetUserPassword(long id, HttpSession session) throws MessagingException, IOException;
+    void resetOwnUserPassword(HttpSession session) throws MessagingException, IOException;
 }
