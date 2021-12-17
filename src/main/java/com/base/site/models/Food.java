@@ -26,6 +26,7 @@ public class Food {
     private double fat;
     private double energy_kilojoule;
     private double energy_kcal;
+    private boolean archived;
 
     @OneToMany(mappedBy="food", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
