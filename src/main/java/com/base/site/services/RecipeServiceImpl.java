@@ -118,11 +118,24 @@ public class RecipeServiceImpl implements RecipeService{
 
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending():
                 Sort.by(sortField).descending();
-
+        //sort = Sort.by("asc");
+        //-------------for testing---------------
         log.info("page numer: "+pageNo);
-        Pageable pageable = of(pageNo, pageSize, sort);
+        Pageable pageable;
 
+        if(pageNo-1<0) {
+            pageable = of(pageNo-1, pageSize, sort);
+        }
+        else {
+            pageable = of(pageNo-1, pageSize, sort);
+        }
+        int count = 1;
+        for (AllFoods pageTest: allFoodsRepository.findAll(keyword,pageable)) {
 
+            log.info("result count: "+count+ " name: "+pageTest.getName());
+            count++;
+        }
+        //-------------for testing---------------
         if (keyword != null) {
             return allFoodsRepository.findAll(keyword, pageable);
         }
