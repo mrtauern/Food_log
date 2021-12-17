@@ -40,10 +40,10 @@
                 </thead>
                 <tbody>
                 <tr th:each="recipef : ${recipeFood}">
-                    <form method="post" id="editFoodAmount" th:action="@{/saveFoodInRecipe/foods/{foodId}/{recipeId}( foodId=${recipef?.food?.id} , recipeId=${recipef.recipe.id} , type=${type})}" th:object="${recipeFood}">
+                    <form method="post" id="editFoodAmount" th:action="@{/saveFoodInRecipe/foods/{foodsId}/{recipeId}( foodsId=${recipef?.food?.id} , recipeId=${recipef.recipe.id} )}" th:object="${recipeFood}">
                         <input type="hidden" th:value="${recipef.id}" th:name="id" >
 
-                        <input th:if="${type}=='foods'" type="hidden" name="foods" th:field="*{food.id}" />
+<!--                        <input th:if="${type}=='foods'" type="hidden" name="foods" th:field="*{food.id}" />-->
                         <!--<input th:if="${type}=='foodp'" type="hidden" name="foodp" th:field="*{privateFood.id}" /> -->
                         <th:block th:if="${recipef.food?.name!=null}">
                             <td class="name"><i class="fas fa-drumstick-bite"></i> <span th:text="${recipef?.food?.name}"></span></td>
@@ -58,11 +58,11 @@
                     </form>
                 </tr>
                 <tr th:each="recipepf : ${recipeFood}">
-                    <form method="post" id="editpFoodAmount" th:action="@{/saveFoodInRecipe/foodp/{foodId}/{recipeId}( foodId=${recipepf?.privateFood?.id} , recipeId=${recipepf.recipe.id} , type=${type})}" th:object="${recipeFood}">
+                    <form method="post" id="editpFoodAmount" th:action="@{/saveFoodInRecipe/foodp/{foodpId}/{recipeId}( foodpId=${recipepf?.privateFood?.id} , recipeId=${recipepf.recipe.id} )}" th:object="${recipeFood}">
                         <input type="hidden" th:value="${recipepf.id}" th:name="id" >
                         <!--
                         <input th:if="${type}=='foods'" type="hidden" name="foods" th:field="*{food.id}" />-->
-                        <input th:if="${type}=='foodp'" type="hidden" name="foodp" th:field="*{privateFood.id}" />
+<!--                        <input th:if="${type}=='foodp'" type="hidden" name="foodp" th:field="*{privateFood.id}" />-->
                         <th:block th:if="${recipepf.privateFood?.name!=null}">
                             <td class="name"><i class="fas fa-drumstick-bite"></i> <span th:text="${recipepf?.privateFood?.name}"></span></td>
                         <td>

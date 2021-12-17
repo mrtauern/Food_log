@@ -147,7 +147,7 @@ public class RecipeController {
     public String saveFoodInRecipe(@PathVariable(required = false, value = "foodId")long foodId,
                                    @PathVariable(required = false, value = "type") String type,
                                    @PathVariable("recipeId")long recipeId, RecipeFood recipeFood, RedirectAttributes redAt, HttpSession session) {
-        log.info("saveFoodInRecipe Postmapping is called with recipeId: "+recipeId+" and foodId: "+foodId+" recipeFood:::"+recipeFood.getAmount());
+        log.info("saveFoodInRecipe Postmapping is called with recipeId: "+recipeId+" and foodId: "+foodId+" recipeFood Amount:::"+recipeFood.getAmount());
 
         if(usersService.getLoggedInUser(session).getId().equals(recipeService.findById(recipeId).getFkUser().getId())) {
             if (type.equals("foods")) {
