@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,5 +85,26 @@ public class PrivateFoodServiceImpl implements PrivateFoodService{
             privateFoods = privateFoodRepo.findAllByFkUserAndKeyword(loggedInUser.getId(), keyword);
         }
         return privateFoods;
+    }
+
+    @Override
+    public RedirectAttributes setArchivedAndGetAttributes(RedirectAttributes redAt, Long userId, Long id, boolean status) {
+        log.info("ID:: "+id);
+        PrivateFood privateFood = findById(id);
+        if (privateFood.getFkUser().getId().equals(userId)) {
+            privateFood.setArchived(status);
+            save(privateFood);
+
+            if(status == true){
+                redAt.addFlashAttribute("showMessage", true);
+                redAt.addFlashAttribute("messageType", "success");
+                redAt.addFlashAttribute("message", "PrivateFood is successfully archived");
+            } else {
+                redAt.addFlashAttribute("showMessage", true);
+                redAt.addFlashAttribute("messageType", "success");
+                redAt.addFlashAttribute("message", "PrivateFood is successfully restored");
+            }
+        }
+        return redAt;
     }
 }
