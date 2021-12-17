@@ -8,21 +8,19 @@
 
 <thead th:fragment="addFoodTableHeader">
     <tr>
-        <th>  Food ID </th>
-        <th> Name  </th>
-        <th> Protein </th>
-        <th> Carbohydrates </th>
-        <th> Fat </th>
-        <th> Kilojoule </th>
-        <th> Kcal </th>
-        <th> Action </th>
+        <th>Name</th>
+        <th>Protein</th>
+        <th>Carbohydrates</th>
+        <th>Fat</th>
+        <th>Kilojoule</th>
+        <th>Kcal</th>
+        <th></th>
 
     </tr>
 </thead>
 
 <tbody th:fragment="addFoodTableBody_dailyLog">
     <tr th:each="foods : ${foodlist}">
-        <td th:text="${foods.id}">Food ID</td>
         <td th:text="${foods.name}">Name</td>
         <td th:text="${foods.protein}">Protein</td>
         <td th:text="${foods.carbohydrates}">Carbohydrates</td>
@@ -37,7 +35,6 @@
 
 <tbody th:fragment="addFoodTableBody_recipe">
     <tr th:each="foods : ${foodlist}">
-        <td th:text="${foods.id}">Food ID</td>
         <td th:text="${foods.name}">Name</td>
         <td th:text="${foods.protein}">Protein</td>
         <td th:text="${foods.carbohydrates}">Carbohydrates</td>
@@ -52,7 +49,6 @@
         </td>
     </tr>
     <tr th:each="foodp : ${pfoodlist}">
-        <td th:text="${foodp.id}">Food ID</td>
         <td th:text="${foodp.name}">Name</td>
         <td th:text="${foodp.protein}">Protein</td>
         <td th:text="${foodp.carbohydrates}">Carbohydrates</td>

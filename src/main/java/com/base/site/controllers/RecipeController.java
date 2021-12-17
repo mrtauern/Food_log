@@ -189,19 +189,30 @@ public class RecipeController {
     }
 
     //Might need to be moved to food controller
-    @GetMapping("/addFoodToRecipe/{recipeId}")
-    public String addFoodToRecipe(@PathVariable("recipeId")long recipeId, @Param("keyword") String keyword, Model model, HttpSession session) {
+    @GetMapping({"/addFoodToRecipe/{recipeId}", "/addFoodToRecipe/{recipeId}/{pageNo}"})
+    public String addFoodToRecipe(@PathVariable("recipeId")long recipeId,
+                                  @PathVariable(value = "pageNo", required = false) Integer pageNo,
+                                  @RequestParam(value = "sortField", required = false) String sortField,
+                                  @RequestParam(value = "sortDir", required = false) String sortDir,
+                                  @RequestParam(value = "keyword", required = false) String keyword,
+                                  Model model,
+                                  HttpSession session) {
+
         log.info("addFoodToRecipe Getmapping is called with recipeId: "+recipeId);
 
-        model.addAttribute("recipeId", recipeId);
+        if(keyword != null) {
+            keyword = "";
+        }
+
         model.addAttribute("foodlist", foodService.findAllByKeyword(keyword));
         model.addAttribute("pfoodlist", privateFoodService.findAllByKeyword(keyword));
         model.addAttribute("keyword", keyword);
+
+        model.addAttribute("recipeId", recipeId);
         model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
         model.addAttribute("recipeFood", new RecipeFood());
         model.addAttribute("pageTitle", "Add food to recipe");
         model.addAttribute("selectedPage", "recipe");
-
 
         return ADD_FOOD_TO_RECIPE;
     }
