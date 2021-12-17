@@ -84,8 +84,8 @@
                     <td class="actionButtons">
                         <a th:href="@{/updateFood/{id}(id=${food.id})}" class="btn btn-outline-dark mr-2 btn-sm"><i class="fas fa-pen"></i> Edit</a>
                         <!--<a th:href="@{/deleteFood/{id}(id=${food.id})}" class="btn btn-outline-danger mr-2 btn-sm" th:attr="onclick=|return confirm_delete('${food.name}')|"><i class="fas fa-trash-alt"></i> Delete</a>-->
-                        <a th:if="${food.fk_user_id == 0}" th:href="@{/archiveFood/false/food/{id}(id=${food.id})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-undo-alt"></i> Restore</a>
-                        <a th:if="${food.fk_user_id != 0}" th:href="@{/archiveFood/false/pfood/{id}(id=${food.id})}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-undo-alt"></i> Restore</a>
+                        <a th:if="${food.fk_user_id == 0}" th:href="@{/archiveFood/false/food/{id}(id=${food.id})}" class="btn btn-outline-primary mr-2 btn-sm"><i class="fas fa-undo-alt"></i> Restore</a>
+                        <a th:if="${food.fk_user_id != 0}" th:href="@{/archiveFood/false/pfood/{id}(id=${food.id})}" class="btn btn-outline-primary mr-2 btn-sm"><i class="fas fa-undo-alt"></i> Restore</a>
 
 
                     </td>
