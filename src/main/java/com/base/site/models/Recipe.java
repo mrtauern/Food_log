@@ -80,7 +80,7 @@ public class Recipe implements Serializable {
                 }
             }
         }
-        total = (total/getTotal_weight())*100;
+        total = (double)Math.round((total/getTotal_weight())*100);
         return total;
     }
 
