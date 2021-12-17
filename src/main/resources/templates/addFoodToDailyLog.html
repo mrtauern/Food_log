@@ -46,18 +46,22 @@
             </thead>
             <tbody>
                 <tr th:each="food : ${listFood}">
-                    <td><i class="fas fa-drumstick-bite"></i> <span th:text="${food.name}"></span></td>
-                    <td th:text="${food.protein}">Protein</td>
-                    <td th:text="${food.carbohydrates}">Carbohydrates</td>
-                    <td th:text="${food.fat}">Fat</td>
-                    <td th:text="${food.energy_kilojoule}">Kilojoule</td>
-                    <td th:text="${food.energy_kcal}">Kcal</td>
-                    <td class="actionButtons">
-                        <a th:if="${food.fk_user_id == 0}" th:href="@{/createDailyLog/food/{id}/{date}(id=${food.id},date=${date})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add</a>
-                        <a th:if="${food.fk_user_id != 0}" th:href="@{/createDailyLog/pfood/{id}/{date}(id=${food.id},date=${date})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add</a>
-                    </td>
+                    <th:block th:if="${food.archived==false}">
+                        <th:block th:if="${food.fk_user_id == loggedInUser.id or food.fk_user_id == 0}">
+                            <td><i class="fas fa-drumstick-bite"></i> <span th:text="${food.name}"></span></td>
+                            <td th:text="${food.protein}">Protein</td>
+                            <td th:text="${food.carbohydrates}">Carbohydrates</td>
+                            <td th:text="${food.fat}">Fat</td>
+                            <td th:text="${food.energy_kilojoule}">Kilojoule</td>
+                            <td th:text="${food.energy_kcal}">Kcal</td>
+                            <td class="actionButtons">
+                                <a th:if="${food.fk_user_id == 0}" th:href="@{/createDailyLog/food/{id}/{date}(id=${food.id},date=${date})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add</a>
+                                <a th:if="${food.fk_user_id != 0}" th:href="@{/createDailyLog/pfood/{id}/{date}(id=${food.id},date=${date})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add</a>
+                            </td>
+                        </th:block>
+                    </th:block>
                 </tr>
-                <tr th:each="pfood : ${listPrivateFood}">
+                <!--<tr th:each="pfood : ${listPrivateFood}">
                     <td><i class="fas fa-drumstick-bite"></i> <span th:text="${pfood.name}"></span></td>
                     <td th:text="${pfood.protein}">Protein</td>
                     <td th:text="${pfood.carbohydrates}">Carbohydrates</td>
@@ -67,7 +71,7 @@
                     <td class="actionButtons">
                         <a th:href="@{/createDailyLog/pfood/{id}/{date}(id=${pfood.id},date=${date})}" class="btn btn-success mr-2 btn-sm"><i class="fas fa-plus-circle"></i> Add</a>
                     </td>
-                </tr>
+                </tr>-->
             </tbody>
         </table>
 
