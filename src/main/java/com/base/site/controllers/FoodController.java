@@ -37,6 +37,7 @@ public class FoodController {
     private final String CREATE_DAILYLOG = "createDailyLog";
     private final String DAILYLOG = "dailyLog";
     private final String UPDATE_DAILYLOG = "updateDailylog";
+    private final String SHOW_FOOD_ARCHIVE = "showFoodArchive";
 
 
     @GetMapping("/food")
@@ -49,7 +50,7 @@ public class FoodController {
 
         model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
 
-        return findPaginatedFood(model,1 ,"name", "asc", keyword, session );
+        return findPaginatedFood(model,1 ,"name", "asc", keyword, session);
     }
 
     @GetMapping("/pageFood/{pageNo}")
@@ -62,6 +63,18 @@ public class FoodController {
         model = foodService.getPaginatedModelAttributes(model, pageNo, sortField, sortDir, keyword, session);
 
         return FOOD;
+    }
+
+    @GetMapping("/pageFoodArchived/{pageNo}")
+    public String findPaginatedFoodArchive(Model model, @PathVariable(value = "pageNo")int pageNo,
+                                    @RequestParam("sortField")String sortField,
+                                    @RequestParam("sortDir")String sortDir,
+                                    @Param("keyword") String keyword,
+                                    HttpSession session){
+
+        model = foodService.getPaginatedModelAttributes(model, pageNo, sortField, sortDir, keyword, session);
+
+        return SHOW_FOOD_ARCHIVE;
     }
 
     @GetMapping("/createFood")
@@ -120,6 +133,43 @@ public class FoodController {
         redAt.addFlashAttribute("message", name + " is successfully deleted");
 
         return REDIRECT+FOOD;
+    }
+    @GetMapping("/archiveFood/{status}/{type}/{id}")
+    public String archiveFood(@PathVariable(value = "id") Long id,@PathVariable(value = "type") String type,@PathVariable(value = "status") boolean status, RedirectAttributes redAt) {
+        log.info("  GetMapping archiveFoodbyId is called "+type);
+        String name = "";
+        if(type.equals("food")) {
+            log.info("find food");
+            foodService.setFoodArchived(status, foodService.findById(id));
+            name = foodService.findById(id).getName();
+        } else if(type.equals("pfood")){
+            log.info("find pfood");
+            privateFoodService.setPfoodArchived(status, privateFoodService.findById(id));
+            name = privateFoodService.findById(id).getName();
+        }
+
+
+
+
+        //his.foodService.deleteById(id);
+
+        redAt.addFlashAttribute("showMessage", true);
+        redAt.addFlashAttribute("messageType", "success");
+        redAt.addFlashAttribute("message", name + " is successfully changed");
+
+        return REDIRECT+FOOD;
+    }
+
+    @GetMapping("/showFoodArchive")
+    public String showFoodArchive (Model model, @Param("keyword") String keyword, HttpSession session) {
+        log.info("  get mapping showFoodArchive is called");
+
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("pageTitle", "Food Archive");
+        model.addAttribute("selectedPage", "food");
+
+        model.addAttribute("loggedInUser", usersService.getLoggedInUser(session));
+        return findPaginatedFoodArchive(model,1 ,"name", "asc", keyword, session);
     }
 
     @GetMapping({"/addFoodToDailyLog", "/addFoodToDailyLog/{date}"})

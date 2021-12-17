@@ -25,5 +25,5 @@ public interface PrivateFoodService {
 
     RedirectAttributes setArchivedAndGetAttributes(RedirectAttributes redAt, Long userId, Long id, boolean status);
 
-
+    void setPfoodArchived(boolean status, PrivateFood food);
 }

@@ -27,4 +27,5 @@ public class AllFoods implements Serializable {
     private double energy_kilojoule;
     private double energy_kcal;
     private long fk_user_id;
+    private boolean archived;
 }

@@ -190,6 +190,12 @@ public class FoodServiceImpl implements FoodService {
 
         return model;
     }
+
+    @Override
+    public void setFoodArchived(boolean status, Food food) {
+        food.setArchived(status);
+        save(food);
+    }
 }
 
 
