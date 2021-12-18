@@ -60,16 +60,15 @@
                 <tr th:each="recipepf : ${recipeFood}">
                     <form method="post" id="editpFoodAmount" th:action="@{/saveFoodInRecipe/foodp/{foodpId}/{recipeId}( foodpId=${recipepf?.privateFood?.id} , recipeId=${recipepf.recipe.id} )}" th:object="${recipeFood}">
                         <input type="hidden" th:value="${recipepf.id}" th:name="id" >
-                        <!--
-                        <input th:if="${type}=='foods'" type="hidden" name="foods" th:field="*{food.id}" />-->
-<!--                        <input th:if="${type}=='foodp'" type="hidden" name="foodp" th:field="*{privateFood.id}" />-->
+
                         <th:block th:if="${recipepf.privateFood?.name!=null}">
                             <td class="name"><i class="fas fa-drumstick-bite"></i> <span th:text="${recipepf?.privateFood?.name}"></span></td>
                         <td>
                             <input type="number" th:name="amount" th:value="${recipepf?.amount}" id="amount" placeholder="amount (Gram)" th:required="required"></td>
                         </td>
                         <td class="actionButtons">
-                            <button value="Confirm" form="editFoodAmount" type="submit" class="btn btn-outline-primary mr-2 btn-sm"><i class="fas fa-check"></i></button>
+                            <!--   Fejlien ligger her -->
+                            <button value="Confirm" form="editpFoodAmount" type="submit" class="btn btn-outline-primary mr-2 btn-sm"><i class="fas fa-check"></i></button>
                             <a th:href="@{/removeFoodFromRecipe/{recipeId}/{id}(recipeId=${recipepf.recipe.id}, id=${recipepf.id} )}" class="btn btn-outline-danger mr-2 btn-sm"><i class="fas fa-trash-alt"></i></a>
                         </td>
                         </th:block>
